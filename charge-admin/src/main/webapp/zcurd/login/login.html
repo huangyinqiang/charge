@@ -8,7 +8,7 @@ if (self != top) {  //主页不允许在iframe中
 <div class="crm-register-bg">
   <div class="crm-register-form">
     <header class="crm-login1-header">
-      <h1>欢迎登录Zcurd</h1>
+      <h1>欢迎登录 i易充管理中心</h1>
     </header>
     <form id="ff" class="easyui-form" method="post" action="zcurdHead/main" data-options="novalidate:true">
     <div class="crm-register-body crm-login1-body">
@@ -16,7 +16,7 @@ if (self != top) {  //主页不允许在iframe中
           <input type="text" class="crm-register-input easyui-validatebox" data-options="required:true,validType:'length[2,20]'" value="admin" name="user_name" id="user_name" placeholder="请输入用户名" tabindex="1">
         </div>
         <div class="crm-register-input-warpper">
-          <input type="password" class="crm-register-input easyui-validatebox" data-options="required:true" class="crm-register-input easyui-validatebox" value="12345678" name="password" id="password" placeholder="请输入密码" tabindex="1" onfocus="">
+          <input type="password" class="crm-register-input easyui-validatebox" data-options="required:true" class="crm-register-input easyui-validatebox" value="123456" name="password" id="password" placeholder="请输入密码" tabindex="1" onfocus="">
         </div>
         <div class="crm-register-input-warpper" <#if isShowRandomCode==false>style="display: none;"</#if>>
           <input type="text" class="crm-register-input <#if isShowRandomCode>easyui-validatebox</#if>" data-options="required:true,validType:'length[4,4]'" name="randomCode" id="randomCode" placeholder="请输入识别码，点击图片可更换" tabindex="3">
@@ -27,10 +27,10 @@ if (self != top) {  //主页不允许在iframe中
       <a href="javascript:login();" class="pg-btn-submit dinline-block " tabindex="3" act="login_btn">登     录</a>
     </div>
     </form>
-    <p class="crm-loginfooter-info" style="">
+<!--    <p class="crm-loginfooter-info" style="">
       <a href="javascript: $('#user_name').val('readonly');" class="register_link" tabindex="6" act="reg_link">readonly</a>
       登陆，体验只读权限
-    </p>
+    </p>-->
   </div>
 </div>
 <script type="text/javascript">

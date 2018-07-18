@@ -9,7 +9,6 @@ public class ZcurdHandler extends Handler {
 
 	@Override
 	public void handle(String target, HttpServletRequest request, HttpServletResponse response, boolean[] isHandled) {
-		// 在线表单管理url处理（/zcurd/{headId}/method 转换为--> /zcurd/method）
 		String pre = "/zcurd/";
 		if(target.startsWith(pre)) {
 			String[] params = target.split("/");

@@ -9,11 +9,10 @@ import net.inconnection.charge.admin.online.model.CommonFile;
 
 /**
  * 用来存放一些公共地址（无权限控制）的controller
- * @author 钟世云 2016.3.22
  */
 @ClearAuth
 public class CommonController extends BaseController {
-	
+
 	//获得字典数据
 	public void getDictData() {
 		Object[] queryParams = getQueryParams();
