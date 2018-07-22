@@ -1,0 +1,91 @@
+<#include "/common/head.html"/>
+<div class="easyui-panel updatePage"
+	data-options="fit:true,border:false">
+	<form id="ff" class="easyui-form" method="post">
+		<table class="table1">
+			<tr>
+				<th><span>用户编号:</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="openId"
+							id="openId" value="${model.openId!''}"
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			<tr>
+				<th><span>充值金额(分):</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="money"
+							id="money" value="${model.money!''}"
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>剩余金额(分):</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="amount"
+							id="amount" value="${model.amount!''}"
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>充值时间:</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-datebox" type="text" name="createTime"
+							id="createTime" value="${model.createTime!''}"
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>充值类型(CH 物理充电卡,WA虚拟充电卡):</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="chargeType"
+							id="chargeType" value="${model.chargeType!''}"
+							data-options="fit: true"></input>
+					</div>
+				</td>
+
+			</tr>
+		</table>
+	</form>
+</div>
+<script>
+top.window.subPage.save = save;
+function save() {
+	if($("#zcurdHeadTable").form('validate')) {
+		$.post("update", getParam(), function(data) {
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+		});
+	}
+}
+function getParam() {
+	var param = {
+	    "id": ${model.id}, 
+       	    "model.openId": getInputValue("openId"), 
+       	    "model.money": getInputValue("money"), 
+       	    "model.amount": getInputValue("amount"), 
+       	    "model.createTime": getInputValue("createTime"), 
+       	    "model.chargeType": getInputValue("chargeType"), 
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

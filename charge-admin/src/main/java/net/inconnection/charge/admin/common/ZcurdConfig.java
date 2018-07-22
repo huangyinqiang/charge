@@ -18,8 +18,7 @@ import net.inconnection.charge.admin.common.interceptor.ErrorInterceptor;
 import net.inconnection.charge.admin.online.controller.*;
 import net.inconnection.charge.admin.online.model.*;
 import net.inconnection.charge.admin.online.service.TaskService;
-import net.inconnection.charge.extend.controller.ClawBookUrlController;
-import net.inconnection.charge.extend.controller.StockHistoryLogController;
+import net.inconnection.charge.extend.controller.*;
 import net.inconnection.charge.extend.model.ClawBookUrl;
 import net.inconnection.charge.extend.model.StockHistoryLog;
 import net.inconnection.charge.extend.model.busi_MappingKit;
@@ -54,6 +53,13 @@ public class ZcurdConfig extends JFinalConfig {
 		
 		me.add("/stockHistoryLog", StockHistoryLogController.class, "/busi/stockHistoryLog");
 		me.add("/clawBookUrl", ClawBookUrlController.class, "/busi/clawBookUrl");
+
+
+		me.add("/weixin", ChargeBatteryInfoController.class, "/busi/weixin");
+		me.add("/money", ChargeMoneyInfoController.class, "/busi/chargemoney");
+		me.add("/weixinsum", ChargeBatterySumController.class, "/busi/weixinsum");
+
+
 	}
 	
 	/**

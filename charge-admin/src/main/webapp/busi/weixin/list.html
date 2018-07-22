@@ -1,0 +1,171 @@
+<#include "/common/head.html"/>
+    <table id="dg"></table>
+    <div id="tb" style="padding:2px 5px;">
+        <div class="wrap_search">
+		        		
+			            	<span class="search_item">
+				            	<span class="item_text">用户名称: </span>
+				            	<span class="item_obj">
+				            		<input class="easyui-textbox" type="text" name="nickName" id="nickName" value=""/>
+				            	</span>    
+				            </span>
+			            	<span class="search_item">
+				            	<span class="item_text">设备名称: </span>
+				            	<span class="item_obj">
+				            		<input class="easyui-textbox" type="text" name="remark" id="remark" value=""/>
+				            	</span>    
+				            </span>
+				            <span class="search_item search_between">
+				                <span class="item_text">操作时间: </span>
+				                <span class="item_obj">
+				                    <input class="easyui-datetimebox" style="width:150px;" name="_start_startTime" id="_start_startTime" value=""/> ：<input class="easyui-datetimebox" style="width:150px;" name="_end_startTime" id="_end_startTime" value=""/>
+				                </span>
+				            </span>
+        </div>
+        <div style="text-align: left; margin:6px;">
+            <a href="javascript:void(0)" class="easyui-linkbutton detailBtn" iconCls="glyphicon-map-marker" plain="true" onclick="detail()">详情</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton exportBtn" iconCls="glyphicon-export" plain="true" onclick="exportCsv()">导出</a>
+            <div id="searchBtnWrap" style="float:right; padding-right:40px;">
+                <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
+            </div>
+        </div>
+    </div>
+    
+
+<script type="text/javascript">
+var datagrid = $("#dg");
+var dgOptions = {
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'listData',
+    	method:'post',
+    	fitColumns: true,
+    	singleSelect: true,
+    	toolbar:'#tb',
+    	pageSize: 50,
+    	pagination:true,
+    	multiSort:true,
+        queryParams: getInitParam(),
+        columns: [[
+		         {field:'id', checkbox:true}
+	           	 ,{field:'nickName', title: '用户名称', width:120, sortable: true}
+	           	 ,{field:'remark', title: '设备名称', width:120, sortable: true}
+	           	 ,{field:'area', title: '设备位置', width:120, sortable: true}
+	           	 ,{field:'qr_num', title: '设备序号', width:120, sortable: true}
+	           	 ,{field:'devicePort', title: '端口', width:60, sortable: true}
+	           	 ,{field:'startTime', title: '开始时间', width:120, sortable: true}
+	           	 ,{field:'endTime', title: '结束时间', width:120, sortable: true}
+	           	 ,{field:'operType', title: '消费类型', width:120, sortable: true
+	           	 ,formatter:function(value,row,index){
+	           		 if(value=='W'){
+	           			 return '钱包';
+	           		 }else{
+	           			 return '临时';
+	           		 }
+	           	 }},
+	           	  {field:'feeStatus', title: '扣费状态', width:120, sortable: true,formatter:function(value,row,index){
+		           		 if(value=='S'){
+		           			 return '扣费成功';
+		           		 }else{
+		           			 return '未扣费';
+		           		 }
+		           	 }}
+	           	 ,{field:'status', title: ' 充电状态', width:80, sortable: true,formatter:function(value,row,index){
+	           		 if(value=='S'){
+	           			 return '正在充电';
+	           		 }else if(value=='D'){
+	           			 return '充电计时完毕';
+	           		 }else if(value=='C'){
+	           			 return '充电插座脱落';
+	           		 }else if(value=='B'){
+	           			 return '充电功率异常';
+	           		 }else if(value=='A'){
+	           			 return '充电已完成';
+	           		 }else if(value=='E'){
+	           			 return '被云端断电';
+	           		 }else if(value=='F'){
+	           			 return '未能充电';
+	           		 }else if(value=='G'){
+	           			 return '充满自停';
+	           		 }
+	           	 }}
+	           	 ,{field:'charge', title: '消费金额(元)', width:100, sortable: true}
+	           	 ,{field:'chargeTime', title: '选择充电时间(分钟)', width:100, sortable: true}
+	           	 ,{field:'realChargeTime', title: '实际充电时间(分钟)', width:100, sortable: true}
+	           	 ,{field:'walletAccount', title: '用户余额(元)', width:100, sortable: true}
+	           	 ,{field:'createDate', title: '操作时间', width:120, sortable: true}
+	           ]]
+	};
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+});
+
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param[$(item).attr("name")] = $(item).val();	
+		}
+	});
+	return param;
+}
+function getInitParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+	});
+	return param;
+}
+var initPara = zcurdGetParam();
+function detail() {
+	var rowsSel = datagrid.datagrid("getSelections");
+	if(rowsSel.length != 1) {
+		showWarnMsg("请择要查看的条数据！");
+		return;
+	}
+	var id = rowsSel[0].id;
+	top.openWindow("消费记录-详情", getCurrUrl("detailPage") + "?id=" + id, {size: '600x400'});
+}
+function exportCsv() {
+	var option = datagrid.datagrid("options");
+	var param = option.queryParams;
+	param.sortName = option.sortName;
+	param.sortOrder = option.sortOrder;
+	window.location.href = "exportCsv?" + $.param(param);
+}
+
+//按钮事件
+
+/**
+ * 打开子页
+ */
+var _openSubPageFlag = false;
+function _openSubPage(pageUrl) {
+	if(!_openSubPageFlag) {
+		$("#subLayout").layout("expand", "east");
+		setTimeout(function() {
+			$("#subIframe").attr("src", pageUrl);
+		}, 600);
+		_openSubPageFlag = true;
+	}else {
+		$("#subIframe").attr("src", pageUrl);
+	}
+}
+
+//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/>
+<#include "/common/foot.html"/>

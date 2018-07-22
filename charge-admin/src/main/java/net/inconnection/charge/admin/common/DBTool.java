@@ -214,7 +214,51 @@ public class DBTool{
 		List<Object> result = Db.use(ZcurdTool.getDbSource(dbSource)).query(sb.toString(), params.toArray());
 		return result;
 	}
-	
+
+
+
+	public static List<Object> findDbSource2(String dbSource, String selectSQL, String[] properties, String[] symbols, Object[] values) {
+		checkSecurity(properties, symbols);
+		StringBuilder sb = new StringBuilder(selectSQL);
+		if (selectSQL.toLowerCase().indexOf("where") < 0) {
+			sb.append(" where");
+		}
+
+		sb.append(" 1=1");
+
+		for(int i = 0; i < properties.length; ++i) {
+			sb.append(" and " + properties[i] + " " + symbols[i] + " ?");
+		}
+
+		sb.append("  group by chargetype");
+		List<Object> result = Db.use(ZcurdTool.getDbSource(dbSource)).query(sb.toString(), values);
+		return result;
+	}
+
+
+	public static List<Object> findDbSource3(String dbSource, String selectSQL, String[] properties, String[] symbols, Object[] values, long gid) {
+		checkSecurity(properties, symbols);
+		StringBuilder sb = new StringBuilder(selectSQL);
+		if (selectSQL.toLowerCase().indexOf("where") < 0) {
+			sb.append(" where");
+		}
+
+		sb.append(" 1=1");
+
+		for(int i = 0; i < properties.length; ++i) {
+			if (!properties[i].equals("gid")) {
+				sb.append(" and charge_money_info." + properties[i] + " " + symbols[i] + " '" + values[i] + "'");
+			} else if (!"1".equals(values[i])) {
+				sb.append(" and " + properties[i] + " " + symbols[i] + " " + values[i]);
+			}
+		}
+
+		sb.append("  group by chargetype");
+		List<Object> result = Db.use(ZcurdTool.getDbSource(dbSource)).query(sb.toString());
+		return result;
+	}
+
+
 	/**
 	 * 解析dbSource和sql，格式为[dbSource=xxx]select ...
 	 * @param sql

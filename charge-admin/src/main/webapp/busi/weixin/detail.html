@@ -1,0 +1,67 @@
+
+<#include "/common/head.html"/>
+
+
+ <div class="easyui-panel detailPage" data-options="fit:true,border:false">
+    <form id="ff" class="easyui-form" method="post">
+        <table class="table1">
+            <tr>
+           		<th><span>用户名称:</span></th>
+               	<td><span class="valueSpan"><pre>${model.nickName!''}</pre></span></td>
+			</tr>
+            <tr>
+           		<th><span>用户头像:</span></th>
+               	<td><span class="valueSpan"><img src="${model.headimgurl!''}" style="width:150px;height:150px"/></span></td>
+			</tr>
+            <tr>
+           		<th><span>设备名称:</span></th>
+               	<td><span class="valueSpan"><pre>${model.remark!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>设备序号:</span></th>
+               	<td><span class="valueSpan"><pre>${model.QR_num!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>设备端口:</span></th>
+               	<td><span class="valueSpan"><pre>${model.devicePort!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>开始时间:</span></th>
+               	<td><span class="valueSpan"><pre>${model.startTime!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>结束时间:</span></th>
+               	<td><span class="valueSpan"><pre>${model.endTime!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>充电方式(手动:M,微信W):</span></th>
+               	<td><span class="valueSpan"><pre>${model.operType!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>终端充电状态:</span></th>
+               	<td><span class="valueSpan"><pre>${model.status!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>消费金额:</span></th>
+               	<td><span class="valueSpan"><pre>${model.charge!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>充电时间(分钟):</span></th>
+               	<td><span class="valueSpan"><pre>${model.chargeTime!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>操作时间:</span></th>
+               	<td><span class="valueSpan"><pre>${model.createDate!''}</pre></span></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+top.window.subPage.save = save;
+function save() {
+	top.window.closeWindow();
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>
