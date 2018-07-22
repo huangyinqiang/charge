@@ -8,4 +8,5 @@ import net.inconnection.charge.extend.model.base.BaseTuser;
 @SuppressWarnings("serial")
 public class Tuser extends BaseTuser<Tuser> {
 	public static final Tuser dao = new Tuser().dao();
+	public static final Tuser me = new Tuser();
 }

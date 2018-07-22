@@ -1,0 +1,111 @@
+
+<#include "/common/head.html"/>
+
+
+ <div class="easyui-panel addPage" data-options="fit:true,border:false,novalidate:true">
+    <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
+        <table class="table1">
+            <tr>
+           		<th><span>微信用户的唯一识别:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="openId" id="openId" value="" data-options="fit: true,required:true"></input></div>
+           		</td>
+            <tr>
+           		<th><span>昵称:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="nickName" id="nickName" value="" data-options="fit: true,required:true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>头像:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="headimgurl" id="headimgurl" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>城市:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="city" id="city" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>省会:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="province" id="province" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>手机号码:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="tel" id="tel" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>注册时间:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-datebox" type="text" name="registerDate" id="registerDate" value="" data-options="fit: true,required:true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>最后登录时间:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-datebox" type="text" name="lastLoginDate" id="lastLoginDate" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>卡号:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="cardNumber" id="cardNumber" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>是否绑定手机(Y:绑定 N:未绑定):</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="band" id="band" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span>钱包:</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="walletAccount" id="walletAccount" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+top.window.subPage.save = save;
+function save() {
+	if($("#ff").form('enableValidation').form('validate')) {
+		$.post("add", getParam(), function(data) {
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+		});
+	}
+}
+function getParam() {
+	var param = {
+	     
+       	    "model.openId": $(":input[name='openId']").val(), 
+       	    "model.nickName": $(":input[name='nickName']").val(), 
+       	    "model.headimgurl": $(":input[name='headimgurl']").val(), 
+       	    "model.city": $(":input[name='city']").val(), 
+       	    "model.province": $(":input[name='province']").val(), 
+       	    "model.tel": $(":input[name='tel']").val(), 
+       	    "model.registerDate": $(":input[name='registerDate']").val(), 
+       	    "model.lastLoginDate": $(":input[name='lastLoginDate']").val(), 
+       	    "model.cardNumber": $(":input[name='cardNumber']").val(), 
+       	    "model.band": $(":input[name='band']").val(), 
+       	    "model.walletAccount": $(":input[name='walletAccount']").val(), 
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

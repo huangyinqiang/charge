@@ -1,0 +1,101 @@
+ <#include "/common/head.html"/>
+
+
+<div class="easyui-panel updatePage"
+	data-options="fit:true,border:false">
+	<form id="ff" class="easyui-form" method="post">
+		<table class="table1">
+			<tr>
+				<th><span>设备序号：</span></th>
+				<td>
+					<div class="wrap_input">
+					<input type="hidden" name="id" value="${id!''}"">
+						<input class="easyui-textbox" type="text" name="qr_num"
+							id="QR_num" value="${model.qr_num!''}" data-options="fit: true" readonly="readonly"></input>
+					</div>
+				</td>
+			<tr>
+				<th><span>通讯序号：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="match_num"
+							id="match_num" value="${model.match_num!''}"
+							data-options="fit: true" readonly="readonly"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>设备位置：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="area" id="area"
+							value="${model.area!''}" data-options="fit: true" readonly="readonly"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>已经授权用户(为空则没有进行过授权)：</span></th>
+				<td>
+				<div class="wrap_input">
+					<input  class="easyui-textbox" type="text" value="${model.gname!''}" data-options="fit: true" readonly="readonly"></input>
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>授权给：</span></th>
+				<td>
+				<div class="wrap_input">
+					<input id="parent_id" class="easyui-textbox" type="text" name="parent_id" data-options="fit: true,required:true"></input>
+				</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<script>
+$(function() {
+	//上级菜单
+	$.post("${basePath}/device/listUserAll", function(data) {
+		var menulist = [];
+		$.each(data, function(i, item) {
+			menulist.push({
+				id: item.id,
+				text: item.user_name
+			});
+		});
+		var treeData = [];
+		for(var i = 0; i < menulist.length; i++) {
+			treeData.push(menulist[i]);
+		}
+		$("#parent_id").combotree({
+			data: treeData,
+			required: true
+		});
+	});
+});
+
+top.window.subPage.save = save;
+function save() {
+	if($("#ff").form('validate')) {
+		$.post("authorize", getParam(), function(data) {
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+		});
+	}
+}
+function getParam() {
+	var param = {
+	   		"id": ${model.id}, 
+       	    "parent_id": getInputValue("parent_id"), 
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

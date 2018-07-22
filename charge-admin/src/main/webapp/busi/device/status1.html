@@ -1,0 +1,56 @@
+ <#include "/common/head.html"/>
+
+
+<div class="easyui-panel detailPage"
+	data-options="fit:true,border:false">
+	<form id="ff" class="easyui-form" method="post">
+		<table class="table1">
+			<tr>
+				<th><span>设备序号：</span></th>
+				<td><span class="valueSpan"><pre>${model.qr_num!''}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>设备名称：</span></th>
+				<td><span class="valueSpan"><pre>${model.remark!''}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>端口1状态：</span></th>
+				<td><span class="valueSpan"><pre>${status.portStatus["01"]?string("<span
+								style='color: red;'>使用中</span>", "<span style='color: green;'>空闲中</span>")}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>端口2状态：</span></th>
+				<td><span class="valueSpan"><pre>${status.portStatus["02"]?string("<span
+								style='color: red;'>使用中</span>", "<span style='color: green;'>空闲中</span>")}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>端口3状态：</span></th>
+				<td><span class="valueSpan"><pre>${status.portStatus["03"]?string("<span
+								style='color: red;'>使用中</span>", "<span style='color: green;'>空闲中</span>")}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>端口4状态：</span></th>
+				<td><span class="valueSpan"><pre>${status.portStatus["04"]?string("<span
+								style='color: red;'>使用中</span>", "<span style='color: green;'>空闲中</span>")}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>最后更新时间：</span></th>
+				<td><span class="valueSpan"><pre>${status.endTime?string("yyyy-MM-dd HH:mm:ss zzzz")}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>设备上线时间：</span></th>
+				<td><span class="valueSpan"><pre>${status.joinTime?string("yyyy-MM-dd HH:mm:ss zzzz")}</pre></span></td>
+			</tr>
+
+		</table>
+	</form>
+</div>
+<script>
+	top.window.subPage.save = save;
+	function save() {
+		top.window.closeWindow();
+	}
+
+	//扩展js
+</script>
+<#include "/common/foot.html"/>

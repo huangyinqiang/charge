@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>充电桩云管理平台</title>
+<link rel="stylesheet" type="text/css"
+	href="http://developer.amap.com/Public/css/demo.Default.css" />
+<script type="text/javascript"
+	src="http://webapi.amap.com/maps?v=1.4.2&key=9ed55539c527ba074e6f9b277b1d5462"></script>
+<script language="javascript">
+	var mapObj, marker;
+	function mapInit() {
+		mapObj = new AMap.Map("iCenter", {
+			view : new AMap.View2D({
+				center : new AMap.LngLat(113.690821, 34.739039),
+				zoom : 13
+			})
+		});
+	}
+	function addMarker() {
+		xmlhttp = new XMLHttpRequest();
+		xmlhttp.open("GET", "${basePath}/res/map.txt", true);
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState != 4)
+				return false;
+			var status = xmlhttp.status;
+			if (status == 429) {
+				alert("每日查询超限");
+				return false;
+			}
+			if (status == 403) {
+				alert("IP被屏蔽，请联系service@cellocation.com");
+				return false;
+			}
+			if (status != 200) {
+				return false;
+			}
+			mapObj.clearMap();
+			var result = xmlhttp.responseText.split(",");
+			if (result[0] == "10000") {
+				alert("查询参数错误");
+				return;
+			}
+			if (result[0] == "10001") {
+				alert("无基站数据");
+				return;
+			}
+			var lat = result[1];
+			var lon = result[2];
+			var addr = result[4];
+			marker = new AMap.Marker({
+				position : new AMap.LngLat(lon, lat)
+			});
+			marker.setMap(mapObj);
+			inforWindow = new AMap.InfoWindow({
+				autoMove : true,
+				offset : new AMap.Pixel(0, -30)
+			});
+			var info = [];
+			info.push(mcc + "," + mnc + "," + lac + "," + ci);
+			info.push(lat + "," + lon + " (GCJ02)");
+			info.push(addr);
+			inforWindow.setContent(info.join("<br/>"));
+			inforWindow.open(mapObj, new AMap.LngLat(lon, lat));
+			mapObj.setZoomAndCenter(14, new AMap.LngLat(lon, lat));
+		};
+		xmlhttp.send();
+	}
+</script>
+</head>
+<body onLoad="mapInit()">
+	<div>
+		<input type="button" value="查询" onClick="javascript:addMarker()" />
+	</div>
+	<div id="iCenter" style="width: 700px; height: 500px"></div>
+</body>
+</html>

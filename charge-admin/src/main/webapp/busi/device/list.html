@@ -1,0 +1,378 @@
+ <#include "/common/head.html"/>
+
+<table id="dg"></table>
+<div id="tb" style="padding: 2px 5px;">
+	<div class="wrap_search">
+
+		<span class="search_item"> <span class="item_text">设备序号:
+		</span> <span class="item_obj"> <input class="easyui-textbox"
+				type="text" name="qr_num" id="qr_num" value="" />
+		</span>
+		</span> <span class="search_item"> <span class="item_text">通讯序号:
+		</span> <span class="item_obj"> <input class="easyui-textbox"
+				type="text" name="match_num" id="match_num" value="" />
+		</span>
+		</span> <span class="search_item"> <span class="item_text">设备位置:
+		</span> <span class="item_obj"> <input class="easyui-textbox"
+				type="text" name="area" id="area" value="" />
+		</span>
+		</span> <span class="search_item"> <span class="item_text">设备名称:
+		</span> <span class="item_obj"> <input class="easyui-textbox"
+				type="text" name="remark" id="remark" value="" />
+		</span>
+		</span> <span class="search_item search_between"> <span
+			class="item_text">设备加入时间: </span> <span class="item_obj"> <input
+				class="easyui-datebox" name="_start_createTime"
+				id="_start_createTime" value="" /> ： <input class="easyui-datebox"
+				name="_end_createTime" id="_end_createTime" value="" />
+		</span>
+		</span>
+	</div>
+	<div style="text-align: left; margin: 6px;">
+		<a href="javascript:void(0)" class="easyui-linkbutton addBtn"
+			iconCls="glyphicon-plus" plain="true" onclick="add()">增加设备</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton updateBtn"
+			iconCls="glyphicon-pencil" plain="true" onclick="update()">设置费率</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton authorizeBtn"
+			iconCls="glyphicon-pencil" plain="true" onclick="authorize()">授权用户</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton delBtn"
+			iconCls="glyphicon-remove" plain="true" onclick="del()">删除设备</a> <a
+			href="javascript:void(0)" class="easyui-linkbutton updateBtn"
+			iconCls="glyphicon-map-marker" plain="true" onclick="status()">端口状态</a>
+		<a href="javascript:void(0)" class="easyui-linkbutton updateBtn"
+			iconCls="glyphicon-map-marker" plain="true" onclick="map()">全城地图</a>
+		<span> 【小功率:A1段:1-200W A2段:201-300W A3段:301-350W A4段:351-500W
+			A5段:501-700W 大功率:A1段:1-300w A2段:301-500W A3段:501-700 A4段:701-1000W
+			A5段:1001-1500W A6段:1501-2000w A7段:2001-2500W 】</span>
+		<div id="searchBtnWrap" style="float: right; padding-right: 40px;">
+			<a href="javascript:void(0)" class="easyui-linkbutton color1"
+				iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a> <a
+				href="javascript:void(0)" class="easyui-linkbutton color2"
+				iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var datagrid = $("#dg");
+	var dgOptions = {
+		rownumbers : true,
+		fit : true,
+		border : false,
+		rownumbers : true,
+		url : 'listData',
+		method : 'post',
+		toolbar : '#tb',
+		pageSize : 50,
+		pagination : true,
+		multiSort : true,
+		singleSelect : true,
+		queryParams : getInitParam(),
+		columns : [ [
+				{
+					field : 'id',
+					checkbox : true
+				},
+				{
+					field : 'status',
+					title : '状态',
+					width : 60,
+					sortable : true,
+					formatter : function(value, row, index) {
+						if (value == 'Y') {
+							return "<span style='color:green;font-size:20px;'>在线</span>";
+						} else if (value == 'N') {
+							return "<span style='color:red;font-size:20px;'>离线</span>";
+						} else {
+							return "<span style='color:yellow;font-size:20px;'>错误</span>";
+						}
+					}
+				},
+				{
+					field : 'gname',
+					title : '授权用户',
+					width : 60,
+					formatter : function(value, row, index) {
+						if (value != null) {
+							return value;
+						} else {
+							return "<span style='color:#FF9900;font-size:16px;'>未出货</span>";
+						}
+					}
+				},
+				{
+					field : 'remark',
+					title : '设备名称',
+					width : 120,
+					sortable : true
+				},
+				{
+					field : 'tow_hours_price',
+					title : '非会员2小时价格',
+					width : 120,
+					sortable : true
+				},
+				{
+					field : 'four_hours_price',
+					title : '非会员4小时价格',
+					width : 120,
+					sortable : true
+				},
+				{
+					field : 'eight_hours_price',
+					title : '非会员8小时价格',
+					width : 120,
+					sortable : true
+				},
+				{
+					field : 'twelve_hours_price',
+					title : '非会员12小时价格',
+					width : 120,
+					sortable : true
+				},
+				{
+					field : 'type',
+					title : '功率类别',
+					width : 120,
+					sortable : true,
+					formatter : function(value, row, index) {
+						if (value == 'S') {
+							return "<span style='color:#FF9900;font-size:16px;'>小功率</span>";
+						} else if (value == 'L') {
+							return "<span style='color:#3366CC;font-size:20px;'>大功率</span>";
+						}
+					}
+				}, {
+					field : 'power_a1',
+					title : 'A1段功率每小时价格',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'power_a2',
+					title : 'A2段功率每小时价格',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'power_a3',
+					title : 'A3段功率每小时价格',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'power_a4',
+					title : 'A4段功率每小时价格',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'power_a5',
+					title : 'A5段功率每小时价格',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'power_a6',
+					title : 'A6段功率每小时价格',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'power_a7',
+					title : 'A7段功率每小时价格',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'qr_num',
+					title : '设备序号',
+					width : 130,
+					sortable : true
+				}, {
+					field : 'match_num',
+					title : '通讯序号',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'area',
+					title : '设备位置',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'updatetime',
+					title : '最后更新时间',
+					width : 120,
+					sortable : true
+				}, {
+					field : 'createtime',
+					title : '设备加入时间',
+					width : 120,
+					sortable : true
+				} ] ]
+	};
+	$(function() {
+		handleAuthDataRule();
+		datagrid.datagrid(dgOptions);
+	});
+
+	function zcurdSearch() {
+		var param = zcurdGetParam();
+		datagrid.datagrid("load", {
+			queryParams : param
+		})
+	}
+
+	function zcurdGetParam() {
+		var param = {};
+		$("#tb :input[name]").each(function(i, item) {
+			if ($(item).val()) {
+				param[$(item).attr("name")] = $(item).val();
+			}
+		});
+		return param;
+	}
+
+	function getInitParam() {
+		var param = {};
+		$("#tb :input[name]").each(
+				function(i, item) {
+					if ($(item).val()) {
+						param["queryParams[" + $(item).attr("name") + "]"] = $(
+								item).val();
+					}
+				});
+		return param;
+	}
+
+	var initPara = zcurdGetParam();
+	function add() {
+		top.window.subPage.loadCurrDatagrid = function() {
+			showMsg("增加设备成功");
+			datagrid.datagrid("load");
+		}
+		top.openWindow("设备记录-增加", getCurrUrl("addPage") + "?"
+				+ $.param(initPara), {
+			size : '600x400'
+		});
+	}
+
+	function update() {
+		var rowsSel = datagrid.datagrid("getSelections");
+		if (rowsSel.length != 1) {
+			showWarnMsg("请选择要编辑的数据！");
+			return;
+		}
+		var id = rowsSel[0].id;
+		var type = rowsSel[0].type;
+		top.window.subPage.loadCurrDatagrid = function() {
+			showMsg("设置费率成功");
+			datagrid.datagrid("reload");
+		}
+		if (type == "S") {
+			top.openWindow("设备管理-设置费率-小功率", getCurrUrl("updatePage") + "?id="
+					+ id, {
+				size : '800x800'
+			});
+		} else {
+			top.openWindow("设备管理-设置费率-大功率", getCurrUrl("updatePage1") + "?id="
+					+ id, {
+				size : '800x800'
+			});
+		}
+
+	}
+	function config() {
+		top.window.subPage.loadCurrDatagrid = function() {
+			showMsg("设置卡密码设置成功");
+			datagrid.datagrid("reload");
+		}
+		top.openWindow("设备记录-设置卡密码", getCurrUrl("configPage"), {
+			size : '600x400'
+		});
+	}
+	function authorize() {
+		var rowsSel = datagrid.datagrid("getSelections");
+		if (rowsSel.length != 1) {
+			showWarnMsg("请选择要编辑的数据！");
+			return;
+		}
+		var id = rowsSel[0].id;
+		top.window.subPage.loadCurrDatagrid = function() {
+			showMsg("授权用户成功");
+			datagrid.datagrid("reload");
+		}
+		top.openWindow("设备记录-授权用户", getCurrUrl("authorizePage") + "?id=" + id,
+				{
+					size : '600x600'
+				});
+	}
+	function del() {
+		var ids = [];
+		$.each(datagrid.datagrid("getSelections"), function(i, item) {
+			ids.push(item.id);
+		});
+		if (ids.length < 1) {
+			showWarnMsg("请选择要删除的数据");
+			return;
+		}
+		confirmMsg("确认删除?", function() {
+			$.post("delete", {
+				id : ids
+			}, function(data) {
+				showMsg("删除成功?");
+				datagrid.datagrid("reload");
+			});
+		});
+	}
+
+	function status() {
+		var rowsSel = datagrid.datagrid("getSelections");
+		if (rowsSel.length != 1) {
+			showWarnMsg("请选择择要查看的数据！");
+			return;
+		}
+		var id = rowsSel[0].id;
+		top.openWindow("设备状态-详情", getCurrUrl("statusPage") + "?id=" + id, {
+			size : '600x700'
+		});
+	}
+	function detail() {
+		var rowsSel = datagrid.datagrid("getSelections");
+		if (rowsSel.length != 1) {
+			showWarnMsg("请选择择要查看的数据！");
+			return;
+		}
+		var id = rowsSel[0].id;
+		top.openWindow("设备记录-详情", getCurrUrl("detailPage") + "?id=" + id, {
+			size : '600x400'
+		});
+	}
+	function map() {
+		top.openWindow("全城地图-详情", getCurrUrl("mapPage"), {
+			size : '800x700'
+		});
+	}
+	function exportCsv() {
+		var option = datagrid.datagrid("options");
+		var param = option.queryParams;
+		param.sortName = option.sortName;
+		param.sortOrder = option.sortOrder;
+		window.location.href = "exportCsv?" + $.param(param);
+	}
+
+	//按钮事件
+
+	/**
+	 * 打开子页
+	 */
+	var _openSubPageFlag = false;
+	function _openSubPage(pageUrl) {
+		if (!_openSubPageFlag) {
+			$("#subLayout").layout("expand", "east");
+			setTimeout(function() {
+				$("#subIframe").attr("src", pageUrl);
+			}, 600);
+			_openSubPageFlag = true;
+		} else {
+			$("#subIframe").attr("src", pageUrl);
+		}
+	}
+
+	//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/> <#include "/common/foot.html"/>

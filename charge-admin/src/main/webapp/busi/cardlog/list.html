@@ -1,0 +1,196 @@
+<#include "/common/head.html"/>
+    <table id="dg"></table>
+    <div id="tb" style="padding:2px 5px;">
+        <div class="wrap_search">
+		        		
+			            	<span class="search_item">
+				            	<span class="item_text">充电卡号: </span>
+				            	<span class="item_obj">
+				            		<input class="easyui-textbox" type="text" name="cardCode" id="cardCode" value=""/>
+				            	</span>    
+				            </span>
+			        		<span class="search_item search_between">
+				                <span class="item_text">刷卡时间: </span>
+				                <span class="item_obj">
+				                    <input class="easyui-datetimebox" name="_start_joinDate" id="_start_joinDate" value=""/> 至 <input class="easyui-datetimebox" name="_end_joinDate" id="_end_joinDate" value=""/>
+				                </span>
+				            </span>
+		        		
+			            	<span class="search_item">
+				            	<span class="item_text">用户名: </span>
+				            	<span class="item_obj">
+				            		<input class="easyui-textbox" type="text" name="name" id="name" value=""/>
+				            	</span>    
+				            </span>
+			            	<span class="search_item">
+				            	<span class="item_text">手机号: </span>
+				            	<span class="item_obj">
+				            		<input class="easyui-textbox" type="text" name="phone" id="phone" value=""/>
+				            	</span>    
+				            </span>
+        </div>
+        <div style="text-align: left; margin:6px;">
+            <a href="javascript:void(0)" class="easyui-linkbutton addBtn" iconCls="glyphicon-plus" plain="true" onclick="add()">增加</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="update()">编辑</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton delBtn" iconCls="glyphicon-remove" plain="true" onclick="del()">删除</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton detailBtn" iconCls="glyphicon-map-marker" plain="true" onclick="detail()">详情</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton exportBtn" iconCls="glyphicon-export" plain="true" onclick="exportCsv()">导出</a>
+            <div id="searchBtnWrap" style="float:right; padding-right:40px;">
+                <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+var datagrid = $("#dg");
+var dgOptions = {
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'listData',
+    	method:'post',
+    	toolbar:'#tb',
+    	pageSize: 40,
+    	pagination:true,
+    	multiSort:true,
+        queryParams: getInitParam(),
+        columns: [[
+		         {field:'id', checkbox:true}
+	           	 ,{field:'cardCode', title: '充电卡号', width:120, sortable: true }
+	           	 ,{field:'phyicalId', title: '物理编号', width:100, sortable: true }
+	           	 ,{field:'balance', title: '余额/余次', width:80, sortable: true }
+	           	 ,{field:'joinDate', title: '刷卡时间', width:150, sortable: true }
+	           	 ,{field:'name', title: '用户名', width:120, sortable: true }
+	           	 ,{field:'phone', title: '手机号', width:120, sortable: true }
+	           	 ,{field:'gname', title: '代理名称', width:120, sortable: true }
+	           	 ,{field:'deviceId', title: '设备编号', width:130, sortable: true }
+	           	 ,{field:'area', title: '设备位置', width:150, sortable: true }
+	           	 ,{field:'channelNum', title: '端口号', width:100, sortable: true }
+	           ]],
+	           loadFilter: function(data) {
+	        	   if(data.result && data.result == 'fail') {	//失败时，错误消息提示
+	        		   showWarnMsg(data.msg);
+	        		   return {};
+	        	   }else {
+	        		   return data;
+	        	   }
+	           }           
+	};
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+});
+
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param[$(item).attr("name")] = $(item).val();	
+		}
+	});
+	return param;
+}
+
+function getInitParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+	});
+	if("") {
+		param.sort = "";
+		param.order = "asc";
+	}
+	return param;
+}
+
+var initPara = zcurdGetParam();
+function add() {
+	top.window.subPage.loadCurrDatagrid = function() {
+		showMsg("增加成功");
+		datagrid.datagrid("load");
+	}
+	top.openWindow("刷卡记录-增加", getCurrUrl("addPage") + "?" + $.param(initPara), {size: '600x400'});
+}
+
+function update() {
+	var rowsSel = datagrid.datagrid("getSelections");
+	if(rowsSel.length != 1) {
+		showWarnMsg("请选择要编辑的数据！");
+		return;
+	}
+	var id = rowsSel[0].id;
+	top.window.subPage.loadCurrDatagrid = function() {
+		showMsg("更新成功");
+		datagrid.datagrid("reload");
+	}
+	top.openWindow("刷卡记录-编辑", getCurrUrl("updatePage") + "?id=" + id, {size: '600x400'});
+}
+
+function del() {
+	var ids = [];
+	$.each(datagrid.datagrid("getSelections"), function(i, item) {
+		ids.push(item.id);
+	});
+	if(ids.length < 1) {
+		showWarnMsg("请选择要删除的数据");
+		return;
+	}
+	confirmMsg("确认删除?", function() {
+		$.post("delete", {id: ids}, function(data) {
+			showMsg("删除成功");
+			datagrid.datagrid("reload");
+		});
+	});
+}
+
+function detail() {
+	var rowsSel = datagrid.datagrid("getSelections");
+	if(rowsSel.length != 1) {
+		showWarnMsg("请选择要查看的数据！");
+		return;
+	}
+	var id = rowsSel[0].id;
+	top.openWindow("刷卡记录-详情", getCurrUrl("detailPage") + "?id=" + id, {size: '600x400'});
+}
+
+function exportCsv() {
+	var option = datagrid.datagrid("options");
+	var param = option.queryParams;
+	param.sortName = option.sortName;
+	param.sortOrder = option.sortOrder;
+	window.location.href = "exportCsv?" + $.param(param);
+}
+
+//按钮事件
+
+/**
+ * 打开子页
+ */
+var _openSubPageFlag = false;
+function _openSubPage(pageUrl) {
+	if(!_openSubPageFlag) {
+		$("#subLayout").layout("expand", "east");
+		setTimeout(function() {
+			$("#subIframe").attr("src", pageUrl);
+		}, 600);
+		_openSubPageFlag = true;
+	}else {
+		$("#subIframe").attr("src", pageUrl);
+	}
+}
+
+//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/>
+<#include "/common/foot.html"/>

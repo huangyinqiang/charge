@@ -1,0 +1,226 @@
+ <#include "/common/head.html"/>
+
+
+<div class="easyui-panel updatePage"
+	data-options="fit:true,border:false">
+	<form id="ff" class="easyui-form" method="post">
+		<table class="table1">
+			<tr>
+				<th><span>设备名称：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="remark"
+							id="remark" value="${model.remark!''}" data-options="fit: true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>设备序号：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="qr_num"
+							id="QR_num" value="${model.qr_num!''}" data-options="fit: true"
+							readonly="readonly"></input>
+					</div>
+				</td>
+			<tr>
+				<th><span>通讯序号：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="match_num"
+							id="match_num" value="${model.match_num!''}"
+							data-options="fit: true" readonly="readonly"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>设备位置：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="area" id="area"
+							value="${model.area!''}" data-options="fit: true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>非会员2小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text"
+							name="tow_hours_price" id="tow_hours_price"
+							value="${model.tow_hours_price!''}" data-options="fit: true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>非会员4小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text"
+							name="four_hours_price" id="four_hours_price"
+							value="${model.four_hours_price!''}" data-options="fit: true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>非会员8小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text"
+							name="eight_hours_price" id="eight_hours_price"
+							value="${model.eight_hours_price!''}" data-options="fit: true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>非会员12小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text"
+							name="twelve_hours_price" id="twelve_hours_price"
+							value="${model.twelve_hours_price!''}" data-options="fit: true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>会员最低钱包金额：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="auto_price"
+							id="auto_price" value="" data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>功率段信息：</span></th>
+				<td>
+					<div class="wrap_input">
+						<span style="color: red;"> 大功率:A1:1-300w A2:301-500W
+							A3:501-700 A4:701-1000W A5:1001-1500W A6:1501-2000w A7:2001-2500W
+						</span>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>A1段每小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="power_a1"
+							id="power_a1" value="${model.power_a1!''}"
+							data-options="fit: true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>A2段每小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="power_a2"
+							id="power_a2" value="${model.power_a2!''}"
+							data-options="fit: true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>A3段每小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="power_a3"
+							id="power_a3" value="${model.power_a3!''}"
+							data-options="fit: true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>A4段每小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="power_a4"
+							id="power_a4" value="${model.power_a4!''}"
+							data-options="fit: true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>A5段每小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="power_a5"
+							id="power_a5" value="${model.power_a5!''}"
+							data-options="fit: true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>A6段每小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="power_a6"
+							id="power_a6" value="${model.power_a6!''}"
+							data-options="fit: true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>A7段每小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text" name="power_a7"
+							id="power_a7" value="${model.power_a7!''}"
+							data-options="fit: true"></input>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<script>
+top.window.subPage.save = save;
+function save() {
+	if($("#zcurdHeadTable").form('validate')) {
+		$.post("update1", getParam(), function(data) {
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+		});
+	}
+}
+function getParam() {
+	var param = {
+	    "id": ${model.id}, 
+       	    "model.QR_num": getInputValue("QR_num"), 
+       	    "model.match_num": getInputValue("match_num"), 
+       	    "model.area": getInputValue("area"), 
+       	    "model.tow_hours_price": getInputValue("tow_hours_price"), 
+       	    "model.four_hours_price": getInputValue("four_hours_price"), 
+       	    "model.eight_hours_price": getInputValue("eight_hours_price"), 
+       	    "model.twelve_hours_price": getInputValue("twelve_hours_price"), 
+       	    "model.type": getInputValue("type"), 
+       	    "model.power_a1": getInputValue("power_a1"), 
+       	    "model.power_a2": getInputValue("power_a2"), 
+       	    "model.power_a3": getInputValue("power_a3"), 
+       	    "model.power_a4": getInputValue("power_a4"), 
+       	    "model.power_a5": getInputValue("power_a5"), 
+       	    "model.power_a6": getInputValue("power_a6"), 
+       	    "model.power_a7": getInputValue("power_a7"), 
+       		"model.auto_price": getInputValue("auto_price"), 
+       	    "model.remark": getInputValue("remark"), 
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

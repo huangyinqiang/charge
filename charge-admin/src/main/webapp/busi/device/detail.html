@@ -1,0 +1,81 @@
+
+<#include "/common/head.html"/>
+
+
+ <div class="easyui-panel detailPage" data-options="fit:true,border:false">
+    <form id="ff" class="easyui-form" method="post">
+        <table class="table1">
+            <tr>
+           		<th><span>设备序号：</span></th>
+               	<td><span class="valueSpan"><pre>${model.QR_num!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>设备名称：</span></th>
+               	<td><span class="valueSpan"><pre>${model.remark!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>通讯序号：</span></th>
+               	<td><span class="valueSpan"><pre>${model.match_num!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>设备位置：</span></th>
+               	<td><span class="valueSpan"><pre>${model.area!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>非员会2小时价格：</span></th>
+               	<td><span class="valueSpan"><pre>${model.tow_hours_price!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>非员会4小时价格：</span></th>
+               	<td><span class="valueSpan"><pre>${model.four_hours_price!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>非员会8小时价格：</span></th>
+               	<td><span class="valueSpan"><pre>${model.eight_hours_price!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>非员会8小时价格：</span></th>
+               	<td><span class="valueSpan"><pre>${model.twelve_hours_price!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>员会2小时价格：</span></th>
+               	<td><span class="valueSpan"><pre>${model.tow_hours_mem_price!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>员会4小时价格：</span></th>
+               	<td><span class="valueSpan"><pre>${model.four_hours_mem_price!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>员会8小时价格：</span></th>
+               	<td><span class="valueSpan"><pre>${model.eight_hours_mem_price!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>员会12小时价格：</span></th>
+               	<td><span class="valueSpan"><pre>${model.twelve_hours_mem_price!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>状态：</span></th>
+               	<td><span class="valueSpan"><pre>${model.status!''}</pre></span></td>
+            </tr>
+           
+            <tr>
+           		<th><span>最后更新时间：</span></th>
+               	<td><span class="valueSpan"><pre>${model.updateTime!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>设备加入时间：</span></th>
+               	<td><span class="valueSpan"><pre>${model.createTime!''}</pre></span></td>
+            </tr>
+           	
+        </table>
+    </form>
+</div>
+<script>
+top.window.subPage.save = save;
+function save() {
+	top.window.closeWindow();
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

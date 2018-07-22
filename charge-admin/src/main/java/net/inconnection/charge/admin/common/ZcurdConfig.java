@@ -58,7 +58,10 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/weixin", ChargeBatteryInfoController.class, "/busi/weixin");
 		me.add("/money", ChargeMoneyInfoController.class, "/busi/chargemoney");
 		me.add("/weixinsum", ChargeBatterySumController.class, "/busi/weixinsum");
-
+		me.add("/moneysum", ChargeMoneySumController.class, "/busi/chargemoneysum");
+		me.add("/cardlog", CardlogController.class, "/busi/cardlog");
+		me.add("/tuser", TuserController.class, "/busi/tuser");
+		me.add("/device", QrMatchDeviceController.class, "/busi/device");
 
 	}
 	

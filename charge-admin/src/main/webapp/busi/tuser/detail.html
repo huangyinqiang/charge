@@ -1,0 +1,63 @@
+
+<#include "/common/head.html"/>
+
+
+ <div class="easyui-panel detailPage" data-options="fit:true,border:false">
+    <form id="ff" class="easyui-form" method="post">
+        <table class="table1">
+            <tr>
+           		<th><span>微信用户的唯一识别:</span></th>
+               	<td><span class="valueSpan"><pre>${model.openId!''}</pre></span></td>
+            <tr>
+           		<th><span>昵称:</span></th>
+               	<td><span class="valueSpan"><pre>${model.nickName!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>头像:</span></th>
+               	<td><span class="valueSpan"><pre>${model.headimgurl!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>城市:</span></th>
+               	<td><span class="valueSpan"><pre>${model.city!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>省会:</span></th>
+               	<td><span class="valueSpan"><pre>${model.province!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>手机号码:</span></th>
+               	<td><span class="valueSpan"><pre>${model.tel!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>注册时间:</span></th>
+               	<td><span class="valueSpan"><pre>${model.registerDate!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>最后登录时间:</span></th>
+               	<td><span class="valueSpan"><pre>${model.lastLoginDate!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>卡号:</span></th>
+               	<td><span class="valueSpan"><pre>${model.cardNumber!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>是否绑定手机(Y:绑定 N:未绑定):</span></th>
+               	<td><span class="valueSpan"><pre>${model.band!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span>钱包:</span></th>
+               	<td><span class="valueSpan"><pre>${model.walletAccount!''}</pre></span></td>
+            </tr>
+           	
+        </table>
+    </form>
+</div>
+<script>
+top.window.subPage.save = save;
+function save() {
+	top.window.closeWindow();
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

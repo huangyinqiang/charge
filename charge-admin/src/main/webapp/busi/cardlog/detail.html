@@ -1,0 +1,39 @@
+ <#include "/common/head.html"/>
+
+
+<div class="easyui-panel detailPage"
+	data-options="fit:true,border:false">
+	<form id="ff" class="easyui-form" method="post">
+		<table class="table1">
+			<tr>
+				<th><span>设备编号: </span></th>
+				<td><span class="valueSpan"><pre>${model.deviceId!''}</pre></span></td>
+			<tr>
+				<th><span>物理编号: </span></th>
+				<td><span class="valueSpan"><pre>${model.phyicalId!''}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>充电卡号: </span></th>
+				<td><span class="valueSpan"><pre>${model.cardCode!''}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>剩余金额: </span></th>
+				<td><span class="valueSpan"><pre>${model.balance!''}</pre></span></td>
+			</tr>
+			<tr>
+				<th><span>刷卡时间: </span></th>
+				<td><span class="valueSpan"><pre>${model.joinDate!''}</pre></span></td>
+			</tr>
+
+		</table>
+	</form>
+</div>
+<script>
+	top.window.subPage.save = save;
+	function save() {
+		top.window.closeWindow();
+	}
+
+	//扩展js
+</script>
+<#include "/common/foot.html"/>

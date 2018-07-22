@@ -1,0 +1,146 @@
+ <#include "/common/head.html"/>
+
+
+<div class="easyui-panel addPage"
+	data-options="fit:true,border:false,novalidate:true">
+	<form class="easyui-form" id="ff" method="post"
+		data-options="novalidate:true">
+		<table class="table1">
+			<tr>
+				<th><span>设备序号：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="qr_num"
+							id="QR_num" value="" data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>设备名称：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="remark"
+							id="remark" value="" data-options="fit: true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>通讯序号：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="match_num"
+							id="match_num" value="" data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>设备位置：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="area" id="area"
+							value="" data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>设备类型：<span style="color: red;">(小功率S
+							大功率L)：</span></span></th>
+				<td>
+					<div class="wrap_input">
+						<input minlength="1" maxlength="1" class="easyui-textbox"
+							type="text" name="type" id="type" value="S"
+							data-options="fit: true,required:true,min:1,max:1"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>非会员2小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text"
+							name="tow_hours_price" id="tow_hours_price" value=""
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>非会员4小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text"
+							name="four_hours_price" id="four_hours_price" value=""
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>非会员8小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text"
+							name="eight_hours_price" id="eight_hours_price" value=""
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>非会员12小时价格：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text"
+							name="twelve_hours_price" id="twelve_hours_price" value=""
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<th><span>会员最低钱包金额：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-numberspinner" type="text"
+							name="auto_price" id="auto_price" value=""
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</form>
+</div>
+<script>
+	top.window.subPage.save = save;
+	function save() {
+		if ($("#ff").form('enableValidation').form('validate')) {
+			$.post("add", getParam(), function(data) {
+				top.window.closeWindow();
+				top.window.subPage.loadCurrDatagrid();
+			});
+		}
+	}
+	function getParam() {
+		var param = {
+			"model.qr_num" : $(":input[name='qr_num']").val(),
+			"model.match_num" : $(":input[name='match_num']").val(),
+			"model.area" : $(":input[name='area']").val(),
+			"model.tow_hours_price" : $(":input[name='tow_hours_price']").val(),
+			"model.four_hours_price" : $(":input[name='four_hours_price']")
+					.val(),
+			"model.eight_hours_price" : $(":input[name='eight_hours_price']")
+					.val(),
+			"model.twelve_hours_price" : $(":input[name='twelve_hours_price']")
+					.val(),
+			"model.status" : $(":input[name='status']").val(),
+			"model.type" : $(":input[name='type']").val(),
+			"model.auto_price" : $(":input[name='auto_price']").val(),
+			"model.remark" : $(":input[name='remark']").val(),
+		}
+		for (key in param) {
+			if (!param[key]) {
+				delete param[key];
+			}
+		}
+		return param;
+	}
+
+	//扩展js
+</script>
+<#include "/common/foot.html"/>

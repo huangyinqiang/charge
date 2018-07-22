@@ -8,4 +8,6 @@ import net.inconnection.charge.extend.model.base.BaseCardlog;
 @SuppressWarnings("serial")
 public class Cardlog extends BaseCardlog<Cardlog> {
 	public static final Cardlog dao = new Cardlog().dao();
+
+	public static final Cardlog me = new Cardlog();
 }
