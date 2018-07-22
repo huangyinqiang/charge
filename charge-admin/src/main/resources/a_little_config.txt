@@ -1,6 +1,6 @@
 devMode = true
 
-base_jdbcUrl = jdbc:mysql://127.0.0.1/zcurd_base_before?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useUnicode=true&relaxAutoCommit=true&useSSL=false&serverTimezone=GMT%2B8
+base_jdbcUrl = jdbc:mysql://127.0.0.1/zcurd_base?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useUnicode=true&relaxAutoCommit=true&useSSL=false&serverTimezone=GMT%2B8
 base_user = root
 base_password = 123456
 

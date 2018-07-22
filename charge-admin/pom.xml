@@ -95,9 +95,8 @@
 
     </dependencies>
 
-
     <build>
-        <finalName>zcurd</finalName>
+        <finalName>charge</finalName>
         <plugins>
 
             <plugin>
