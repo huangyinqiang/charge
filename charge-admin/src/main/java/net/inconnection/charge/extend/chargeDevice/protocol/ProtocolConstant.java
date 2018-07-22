@@ -41,6 +41,8 @@ public class ProtocolConstant {
     public static final String MSG_GWID                                     = "GWID";        //网关ID
     public static final String MSG_GW_STATUS                                = "STATUS";        //网关硬件状态
 
+    public static final String MSG_CHARGEVOLTAGE = "CV";//充电电压
+
 
     public static final String MSG_REQUEST                                  = "REQUEST";     //REQUEST主题，请求
     public static final String MSG_RESPONSE                                 = "RESPONSE";    //响应

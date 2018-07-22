@@ -7,6 +7,7 @@ import net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.Alarm;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmConfigManager;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfo;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfoConfig;
+import net.inconnection.charge.extend.model.ChargeSocket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +41,17 @@ public class ChargeSocketComponent implements Device {
     public ChargeSocketComponent(Long chargePileId, Long chargeSocketId){
         this.chargePileId = chargePileId;
         this.chargeSocketId = chargeSocketId;
+    }
+
+    public void saveData(){
+        ChargeSocket chargeSocketDo = new ChargeSocket();
+        chargeSocketDo.setId(chargePileId).setIsUsed(used).setStartPower(startPower)
+                .setChargeIntensity(chargeIntensity).setChargeTime(chargeTime).setChargeState(chargeState).setUpdateTime(lastUpdateTime).save();
+    }
+
+    public void saveNewModel(){
+        ChargeSocket chargeSocketDo = new ChargeSocket();
+        chargeSocketDo.setId(chargePileId).setChargePileId(chargePileId).save()
     }
 
     @Override

@@ -15,6 +15,7 @@ import net.inconnection.charge.extend.chargeDevice.protocol.message.RequestSocke
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.protocol.update.UpdateMsgHandle;
 import net.inconnection.charge.extend.chargeDevice.utils.*;
+import net.inconnection.charge.extend.model.ChargePile;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,8 @@ public class ChargePileDevice implements GateWay {
     private Long chargePileId;//充电桩Id
     private String name;//充电桩名称
 
+    private Integer voltage;
+
     private boolean isOnline;
 
     private Map<Integer, Alarm> alarmMap = new HashMap<>();//Tag， alarm   保存的状态数据
@@ -44,6 +47,18 @@ public class ChargePileDevice implements GateWay {
         this.chargePileId = chargePileId;
         isOnline = false;//仅仅是初始化，未上线
     }
+
+    void saveNewModel(){
+        ChargePile chargePileDo = new ChargePile();
+        chargePileDo.setId(chargePileId).setIsOnline(isOnline).save();
+    }
+
+    void saveData(){
+        ChargePile chargePileDo = new ChargePile();
+        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).save();
+    }
+
+
 
     @Override
     public void setID(Long id) {
@@ -101,6 +116,12 @@ public class ChargePileDevice implements GateWay {
 
         updateAlarm(gwFacetObj, dataTime);
 
+        if (gwFacetObj.containsKey(MSG_CHARGEVOLTAGE)){
+            voltage = Double.parseDouble(gwFacetObj.getString(MSG_CHARGEVOLTAGE));
+        }
+
+        saveData();
+
         for (int i=1; i<msgJArray.size(); i++){
             JSONObject chargeSocketObj = msgJArray.getJSONObject(i);
 
@@ -114,6 +135,7 @@ public class ChargePileDevice implements GateWay {
             Device chargeSocket = chargeSocketMap.get(socketSn);
 
             chargeSocket.updateData(dataTime, chargeSocketObj);
+
             chargeSocket.updateStatus(dataTime, chargeSocketObj);
 
         }
