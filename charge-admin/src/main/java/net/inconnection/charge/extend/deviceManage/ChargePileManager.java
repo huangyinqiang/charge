@@ -1,7 +1,7 @@
 package net.inconnection.charge.extend.deviceManage;
 
 
-import net.inconnection.charge.extend.deviceManage.device.ChargePile;
+import net.inconnection.charge.extend.deviceManage.device.ChargePileDevice;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Map;
 public class ChargePileManager {
     private static ChargePileManager ourInstance = new ChargePileManager();
 
-    private Map<Long, ChargePile> chargePileMap = new HashMap<>();
+    private Map<Long, ChargePileDevice> chargePileMap = new HashMap<>();
 
 
     public static ChargePileManager getInstance() {
@@ -19,7 +19,7 @@ public class ChargePileManager {
     private ChargePileManager() {
     }
 
-    public ChargePile getChargePile(Long chargePileId){
+    public ChargePileDevice getChargePile(Long chargePileId){
         if (chargePileMap.containsKey(chargePileId)){
             return chargePileMap.get(chargePileId);
         }
@@ -32,7 +32,7 @@ public class ChargePileManager {
     }
 
     public void addChargePile(Long chargePileId){
-        chargePileMap.put(chargePileId, new ChargePile(chargePileId));
+        chargePileMap.put(chargePileId, new ChargePileDevice(chargePileId));
     }
 
 

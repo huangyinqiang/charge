@@ -1,7 +1,7 @@
 package net.inconnection.charge.extend.deviceManage;
 
 
-import net.inconnection.charge.extend.deviceManage.device.ChargePile;
+import net.inconnection.charge.extend.deviceManage.device.ChargePileDevice;
 import net.inconnection.charge.extend.protocol.TopicAndMsgStruct;
 import net.inconnection.charge.extend.protocol.topic.GeneralTopic;
 
@@ -37,23 +37,23 @@ public class MsgProcessor {
 
         }else {
 
-            ChargePile chargePile = ChargePileManager.getInstance().getChargePile(gwId);
+            ChargePileDevice chargePileDevice = ChargePileManager.getInstance().getChargePile(gwId);
 
             switch (messageType) {
                 case TOPIC_DATA:
-                    chargePile.dataMsgHandle(message);
+                    chargePileDevice.dataMsgHandle(message);
                     break;
                 case TOPIC_IMAGE:
-                    chargePile.imageMsgHandle(message);
+                    chargePileDevice.imageMsgHandle(message);
                     break;
                 case TOPIC_REQUEST:
-                    chargePile.requestMsgHandle(message);
+                    chargePileDevice.requestMsgHandle(message);
                     break;
                 case TOPIC_RESPONSE:
-                    chargePile.responseMsgHandle(message);
+                    chargePileDevice.responseMsgHandle(message);
                     break;
                 case TOPIC_UPDATE:
-                    chargePile.updateMsgHandle(message);
+                    chargePileDevice.updateMsgHandle(message);
                     break;
                 default:
                     break;

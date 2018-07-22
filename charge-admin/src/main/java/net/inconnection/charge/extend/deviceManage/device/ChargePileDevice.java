@@ -27,7 +27,7 @@ import static net.inconnection.charge.extend.deviceManage.alarm.AlarmStatus.END;
 import static net.inconnection.charge.extend.protocol.ProtocolConstant.*;
 
 
-public class ChargePile implements GateWay {
+public class ChargePileDevice implements GateWay {
     private Long chargePileId;//充电桩Id
     private String name;//充电桩名称
 
@@ -37,10 +37,10 @@ public class ChargePile implements GateWay {
 
     private Map<Long, Device> chargeSocketMap = new HashMap<>();//该充电桩下的所有插座
 
-    private static Logger _log = LoggerFactory.getLogger(ChargePile.class);
+    private static Logger _log = LoggerFactory.getLogger(ChargePileDevice.class);
     private Map<Integer, String> requestSNAndCallBackQueueNameMap = new ConcurrentHashMap();
 
-    public ChargePile(Long chargePileId){
+    public ChargePileDevice(Long chargePileId){
         this.chargePileId = chargePileId;
         isOnline = false;//仅仅是初始化，未上线
     }
@@ -107,8 +107,8 @@ public class ChargePile implements GateWay {
             Long socketSn = Long.parseLong(chargeSocketObj.getString(MSG_DEVICESN));
 
             if (!chargeSocketMap.containsKey(socketSn)){
-                ChargeSocket chargeSocket = new ChargeSocket(chargePileId, socketSn);
-                chargeSocketMap.put(socketSn, chargeSocket);
+                ChargeSocketComponent chargeSocketComponent = new ChargeSocketComponent(chargePileId, socketSn);
+                chargeSocketMap.put(socketSn, chargeSocketComponent);
             }
 
             Device chargeSocket = chargeSocketMap.get(socketSn);
@@ -399,24 +399,24 @@ public class ChargePile implements GateWay {
     public static void main(String[] args){
 
 
-        ChargePile chargePile = new ChargePile(1000L);
+        ChargePileDevice chargePileDevice = new ChargePileDevice(1000L);
 
         String testQueue = "testqueue";
 
-        chargePile.permissionOnLine(testQueue);
+        chargePileDevice.permissionOnLine(testQueue);
 
-        chargePile.shutDownAllSockets(testQueue);
+        chargePileDevice.shutDownAllSockets(testQueue);
 
         Vector<Long> sockets = new Vector<>();
         sockets.add(1L);
         sockets.add(2L);
         sockets.add(4L);
 
-        chargePile.shutDownChargeSocket(sockets, testQueue);
+        chargePileDevice.shutDownChargeSocket(sockets, testQueue);
 
-        chargePile.requestTestPower(sockets, testQueue);
+        chargePileDevice.requestTestPower(sockets, testQueue);
 
-        chargePile.startCharge(sockets, testQueue);
+        chargePileDevice.startCharge(sockets, testQueue);
 
     }
 

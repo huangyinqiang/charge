@@ -17,10 +17,10 @@ import static net.inconnection.charge.extend.deviceManage.alarm.AlarmStatus.END;
 import static net.inconnection.charge.extend.protocol.ProtocolConstant.*;
 
 
-public class ChargeSocket implements Device {
+public class ChargeSocketComponent implements Device {
     public static final String DEVICEUSED = "1";
 
-    private static Logger _log = LoggerFactory.getLogger(ChargeSocket.class);
+    private static Logger _log = LoggerFactory.getLogger(ChargeSocketComponent.class);
 
     private Long chargeSocketId;
     private Long chargePileId;
@@ -37,7 +37,7 @@ public class ChargeSocket implements Device {
 
     private Map<Integer, Alarm> alarmMap = new HashMap<>();//Tag， alarm   保存该网关的状态数据
 
-    public ChargeSocket(Long chargePileId, Long chargeSocketId){
+    public ChargeSocketComponent(Long chargePileId, Long chargeSocketId){
         this.chargePileId = chargePileId;
         this.chargeSocketId = chargeSocketId;
     }
