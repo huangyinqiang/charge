@@ -18,15 +18,15 @@ public class _JFinalDemoGenerator {
 	public static DataSource getDataSource() {
 		PropKit.use("a_little_config.txt");
 		C3p0Plugin c3p0Plugin = new C3p0Plugin(
-				PropKit.get("base_jdbcUrl"), 
-				PropKit.get("base_user"), 
-				PropKit.get("base_password").trim());
+				PropKit.get("busi_jdbcUrl"),
+				PropKit.get("busi_user"),
+				PropKit.get("busi_password").trim());
 		c3p0Plugin.start();
 		return c3p0Plugin.getDataSource();
 	}
 	
 	public static void main(String[] args) {
-		String packageName = "com.zcurd.entity";
+		String packageName = "net.inconnection.charge.extend.model";
 		// base model 文件保存路径
 		String outputDir = PathKit.getWebRootPath() + "/src/main/java/" + packageName.replaceAll("\\.", "/");
 		//String baseModelOutputDir = "/Users/user/Desktop/genCode/base";

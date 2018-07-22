@@ -10,6 +10,7 @@ import net.inconnection.charge.admin.account.service.LoginService;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.util.PasswordUtil;
 import net.inconnection.charge.admin.common.util.StringUtil;
+import net.inconnection.charge.extend.model.ChargePile;
 
 import java.util.Date;
 
@@ -26,6 +27,14 @@ public class LoginController extends BaseController {
 	 * 登陆页面
 	 */
 	public void index() {
+
+
+		//存入数据库的测试逻辑  todo 存入数据库的测试逻辑
+		ChargePile chargePile = new ChargePile();
+		chargePile.setId(1l).setName("ceshi").setProvince("陕西省").setCity("西安").setDetailLocation("王座国际城").setLat(23d).setLng(22d).setSocketNumber(2).setTotalIntensity(23d).setTotalVoltage(34d).setIsOnline(true);
+		chargePile.save();
+
+
 		setAttr("isShowRandomCode", isShowRandomCode());
 		render("login.html");
 	}

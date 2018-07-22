@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataTagDefine>
+    <define>
+        <tag>0</tag>
+        <alarmMessage>节点超时</alarmMessage>
+        <addr>0</addr>
+        <value>0</value>
+    </define>
+    <define>
+        <tag>1</tag>
+        <alarmMessage>节点正常返回数据</alarmMessage>
+        <addr>0</addr>
+        <value>0</value>
+    </define>
+    <define>
+        <tag>2</tag>
+        <alarmMessage>节点电压低</alarmMessage>
+        <addr>0</addr>
+        <value>0</value>
+    </define>
+    <define>
+        <tag>3</tag>
+        <alarmMessage>节点所挂载的设备没有准备好数据</alarmMessage>
+        <addr>0</addr>
+        <value>0</value>
+    </define>
+    <define>
+        <tag>100</tag>
+        <alarmMessage>子站正常</alarmMessage>
+        <addr>0</addr>
+        <value>0</value>
+    </define>
+    <define>
+        <tag>101</tag>
+        <alarmMessage>子站电压低</alarmMessage>
+        <addr>0</addr>
+        <value>0</value>
+    </define>
+</DataTagDefine>

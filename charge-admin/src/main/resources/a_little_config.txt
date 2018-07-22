@@ -20,5 +20,6 @@ busi_password = 123456
 
 
 #代码生成保存地址
-#genCodePath = F:/genCode/
-genCodePath = /Users/user/Desktop/genCode/
+genCodePath = F:/genCode/
+#genCodePath = /Users/user/Desktop/genCode/
+

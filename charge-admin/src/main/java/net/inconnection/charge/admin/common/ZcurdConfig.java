@@ -22,6 +22,7 @@ import net.inconnection.charge.extend.controller.ClawBookUrlController;
 import net.inconnection.charge.extend.controller.StockHistoryLogController;
 import net.inconnection.charge.extend.model.ClawBookUrl;
 import net.inconnection.charge.extend.model.StockHistoryLog;
+import net.inconnection.charge.extend.model.busi_MappingKit;
 
 /**
  * API引导式配置
@@ -79,16 +80,14 @@ public class ZcurdConfig extends JFinalConfig {
 		arp.addMapping("task_log", "id", TaskLog.class);
 		arp.addMapping("sys_login_log", "id", SysLoginLog.class);
 		_MappingKit.mapping(arp);
-		
+
+
 		//业务数据库
 		C3p0Plugin c3p0PluginAir = new C3p0Plugin(PropKit.get("busi_jdbcUrl"), PropKit.get("busi_user"), PropKit.get("busi_password").trim());
 		me.add(c3p0PluginAir);
 		ActiveRecordPlugin arpAir = new ActiveRecordPlugin("zcurd_busi", c3p0PluginAir);
 		arpAir.setShowSql(true);
-		
-		arpAir.addMapping("stock_history_log", StockHistoryLog.class);
-		arpAir.addMapping("claw_book_url", ClawBookUrl.class);
-		
+		busi_MappingKit.mapping(arpAir);
 		me.add(arpAir);
 	}
 	
