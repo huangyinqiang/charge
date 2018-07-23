@@ -18,10 +18,16 @@ import net.inconnection.charge.admin.common.interceptor.ErrorInterceptor;
 import net.inconnection.charge.admin.online.controller.*;
 import net.inconnection.charge.admin.online.model.*;
 import net.inconnection.charge.admin.online.service.TaskService;
+import net.inconnection.charge.extend.chargeDevice.jms.*;
+import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgReceiver;
 import net.inconnection.charge.extend.controller.*;
 import net.inconnection.charge.extend.model.ClawBookUrl;
 import net.inconnection.charge.extend.model.StockHistoryLog;
 import net.inconnection.charge.extend.model.busi_MappingKit;
+
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
+import java.util.Date;
 
 /**
  * API引导式配置
@@ -69,6 +75,8 @@ public class ZcurdConfig extends JFinalConfig {
 	 * 配置插件
 	 */
 	public void configPlugin(Plugins me) {
+
+		System.out.println("》》》》》》》test configPlugin");
 		accountConfig.configPlugin(me);
 		// 配置C3p0数据库连接池插件
 		C3p0Plugin c3p0Plugin = new C3p0Plugin(PropKit.get("base_jdbcUrl"), PropKit.get("base_user"), PropKit.get("base_password").trim());
@@ -98,6 +106,35 @@ public class ZcurdConfig extends JFinalConfig {
 		arpAir.setShowSql(true);
 		busi_MappingKit.mapping(arpAir);
 		me.add(arpAir);
+
+
+		ActiveMQPlugin p = new ActiveMQPlugin("failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=1000");
+		p.start();
+
+		String subject = "test";
+		try {
+			ActiveMQ.addSender(new JmsSender("testSender1", ActiveMQ.getConnection(), DestinationType.Queue, subject));//定义发送者
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+		try {
+			ActiveMQ.addReceiver(new JmsReceiver("testReceiver1", ActiveMQ.getConnection(), DestinationType.Queue, subject));//定义接受者
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+
+		MqttMsgReceiver.getInstance().start();
+
+		JmsSender sq1 = ActiveMQ.getSender("testSender1");
+		TextMessage msg = null;
+		try {
+			msg = sq1.getSession().createTextMessage("测试" + new Date());
+			sq1.sendMessage(msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
+
+
 	}
 	
 	/**
