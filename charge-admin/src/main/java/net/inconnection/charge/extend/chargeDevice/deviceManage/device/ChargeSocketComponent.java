@@ -45,13 +45,13 @@ public class ChargeSocketComponent implements Device {
 
     public void saveData(){
         ChargeSocket chargeSocketDo = new ChargeSocket();
-        chargeSocketDo.setId(chargePileId).setIsUsed(used).setStartPower(startPower)
-                .setChargeIntensity(chargeIntensity).setChargeTime(chargeTime).setChargeState(chargeState).setUpdateTime(lastUpdateTime).save();
+//        chargeSocketDo.setId(chargePileId).setIsUsed(used).setStartPower(startPower)
+//                .setChargeIntensity(chargeIntensity).setChargeTime(chargeTime).setChargeState(chargeState).setUpdateTime(lastUpdateTime).save();
     }
 
     public void saveNewModel(){
         ChargeSocket chargeSocketDo = new ChargeSocket();
-        chargeSocketDo.setId(chargePileId).setChargePileId(chargePileId).save()
+        chargeSocketDo.setId(chargePileId).setChargePileId(chargePileId).save();
     }
 
     @Override

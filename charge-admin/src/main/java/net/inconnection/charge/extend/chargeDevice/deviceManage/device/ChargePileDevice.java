@@ -55,7 +55,7 @@ public class ChargePileDevice implements GateWay {
 
     void saveData(){
         ChargePile chargePileDo = new ChargePile();
-        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).save();
+        //chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).save();
     }
 
 
@@ -117,7 +117,7 @@ public class ChargePileDevice implements GateWay {
         updateAlarm(gwFacetObj, dataTime);
 
         if (gwFacetObj.containsKey(MSG_CHARGEVOLTAGE)){
-            voltage = Double.parseDouble(gwFacetObj.getString(MSG_CHARGEVOLTAGE));
+            voltage = Integer.parseInt(gwFacetObj.getString(MSG_CHARGEVOLTAGE));
         }
 
         saveData();

@@ -118,7 +118,7 @@ public class ZcurdConfig extends JFinalConfig {
 			e.printStackTrace();
 		}
 		try {
-			ActiveMQ.addReceiver(new JmsReceiver("testReceiver1", ActiveMQ.getConnection(), DestinationType.Queue, subject));//定义接受者
+			ActiveMQ.addReceiver(new MQTTListener("testReceiver1", ActiveMQ.getConnection(), DestinationType.Queue, subject));//定义接受者
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}

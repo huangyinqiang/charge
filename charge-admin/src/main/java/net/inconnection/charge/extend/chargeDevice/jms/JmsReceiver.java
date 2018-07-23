@@ -17,9 +17,9 @@ import java.util.Enumeration;
 
 
 public class JmsReceiver implements MessageListener {
-    private String name;
-    private Session session;
-    private MessageConsumer consumer;
+    protected String name;
+    protected Session session;
+    protected MessageConsumer consumer;
     public JmsReceiver(String name,
                        PooledConnection connection,
                        DestinationType type,
