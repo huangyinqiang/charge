@@ -29,11 +29,15 @@ import javax.jms.JMSException;
 import javax.jms.TextMessage;
 import java.util.Date;
 
+import static net.inconnection.charge.extend.chargeDevice.jms.ActiveMQConstant.MQTT_TO_MqttMsgProcesser;
+
 /**
  * API引导式配置
  */
 public class ZcurdConfig extends JFinalConfig {
-	AccountConfig accountConfig = new AccountConfig();
+    public static final String MQTT2PROCESSOR = "testSender1";
+    public static final String MQTTLISTENER = "testReceiver1";
+    AccountConfig accountConfig = new AccountConfig();
 	
 	/**
 	 * 配置常量
@@ -111,29 +115,16 @@ public class ZcurdConfig extends JFinalConfig {
 		ActiveMQPlugin p = new ActiveMQPlugin("failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=1000");
 		p.start();
 
-		String subject = "test";
 		try {
-			ActiveMQ.addSender(new JmsSender("testSender1", ActiveMQ.getConnection(), DestinationType.Queue, subject));//定义发送者
+			ActiveMQ.addSender(new JmsSender(MQTT2PROCESSOR, ActiveMQ.getConnection(), DestinationType.Queue, MQTT_TO_MqttMsgProcesser));//定义发送者
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
 		try {
-			ActiveMQ.addReceiver(new MQTTListener("testReceiver1", ActiveMQ.getConnection(), DestinationType.Queue, subject));//定义接受者
+			ActiveMQ.addReceiver(new MQTTListener(MQTTLISTENER, ActiveMQ.getConnection(), DestinationType.Queue, MQTT_TO_MqttMsgProcesser));//定义接受者
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
-
-		MqttMsgReceiver.getInstance().start();
-
-		JmsSender sq1 = ActiveMQ.getSender("testSender1");
-		TextMessage msg = null;
-		try {
-			msg = sq1.getSession().createTextMessage("测试" + new Date());
-			sq1.sendMessage(msg);
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
-
 
 	}
 	
@@ -166,6 +157,10 @@ public class ZcurdConfig extends JFinalConfig {
 		//定时任务
 		TaskService taskService = Duang.duang(TaskService.class);
 		taskService.startAll();
+
+        MqttMsgReceiver.getInstance().setJmsSendertoMqttProcesser(ActiveMQ.getSender(MQTT2PROCESSOR));
+        MqttMsgReceiver.getInstance().start();
+
 	}
 	
 	/**

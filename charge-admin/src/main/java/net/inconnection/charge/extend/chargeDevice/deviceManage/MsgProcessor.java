@@ -19,6 +19,8 @@ public class MsgProcessor {
 
     public void processIncomeMsg(String topicAndMsg) {
 
+        System.out.println("MsgProcessor msg: " + topicAndMsg);
+
         TopicAndMsgStruct topicAndMsgStruct = new TopicAndMsgStruct(topicAndMsg);
 
         String message = topicAndMsgStruct.getMessage();
@@ -38,6 +40,10 @@ public class MsgProcessor {
         }else {
 
             ChargePileDevice chargePileDevice = ChargePileManager.getInstance().getChargePile(gwId);
+
+            if (null == chargePileDevice){
+                return;
+            }
 
             switch (messageType) {
                 case TOPIC_DATA:

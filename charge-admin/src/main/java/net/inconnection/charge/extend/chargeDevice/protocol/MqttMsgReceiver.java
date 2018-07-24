@@ -2,6 +2,7 @@ package net.inconnection.charge.extend.chargeDevice.protocol;
 
 import net.inconnection.charge.extend.chargeDevice.jms.ActiveMQConstant;
 import net.inconnection.charge.extend.chargeDevice.jms.ActiveMQSender;
+import net.inconnection.charge.extend.chargeDevice.jms.JmsSender;
 import net.inconnection.charge.extend.chargeDevice.utils.CommunicateBySocket;
 import net.inconnection.charge.extend.chargeDevice.utils.MqttReconnectUtil;
 import org.eclipse.paho.client.mqttv3.*;
@@ -18,6 +19,7 @@ public class MqttMsgReceiver {
 
     private MqttClient client;
     private ActiveMQSender activeMQSendertoMqttProcessers = new ActiveMQSender(ActiveMQConstant.MQTT_TO_MqttMsgProcesser);
+    private JmsSender jmsSendertoMqttProcesser;
     private static Logger _log = LoggerFactory.getLogger(MqttMsgReceiver.class);
 
     //单例模式获取唯一对象
@@ -36,6 +38,10 @@ public class MqttMsgReceiver {
             }
         }
         return mqttMsgReceiver;
+    }
+
+    public void setJmsSendertoMqttProcesser(JmsSender jmsSendertoMqttProcesser) {
+        this.jmsSendertoMqttProcesser = jmsSendertoMqttProcesser;
     }
 
     public void start() {

@@ -28,6 +28,8 @@ public class MQTTListener extends JmsReceiver {
             try {
                 TextMessage msg = (TextMessage) message;
                 System.out.println("MQTTListener" + msg.getText());
+
+                MsgProcessor.getInstance().processIncomeMsg(textMessage.getText());
             } catch (Exception e){
                 _log.error("消息处理异常:",e);
             }
