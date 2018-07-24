@@ -112,19 +112,19 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add(arpAir);
 
 
-		ActiveMQPlugin p = new ActiveMQPlugin("failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=1000");
-		p.start();
+//		ActiveMQPlugin p = new ActiveMQPlugin("failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=1000");
+//		p.start();
 
-		try {
-			ActiveMQ.addSender(new JmsSender(MQTT2PROCESSOR, ActiveMQ.getConnection(), DestinationType.Queue, MQTT_TO_MqttMsgProcesser));//定义发送者
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
-		try {
-			ActiveMQ.addReceiver(new MQTTListener(MQTTLISTENER, ActiveMQ.getConnection(), DestinationType.Queue, MQTT_TO_MqttMsgProcesser));//定义接受者
-		} catch (JMSException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			ActiveMQ.addSender(new JmsSender(MQTT2PROCESSOR, ActiveMQ.getConnection(), DestinationType.Queue, MQTT_TO_MqttMsgProcesser));//定义发送者
+//		} catch (JMSException e) {
+//			e.printStackTrace();
+//		}
+//		try {
+//			ActiveMQ.addReceiver(new MQTTListener(MQTTLISTENER, ActiveMQ.getConnection(), DestinationType.Queue, MQTT_TO_MqttMsgProcesser));//定义接受者
+//		} catch (JMSException e) {
+//			e.printStackTrace();
+//		}
 
 	}
 	
@@ -158,7 +158,6 @@ public class ZcurdConfig extends JFinalConfig {
 		TaskService taskService = Duang.duang(TaskService.class);
 		taskService.startAll();
 
-        MqttMsgReceiver.getInstance().setJmsSendertoMqttProcesser(ActiveMQ.getSender(MQTT2PROCESSOR));
         MqttMsgReceiver.getInstance().start();
 
 	}

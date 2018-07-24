@@ -22,8 +22,7 @@ public class ActiveMQ {
     public static JmsReceiver getReceiver(String name) {
         return receiverMap.get(name);
     }
-    public static void addConnection(String connectionName,
-                                     PooledConnection connection) {
+    public static void addConnection(String connectionName,PooledConnection connection) {
         pooledConnectionMap.put(connectionName, connection);
     }
     public static PooledConnection getConnection() {

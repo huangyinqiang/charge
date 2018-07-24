@@ -2,29 +2,27 @@ package net.inconnection.charge.extend.chargeDevice.deviceManage;
 
 
 import net.inconnection.charge.extend.chargeDevice.deviceManage.device.ChargePileDevice;
-import net.inconnection.charge.extend.chargeDevice.protocol.TopicAndMsgStruct;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.*;
 
-public class MsgProcessor {
-    private static MsgProcessor ourInstance = new MsgProcessor();
+public class MQTTMsgProcessor {
+    private static MQTTMsgProcessor instance = new MQTTMsgProcessor();
 
-    public static MsgProcessor getInstance() {
-        return ourInstance;
+    public static MQTTMsgProcessor getInstance() {
+        return instance;
     }
 
-    private MsgProcessor() {
+    private MQTTMsgProcessor() {
     }
 
-    public void processIncomeMsg(String topicAndMsg) {
+    public void processIncomeMsg(String topic, String msg) {
 
-        System.out.println("MsgProcessor msg: " + topicAndMsg);
+        System.out.println("topic : " + topic);
+        System.out.println("msg : " + msg);
 
-        TopicAndMsgStruct topicAndMsgStruct = new TopicAndMsgStruct(topicAndMsg);
-
-        String message = topicAndMsgStruct.getMessage();
-        String topicStr = topicAndMsgStruct.getTopic();
+        String message = msg;
+        String topicStr = topic;
 
         GeneralTopic generalTopic = new GeneralTopic(topicStr);
         Long gwId = Long.parseLong(generalTopic.getGwId());

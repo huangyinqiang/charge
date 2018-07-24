@@ -1,9 +1,7 @@
 package net.inconnection.charge.extend.chargeDevice.protocol;
 
-import net.inconnection.charge.extend.chargeDevice.jms.ActiveMQConstant;
-import net.inconnection.charge.extend.chargeDevice.jms.ActiveMQSender;
-import net.inconnection.charge.extend.chargeDevice.jms.JmsSender;
-import net.inconnection.charge.extend.chargeDevice.utils.CommunicateBySocket;
+import net.inconnection.charge.extend.chargeDevice.deviceManage.MQTTMsgProcessor;
+import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.utils.MqttReconnectUtil;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -18,8 +16,6 @@ import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConst
 public class MqttMsgReceiver {
 
     private MqttClient client;
-    private ActiveMQSender activeMQSendertoMqttProcessers = new ActiveMQSender(ActiveMQConstant.MQTT_TO_MqttMsgProcesser);
-    private JmsSender jmsSendertoMqttProcesser;
     private static Logger _log = LoggerFactory.getLogger(MqttMsgReceiver.class);
 
     //单例模式获取唯一对象
@@ -32,21 +28,14 @@ public class MqttMsgReceiver {
             synchronized (MqttMsgReceiver.class) {
                 if (mqttMsgReceiver == null) {
                     mqttMsgReceiver = new MqttMsgReceiver();
-                    Thread chSubscribeThread = new Thread(() -> CommunicateBySocket.getMsg(mqttMsgReceiver));
-                    chSubscribeThread.start();
                 }
             }
         }
         return mqttMsgReceiver;
     }
 
-    public void setJmsSendertoMqttProcesser(JmsSender jmsSendertoMqttProcesser) {
-        this.jmsSendertoMqttProcesser = jmsSendertoMqttProcesser;
-    }
 
     public void start() {
-
-        System.out.println("ddddddddddddddddd");
 
         try {
             String clientid = "MqttMsgReceiver_" + UUID.randomUUID();
@@ -91,8 +80,10 @@ public class MqttMsgReceiver {
 
                 String messageStr = new String(message.getPayload(),"ISO-8859-1");
                 String messageIn = messageStr;
-                String[] type = topic.split("/");
-                if((type[type.length-1]).equals("data")){
+
+                GeneralTopic generalTopic = new GeneralTopic(topic);
+
+                if(generalTopic.getMessageType().equals("data")){
                     _log.info("data类型消息");
                 }else {
                     _log.info("其他类型消息");
@@ -101,12 +92,7 @@ public class MqttMsgReceiver {
                 }
                 _log.info("MqttMsgReceiver接收消息内容为 : \n" + messageIn);
 
-                TopicAndMsgStruct topicAndMsgStruct = new TopicAndMsgStruct(topic, messageIn);
-
-                String msg4MQ = topicAndMsgStruct.toString();//MQTT主题和MQTT消息拼接为一个消息
-
-                activeMQSendertoMqttProcessers.sendMessage(msg4MQ);
-
+                MQTTMsgProcessor.getInstance().processIncomeMsg(topic, messageIn);
             }
 
             @Override
@@ -135,16 +121,16 @@ public class MqttMsgReceiver {
 
         String[] topic1 = new String[7];
         int count = 0;
-            topic1[count] = "C/CHARGE/+/+/data";
-            count++;
-            topic1[count] = "C/CHARGE/+/+/request";
-            count++;
-            topic1[count] = "C/CHARGE/+/+/response";
-            count++;
-            topic1[count] = "C/CHARGE/+/+/image";
-            count++;
-            topic1[count] = "C/CHARGE/+/+/update";
-            count++;
+        topic1[count] = "C/CHARGE/+/+/data";
+        count++;
+        topic1[count] = "P/CHARGE/+/+/request";
+        count++;
+        topic1[count] = "C/CHARGE/+/+/response";
+        count++;
+        topic1[count] = "C/CHARGE/+/+/image";
+        count++;
+        topic1[count] = "C/CHARGE/+/+/update";
+        count++;
 
         topic1[count]="C/GW_INIT/+/+/notify";
         count++;
@@ -161,38 +147,4 @@ public class MqttMsgReceiver {
         }
     }
 
-    //重启订阅流程
-    public void reSubscribe(String title , String topic) {
-        _log.info("title:"+title+"   "+"topic:"+topic);
-        if(title.equals("del")){
-            String[] delTopics = new String[5];
-            delTopics[0] = "C/"+topic + "/+/data";
-            delTopics[1] = "C/"+topic + "/+/request";
-            delTopics[2] = "C/"+topic+ "/+/response";
-            delTopics[3] = "C/"+topic+ "/+/image";
-            delTopics[4] = "C/"+topic+ "/+/update";
-            try {
-                mqttMsgReceiver.client.unsubscribe(delTopics);
-                _log.info("订阅删除完成:"+topic);
-            } catch (MqttException e) {
-                _log.error("mqtt取消订阅失败!"+e);
-                e.printStackTrace();
-            }
-        }
-        if(title.equals("add")){
-            String[] addTopics = new String[5];
-            addTopics[0] = "C/"+topic + "/+/data";
-            addTopics[1] = "C/"+topic + "/+/request";
-            addTopics[2] = "C/"+topic+ "/+/response";
-            addTopics[3] = "C/"+topic+ "/+/image";
-            addTopics[4] = "C/"+topic+ "/+/update";
-            try {
-                mqttMsgReceiver.client.subscribe(addTopics);
-                _log.info("订阅新增完成:"+topic);
-            } catch (MqttException e) {
-                _log.error("添加订阅失败!"+e);
-                e.printStackTrace();
-            }
-        }
-    }
 }
