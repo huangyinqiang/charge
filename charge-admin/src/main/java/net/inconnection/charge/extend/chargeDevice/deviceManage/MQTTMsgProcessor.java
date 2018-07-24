@@ -9,6 +9,8 @@ import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConst
 public class MQTTMsgProcessor {
     private static MQTTMsgProcessor instance = new MQTTMsgProcessor();
 
+    private static ChargePileManager chargePileManager = ChargePileManager.getInstance();
+
     public static MQTTMsgProcessor getInstance() {
         return instance;
     }
@@ -16,28 +18,24 @@ public class MQTTMsgProcessor {
     private MQTTMsgProcessor() {
     }
 
-    public void processIncomeMsg(String topic, String msg) {
+    public void processIncomeMsg(String topic, String message) {
 
         System.out.println("topic : " + topic);
-        System.out.println("msg : " + msg);
+        System.out.println("msg : " + message);
 
-        String message = msg;
-        String topicStr = topic;
-
-        GeneralTopic generalTopic = new GeneralTopic(topicStr);
+        GeneralTopic generalTopic = new GeneralTopic(topic);
         Long gwId = Long.parseLong(generalTopic.getGwId());
         String messageType = generalTopic.getMessageType();
 
         if (TOPIC_NOTIFY.equals(messageType)){
-
             //待注册设备
-            if (!ChargePileManager.getInstance().hasChargePile(gwId)){
-                ChargePileManager.getInstance().addChargePile(gwId);
+            if (!chargePileManager.hasChargePile(gwId)){
+                chargePileManager.addChargePile(gwId);
             }
 
         }else {
 
-            ChargePileDevice chargePileDevice = ChargePileManager.getInstance().getChargePile(gwId);
+            ChargePileDevice chargePileDevice = chargePileManager.getChargePile(gwId);
 
             if (null == chargePileDevice){
                 return;

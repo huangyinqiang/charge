@@ -418,6 +418,8 @@ public class ChargePileDevice implements GateWay {
     }
 
 
+
+
     public static void main(String[] args){
 
 
@@ -439,6 +441,8 @@ public class ChargePileDevice implements GateWay {
         chargePileDevice.requestTestPower(sockets, testQueue);
 
         chargePileDevice.startCharge(sockets, testQueue);
+
+
 
     }
 
