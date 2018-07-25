@@ -1,7 +1,7 @@
 package net.inconnection.charge.extend.chargeDevice.protocol;
 
 public class ProtocolConstant {
-    public static final String MQTT_BROKER_IP = "tcp://139.199.78.128:1883";
+    public static final String MQTT_BROKER_IP = "tcp://127.0.0.1:1883";
 
     public static final int MSG_UPDATE_WEB_PORT =   7777;       //update的web管理端口
     public static final int MSG_UPDATE_PROCESS_PORT =   8888;       //update的数据管理端口
@@ -41,7 +41,8 @@ public class ProtocolConstant {
     public static final String MSG_GWID                                     = "GWID";        //网关ID
     public static final String MSG_GW_STATUS                                = "STATUS";        //网关硬件状态
 
-    public static final String MSG_CHARGEVOLTAGE = "CV";//充电电压
+    public static final String MSG_CHARGEVOLTAGE = "VOLTAGE";//充电电压
+    public static final String MSG_CHARGEPOWER = "POWER";//充电功率
 
 
     public static final String MSG_REQUEST                                  = "REQUEST";     //REQUEST主题，请求

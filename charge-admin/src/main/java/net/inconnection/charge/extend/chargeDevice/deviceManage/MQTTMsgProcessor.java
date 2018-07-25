@@ -37,6 +37,12 @@ public class MQTTMsgProcessor {
 
             ChargePileDevice chargePileDevice = chargePileManager.getChargePile(gwId);
 
+            System.out.println("----chargePileManager----");
+            System.out.println(chargePileManager);
+
+            System.out.println("----chargePileDevice----");
+            System.out.println(chargePileDevice);
+
             if (null == chargePileDevice){
                 return;
             }

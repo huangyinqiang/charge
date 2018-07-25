@@ -1,6 +1,7 @@
 package net.inconnection.charge.extend.chargeDevice.deviceManage.alarm;
 
 import java.util.Date;
+import java.util.Objects;
 
 import static net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.AlarmStatus.START;
 
@@ -73,4 +74,34 @@ public class Alarm {
     public void setStatus(AlarmStatus status) {
         this.status = status;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Alarm alarm = (Alarm) o;
+        return tag == alarm.tag &&
+                Objects.equals(message, alarm.message) &&
+                Objects.equals(startTime, alarm.startTime) &&
+                Objects.equals(endTime, alarm.endTime) &&
+                status == alarm.status;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(tag, message, startTime, endTime, status);
+    }
+
+    @Override
+    public String toString() {
+        return "Alarm{" +
+                "tag=" + tag +
+                ", message='" + message + '\'' +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", status=" + status +
+                '}';
+    }
+
 }

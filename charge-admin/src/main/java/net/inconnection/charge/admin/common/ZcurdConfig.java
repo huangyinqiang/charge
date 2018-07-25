@@ -80,7 +80,6 @@ public class ZcurdConfig extends JFinalConfig {
 	 */
 	public void configPlugin(Plugins me) {
 
-		System.out.println("》》》》》》》test configPlugin");
 		accountConfig.configPlugin(me);
 		// 配置C3p0数据库连接池插件
 		C3p0Plugin c3p0Plugin = new C3p0Plugin(PropKit.get("base_jdbcUrl"), PropKit.get("base_user"), PropKit.get("base_password").trim());
@@ -126,6 +125,9 @@ public class ZcurdConfig extends JFinalConfig {
 //			e.printStackTrace();
 //		}
 
+
+		MqttMsgReceiver.getInstance().start();
+
 	}
 	
 	/**
@@ -158,7 +160,6 @@ public class ZcurdConfig extends JFinalConfig {
 		TaskService taskService = Duang.duang(TaskService.class);
 		taskService.startAll();
 
-        MqttMsgReceiver.getInstance().start();
 
 	}
 	

@@ -75,6 +75,21 @@ public class ChargeSocketComponent implements Device {
     }
 
     @Override
+    public String toString() {
+        return "ChargeSocketComponent{" +
+                "chargeSocketId=" + chargeSocketId +
+                ", chargePileId=" + chargePileId +
+                ", used=" + used +
+                ", startPower=" + startPower +
+                ", chargeIntensity=" + chargeIntensity +
+                ", chargeTime=" + chargeTime +
+                ", chargeState=" + chargeState +
+                ", lastUpdateTime=" + lastUpdateTime +
+                ", alarmMap=" + alarmMap +
+                '}';
+    }
+
+    @Override
     public boolean updateData(Date updateTime, JSONObject deviceObj) {
 
         if (deviceObj.containsKey(MSG_INUSE)){

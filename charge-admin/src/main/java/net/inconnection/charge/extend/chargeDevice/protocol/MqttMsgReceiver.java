@@ -19,7 +19,7 @@ public class MqttMsgReceiver {
     private static Logger _log = LoggerFactory.getLogger(MqttMsgReceiver.class);
 
     //单例模式获取唯一对象
-    private volatile static MqttMsgReceiver mqttMsgReceiver;
+    private volatile static MqttMsgReceiver mqttMsgReceiver ;
 
     private MqttMsgReceiver(){}
 
@@ -31,6 +31,9 @@ public class MqttMsgReceiver {
                 }
             }
         }
+
+        System.out.println("MqttMsgReceiver getInstance " + mqttMsgReceiver);
+
         return mqttMsgReceiver;
     }
 
@@ -77,6 +80,10 @@ public class MqttMsgReceiver {
             @Override
             public void messageArrived(String topic, MqttMessage message) throws Exception {
                 _log.info("MqttMsgReceiver接收消息主题 : " + topic + ", 消息Qos : " + message.getQos());
+
+                System.out.println("MqttMsgReceiver messageArrived this: " + mqttMsgReceiver);
+
+                System.out.println("MqttMsgReceiver接收消息主题 : " + topic + ", 消息Qos : " + message.getQos());
 
                 String messageStr = new String(message.getPayload(),"ISO-8859-1");
                 String messageIn = messageStr;

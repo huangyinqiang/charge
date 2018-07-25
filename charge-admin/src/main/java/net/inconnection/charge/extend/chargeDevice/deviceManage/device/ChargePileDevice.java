@@ -33,6 +33,8 @@ public class ChargePileDevice implements GateWay {
     private String name;//充电桩名称
 
     private Integer voltage;
+    private Integer power;
+    private Date lastUpdataTime = null;
 
     private boolean isOnline;
 
@@ -111,8 +113,22 @@ public class ChargePileDevice implements GateWay {
 
     private void updateDataAndAlarm(JSONArray msgJArray){
 
+        System.out.println("updateDataAndAlarm jarray: " + msgJArray);
+
         JSONObject gwFacetObj = msgJArray.getJSONObject(0);
+
+        if (chargePileId != Long.parseLong(gwFacetObj.getString(MSG_GWID))){
+            _log.error("the id in message is not match the id in topic!!!");
+            return;
+        }
+
         Date dataTime= DateUtil.yyyyMMddHHmmssStrToDate(gwFacetObj.getString(MSG_TIME));
+
+        if (null != lastUpdataTime && lastUpdataTime.getTime() > dataTime.getTime()){
+            return;
+        }
+
+        lastUpdataTime = dataTime;
 
         updateAlarm(gwFacetObj, dataTime);
 
@@ -120,12 +136,16 @@ public class ChargePileDevice implements GateWay {
             voltage = Integer.parseInt(gwFacetObj.getString(MSG_CHARGEVOLTAGE));
         }
 
+        if (gwFacetObj.containsKey(MSG_CHARGEPOWER)){
+            power = Integer.parseInt(gwFacetObj.getString(MSG_CHARGEPOWER));
+        }
+
         saveData();
 
         for (int i=1; i<msgJArray.size(); i++){
             JSONObject chargeSocketObj = msgJArray.getJSONObject(i);
 
-            Long socketSn = Long.parseLong(chargeSocketObj.getString(MSG_DEVICESN));
+            Long socketSn = Long.parseLong(gwFacetObj.getString(MSG_GWID) + chargeSocketObj.getString(MSG_DEVICESN));
 
             if (!chargeSocketMap.containsKey(socketSn)){
                 ChargeSocketComponent chargeSocketComponent = new ChargeSocketComponent(chargePileId, socketSn);
@@ -139,6 +159,17 @@ public class ChargePileDevice implements GateWay {
             chargeSocket.updateStatus(dataTime, chargeSocketObj);
 
         }
+
+        displayAll();
+    }
+
+    private void displayAll(){
+
+        System.out.println("---------id: " + chargePileId + "   display-------------");
+        System.out.println("name: " + name + " ; voltage: " + voltage + "; power: " + power + "; online: " + isOnline + "; last update time:" + lastUpdataTime.toString());
+        System.out.println("status: " + alarmMap);
+        System.out.println("sockets: " + chargeSocketMap);
+
     }
 
     private void updateAlarm(JSONObject gwFacetObj, Date dataTime) {
