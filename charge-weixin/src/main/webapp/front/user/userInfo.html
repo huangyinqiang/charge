@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>个人信息</title>
+<link rel="stylesheet" href="../css/weui.css">
+<link rel="stylesheet" href="../css/wechat.css">
+<style>
+.codePay-inner table {
+	width: 100%;
+	margin-top: 10px;
+}
+
+.codePay-inner tr {
+	height: 50px;
+	display: block;
+	line-height: 50px;
+	background: #FFFFFF;
+	border-bottom: 1px solid #e4e4e4;
+}
+
+.codePay-inner tr td {
+	width: 50%;
+	box-sizing: border-box;
+	float: left;
+	display: block;
+}
+
+.codePay-inner tr td:first-child {
+	padding-left: 10px;
+	width: 50%;
+}
+
+.codePay-inner tr td:last-child {
+	width: 50%;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.codePay-inner tr:last-child {
+	margin-top: 20px;
+}
+
+.codePay-inner tr:first-child {
+	height: 80px;
+	line-height: 80px;
+}
+
+.codePay-inner .icon {
+	width: 70px;
+	height: 70px;
+	border-radius: 50px;
+	margin-top: 5px;
+	float: right;
+	background-size: cover;
+	background-position: center;
+	float: right;
+}
+
+.codePay-inner .icon-detail {
+	float: right;
+	font-size: 20px;
+}
+
+.recharge {
+	display: block;
+	margin: 0 auto;
+	margin-top: 50px;
+	text-align: center;
+	width: 90%;
+	height: 50px;
+	line-height: 50px;
+	background: #5bc0de;
+	color: #FFFFFF;
+	border-radius: 20px;
+}
+</style>
+<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var openId = localStorage.getItem("openId");// 获取名称为“key”的值
+		$.ajax({
+			type : "post",
+			url : "../user/findUserInfo",
+			data : {"openId":openId},
+			cache : false,
+			async : false,
+			dataType : "json",
+			success : function(data) {
+				$('#headimgurl').css("background-image",
+						"url(" + data.respObj.headimgurl + ")");
+				$('#nickName').text(data.respObj.nickName);
+				if(data.respObj.tel != null){
+					$('#tel').text(data.respObj.tel);
+				}
+				if(data.respObj.cardNumber != null){
+					$('#cardNum').text(data.respObj.cardNumber);
+				}
+			}
+		});
+	});
+</script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="codePay-inner ">
+			<table>
+				<tr>
+					<td>头像</td>
+					<td>
+						<div class="icon-detail"></div>
+						<div class="icon" id="headimgurl">
+							<!-- <img id="headimgurl" src="" alt="" style="width:40px;height:40px"> -->
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>用户名</td>
+					<td id=nickName style="color:gray;"></td>
+				</tr>
+				<tr>
+					<td>手机号</td>
+					<td id=tel style="color:gray;">未绑定</td>
+				</tr>
+				<tr>
+					<td>我的卡号</td>
+					<td id=cardNum style="color:gray;">未绑定</td>
+				</tr>
+			</table>
+			<a href="../user/bandCard" class="recharge">点击开始绑定</a>
+		</div>
+	</div>
+</body>
+<script src="../js/common/zepto.min.js"></script>
+<script src="../js/common/weui.min.js"></script>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>充电导航</title>
+<link rel="stylesheet" href="../css/weui.css">
+<link rel="stylesheet" href="../css/wechat.css">
+<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../js/common/template7.min.js"></script>
+<script type="text/javascript" src="../js/common/dropload.min.js"></script>
+<script type="text/javascript" src="../js/map/navigation.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="../js/common/layer/layer.js"></script>
+<link rel="stylesheet" href="../js/common/layer/theme/default/layer.css">
+<style>
+ul {
+	overflow: auto;
+}
+
+li {
+	background: #ffffff;
+	width: 100%;
+	margin-top: 15px;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.top-inner {
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #f1f1f1;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.amount {
+	color: #5bc0de;
+	font-size: 20px;
+}
+
+.details {
+	margin-top: 5px;
+}
+
+.codePay-inner {
+	
+}
+
+.dropload-up,.dropload-down{
+    position: relative;
+    height: 0;
+    overflow: hidden;
+    font-size: 12px;
+    /* 开启硬件加速 */
+    -webkit-transform:translateZ(0);
+    transform:translateZ(0);
+}
+.dropload-down{
+    height: 50px;
+}
+.dropload-refresh,.dropload-update,.dropload-load,.dropload-noData{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+.dropload-load .loading{
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    border-radius: 100%;
+    margin: 6px;
+    border: 2px solid #666;
+    border-bottom-color: transparent;
+    vertical-align: middle;
+    -webkit-animation: rotate 0.75s linear infinite;
+    animation: rotate 0.75s linear infinite;
+}
+@-webkit-keyframes rotate {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    50% {
+        -webkit-transform: rotate(180deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+</style>
+</head>
+
+<body>
+	<div class="container content">
+		<div class="codePay-inner" id='dataList' style="height: 100%;"></div>
+	</div>
+	<script type="text/template7" id="dataListTpl">
+		<ul>
+			{{#each respObj}}
+  				<li>
+					<div class="top-inner">
+						<div class="left">
+							<p>{{title}}</p>
+						</div>
+						<div class="right">
+                            <p class="amount" onClick=start({{latitude}},{{longitude}})>导航</p>
+                       	</div>
+					</div>
+					<div class="bootom-inner">
+  						<p class="details">直线距离：<span>{{distance}}</span>千米</p>
+  						<p class="details">详细地址：<span>{{address}}</span></p>
+					</div>				
+				</li>
+			{{/each}} 
+    	</ul>
+	</script>
+</body>
+<!-- <script src="../js/common/zepto.min.js"></script> -->
+<!-- <script src="../js/common/weui.min.js"></script> -->
+</html>
