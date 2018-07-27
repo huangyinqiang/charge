@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!-- 条转到充电记录页面 -->
+<meta http-equiv="refresh" content="10;url=../charging/chargingInfo">
+<title>正在充电</title>
+<link rel="stylesheet" href="../css/weui.css">
+<link rel="stylesheet" href="../css/wechat.css">
+<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../js/charging/charging.js"></script>
+</head>
+<body onload="shownum()">
+	<div class="container">
+		<div class="page__bd">
+			<div class="page home">
+				<div class="weui-flex">
+					<div class="weui-flex__item">
+						<div class="charge-cont text-center">
+							<img src="../images/battery.png" class="battery-pic" alt="">
+							<h3 class="charge-active">正在充电</h3>
+							<p>
+								<i class="common-color" id="showTimes"></i>
+							</p>
+							<a href="../poweroff" class="weui-btn weui-btn_default">
+								远程断电 </a>
+						</div>
+					</div>
+				</div>
+				<div class="show-control">
+					<p>
+						充电插座：<i id="devicePort"></i>
+					</p>
+					<p>
+						充电时长：<i id="time"></i>分钟
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script src="../js/common/zepto.min.js"></script>
+<script src="../js/common/weui.min.js"></script>
+
+</html>

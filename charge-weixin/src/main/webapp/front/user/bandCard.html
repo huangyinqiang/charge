@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>用户绑卡</title>
+<link rel="stylesheet" href="../css/weui.css">
+<link rel="stylesheet" href="../css/wechat.css">
+<style>
+.codePay-inner table {
+	background: #FFFFFF;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.codePay-inner tr {
+	height: 50px;
+	display: block;
+	line-height: 50px;
+}
+
+.codePay-inner tr {
+	border-bottom: 1px solid #e4e4e4;
+}
+
+.codePay-inner tr:last-child {
+	border-bottom: none;
+}
+
+.codePay-inner tr td {
+	padding-left: 10px;
+}
+
+.codePay-inner tr td:first-child {
+	width: 30%;
+}
+
+.codePay-inner input {
+	border: none;
+	font-size: 15px;
+	height: 40px;
+	outline: none;
+}
+
+.recharge {
+	display: block;
+	margin: 0 auto;
+	margin-top: 50px;
+	text-align: center;
+	width: 90%;
+	height: 50px;
+	line-height: 50px;
+	background: #5bc0de;
+	color: #FFFFFF;
+	border-radius: 20px;
+}
+</style>
+<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+<script src="../js/common/layer/layer.js"></script>
+<link rel="stylesheet" href="../js/common/layer/theme/default/layer.css">
+<script type="text/javascript">
+	$(function() {
+		$.ajax({
+			type : "post",
+			url : "../user/findUserInfo",
+			data : {
+				"openId" : localStorage.getItem("openId")
+			},
+			cache : false,
+			async : false,//
+			dataType : "json",
+			success : function(data) {
+				$('#tel').val(data.respObj.tel);
+				$('#cardNum').val(data.respObj.cardNumber);
+			}
+		});
+	});
+	function submit() {
+		var tel = $('#tel').val();
+		var cardNumber = $('#cardNum').val();
+		var cardNumber2 = $('#cardNum2').val();
+		if (cardNumber == "" || cardNumber == null) {
+			layer.msg("请输入卡号", {
+				shift : 5
+			});
+			return;
+		}
+		if (cardNumber2 == "" || cardNumber2 == null) {
+			layer.msg("请输入确认卡号", {
+				shift : 5
+			});
+			return;
+		}
+		if (cardNumber != cardNumber2) {
+			layer.msg("请确保两次输入卡号相同", {
+				shift : 5
+			});
+			return;
+		}
+		$.ajax({
+			type : "post",
+			url : "../user/updateBandCard",
+			data : {
+				openId : localStorage.getItem("openId"),
+				tel : tel,
+				cardNumber : cardNumber
+			},
+			cache : false,
+			async : false,//
+			dataType : "json",
+			success : function(data) {
+				if (data.respCode == "000000") {
+					window.location.href = "../index"
+				} else {
+					layer.msg(data.respMsg, {
+						shift : 5
+					});
+				}
+			}
+		});
+	}
+</script>
+</head>
+
+<body>
+	<div class="container">
+		<div class="codePay-inner ">
+			<table>
+				<tr>
+					<td>手机号</td>
+					<td><input type="text" placeholder="请输入手机号" id="tel"></input></td>
+				</tr>
+				<tr>
+					<td>卡号</td>
+					<td><input type="text" placeholder="请输入您的卡号" id="cardNum"></input></td>
+				</tr>
+				<tr>
+					<td>确认卡号</td>
+					<td><input type="text" placeholder="请再次输入卡号" id="cardNum2"></input></td>
+				</tr>
+			</table>
+			<a href="#" onclick="submit()" class="recharge">提交</a>
+		</div>
+	</div>
+</body>
+<script src="../js/common/zepto.min.js"></script>
+<script src="../js/common/weui.min.js"></script>
+</html>

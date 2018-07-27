@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>关注公众号</title>
+<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+<script type='text/javascript' src="../js/qrcode/qrcode.demo.js"></script>
+<style type="text/css">
+#imgQr {
+	position: absolute;
+	top: 40%;
+	left: 50%;
+	text-align: center;
+	transform: translate(-50%, -50%);
+}
+
+#qrTips {
+	text-align: center;
+	padding-top: 20px;
+}
+</style>
+
+</head>
+<body>
+	<div id="qrDiv" style="display: none;"></div>
+	<div id="qrTips">温馨提示：您还未关注公众号，请先关注！</div>
+	<div id="imgQr">
+		<div id="imagQrDiv"></div>
+		<div id="qrTouch">长按识别二维码</div>
+	</div>
+	<script type="text/javascript">
+		var qrCode = null;
+		$(function() {
+			// 对浏览器的UserAgent进行正则匹配，不含有微信独有标识的则为其他浏览器
+			var useragent = navigator.userAgent;
+			if (useragent.match(/MicroMessenger/i) != 'MicroMessenger') {
+				alert('已禁止本次访问：您必须使用微信内置浏览器访问本页面！');
+				var opened = window.open('about:blank', '_self');
+				opened.opener = null;
+				opened.close();
+			}
+			getCompanyInfo();
+		});
+
+		function getCompanyInfo() {
+			$.ajax({
+				type : 'POST',
+				url : "../about/getQrCode",
+				dataType : "json",
+				data : {},
+				cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
+				async : false,// 设置同步方式，false为同步
+				success : function(data) {
+					$("#qrDiv").qrcode({
+						width : 150, //宽度
+						height : 150, //高度
+						text : data.qrCode//二维码内容
+					});
+					//从 canvas 提取图片 image
+					function convertCanvasToImage(canvas) {
+						//新Image对象，可以理解为DOM
+						var image = new Image();
+						// canvas.toDataURL 返回的是一串Base64编码的URL，当然,浏览器自己肯定支持
+						// 指定格式 PNG
+						image.src = canvas.toDataURL("image/png");
+						return image;
+					}
+					//获取网页中的canvas对象
+					var mycanvas1 = document.getElementsByTagName('canvas')[0];
+					//将转换后的img标签插入到html中
+					var img = convertCanvasToImage(mycanvas1);
+					$('#imagQrDiv').append(img);//imagQrDiv表示你要插入的容器id
+				}
+			});
+		}
+	</script>
+</body>
+</html>

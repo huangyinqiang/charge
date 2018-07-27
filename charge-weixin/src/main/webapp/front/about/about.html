@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-cn">
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>关于我们</title>
+<link rel="stylesheet" href="css/about/rui.css" />
+<link rel="stylesheet" href="css/about/flex.css" />
+<script type="text/javascript" src="js/common/jquery-2.1.1.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		getCompanyInfo()
+	});
+
+	function getCompanyInfo() {
+		$.ajax({
+			type : 'POST',
+			url : "about/getCompanyInfo",
+			dataType : "json",
+			data : {},
+			cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
+			async : false,// 设置同步方式，false为同步
+			success : function(data) {
+				$(".wechat").html(data.wechat);
+				$(".company").html(data.company);
+				$("#tel").html('服务电话：' + data.tel);
+				// 				$("#tel").href = data.tel;
+			}
+		});
+	}
+</script>
+<style>
+.rui-content>.rui-table-view:first-child {
+	margin-top: 0px;
+}
+
+.logo {
+	height: 180px;
+}
+
+.company {
+	height: 150px;
+}
+</style>
+</head>
+<body class="flex-col">
+	<div class="rui-content ">
+		<ul class="rui-table-view">
+			<li class="rui-table-view-cell">
+				<div class=" flex-center-row  logo">
+					<img src="images/logoBlack.png" alt="logo" />
+					<div class=wechat></div>
+					<div>版本号：2.0.0</div>
+				</div>
+			</li>
+			<li class="rui-table-view-cell"><a href="./about/tbts"
+				class="rui-navigate-right">特别提示</a></li>
+			<li class="rui-table-view-cell"><a href="./about/bqsm"
+				class="rui-navigate-right">版权申明</a></li>
+			<li class="rui-table-view-cell"><a href="./about/mzsm"
+				class="rui-navigate-right">免责声明</a></li>
+			<li class="rui-table-view-cell "><a id="tel"></a></li>
+		</ul>
+		<div class="company flex-col flex-center-col">
+			<span><a class=company></a></span>
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<meta name="format-detection" content="telphone=no,email=no" />
+<meta name="keywords" content="">
+<meta name="description" content="">
+<title>我要充电</title>
+<link rel="stylesheet" type="text/css" href="temp/main.css">
+<script type="text/javascript" src="temp/jquery.js"></script>
+<script type="text/javascript" src="./js/charging/startCharging.js"></script>
+<script src="./js/common/layer/layer.js"></script>
+<link rel="stylesheet" href="./js/common/layer/theme/default/layer.css">
+<script type="text/javascript"
+	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+	
+</script>
+</head>
+<body>
+
+	<div class="top">
+		<ul>
+			<li><img src="temp/topNum01.png" alt="1">
+				<p>确保您的充电插座与充电站空闲插座连接正常。</p></li>
+			<li><img src="temp/topNum02.png" alt="2">
+				<p>点击扫码充电，请对准插座二维码进行扫码充电。</p></li>
+			<li><img src="temp/topNum03.png" alt="3">
+				<p>扫码成功后选择充电时间开始充电。</p></li>
+		</ul>
+	</div>
+	<div class="cen">
+		<div class="terms">
+			<input type="checkbox" checked> <a href="./about/mzsm">同意《充电说明》</a>
+		</div>
+		<i class="icon" onclick="scanQR();"></i> <input type="button"
+			onclick="scanQR();" value="扫码充电">
+	</div>
+	<div class="foot">
+		<p class="tit">温馨提示</p>
+		<ul>
+			<li><img src="temp/footNum01.png" alt="1">
+				<p>如您经常使用本设备请点击“个人中心”，进行“钱包”充值参与更多优惠活动。</p></li>
+			<li><img src="temp/footNum02.png" alt="2">
+				<p>请选择充电器插入的插座进行充电。</p></li>
+			<li><img src="temp/footNum03.png" alt="3">
+				<p>手机信号较差会影响使用，建议在手机信号稳定情况下使用。</p></li>
+			<li><img src="temp/footNum04.png" alt="4">
+				<p>使用过程中充电器被拔下或脱落，设备会自动断电。</p></li>
+		</ul>
+	</div>
+</body>
+</html>
+

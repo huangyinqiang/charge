@@ -12,6 +12,7 @@
 
     <modules>
         <module>charge-admin</module>
+        <module>charge-weixin</module>
     </modules>
 
 </project>

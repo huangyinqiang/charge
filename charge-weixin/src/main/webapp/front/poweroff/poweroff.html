@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>远程断电</title>
+<link rel="stylesheet" href="./css/weui.css">
+<link rel="stylesheet" href="./css/wechat.css">
+<script type="text/javascript" src="./js/common/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="./js/common/template7.min.js"></script>
+<script src="./js/common/layer/layer.js"></script>
+<link rel="stylesheet" href="./js/common/layer/theme/default/layer.css">
+<script type="text/javascript">
+	//编译模板
+	(function($) {
+		var compiled = {};
+		$.fn.template7 = function(template, data) {
+			if (template instanceof jQuery) {
+				var templateId = $(template).attr('id');
+			} else {
+				return false;
+			}
+			if (typeof (compiled[templateId]) == 'undefined') {
+				template = $(template).html();
+				compiled[templateId] = Template7.compile(template);
+			}
+			var appendFlag = arguments[2] ? arguments[2] : 0;
+			if (appendFlag) {
+				this.append(compiled[templateId](data));
+			} else {
+				this.html(compiled[templateId](data));
+			}
+		};
+
+	})(jQuery);
+	$(function() {
+		getChargingInfo();
+	});
+	//查询可远程断电的设备
+	function getChargingInfo() {
+		$.ajax({
+			type : 'POST',
+			data : {openId : localStorage.getItem("openId")},
+			url : "./poweroff/queryPoweroff",
+			dataType : "json",
+			async : false,
+			success : function(data) {
+				if (data.respObj.length != 0 && data.respCode == "000000") {
+					$(".codePay-inner").template7($('#dataListTpl'), data);
+				} else {
+					layer.msg("未查询到可远程断电的设备...", {
+						shift : 15
+					});
+				}
+			}
+		});
+	}
+
+	function confirm() {
+		layer.confirm('您确定要断开本次充电吗？', {
+			btn : [ '取消', '断电' ]
+		//按钮
+		}, function() {
+			layer.msg('已取消');
+		}, function() {
+			poweroff();
+		});
+	}
+
+	function poweroff() {
+		var id = $("#id").val();
+		var deviceId = $("#deviceId").val();
+		var devicePort = $("#devicePort").text();
+		$.ajax({
+			type : 'POST',
+			url : "./poweroff/poweroff",
+			dataType : "json",
+			data : {
+				openId : localStorage.getItem("openId"),
+				id : id,
+				deviceId : deviceId,
+				channeNum : devicePort
+			},
+			async : false,
+			success : function(data) {
+				if (data.respCode == "000000") {
+					layer.msg("远程断电成功...", {
+						shift : 5
+					});
+				} else {
+					layer.msg("远程断电失败...", {
+						shift : 5
+					});
+				}
+			}
+		});
+	}
+</script>
+<style>
+li {
+	background: #ffffff;
+	width: 100%;
+	margin-top: 15px;
+	padding: 10px;
+	box-sizing: border-box;
+}
+
+.top-inner {
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #f1f1f1;
+}
+
+.left {
+	float: left;
+}
+
+.right {
+	float: right;
+}
+
+.amount {
+	width: 100px;
+	text-align: center;
+	height: 40px;
+	border-radius: 20px;
+	line-height: 40px;
+	border: 1px solid #5bc0de;
+	color: #5bc0de;
+	font-size: 20px;
+}
+
+.details {
+	margin-top: 5px;
+}
+</style>
+
+</head>
+
+<body>
+	<div class="container">
+		<div class="codePay-inner"></div>
+	</div>
+	<script type="text/template7" id="dataListTpl">
+		<ul>
+			{{#each respObj}}
+				<li>
+                    <div class="top-inner">
+                         <div class="left">
+							 <input type="hidden" value={{id}} id="id"></input>
+							 <input type="hidden" value={{deviceId}} id="deviceId"></input>
+                            <p><a id="area">{{area}}</a>（插座：<a id="devicePort">{{devicePort}}</a>）</p>
+                        </div>
+                        <div class="right">
+                            <p class="amount" onclick="confirm()">远程断电</p>
+                        </div>
+                    </div>
+                    <div class="bootom-inner">
+  						<p class="details">开始时间：<span>{{operStartTime}}</span></p>
+  						<p class="details">充电时长：<span>{{chargeTime}}</span>分钟</p>
+                    </div>  
+                </li>
+			{{/each}} 
+    	</ul>
+	</script>
+</body>
+</html>

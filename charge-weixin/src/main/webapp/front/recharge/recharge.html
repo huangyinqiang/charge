@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>充值</title>
+<link rel="stylesheet" href="../css/weui.css">
+<link rel="stylesheet" href="../css/wechat.css">
+<link rel="stylesheet" href="../js/common/layer/theme/default/layer.css">
+<style>
+.methods {
+	height: 50px;
+	background: #FFFFFF;
+	padding: 10px;
+	box-sizing: border-box;
+	position: relative;
+}
+
+.wechat-logo {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	margin-top: 5px;
+	background: url(images/wechat.png) center center no-repeat;
+	background-size: cover;
+}
+
+.wechat-name {
+	margin-left: 10px;
+	position: absolute;
+	bottom: 10px;
+}
+
+.weui-cells_checkbox {
+	float: right;
+}
+
+.select-type {
+	position: absolute;
+	right: 0px;
+}
+
+.select-type label {
+	margin-right: 20px;
+}
+
+.close-box {
+	width: 100%;
+	height: 15px;
+	position: relative;
+	margin: 10px 0px;
+}
+
+.close-icon {
+	width: 15px;
+	height: 15px;
+	background: url(../images/close.png) center center;
+	background-size: cover;
+	position: absolute;
+	right: 10px;
+}
+
+.pay-footer {
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+}
+
+.body {
+	position: relative;
+}
+
+.money-content {
+	padding-top: 10px;
+}
+
+.weui-dialog__bd {
+	display: none;
+}
+
+#elecardType {
+	padding: 0 1.6em 0.8em;;
+}
+</style>
+<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+<script src="../js/common/leadbase-encrypts.js"></script>
+<script src="../js/common/layer/layer.js"></script>
+<script src="../js/recharge/recharge.js"></script>
+</head>
+<body ontouchstart>
+	<input type="hidden" id="selectedMoney">
+	<div class="container">
+		<div class="page__bd">
+			<div class="weui-cells__title">
+				<div class="pull-left">
+					<i class="iconfont icon-ditu1"></i>
+				</div>
+			</div>
+			<div class="weui-cells">
+				<div class="weui-cell weui-cell_access">
+					<div class="weui-cell__bd">
+						<p>钱包余额</p>
+					</div>
+					<div id="walletAccount"></div>
+					元
+				</div>
+				<div class="weui-cell">
+					<div class="weui-cell__hd ">
+						<label for="" class="weui-label">充值选项</label>
+
+					</div>
+					<div class="select-type">
+						<label> <input type="radio" name="selectedType" checked
+							value="WA"> 钱包
+						</label> <label> <input id="radioCH" type="radio" name="selectedType"
+							value="CH"> 电卡
+						</label>
+					</div>
+					<div class="weui-cell__ft"></div>
+				</div>
+			</div>
+			<div class="methods">
+				<span class="wechat-name">微信支付</span> <span
+					class="weui-cells_checkbox"> <input type="checkbox"
+					name="checkbox1" class="weui-check" checked="checked" id="s12" />
+					<i class="weui-icon-checked"></i>
+				</span>
+			</div>
+
+			<div class="money-content">
+				<div id="elecardType" class=" elecard-wallte weui-dialog__bd">
+					<div class="weui-flex inline-btn">
+						<div class="weui-flex__item text-left">
+							<a href="javascript:;" data-date='1001'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+						<div class="weui-flex__item text-right">
+							<a href="javascript:;" data-date='1002'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+					</div>
+					<div class="weui-flex inline-btn">
+						<div class="weui-flex__item text-left">
+							<a href="javascript:;" data-date='1003'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+						<div class="weui-flex__item text-right">
+							<a href="javascript:;" data-date='1005'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+					</div>
+					<div class="weui-flex">
+						<div class="weui-flex__item">
+							<a href="javascript:;" data-date='1006'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+
+					</div>
+				</div>
+				<div id="walletType" class="elecard-wallte weui-dialog__bd">
+					<div class="weui-flex inline-btn">
+						<div class="weui-flex__item text-left">
+							<a href="javascript:;" data-date='2001'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+						<div class="weui-flex__item text-right">
+							<a href="javascript:;" data-date='2002'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+					</div>
+					<div class="weui-flex inline-btn">
+						<div class="weui-flex__item text-left">
+							<a href="javascript:;" data-date='2003'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+						<div class="weui-flex__item text-right">
+							<a href="javascript:;" data-date='2005'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+					</div>
+					<div class="weui-flex">
+						<div class="weui-flex__item">
+							<a href="javascript:;" data-date='2006'
+								class="weui-btn weui-btn_plain-primary"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="weui-cells__tips">
+				<span>说明：</span><span id="explain">充值成为会员，享受更多优惠！</span>
+			</div>
+			<!-- 			<div class="pay-footer"> -->
+			<div class="page__bd page__bd_spacing">
+				<a href="javascript:;" onclick="startCharging()"
+					class="weui-btn weui-btn_default btn-control">开始充值</a>
+			</div>
+			<!-- 			</div> -->
+		</div>
+	</div>
+</body>
+
+<script src="../js/common/zepto.min.js"></script>
+<script src="../js/common/weui.min.js"></script>
+<script type="text/javascript"
+	src="https://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+</html>

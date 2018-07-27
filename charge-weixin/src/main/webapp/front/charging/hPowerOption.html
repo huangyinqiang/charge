@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>大功率充电选项</title>
+<link rel="stylesheet" href="../css/weui.css">
+<link rel="stylesheet" href="../css/wechat.css">
+<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+<script type="text/javascript"
+	src="https://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<script src="../js/common/leadbase-encrypts.js"></script>
+<script src="../js/common/layer/layer.js"></script>
+<link rel="stylesheet" href="../js/common/layer/theme/default/layer.css">
+<script src="../js/charging/option.js"></script>
+<style>
+.flex-row {
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-box-orient: horizontal;
+	-webkit-flex-flow: row;
+	flex-flow: row;
+}
+
+.flex1 {
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	flex: 1;
+}
+
+.rui-btn {
+	display: block;
+	width: 120px;
+	height: 40px;
+	background: #ffffff;
+	border: 1px solid #00a1e9;
+	border-radius: 10px;
+	text-align: center;
+	line-height: 40px;
+	font-size: 16px;
+	color: #00a1e9;
+	margin: 5px auto;
+}
+
+.rui-btn-outlined {
+	color: #ffffff;
+	background: #00a1e9;
+}
+
+.grid {
+	display: block;
+	margin-top: 30px;
+}
+
+.close-box {
+	width: 100%;
+	height: 15px;
+	position: relative;
+	margin: 10px 0px;
+}
+
+.close-icon {
+	width: 15px;
+	height: 15px;
+	background: url(../images/close.png) center center;
+	background-size: cover;
+	position: absolute;
+	right: 10px;
+}
+</style>
+</head>
+<body ontouchstart>
+	<input type="hidden" id="selectedTime">
+	<div class="container">
+		<div class="page__bd">
+			<div class="weui-cells__title">
+				<div class="pull-left">
+					<i class="iconfont icon-ditu1"></i>
+				</div>
+				<div class="pull-right">
+					<span class="curz normal"></span>
+				</div>
+			</div>
+			<div class="weui-cells">
+				<a class="weui-cell weui-cell_access" href="javascript:;">
+					<div class="weui-cell__bd">
+						<p>充电时间</p>
+					</div>
+					<div class="weui-cell__ft" id="showIOSDialog2">请选择充电时间</div>
+				</a> <a class="weui-cell weui-cell_access" href="javascript:;">
+					<div class="weui-cell__bd">
+						<p>充电插座</p>
+					</div>
+					<div class="weui-cell__port" id="showportDialog"></div>
+				</a>
+			</div>
+			<div class="weui-cells__tips">
+				<span >说明：</span><span id="explain">会员充满自动断电，保护电瓶不受损！</span>
+			</div>
+
+			<div class="grid">
+				<div class="flex-row">
+					<div class="flex1 ">
+						<a id="1" href="javascript:;" class="rui-btn"
+							onclick="selectPort(1,this);">1</a>
+					</div>
+					<div class="flex1 ">
+						<a id="3" href="javascript:;" class="rui-btn"
+							onclick="selectPort(3,this);">3</a>
+					</div>
+				</div>
+
+				<div class="flex-row">
+					<div class="flex1 ">
+						<a id="2" href="javascript:;" class="rui-btn"
+							onclick="selectPort(2,this);">2</a>
+					</div>
+					<div class="flex1 ">
+						<a id="4" href="javascript:;" class="rui-btn"
+							onclick="selectPort(4,this);">4</a>
+					</div>
+				</div>
+			</div>
+			<div class="page__bd page__bd_spacing">
+				<a href="javascript:;" onclick="startCharging()"
+					class="weui-btn weui-btn_default btn-control">开始充电</a>
+			</div>
+
+		</div>
+	</div>
+	<div id="dialogs">
+		<div class="js_dialog" id="iosDialog2" style="display: none;">
+			<div class="weui-mask"></div>
+			<div class="weui-dialog">
+				<div class="weui-flex close-box">
+					<div class="close-icon"></div>
+				</div>
+				<div class="weui-dialog__bd">
+					<div class="weui-flex inline-btn">
+						<div class="weui-flex__item text-left">
+							<a href="javascript:;" onclick="selectxftime2()" data-date='120'
+								class="weui-btn weui-btn_plain-primary">2小时</a>
+						</div>
+						<div class="weui-flex__item text-right">
+							<a href="javascript:;" onclick="selectxftime4()" data-date='240'
+								class="weui-btn weui-btn_plain-primary">4小时</a>
+						</div>
+					</div>
+					<div class="weui-flex inline-btn">
+						<div class="weui-flex__item text-left">
+							<a href="javascript:;" onclick="selectxftime8()" data-date='480'
+								class="weui-btn weui-btn_plain-primary">8小时</a>
+						</div>
+						<div class="weui-flex__item text-right">
+							<a href="javascript:;" onclick="selectxftime12()" data-date='720'
+								class="weui-btn weui-btn_plain-primary">12小时</a>
+						</div>
+					</div>
+					<div class="weui-flex">
+						<div class="weui-flex__item">
+							<a href="javascript:;" onclick="selectxftimeauto()"
+								data-date='800' class="weui-btn weui-btn_plain-primary">智能充电</a>
+						</div>
+
+					</div>
+					<div class="weui-flex">
+						<div class="weui-flex__item2">
+							<a href="javascript:;" onclick='affirm()'
+								class="weui-btn weui-btn_plain-primary weui-dialog__btn">确定</a>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</body>
+<script src="../js/common/zepto.min.js"></script>
+<script src="../js/common/weui.min.js"></script>
+</html>
