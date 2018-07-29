@@ -94,6 +94,9 @@
 				$('#nickName').text(data.respObj.nickName);
 				if(data.respObj.tel != null){
 					$('#tel').text(data.respObj.tel);
+                    $('#bt_str').text("修改手机号");
+				}else {
+                    $('#bt_str').text("绑定手机号");
 				}
 			}
 		});
@@ -124,7 +127,7 @@
 				</tr>
 
 			</table>
-			<a href="../user/bandCard" class="recharge">点击开始绑定</a>
+			<a href="../user/bandTelNumber" id="bt_str" class="recharge"></a>
 		</div>
 	</div>
 </body>

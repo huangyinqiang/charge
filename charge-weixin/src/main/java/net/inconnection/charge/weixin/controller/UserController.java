@@ -25,8 +25,8 @@ public class UserController extends Controller {
         this.render("user/userInfo.html");
     }
 
-    public void bandCard() {
-        this.render("user/bandCard.html");
+    public void bandTelNumber() {
+        this.render("user/bandTelNumber.html");
     }
 
     public void updateTelNumber() {

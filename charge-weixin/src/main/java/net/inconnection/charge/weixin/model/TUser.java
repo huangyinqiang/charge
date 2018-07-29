@@ -81,7 +81,7 @@ public class TUser extends Model<TUser> {
     public int updateTelByOpendid(String openId, String tel) {
         log.info("根据openId更新用户手机号，openId=" + openId + ",tel=" + tel);
         int i = Db.update("update tuser set tel = ? ,band = ? where openId = ? ", new Object[]{tel, "Y", openId});
-        log.info("根据openId更新电卡结果：" + i);
+        log.info("根据openId更新用户手机号码结果：" + i);
         return i;
     }
 }
