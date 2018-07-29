@@ -23,7 +23,7 @@ public class TuserService
         return new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
     }
 
-    public HnKejueResponse updateCardNumberByOpendid(String cardNumber, String openId, String tel)
+    public HnKejueResponse updateCardNumberByOpendid(String openId, String tel)
     {
         int i = 0;
         String reg = "^((13[0-9])|(14[1,4-9])|(15[^4])|(16[6])|(17[0-8])|(18[0-9])|(19[8-9]))\\d{8}$";
@@ -32,9 +32,9 @@ public class TuserService
                 log.error("手机号校验失败");
                 return new HnKejueResponse(RespCode.TEL_FAIL.getKey(), RespCode.TEL_FAIL.getValue());
             }
-            i = TUser.dao.updateCardNumberByOpendid(cardNumber, openId, tel);
+            i = TUser.dao.updateTelByOpendid(openId, tel);
         } catch (Exception e) {
-            log.error("根据openid更新电卡信息失败", e);
+            log.error("根据openid更新手机号失败", e);
             return new HnKejueResponse(Integer.valueOf(0), RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
         }
         return new HnKejueResponse(Integer.valueOf(i), RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());

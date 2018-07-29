@@ -29,15 +29,14 @@ public class UserController extends Controller {
         this.render("user/bandCard.html");
     }
 
-    public void updateBandCard() {
-        String cardNumber = this.getPara("cardNumber");
+    public void updateTelNumber() {
         String tel = this.getPara("tel");
         String openId = this.getPara("openId");
         log.info("修改绑定的电卡开始，openId=" + openId + ",tel=" + tel + ",openId=" + openId);
         if (StringUtils.isEmpty(openId)) {
             this.forwardAction("/toOauth");
         } else {
-            HnKejueResponse resp = tuserService.updateCardNumberByOpendid(cardNumber, openId, tel);
+            HnKejueResponse resp = tuserService.updateCardNumberByOpendid(openId, tel);
             this.renderJson(resp);
         }
     }

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>用户绑卡</title>
+<title>用户绑定手机</title>
 <link rel="stylesheet" href="../css/weui.css">
 <link rel="stylesheet" href="../css/wechat.css">
 <style>
@@ -72,39 +72,18 @@
 			dataType : "json",
 			success : function(data) {
 				$('#tel').val(data.respObj.tel);
-				$('#cardNum').val(data.respObj.cardNumber);
 			}
 		});
 	});
 	function submit() {
 		var tel = $('#tel').val();
-		var cardNumber = $('#cardNum').val();
-		var cardNumber2 = $('#cardNum2').val();
-		if (cardNumber == "" || cardNumber == null) {
-			layer.msg("请输入卡号", {
-				shift : 5
-			});
-			return;
-		}
-		if (cardNumber2 == "" || cardNumber2 == null) {
-			layer.msg("请输入确认卡号", {
-				shift : 5
-			});
-			return;
-		}
-		if (cardNumber != cardNumber2) {
-			layer.msg("请确保两次输入卡号相同", {
-				shift : 5
-			});
-			return;
-		}
+
 		$.ajax({
 			type : "post",
-			url : "../user/updateBandCard",
+			url : "../user/updateTelNumber",
 			data : {
 				openId : localStorage.getItem("openId"),
-				tel : tel,
-				cardNumber : cardNumber
+				tel : tel
 			},
 			cache : false,
 			async : false,//
@@ -131,14 +110,7 @@
 					<td>手机号</td>
 					<td><input type="text" placeholder="请输入手机号" id="tel"></input></td>
 				</tr>
-				<tr>
-					<td>卡号</td>
-					<td><input type="text" placeholder="请输入您的卡号" id="cardNum"></input></td>
-				</tr>
-				<tr>
-					<td>确认卡号</td>
-					<td><input type="text" placeholder="请再次输入卡号" id="cardNum2"></input></td>
-				</tr>
+
 			</table>
 			<a href="#" onclick="submit()" class="recharge">提交</a>
 		</div>
