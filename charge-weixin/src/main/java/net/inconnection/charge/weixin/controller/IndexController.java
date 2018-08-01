@@ -22,11 +22,11 @@ public class IndexController extends Controller {
 
 
 //todo ceshi
-        this.render("ucenter.html");
-
-        if (1==1){
-            return;
-        }
+//        this.render("ucenter.html");
+//
+//        if (1==1){
+//            return;
+//        }
 
 
 
@@ -52,7 +52,7 @@ public class IndexController extends Controller {
         HnKejueResponse respJson = new HnKejueResponse();
         String openId = (String)this.getSessionAttr("openId");
 
-        openId="oNFzS1F-DOqXNLIUeygz_KspS-i0";//todo ceshi
+        //openId="oNFzS1F-DOqXNLIUeygz_KspS-i0";//todo ceshi
 
         log.info("session中的openid=" + openId);
         respJson.setRespCode("000000");

@@ -47,6 +47,7 @@ public class APPConfig extends JFinalConfig {
     public void configRoute(Routes me) {
         me.add("/", IndexController.class, "/front");
         me.add("/oauth", OauthController.class);
+        me.add("/tokenCheck", TokenCheckController.class);
         me.add("/scanCodeOauth", ScanCodeOauthController.class);
         me.add("/weixinScanCodeOauth", WeiXinScanCodeOauthController.class);
         me.add("/pay", WeiXinPayController.class, "/front");
