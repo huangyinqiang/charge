@@ -1,0 +1,34 @@
+@charset "utf-8";
+/* CSS Document */
+html{font-size:100px}
+html,body{height:100%}
+body{font:14px/1.5 'Helvetica','PingFang SC','Arial','\5FAE\8F6F\96C5\9ED1',sans-serif;-webkit-text-size-adjust:100%;max-width:750px;margin:0 auto;background:#f3f3f3}
+ol,ul,li,dl,dt,dd,p,span,h1,h2,h3,h4,h5,h6,input,textarea,select,button,label{margin:0;padding:0}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}
+ul,ol,li{list-style:none}
+a,a:hover{text-decoration:none;outline-width:0;outline:0}
+i,em,b,strong,code{font-style:normal;font-weight:normal}
+input,textarea,select,button,label{font-family:inherit;font-size:inherit;*font-size:100%;border:0;-webkit-appearance:none;appearance:none}
+a,i,span,li,input,textarea,select,button{-webkit-tap-highlight-color:transparent}
+input[type=button],input[type=submit]{cursor:pointer}
+table,tbody,tr,th,td{border-collapse:collapse;border-spacing:0}
+:focus{outline:none;-webkit-tap-highlight-color:transparent}
+img{border:0}
+
+.top{ width:7.5rem; height:4.16rem; background:url(../temp/bg.jpg) no-repeat center top; background-size:7.5rem}
+.top ul{ padding:1.78rem 0 0 2.46rem}
+.top li{ font-size:.2rem; line-height:1.8; color:#070707; letter-spacing:.02rem; float:left}
+.top li img{ width:.4rem; height:.4rem; padding-right:.1rem; float:left; vertical-align:top}
+.top li p{ width:4.14rem; float:left}
+.cen{ font-size:.24rem; text-align:center}
+.cen .terms{ padding:.4rem 0}
+.cen .terms input[type="checkbox"]{ width:.4rem; height:.4rem; background:#0075a9; vertical-align:middle}
+.cen .terms input:checked{ border:0; background:url(../temp/yes.png) no-repeat center center #0075a9; background-size:.4rem}
+.cen .terms i{ color:#0075a9; vertical-align:middle}
+.cen .icon{ width:2.78rem; height:2.78rem; margin:0 1.96rem; background:url(../temp/iconCd.png) no-repeat center center #f3f3f3; background-size:2.78rem; border:.4rem solid #fff; display:inline-block; -webkit-border-radius:9999px; border-radius:9999px}
+.cen input[type="button"]{ width:2rem; height:.52rem; margin-top:.2rem; border:.02rem solid #00a0e9; color:#0075a9; background:none; -webkit-border-radius:9999px; border-radius:9999px}
+.foot .tit{ width:.2rem; padding:.15rem .2rem; margin:.4rem 0 0 .23rem; font-size:.18rem; line-height:1.8; color:#0075a9; text-align:center; border:1px solid #030303; border-top:0; border-bottom:0; float:left}
+.foot ul{ width:6.35rem; padding:.3rem 0 0 .25rem; overflow:hidden}
+.foot li{ height:auto; line-height:.34rem; padding-bottom:.14rem; font-size:.14rem; color:#030303; float:left}
+.foot li img{ width:.34rem; height:.34rem; vertical-align:middle; float:left}
+.foot li p{ width:5.8rem; float:left}
