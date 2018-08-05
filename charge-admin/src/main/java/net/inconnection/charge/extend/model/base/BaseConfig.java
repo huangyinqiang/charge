@@ -9,84 +9,84 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseConfig<M extends BaseConfig<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setGid(Integer gid) {
+	public M setGid(java.lang.Integer gid) {
 		set("gid", gid);
 		return (M)this;
 	}
 	
-	public Integer getGid() {
+	public java.lang.Integer getGid() {
 		return getInt("gid");
 	}
 
-	public M setGname(String gname) {
+	public M setGname(java.lang.String gname) {
 		set("gname", gname);
 		return (M)this;
 	}
 	
-	public String getGname() {
+	public java.lang.String getGname() {
 		return getStr("gname");
 	}
 
-	public M setKeya1value(String keya1value) {
+	public M setKeya1value(java.lang.String keya1value) {
 		set("keya1value", keya1value);
 		return (M)this;
 	}
 	
-	public String getKeya1value() {
+	public java.lang.String getKeya1value() {
 		return getStr("keya1value");
 	}
 
-	public M setKeya2value(String keya2value) {
+	public M setKeya2value(java.lang.String keya2value) {
 		set("keya2value", keya2value);
 		return (M)this;
 	}
 	
-	public String getKeya2value() {
+	public java.lang.String getKeya2value() {
 		return getStr("keya2value");
 	}
 
-	public M setKeyb1value(String keyb1value) {
+	public M setKeyb1value(java.lang.String keyb1value) {
 		set("keyb1value", keyb1value);
 		return (M)this;
 	}
 	
-	public String getKeyb1value() {
+	public java.lang.String getKeyb1value() {
 		return getStr("keyb1value");
 	}
 
-	public M setKeyb2value(String keyb2value) {
+	public M setKeyb2value(java.lang.String keyb2value) {
 		set("keyb2value", keyb2value);
 		return (M)this;
 	}
 	
-	public String getKeyb2value() {
+	public java.lang.String getKeyb2value() {
 		return getStr("keyb2value");
 	}
 
-	public M setControlvalue(String controlvalue) {
+	public M setControlvalue(java.lang.String controlvalue) {
 		set("controlvalue", controlvalue);
 		return (M)this;
 	}
 	
-	public String getControlvalue() {
+	public java.lang.String getControlvalue() {
 		return getStr("controlvalue");
 	}
 
-	public M setRemark(String remark) {
+	public M setRemark(java.lang.String remark) {
 		set("remark", remark);
 		return (M)this;
 	}
 	
-	public String getRemark() {
+	public java.lang.String getRemark() {
 		return getStr("remark");
 	}
 

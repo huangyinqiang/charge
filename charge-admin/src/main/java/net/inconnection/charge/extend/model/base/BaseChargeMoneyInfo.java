@@ -9,39 +9,39 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseChargeMoneyInfo<M extends BaseChargeMoneyInfo<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setOpenId(String openId) {
+	public M setOpenId(java.lang.String openId) {
 		set("openId", openId);
 		return (M)this;
 	}
 	
-	public String getOpenId() {
+	public java.lang.String getOpenId() {
 		return getStr("openId");
 	}
 
-	public M setMoney(Integer money) {
+	public M setMoney(java.lang.Integer money) {
 		set("money", money);
 		return (M)this;
 	}
 	
-	public Integer getMoney() {
+	public java.lang.Integer getMoney() {
 		return getInt("money");
 	}
 
-	public M setAmount(Integer amount) {
+	public M setAmount(java.lang.Integer amount) {
 		set("amount", amount);
 		return (M)this;
 	}
 	
-	public Integer getAmount() {
+	public java.lang.Integer getAmount() {
 		return getInt("amount");
 	}
 
@@ -54,48 +54,48 @@ public abstract class BaseChargeMoneyInfo<M extends BaseChargeMoneyInfo<M>> exte
 		return get("createTime");
 	}
 
-	public M setChargeType(String chargeType) {
+	public M setChargeType(java.lang.String chargeType) {
 		set("chargeType", chargeType);
 		return (M)this;
 	}
 	
-	public String getChargeType() {
+	public java.lang.String getChargeType() {
 		return getStr("chargeType");
 	}
 
-	public M setCardAmount(Integer cardAmount) {
+	public M setCardAmount(java.lang.Integer cardAmount) {
 		set("card_amount", cardAmount);
 		return (M)this;
 	}
 	
-	public Integer getCardAmount() {
+	public java.lang.Integer getCardAmount() {
 		return getInt("card_amount");
 	}
 
-	public M setDeviceId(String deviceId) {
+	public M setDeviceId(java.lang.String deviceId) {
 		set("deviceId", deviceId);
 		return (M)this;
 	}
 	
-	public String getDeviceId() {
+	public java.lang.String getDeviceId() {
 		return getStr("deviceId");
 	}
 
-	public M setMD5(String MD5) {
+	public M setMD5(java.lang.String MD5) {
 		set("MD5", MD5);
 		return (M)this;
 	}
 	
-	public String getMD5() {
+	public java.lang.String getMD5() {
 		return getStr("MD5");
 	}
 
-	public M setPayToAgentStatus(String payToAgentStatus) {
+	public M setPayToAgentStatus(java.lang.String payToAgentStatus) {
 		set("pay_to_agent_status", payToAgentStatus);
 		return (M)this;
 	}
 	
-	public String getPayToAgentStatus() {
+	public java.lang.String getPayToAgentStatus() {
 		return getStr("pay_to_agent_status");
 	}
 

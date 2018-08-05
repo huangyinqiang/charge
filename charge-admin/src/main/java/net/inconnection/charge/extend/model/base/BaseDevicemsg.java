@@ -9,39 +9,39 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseDevicemsg<M extends BaseDevicemsg<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setType(Integer type) {
+	public M setType(java.lang.Integer type) {
 		set("type", type);
 		return (M)this;
 	}
 	
-	public Integer getType() {
+	public java.lang.Integer getType() {
 		return getInt("type");
 	}
 
-	public M setDeviceid(String deviceid) {
+	public M setDeviceid(java.lang.String deviceid) {
 		set("deviceid", deviceid);
 		return (M)this;
 	}
 	
-	public String getDeviceid() {
+	public java.lang.String getDeviceid() {
 		return getStr("deviceid");
 	}
 
-	public M setContent(String content) {
+	public M setContent(java.lang.String content) {
 		set("content", content);
 		return (M)this;
 	}
 	
-	public String getContent() {
+	public java.lang.String getContent() {
 		return getStr("content");
 	}
 

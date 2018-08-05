@@ -9,57 +9,57 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseDevicelog<M extends BaseDevicelog<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setType(String type) {
+	public M setType(java.lang.String type) {
 		set("type", type);
 		return (M)this;
 	}
 	
-	public String getType() {
+	public java.lang.String getType() {
 		return getStr("type");
 	}
 
-	public M setOpenid(String openid) {
+	public M setOpenid(java.lang.String openid) {
 		set("openid", openid);
 		return (M)this;
 	}
 	
-	public String getOpenid() {
+	public java.lang.String getOpenid() {
 		return getStr("openid");
 	}
 
-	public M setDeviceid(String deviceid) {
+	public M setDeviceid(java.lang.String deviceid) {
 		set("deviceid", deviceid);
 		return (M)this;
 	}
 	
-	public String getDeviceid() {
+	public java.lang.String getDeviceid() {
 		return getStr("deviceid");
 	}
 
-	public M setIp(String ip) {
+	public M setIp(java.lang.String ip) {
 		set("ip", ip);
 		return (M)this;
 	}
 	
-	public String getIp() {
+	public java.lang.String getIp() {
 		return getStr("ip");
 	}
 
-	public M setContent(String content) {
+	public M setContent(java.lang.String content) {
 		set("content", content);
 		return (M)this;
 	}
 	
-	public String getContent() {
+	public java.lang.String getContent() {
 		return getStr("content");
 	}
 

@@ -9,57 +9,57 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseChargestatus<M extends BaseChargestatus<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setDeviceid(String deviceid) {
+	public M setDeviceid(java.lang.String deviceid) {
 		set("deviceid", deviceid);
 		return (M)this;
 	}
 	
-	public String getDeviceid() {
+	public java.lang.String getDeviceid() {
 		return getStr("deviceid");
 	}
 
-	public M setOpenid(String openid) {
+	public M setOpenid(java.lang.String openid) {
 		set("openid", openid);
 		return (M)this;
 	}
 	
-	public String getOpenid() {
+	public java.lang.String getOpenid() {
 		return getStr("openid");
 	}
 
-	public M setChannelnum(String channelnum) {
+	public M setChannelnum(java.lang.String channelnum) {
 		set("channelnum", channelnum);
 		return (M)this;
 	}
 	
-	public String getChannelnum() {
+	public java.lang.String getChannelnum() {
 		return getStr("channelnum");
 	}
 
-	public M setStatus(String status) {
+	public M setStatus(java.lang.String status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public String getStatus() {
+	public java.lang.String getStatus() {
 		return getStr("status");
 	}
 
-	public M setContent(String content) {
+	public M setContent(java.lang.String content) {
 		set("content", content);
 		return (M)this;
 	}
 	
-	public String getContent() {
+	public java.lang.String getContent() {
 		return getStr("content");
 	}
 

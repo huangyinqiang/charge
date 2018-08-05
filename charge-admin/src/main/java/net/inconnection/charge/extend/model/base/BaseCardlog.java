@@ -9,48 +9,48 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseCardlog<M extends BaseCardlog<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setDeviceId(String deviceId) {
+	public M setDeviceId(java.lang.String deviceId) {
 		set("deviceId", deviceId);
 		return (M)this;
 	}
 	
-	public String getDeviceId() {
+	public java.lang.String getDeviceId() {
 		return getStr("deviceId");
 	}
 
-	public M setPhyicalId(String phyicalId) {
+	public M setPhyicalId(java.lang.String phyicalId) {
 		set("phyicalId", phyicalId);
 		return (M)this;
 	}
 	
-	public String getPhyicalId() {
+	public java.lang.String getPhyicalId() {
 		return getStr("phyicalId");
 	}
 
-	public M setCardCode(String cardCode) {
+	public M setCardCode(java.lang.String cardCode) {
 		set("cardCode", cardCode);
 		return (M)this;
 	}
 	
-	public String getCardCode() {
+	public java.lang.String getCardCode() {
 		return getStr("cardCode");
 	}
 
-	public M setBalance(String balance) {
+	public M setBalance(java.lang.String balance) {
 		set("balance", balance);
 		return (M)this;
 	}
 	
-	public String getBalance() {
+	public java.lang.String getBalance() {
 		return getStr("balance");
 	}
 
@@ -63,57 +63,57 @@ public abstract class BaseCardlog<M extends BaseCardlog<M>> extends Model<M> imp
 		return get("joinDate");
 	}
 
-	public M setName(String name) {
+	public M setName(java.lang.String name) {
 		set("name", name);
 		return (M)this;
 	}
 	
-	public String getName() {
+	public java.lang.String getName() {
 		return getStr("name");
 	}
 
-	public M setGname(String gname) {
+	public M setGname(java.lang.String gname) {
 		set("gname", gname);
 		return (M)this;
 	}
 	
-	public String getGname() {
+	public java.lang.String getGname() {
 		return getStr("gname");
 	}
 
-	public M setArea(String area) {
+	public M setArea(java.lang.String area) {
 		set("area", area);
 		return (M)this;
 	}
 	
-	public String getArea() {
+	public java.lang.String getArea() {
 		return getStr("area");
 	}
 
-	public M setPhone(String phone) {
+	public M setPhone(java.lang.String phone) {
 		set("phone", phone);
 		return (M)this;
 	}
 	
-	public String getPhone() {
+	public java.lang.String getPhone() {
 		return getStr("phone");
 	}
 
-	public M setChannelNum(String channelNum) {
+	public M setChannelNum(java.lang.String channelNum) {
 		set("channelNum", channelNum);
 		return (M)this;
 	}
 	
-	public String getChannelNum() {
+	public java.lang.String getChannelNum() {
 		return getStr("channelNum");
 	}
 
-	public M setGid(Integer gid) {
+	public M setGid(java.lang.Integer gid) {
 		set("gid", gid);
 		return (M)this;
 	}
 	
-	public Integer getGid() {
+	public java.lang.Integer getGid() {
 		return getInt("gid");
 	}
 

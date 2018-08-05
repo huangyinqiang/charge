@@ -9,48 +9,48 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseTuserCharge<M extends BaseTuserCharge<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setTuserid(Integer tuserid) {
+	public M setTuserid(java.lang.Integer tuserid) {
 		set("tuserid", tuserid);
 		return (M)this;
 	}
 	
-	public Integer getTuserid() {
+	public java.lang.Integer getTuserid() {
 		return getInt("tuserid");
 	}
 
-	public M setName(String name) {
+	public M setName(java.lang.String name) {
 		set("name", name);
 		return (M)this;
 	}
 	
-	public String getName() {
+	public java.lang.String getName() {
 		return getStr("name");
 	}
 
-	public M setCharge(Integer charge) {
+	public M setCharge(java.lang.Integer charge) {
 		set("charge", charge);
 		return (M)this;
 	}
 	
-	public Integer getCharge() {
+	public java.lang.Integer getCharge() {
 		return getInt("charge");
 	}
 
-	public M setLast(Integer last) {
+	public M setLast(java.lang.Integer last) {
 		set("last", last);
 		return (M)this;
 	}
 	
-	public Integer getLast() {
+	public java.lang.Integer getLast() {
 		return getInt("last");
 	}
 

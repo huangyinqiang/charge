@@ -9,21 +9,21 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseCard<M extends BaseCard<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setCardnumber(String cardnumber) {
+	public M setCardnumber(java.lang.String cardnumber) {
 		set("cardnumber", cardnumber);
 		return (M)this;
 	}
 	
-	public String getCardnumber() {
+	public java.lang.String getCardnumber() {
 		return getStr("cardnumber");
 	}
 
@@ -45,30 +45,30 @@ public abstract class BaseCard<M extends BaseCard<M>> extends Model<M> implement
 		return get("updatetime");
 	}
 
-	public M setState(String state) {
+	public M setState(java.lang.String state) {
 		set("state", state);
 		return (M)this;
 	}
 	
-	public String getState() {
+	public java.lang.String getState() {
 		return getStr("state");
 	}
 
-	public M setUid(Integer uid) {
+	public M setUid(java.lang.Integer uid) {
 		set("uid", uid);
 		return (M)this;
 	}
 	
-	public Integer getUid() {
+	public java.lang.Integer getUid() {
 		return getInt("uid");
 	}
 
-	public M setUname(String uname) {
+	public M setUname(java.lang.String uname) {
 		set("uname", uname);
 		return (M)this;
 	}
 	
-	public String getUname() {
+	public java.lang.String getUname() {
 		return getStr("uname");
 	}
 

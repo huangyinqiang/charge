@@ -9,102 +9,102 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseMoneyMatchActivity<M extends BaseMoneyMatchActivity<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setActNum(String actNum) {
+	public M setActNum(java.lang.String actNum) {
 		set("actNum", actNum);
 		return (M)this;
 	}
 	
-	public String getActNum() {
+	public java.lang.String getActNum() {
 		return getStr("actNum");
 	}
 
-	public M setType(String type) {
+	public M setType(java.lang.String type) {
 		set("type", type);
 		return (M)this;
 	}
 	
-	public String getType() {
+	public java.lang.String getType() {
 		return getStr("type");
 	}
 
-	public M setMoney(Double money) {
+	public M setMoney(java.lang.Double money) {
 		set("money", money);
 		return (M)this;
 	}
 	
-	public Double getMoney() {
+	public java.lang.Double getMoney() {
 		return getDouble("money");
 	}
 
-	public M setChargeNum(Integer chargeNum) {
+	public M setChargeNum(java.lang.Integer chargeNum) {
 		set("chargeNum", chargeNum);
 		return (M)this;
 	}
 	
-	public Integer getChargeNum() {
+	public java.lang.Integer getChargeNum() {
 		return getInt("chargeNum");
 	}
 
-	public M setCoupon(Integer coupon) {
+	public M setCoupon(java.lang.Integer coupon) {
 		set("coupon", coupon);
 		return (M)this;
 	}
 	
-	public Integer getCoupon() {
+	public java.lang.Integer getCoupon() {
 		return getInt("coupon");
 	}
 
-	public M setStatus(String status) {
+	public M setStatus(java.lang.String status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public String getStatus() {
+	public java.lang.String getStatus() {
 		return getStr("status");
 	}
 
-	public M setRemark(String remark) {
+	public M setRemark(java.lang.String remark) {
 		set("remark", remark);
 		return (M)this;
 	}
 	
-	public String getRemark() {
+	public java.lang.String getRemark() {
 		return getStr("remark");
 	}
 
-	public M setTime(String time) {
+	public M setTime(java.lang.String time) {
 		set("time", time);
 		return (M)this;
 	}
 	
-	public String getTime() {
+	public java.lang.String getTime() {
 		return getStr("time");
 	}
 
-	public M setActivityId(Integer activityId) {
+	public M setActivityId(java.lang.Integer activityId) {
 		set("activity_id", activityId);
 		return (M)this;
 	}
 	
-	public Integer getActivityId() {
+	public java.lang.Integer getActivityId() {
 		return getInt("activity_id");
 	}
 
-	public M setArea(String area) {
+	public M setArea(java.lang.String area) {
 		set("area", area);
 		return (M)this;
 	}
 	
-	public String getArea() {
+	public java.lang.String getArea() {
 		return getStr("area");
 	}
 

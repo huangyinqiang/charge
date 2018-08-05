@@ -9,30 +9,30 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BasePayLog<M extends BasePayLog<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setUserid(Integer userid) {
+	public M setUserid(java.lang.Integer userid) {
 		set("userid", userid);
 		return (M)this;
 	}
 	
-	public Integer getUserid() {
+	public java.lang.Integer getUserid() {
 		return getInt("userid");
 	}
 
-	public M setUsername(String username) {
+	public M setUsername(java.lang.String username) {
 		set("username", username);
 		return (M)this;
 	}
 	
-	public String getUsername() {
+	public java.lang.String getUsername() {
 		return getStr("username");
 	}
 
@@ -63,39 +63,39 @@ public abstract class BasePayLog<M extends BasePayLog<M>> extends Model<M> imple
 		return get("jointime");
 	}
 
-	public M setStatus(Integer status) {
+	public M setStatus(java.lang.Integer status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public Integer getStatus() {
+	public java.lang.Integer getStatus() {
 		return getInt("status");
 	}
 
-	public M setMoney(String money) {
+	public M setMoney(java.lang.String money) {
 		set("money", money);
 		return (M)this;
 	}
 	
-	public String getMoney() {
+	public java.lang.String getMoney() {
 		return getStr("money");
 	}
 
-	public M setType(String type) {
+	public M setType(java.lang.String type) {
 		set("type", type);
 		return (M)this;
 	}
 	
-	public String getType() {
+	public java.lang.String getType() {
 		return getStr("type");
 	}
 
-	public M setOpenid(String openid) {
+	public M setOpenid(java.lang.String openid) {
 		set("openid", openid);
 		return (M)this;
 	}
 	
-	public String getOpenid() {
+	public java.lang.String getOpenid() {
 		return getStr("openid");
 	}
 

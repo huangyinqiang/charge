@@ -9,39 +9,39 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseWeixinToken<M extends BaseWeixinToken<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setOpenId(String openId) {
+	public M setOpenId(java.lang.String openId) {
 		set("openId", openId);
 		return (M)this;
 	}
 	
-	public String getOpenId() {
+	public java.lang.String getOpenId() {
 		return getStr("openId");
 	}
 
-	public M setAccessToken(String accessToken) {
+	public M setAccessToken(java.lang.String accessToken) {
 		set("accessToken", accessToken);
 		return (M)this;
 	}
 	
-	public String getAccessToken() {
+	public java.lang.String getAccessToken() {
 		return getStr("accessToken");
 	}
 
-	public M setJsapiTicket(String jsapiTicket) {
+	public M setJsapiTicket(java.lang.String jsapiTicket) {
 		set("jsapiTicket", jsapiTicket);
 		return (M)this;
 	}
 	
-	public String getJsapiTicket() {
+	public java.lang.String getJsapiTicket() {
 		return getStr("jsapiTicket");
 	}
 
@@ -54,21 +54,21 @@ public abstract class BaseWeixinToken<M extends BaseWeixinToken<M>> extends Mode
 		return get("createTime");
 	}
 
-	public M setAppId(String appId) {
+	public M setAppId(java.lang.String appId) {
 		set("app_id", appId);
 		return (M)this;
 	}
 	
-	public String getAppId() {
+	public java.lang.String getAppId() {
 		return getStr("app_id");
 	}
 
-	public M setStatus(String status) {
+	public M setStatus(java.lang.String status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public String getStatus() {
+	public java.lang.String getStatus() {
 		return getStr("status");
 	}
 

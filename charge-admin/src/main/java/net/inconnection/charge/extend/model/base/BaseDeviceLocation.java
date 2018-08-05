@@ -9,84 +9,84 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseDeviceLocation<M extends BaseDeviceLocation<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setDeviceid(String deviceid) {
+	public M setDeviceid(java.lang.String deviceid) {
 		set("deviceid", deviceid);
 		return (M)this;
 	}
 	
-	public String getDeviceid() {
+	public java.lang.String getDeviceid() {
 		return getStr("deviceid");
 	}
 
-	public M setDevicename(String devicename) {
+	public M setDevicename(java.lang.String devicename) {
 		set("devicename", devicename);
 		return (M)this;
 	}
 	
-	public String getDevicename() {
+	public java.lang.String getDevicename() {
 		return getStr("devicename");
 	}
 
-	public M setLac(String lac) {
+	public M setLac(java.lang.String lac) {
 		set("lac", lac);
 		return (M)this;
 	}
 	
-	public String getLac() {
+	public java.lang.String getLac() {
 		return getStr("lac");
 	}
 
-	public M setCid(String cid) {
+	public M setCid(java.lang.String cid) {
 		set("cid", cid);
 		return (M)this;
 	}
 	
-	public String getCid() {
+	public java.lang.String getCid() {
 		return getStr("cid");
 	}
 
-	public M setLng(String lng) {
+	public M setLng(java.lang.String lng) {
 		set("lng", lng);
 		return (M)this;
 	}
 	
-	public String getLng() {
+	public java.lang.String getLng() {
 		return getStr("lng");
 	}
 
-	public M setLat(String lat) {
+	public M setLat(java.lang.String lat) {
 		set("lat", lat);
 		return (M)this;
 	}
 	
-	public String getLat() {
+	public java.lang.String getLat() {
 		return getStr("lat");
 	}
 
-	public M setOlng(String olng) {
+	public M setOlng(java.lang.String olng) {
 		set("olng", olng);
 		return (M)this;
 	}
 	
-	public String getOlng() {
+	public java.lang.String getOlng() {
 		return getStr("olng");
 	}
 
-	public M setOlat(String olat) {
+	public M setOlat(java.lang.String olat) {
 		set("olat", olat);
 		return (M)this;
 	}
 	
-	public String getOlat() {
+	public java.lang.String getOlat() {
 		return getStr("olat");
 	}
 
@@ -108,21 +108,21 @@ public abstract class BaseDeviceLocation<M extends BaseDeviceLocation<M>> extend
 		return get("updatetime");
 	}
 
-	public M setUpdatenum(Integer updatenum) {
+	public M setUpdatenum(java.lang.Integer updatenum) {
 		set("updatenum", updatenum);
 		return (M)this;
 	}
 	
-	public Integer getUpdatenum() {
+	public java.lang.Integer getUpdatenum() {
 		return getInt("updatenum");
 	}
 
-	public M setRemark(String remark) {
+	public M setRemark(java.lang.String remark) {
 		set("remark", remark);
 		return (M)this;
 	}
 	
-	public String getRemark() {
+	public java.lang.String getRemark() {
 		return getStr("remark");
 	}
 

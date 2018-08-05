@@ -9,76 +9,85 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseChargeSocket<M extends BaseChargeSocket<M>> extends Model<M> implements IBean {
 
-	public M setId(Long id) {
+	public M setId(java.lang.Long id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Long getId() {
+	public java.lang.Long getId() {
 		return getLong("id");
 	}
 
-	public M setChargePileId(Long chargePileId) {
+	public M setChargePileId(java.lang.Long chargePileId) {
 		set("charge_pile_id", chargePileId);
 		return (M)this;
 	}
 	
-	public Long getChargePileId() {
+	public java.lang.Long getChargePileId() {
 		return getLong("charge_pile_id");
 	}
 
-	public M setIsUsed(Boolean isUsed) {
+	public M setIsUsed(java.lang.Boolean isUsed) {
 		set("is_used", isUsed);
 		return (M)this;
 	}
 	
-	public Boolean getIsUsed() {
+	public java.lang.Boolean getIsUsed() {
 		return get("is_used");
 	}
 
-	public M setStartPower(Double startPower) {
+	public M setStartPower(java.lang.Long startPower) {
 		set("start_power", startPower);
 		return (M)this;
 	}
 	
-	public Double getStartPower() {
-		return getDouble("start_power");
+	public java.lang.Long getStartPower() {
+		return getLong("start_power");
 	}
 
-	public M setChargeIntensity(Double chargeIntensity) {
+	public M setChargePower(java.lang.Long chargePower) {
+		set("charge_power", chargePower);
+		return (M)this;
+	}
+	
+	public java.lang.Long getChargePower() {
+		return getLong("charge_power");
+	}
+
+	public M setChargeIntensity(java.lang.Long chargeIntensity) {
 		set("charge_intensity", chargeIntensity);
 		return (M)this;
 	}
 	
-	public Double getChargeIntensity() {
-		return getDouble("charge_intensity");
+	public java.lang.Long getChargeIntensity() {
+		return getLong("charge_intensity");
 	}
 
-	public M setChargeTime(Long chargeTime) {
+	public M setChargeTime(java.lang.Long chargeTime) {
 		set("charge_time", chargeTime);
 		return (M)this;
 	}
 	
-	public Long getChargeTime() {
+	public java.lang.Long getChargeTime() {
 		return getLong("charge_time");
 	}
 
-	public M setChargeState(Integer chargeState) {
+	public M setChargeState(java.lang.Integer chargeState) {
 		set("charge_state", chargeState);
 		return (M)this;
 	}
 	
-	public Integer getChargeState() {
+	public java.lang.Integer getChargeState() {
 		return getInt("charge_state");
 	}
 
-	public M setUpdateTime(Long updateTime) {
+	public M setUpdateTime(java.util.Date updateTime) {
 		set("update_time", updateTime);
 		return (M)this;
 	}
 	
-	public Long getUpdateTime() {
-		return getLong("update_time");
+	public java.util.Date getUpdateTime() {
+		return get("update_time");
 	}
 
 }

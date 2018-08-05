@@ -9,30 +9,30 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseCommand<M extends BaseCommand<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setCommand(String command) {
+	public M setCommand(java.lang.String command) {
 		set("command", command);
 		return (M)this;
 	}
 	
-	public String getCommand() {
+	public java.lang.String getCommand() {
 		return getStr("command");
 	}
 
-	public M setSleeptime(Integer sleeptime) {
+	public M setSleeptime(java.lang.Integer sleeptime) {
 		set("sleeptime", sleeptime);
 		return (M)this;
 	}
 	
-	public Integer getSleeptime() {
+	public java.lang.Integer getSleeptime() {
 		return getInt("sleeptime");
 	}
 
@@ -45,21 +45,21 @@ public abstract class BaseCommand<M extends BaseCommand<M>> extends Model<M> imp
 		return get("jointime");
 	}
 
-	public M setReamark(String reamark) {
+	public M setReamark(java.lang.String reamark) {
 		set("reamark", reamark);
 		return (M)this;
 	}
 	
-	public String getReamark() {
+	public java.lang.String getReamark() {
 		return getStr("reamark");
 	}
 
-	public M setOrderd(Integer orderd) {
+	public M setOrderd(java.lang.Integer orderd) {
 		set("orderd", orderd);
 		return (M)this;
 	}
 	
-	public Integer getOrderd() {
+	public java.lang.Integer getOrderd() {
 		return getInt("orderd");
 	}
 

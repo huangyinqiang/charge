@@ -9,12 +9,12 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseStockHistoryLog<M extends BaseStockHistoryLog<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
@@ -27,102 +27,102 @@ public abstract class BaseStockHistoryLog<M extends BaseStockHistoryLog<M>> exte
 		return get("dt");
 	}
 
-	public M setCode(String code) {
+	public M setCode(java.lang.String code) {
 		set("code", code);
 		return (M)this;
 	}
 	
-	public String getCode() {
+	public java.lang.String getCode() {
 		return getStr("code");
 	}
 
-	public M setName(String name) {
+	public M setName(java.lang.String name) {
 		set("name", name);
 		return (M)this;
 	}
 	
-	public String getName() {
+	public java.lang.String getName() {
 		return getStr("name");
 	}
 
-	public M setClosingPrice(Double closingPrice) {
+	public M setClosingPrice(java.lang.Double closingPrice) {
 		set("closing_price", closingPrice);
 		return (M)this;
 	}
 	
-	public Double getClosingPrice() {
+	public java.lang.Double getClosingPrice() {
 		return getDouble("closing_price");
 	}
 
-	public M setTopPrice(Double topPrice) {
+	public M setTopPrice(java.lang.Double topPrice) {
 		set("top_price", topPrice);
 		return (M)this;
 	}
 	
-	public Double getTopPrice() {
+	public java.lang.Double getTopPrice() {
 		return getDouble("top_price");
 	}
 
-	public M setMinimumPrice(Double minimumPrice) {
+	public M setMinimumPrice(java.lang.Double minimumPrice) {
 		set("minimum_price", minimumPrice);
 		return (M)this;
 	}
 	
-	public Double getMinimumPrice() {
+	public java.lang.Double getMinimumPrice() {
 		return getDouble("minimum_price");
 	}
 
-	public M setOpeningPrice(Double openingPrice) {
+	public M setOpeningPrice(java.lang.Double openingPrice) {
 		set("opening_price", openingPrice);
 		return (M)this;
 	}
 	
-	public Double getOpeningPrice() {
+	public java.lang.Double getOpeningPrice() {
 		return getDouble("opening_price");
 	}
 
-	public M setPre(Double pre) {
+	public M setPre(java.lang.Double pre) {
 		set("pre", pre);
 		return (M)this;
 	}
 	
-	public Double getPre() {
+	public java.lang.Double getPre() {
 		return getDouble("pre");
 	}
 
-	public M setChangeAmount(Double changeAmount) {
+	public M setChangeAmount(java.lang.Double changeAmount) {
 		set("change_amount", changeAmount);
 		return (M)this;
 	}
 	
-	public Double getChangeAmount() {
+	public java.lang.Double getChangeAmount() {
 		return getDouble("change_amount");
 	}
 
-	public M setChangeRatio(Double changeRatio) {
+	public M setChangeRatio(java.lang.Double changeRatio) {
 		set("change_ratio", changeRatio);
 		return (M)this;
 	}
 	
-	public Double getChangeRatio() {
+	public java.lang.Double getChangeRatio() {
 		return getDouble("change_ratio");
 	}
 
-	public M setTurnoverVolume(Long turnoverVolume) {
+	public M setTurnoverVolume(java.lang.Long turnoverVolume) {
 		set("turnover_volume", turnoverVolume);
 		return (M)this;
 	}
 	
-	public Long getTurnoverVolume() {
+	public java.lang.Long getTurnoverVolume() {
 		return getLong("turnover_volume");
 	}
 
-	public M setTurnoverMoney(Long turnoverMoney) {
+	public M setTurnoverMoney(java.lang.Long turnoverMoney) {
 		set("turnover_money", turnoverMoney);
 		return (M)this;
 	}
 	
-	public Long getTurnoverMoney() {
+	public java.lang.Long getTurnoverMoney() {
 		return getLong("turnover_money");
 	}
 

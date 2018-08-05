@@ -9,210 +9,210 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseOrders<M extends BaseOrders<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setAppid(String appid) {
+	public M setAppid(java.lang.String appid) {
 		set("appid", appid);
 		return (M)this;
 	}
 	
-	public String getAppid() {
+	public java.lang.String getAppid() {
 		return getStr("appid");
 	}
 
-	public M setOutTradeNo(String outTradeNo) {
+	public M setOutTradeNo(java.lang.String outTradeNo) {
 		set("out_trade_no", outTradeNo);
 		return (M)this;
 	}
 	
-	public String getOutTradeNo() {
+	public java.lang.String getOutTradeNo() {
 		return getStr("out_trade_no");
 	}
 
-	public M setOpenId(String openId) {
+	public M setOpenId(java.lang.String openId) {
 		set("openId", openId);
 		return (M)this;
 	}
 	
-	public String getOpenId() {
+	public java.lang.String getOpenId() {
 		return getStr("openId");
 	}
 
-	public M setMchId(String mchId) {
+	public M setMchId(java.lang.String mchId) {
 		set("mch_id", mchId);
 		return (M)this;
 	}
 	
-	public String getMchId() {
+	public java.lang.String getMchId() {
 		return getStr("mch_id");
 	}
 
-	public M setCashFee(Integer cashFee) {
+	public M setCashFee(java.lang.Integer cashFee) {
 		set("cash_fee", cashFee);
 		return (M)this;
 	}
 	
-	public Integer getCashFee() {
+	public java.lang.Integer getCashFee() {
 		return getInt("cash_fee");
 	}
 
-	public M setTotalFee(Integer totalFee) {
+	public M setTotalFee(java.lang.Integer totalFee) {
 		set("total_fee", totalFee);
 		return (M)this;
 	}
 	
-	public Integer getTotalFee() {
+	public java.lang.Integer getTotalFee() {
 		return getInt("total_fee");
 	}
 
-	public M setFeeType(String feeType) {
+	public M setFeeType(java.lang.String feeType) {
 		set("fee_type", feeType);
 		return (M)this;
 	}
 	
-	public String getFeeType() {
+	public java.lang.String getFeeType() {
 		return getStr("fee_type");
 	}
 
-	public M setResultCode(String resultCode) {
+	public M setResultCode(java.lang.String resultCode) {
 		set("result_code", resultCode);
 		return (M)this;
 	}
 	
-	public String getResultCode() {
+	public java.lang.String getResultCode() {
 		return getStr("result_code");
 	}
 
-	public M setErrCode(String errCode) {
+	public M setErrCode(java.lang.String errCode) {
 		set("err_code", errCode);
 		return (M)this;
 	}
 	
-	public String getErrCode() {
+	public java.lang.String getErrCode() {
 		return getStr("err_code");
 	}
 
-	public M setErrCodeDes(String errCodeDes) {
+	public M setErrCodeDes(java.lang.String errCodeDes) {
 		set("err_code_des", errCodeDes);
 		return (M)this;
 	}
 	
-	public String getErrCodeDes() {
+	public java.lang.String getErrCodeDes() {
 		return getStr("err_code_des");
 	}
 
-	public M setIsSubscribe(String isSubscribe) {
+	public M setIsSubscribe(java.lang.String isSubscribe) {
 		set("is_subscribe", isSubscribe);
 		return (M)this;
 	}
 	
-	public String getIsSubscribe() {
+	public java.lang.String getIsSubscribe() {
 		return getStr("is_subscribe");
 	}
 
-	public M setTradeType(String tradeType) {
+	public M setTradeType(java.lang.String tradeType) {
 		set("trade_type", tradeType);
 		return (M)this;
 	}
 	
-	public String getTradeType() {
+	public java.lang.String getTradeType() {
 		return getStr("trade_type");
 	}
 
-	public M setBankType(String bankType) {
+	public M setBankType(java.lang.String bankType) {
 		set("bank_type", bankType);
 		return (M)this;
 	}
 	
-	public String getBankType() {
+	public java.lang.String getBankType() {
 		return getStr("bank_type");
 	}
 
-	public M setTransactionId(String transactionId) {
+	public M setTransactionId(java.lang.String transactionId) {
 		set("transaction_id", transactionId);
 		return (M)this;
 	}
 	
-	public String getTransactionId() {
+	public java.lang.String getTransactionId() {
 		return getStr("transaction_id");
 	}
 
-	public M setCouponId(String couponId) {
+	public M setCouponId(java.lang.String couponId) {
 		set("coupon_id", couponId);
 		return (M)this;
 	}
 	
-	public String getCouponId() {
+	public java.lang.String getCouponId() {
 		return getStr("coupon_id");
 	}
 
-	public M setCouponFee(Integer couponFee) {
+	public M setCouponFee(java.lang.Integer couponFee) {
 		set("coupon_fee", couponFee);
 		return (M)this;
 	}
 	
-	public Integer getCouponFee() {
+	public java.lang.Integer getCouponFee() {
 		return getInt("coupon_fee");
 	}
 
-	public M setCouponCount(Integer couponCount) {
+	public M setCouponCount(java.lang.Integer couponCount) {
 		set("coupon_count", couponCount);
 		return (M)this;
 	}
 	
-	public Integer getCouponCount() {
+	public java.lang.Integer getCouponCount() {
 		return getInt("coupon_count");
 	}
 
-	public M setAttach(String attach) {
+	public M setAttach(java.lang.String attach) {
 		set("attach", attach);
 		return (M)this;
 	}
 	
-	public String getAttach() {
+	public java.lang.String getAttach() {
 		return getStr("attach");
 	}
 
-	public M setTimeEnd(String timeEnd) {
+	public M setTimeEnd(java.lang.String timeEnd) {
 		set("time_end", timeEnd);
 		return (M)this;
 	}
 	
-	public String getTimeEnd() {
+	public java.lang.String getTimeEnd() {
 		return getStr("time_end");
 	}
 
-	public M setCouresCount(Integer couresCount) {
+	public M setCouresCount(java.lang.Integer couresCount) {
 		set("couresCount", couresCount);
 		return (M)this;
 	}
 	
-	public Integer getCouresCount() {
+	public java.lang.Integer getCouresCount() {
 		return getInt("couresCount");
 	}
 
-	public M setCouresId(Integer couresId) {
+	public M setCouresId(java.lang.Integer couresId) {
 		set("couresId", couresId);
 		return (M)this;
 	}
 	
-	public Integer getCouresId() {
+	public java.lang.Integer getCouresId() {
 		return getInt("couresId");
 	}
 
-	public M setUrl(String url) {
+	public M setUrl(java.lang.String url) {
 		set("url", url);
 		return (M)this;
 	}
 	
-	public String getUrl() {
+	public java.lang.String getUrl() {
 		return getStr("url");
 	}
 

@@ -9,48 +9,48 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BasePowerDevicePort<M extends BasePowerDevicePort<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setDeviceid(String deviceid) {
+	public M setDeviceid(java.lang.String deviceid) {
 		set("deviceid", deviceid);
 		return (M)this;
 	}
 	
-	public String getDeviceid() {
+	public java.lang.String getDeviceid() {
 		return getStr("deviceid");
 	}
 
-	public M setPort(String port) {
+	public M setPort(java.lang.String port) {
 		set("port", port);
 		return (M)this;
 	}
 	
-	public String getPort() {
+	public java.lang.String getPort() {
 		return getStr("port");
 	}
 
-	public M setOpenid(String openid) {
+	public M setOpenid(java.lang.String openid) {
 		set("openid", openid);
 		return (M)this;
 	}
 	
-	public String getOpenid() {
+	public java.lang.String getOpenid() {
 		return getStr("openid");
 	}
 
-	public M setStatus(String status) {
+	public M setStatus(java.lang.String status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public String getStatus() {
+	public java.lang.String getStatus() {
 		return getStr("status");
 	}
 
