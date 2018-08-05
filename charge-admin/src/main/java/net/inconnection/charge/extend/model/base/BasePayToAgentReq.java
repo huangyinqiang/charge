@@ -9,120 +9,120 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BasePayToAgentReq<M extends BasePayToAgentReq<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setOpenid(String openid) {
+	public M setOpenid(java.lang.String openid) {
 		set("openid", openid);
 		return (M)this;
 	}
 	
-	public String getOpenid() {
+	public java.lang.String getOpenid() {
 		return getStr("openid");
 	}
 
-	public M setAmount(Integer amount) {
+	public M setAmount(java.lang.Integer amount) {
 		set("amount", amount);
 		return (M)this;
 	}
 	
-	public Integer getAmount() {
+	public java.lang.Integer getAmount() {
 		return getInt("amount");
 	}
 
-	public M setMchAppid(String mchAppid) {
+	public M setMchAppid(java.lang.String mchAppid) {
 		set("mch_appid", mchAppid);
 		return (M)this;
 	}
 	
-	public String getMchAppid() {
+	public java.lang.String getMchAppid() {
 		return getStr("mch_appid");
 	}
 
-	public M setMchid(String mchid) {
+	public M setMchid(java.lang.String mchid) {
 		set("mchid", mchid);
 		return (M)this;
 	}
 	
-	public String getMchid() {
+	public java.lang.String getMchid() {
 		return getStr("mchid");
 	}
 
-	public M setDeviceInfo(String deviceInfo) {
+	public M setDeviceInfo(java.lang.String deviceInfo) {
 		set("device_info", deviceInfo);
 		return (M)this;
 	}
 	
-	public String getDeviceInfo() {
+	public java.lang.String getDeviceInfo() {
 		return getStr("device_info");
 	}
 
-	public M setNonceStr(String nonceStr) {
+	public M setNonceStr(java.lang.String nonceStr) {
 		set("nonce_str", nonceStr);
 		return (M)this;
 	}
 	
-	public String getNonceStr() {
+	public java.lang.String getNonceStr() {
 		return getStr("nonce_str");
 	}
 
-	public M setSign(String sign) {
+	public M setSign(java.lang.String sign) {
 		set("sign", sign);
 		return (M)this;
 	}
 	
-	public String getSign() {
+	public java.lang.String getSign() {
 		return getStr("sign");
 	}
 
-	public M setPartnerTradeNo(String partnerTradeNo) {
+	public M setPartnerTradeNo(java.lang.String partnerTradeNo) {
 		set("partner_trade_no", partnerTradeNo);
 		return (M)this;
 	}
 	
-	public String getPartnerTradeNo() {
+	public java.lang.String getPartnerTradeNo() {
 		return getStr("partner_trade_no");
 	}
 
-	public M setCheckName(String checkName) {
+	public M setCheckName(java.lang.String checkName) {
 		set("check_name", checkName);
 		return (M)this;
 	}
 	
-	public String getCheckName() {
+	public java.lang.String getCheckName() {
 		return getStr("check_name");
 	}
 
-	public M setReUserName(String reUserName) {
+	public M setReUserName(java.lang.String reUserName) {
 		set("re_user_name", reUserName);
 		return (M)this;
 	}
 	
-	public String getReUserName() {
+	public java.lang.String getReUserName() {
 		return getStr("re_user_name");
 	}
 
-	public M setDesc(String desc) {
+	public M setDesc(java.lang.String desc) {
 		set("desc", desc);
 		return (M)this;
 	}
 	
-	public String getDesc() {
+	public java.lang.String getDesc() {
 		return getStr("desc");
 	}
 
-	public M setSpbillCreateIp(String spbillCreateIp) {
+	public M setSpbillCreateIp(java.lang.String spbillCreateIp) {
 		set("spbill_create_ip", spbillCreateIp);
 		return (M)this;
 	}
 	
-	public String getSpbillCreateIp() {
+	public java.lang.String getSpbillCreateIp() {
 		return getStr("spbill_create_ip");
 	}
 
@@ -135,57 +135,57 @@ public abstract class BasePayToAgentReq<M extends BasePayToAgentReq<M>> extends 
 		return get("create_time");
 	}
 
-	public M setDeviceNum(String deviceNum) {
+	public M setDeviceNum(java.lang.String deviceNum) {
 		set("device_num", deviceNum);
 		return (M)this;
 	}
 	
-	public String getDeviceNum() {
+	public java.lang.String getDeviceNum() {
 		return getStr("device_num");
 	}
 
-	public M setDevicePort(String devicePort) {
+	public M setDevicePort(java.lang.String devicePort) {
 		set("device_port", devicePort);
 		return (M)this;
 	}
 	
-	public String getDevicePort() {
+	public java.lang.String getDevicePort() {
 		return getStr("device_port");
 	}
 
-	public M setPayType(String payType) {
+	public M setPayType(java.lang.String payType) {
 		set("pay_type", payType);
 		return (M)this;
 	}
 	
-	public String getPayType() {
+	public java.lang.String getPayType() {
 		return getStr("pay_type");
 	}
 
-	public M setRemark(String remark) {
+	public M setRemark(java.lang.String remark) {
 		set("remark", remark);
 		return (M)this;
 	}
 	
-	public String getRemark() {
+	public java.lang.String getRemark() {
 		return getStr("remark");
 	}
 
-	public M setMD5(String MD5) {
+	public M setMD5(java.lang.String MD5) {
 		set("MD5", MD5);
 		return (M)this;
 	}
 	
-	public String getMD5() {
+	public java.lang.String getMD5() {
 		return getStr("MD5");
 	}
 
-	public M setStatus(String status) {
+	public M setStatus(java.lang.String status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public String getStatus() {
+	public java.lang.String getStatus() {
 		return getStr("status");
 	}
 

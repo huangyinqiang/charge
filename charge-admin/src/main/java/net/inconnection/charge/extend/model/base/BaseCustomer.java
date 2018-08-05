@@ -9,93 +9,93 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseCustomer<M extends BaseCustomer<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setName(String name) {
+	public M setName(java.lang.String name) {
 		set("name", name);
 		return (M)this;
 	}
 	
-	public String getName() {
+	public java.lang.String getName() {
 		return getStr("name");
 	}
 
-	public M setGname(String gname) {
+	public M setGname(java.lang.String gname) {
 		set("gname", gname);
 		return (M)this;
 	}
 	
-	public String getGname() {
+	public java.lang.String getGname() {
 		return getStr("gname");
 	}
 
-	public M setGid(Integer gid) {
+	public M setGid(java.lang.Integer gid) {
 		set("gid", gid);
 		return (M)this;
 	}
 	
-	public Integer getGid() {
+	public java.lang.Integer getGid() {
 		return getInt("gid");
 	}
 
-	public M setPhone(String phone) {
+	public M setPhone(java.lang.String phone) {
 		set("phone", phone);
 		return (M)this;
 	}
 	
-	public String getPhone() {
+	public java.lang.String getPhone() {
 		return getStr("phone");
 	}
 
-	public M setCardnum(String cardnum) {
+	public M setCardnum(java.lang.String cardnum) {
 		set("cardnum", cardnum);
 		return (M)this;
 	}
 	
-	public String getCardnum() {
+	public java.lang.String getCardnum() {
 		return getStr("cardnum");
 	}
 
-	public M setAddress(String address) {
+	public M setAddress(java.lang.String address) {
 		set("address", address);
 		return (M)this;
 	}
 	
-	public String getAddress() {
+	public java.lang.String getAddress() {
 		return getStr("address");
 	}
 
-	public M setMoney(String money) {
+	public M setMoney(java.lang.String money) {
 		set("money", money);
 		return (M)this;
 	}
 	
-	public String getMoney() {
+	public java.lang.String getMoney() {
 		return getStr("money");
 	}
 
-	public M setStatus(Integer status) {
+	public M setStatus(java.lang.Integer status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public Integer getStatus() {
+	public java.lang.Integer getStatus() {
 		return getInt("status");
 	}
 
-	public M setTotal(String total) {
+	public M setTotal(java.lang.String total) {
 		set("total", total);
 		return (M)this;
 	}
 	
-	public String getTotal() {
+	public java.lang.String getTotal() {
 		return getStr("total");
 	}
 

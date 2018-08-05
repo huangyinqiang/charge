@@ -9,156 +9,156 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseQrMatchDevice<M extends BaseQrMatchDevice<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setGid(Integer gid) {
+	public M setGid(java.lang.Integer gid) {
 		set("gid", gid);
 		return (M)this;
 	}
 	
-	public Integer getGid() {
+	public java.lang.Integer getGid() {
 		return getInt("gid");
 	}
 
-	public M setGname(String gname) {
+	public M setGname(java.lang.String gname) {
 		set("gname", gname);
 		return (M)this;
 	}
 	
-	public String getGname() {
+	public java.lang.String getGname() {
 		return getStr("gname");
 	}
 
-	public M setType(String type) {
+	public M setType(java.lang.String type) {
 		set("type", type);
 		return (M)this;
 	}
 	
-	public String getType() {
+	public java.lang.String getType() {
 		return getStr("type");
 	}
 
-	public M setQrNum(String qrNum) {
+	public M setQrNum(java.lang.String qrNum) {
 		set("qr_num", qrNum);
 		return (M)this;
 	}
 	
-	public String getQrNum() {
+	public java.lang.String getQrNum() {
 		return getStr("qr_num");
 	}
 
-	public M setMatchNum(String matchNum) {
+	public M setMatchNum(java.lang.String matchNum) {
 		set("match_num", matchNum);
 		return (M)this;
 	}
 	
-	public String getMatchNum() {
+	public java.lang.String getMatchNum() {
 		return getStr("match_num");
 	}
 
-	public M setArea(String area) {
+	public M setArea(java.lang.String area) {
 		set("area", area);
 		return (M)this;
 	}
 	
-	public String getArea() {
+	public java.lang.String getArea() {
 		return getStr("area");
 	}
 
-	public M setTowHoursPrice(Integer towHoursPrice) {
+	public M setTowHoursPrice(java.lang.Integer towHoursPrice) {
 		set("tow_hours_price", towHoursPrice);
 		return (M)this;
 	}
 	
-	public Integer getTowHoursPrice() {
+	public java.lang.Integer getTowHoursPrice() {
 		return getInt("tow_hours_price");
 	}
 
-	public M setFourHoursPrice(Integer fourHoursPrice) {
+	public M setFourHoursPrice(java.lang.Integer fourHoursPrice) {
 		set("four_hours_price", fourHoursPrice);
 		return (M)this;
 	}
 	
-	public Integer getFourHoursPrice() {
+	public java.lang.Integer getFourHoursPrice() {
 		return getInt("four_hours_price");
 	}
 
-	public M setEightHoursPrice(Integer eightHoursPrice) {
+	public M setEightHoursPrice(java.lang.Integer eightHoursPrice) {
 		set("eight_hours_price", eightHoursPrice);
 		return (M)this;
 	}
 	
-	public Integer getEightHoursPrice() {
+	public java.lang.Integer getEightHoursPrice() {
 		return getInt("eight_hours_price");
 	}
 
-	public M setTwelveHoursPrice(Integer twelveHoursPrice) {
+	public M setTwelveHoursPrice(java.lang.Integer twelveHoursPrice) {
 		set("twelve_hours_price", twelveHoursPrice);
 		return (M)this;
 	}
 	
-	public Integer getTwelveHoursPrice() {
+	public java.lang.Integer getTwelveHoursPrice() {
 		return getInt("twelve_hours_price");
 	}
 
-	public M setTowHoursMemPrice(Integer towHoursMemPrice) {
+	public M setTowHoursMemPrice(java.lang.Integer towHoursMemPrice) {
 		set("tow_hours_mem_price", towHoursMemPrice);
 		return (M)this;
 	}
 	
-	public Integer getTowHoursMemPrice() {
+	public java.lang.Integer getTowHoursMemPrice() {
 		return getInt("tow_hours_mem_price");
 	}
 
-	public M setFourHoursMemPrice(Integer fourHoursMemPrice) {
+	public M setFourHoursMemPrice(java.lang.Integer fourHoursMemPrice) {
 		set("four_hours_mem_price", fourHoursMemPrice);
 		return (M)this;
 	}
 	
-	public Integer getFourHoursMemPrice() {
+	public java.lang.Integer getFourHoursMemPrice() {
 		return getInt("four_hours_mem_price");
 	}
 
-	public M setEightHoursMemPrice(Integer eightHoursMemPrice) {
+	public M setEightHoursMemPrice(java.lang.Integer eightHoursMemPrice) {
 		set("eight_hours_mem_price", eightHoursMemPrice);
 		return (M)this;
 	}
 	
-	public Integer getEightHoursMemPrice() {
+	public java.lang.Integer getEightHoursMemPrice() {
 		return getInt("eight_hours_mem_price");
 	}
 
-	public M setTwelveHoursMemPrice(Integer twelveHoursMemPrice) {
+	public M setTwelveHoursMemPrice(java.lang.Integer twelveHoursMemPrice) {
 		set("twelve_hours_mem_price", twelveHoursMemPrice);
 		return (M)this;
 	}
 	
-	public Integer getTwelveHoursMemPrice() {
+	public java.lang.Integer getTwelveHoursMemPrice() {
 		return getInt("twelve_hours_mem_price");
 	}
 
-	public M setStatus(String status) {
+	public M setStatus(java.lang.String status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public String getStatus() {
+	public java.lang.String getStatus() {
 		return getStr("status");
 	}
 
-	public M setRemark(String remark) {
+	public M setRemark(java.lang.String remark) {
 		set("remark", remark);
 		return (M)this;
 	}
 	
-	public String getRemark() {
+	public java.lang.String getRemark() {
 		return getStr("remark");
 	}
 
@@ -180,120 +180,120 @@ public abstract class BaseQrMatchDevice<M extends BaseQrMatchDevice<M>> extends 
 		return get("createtime");
 	}
 
-	public M setAutoPrice(Integer autoPrice) {
+	public M setAutoPrice(java.lang.Integer autoPrice) {
 		set("auto_price", autoPrice);
 		return (M)this;
 	}
 	
-	public Integer getAutoPrice() {
+	public java.lang.Integer getAutoPrice() {
 		return getInt("auto_price");
 	}
 
-	public M setPowerA1(String powerA1) {
+	public M setPowerA1(java.lang.String powerA1) {
 		set("power_a1", powerA1);
 		return (M)this;
 	}
 	
-	public String getPowerA1() {
+	public java.lang.String getPowerA1() {
 		return getStr("power_a1");
 	}
 
-	public M setPowerA2(String powerA2) {
+	public M setPowerA2(java.lang.String powerA2) {
 		set("power_a2", powerA2);
 		return (M)this;
 	}
 	
-	public String getPowerA2() {
+	public java.lang.String getPowerA2() {
 		return getStr("power_a2");
 	}
 
-	public M setPowerA3(String powerA3) {
+	public M setPowerA3(java.lang.String powerA3) {
 		set("power_a3", powerA3);
 		return (M)this;
 	}
 	
-	public String getPowerA3() {
+	public java.lang.String getPowerA3() {
 		return getStr("power_a3");
 	}
 
-	public M setPowerA4(String powerA4) {
+	public M setPowerA4(java.lang.String powerA4) {
 		set("power_a4", powerA4);
 		return (M)this;
 	}
 	
-	public String getPowerA4() {
+	public java.lang.String getPowerA4() {
 		return getStr("power_a4");
 	}
 
-	public M setPowerA5(String powerA5) {
+	public M setPowerA5(java.lang.String powerA5) {
 		set("power_a5", powerA5);
 		return (M)this;
 	}
 	
-	public String getPowerA5() {
+	public java.lang.String getPowerA5() {
 		return getStr("power_a5");
 	}
 
-	public M setPowerA6(String powerA6) {
+	public M setPowerA6(java.lang.String powerA6) {
 		set("power_a6", powerA6);
 		return (M)this;
 	}
 	
-	public String getPowerA6() {
+	public java.lang.String getPowerA6() {
 		return getStr("power_a6");
 	}
 
-	public M setPowerA7(String powerA7) {
+	public M setPowerA7(java.lang.String powerA7) {
 		set("power_a7", powerA7);
 		return (M)this;
 	}
 	
-	public String getPowerA7() {
+	public java.lang.String getPowerA7() {
 		return getStr("power_a7");
 	}
 
-	public M setActivityId(Integer activityId) {
+	public M setActivityId(java.lang.Integer activityId) {
 		set("activity_id", activityId);
 		return (M)this;
 	}
 	
-	public Integer getActivityId() {
+	public java.lang.Integer getActivityId() {
 		return getInt("activity_id");
 	}
 
-	public M setFree(String free) {
+	public M setFree(java.lang.String free) {
 		set("free", free);
 		return (M)this;
 	}
 	
-	public String getFree() {
+	public java.lang.String getFree() {
 		return getStr("free");
 	}
 
-	public M setPayToAgentStatus(String payToAgentStatus) {
+	public M setPayToAgentStatus(java.lang.String payToAgentStatus) {
 		set("pay_to_agent_status", payToAgentStatus);
 		return (M)this;
 	}
 	
-	public String getPayToAgentStatus() {
+	public java.lang.String getPayToAgentStatus() {
 		return getStr("pay_to_agent_status");
 	}
 
-	public M setPayToAgentOpenid(String payToAgentOpenid) {
+	public M setPayToAgentOpenid(java.lang.String payToAgentOpenid) {
 		set("pay_to_agent_openid", payToAgentOpenid);
 		return (M)this;
 	}
 	
-	public String getPayToAgentOpenid() {
+	public java.lang.String getPayToAgentOpenid() {
 		return getStr("pay_to_agent_openid");
 	}
 
-	public M setPayToAgentName(String payToAgentName) {
+	public M setPayToAgentName(java.lang.String payToAgentName) {
 		set("pay_to_agent_name", payToAgentName);
 		return (M)this;
 	}
 	
-	public String getPayToAgentName() {
+	public java.lang.String getPayToAgentName() {
 		return getStr("pay_to_agent_name");
 	}
 

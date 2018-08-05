@@ -9,39 +9,39 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseChargeBatteryInfo<M extends BaseChargeBatteryInfo<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setOpenId(String openId) {
+	public M setOpenId(java.lang.String openId) {
 		set("openId", openId);
 		return (M)this;
 	}
 	
-	public String getOpenId() {
+	public java.lang.String getOpenId() {
 		return getStr("openId");
 	}
 
-	public M setDeviceId(String deviceId) {
+	public M setDeviceId(java.lang.String deviceId) {
 		set("deviceId", deviceId);
 		return (M)this;
 	}
 	
-	public String getDeviceId() {
+	public java.lang.String getDeviceId() {
 		return getStr("deviceId");
 	}
 
-	public M setDevicePort(String devicePort) {
+	public M setDevicePort(java.lang.String devicePort) {
 		set("devicePort", devicePort);
 		return (M)this;
 	}
 	
-	public String getDevicePort() {
+	public java.lang.String getDevicePort() {
 		return getStr("devicePort");
 	}
 
@@ -72,84 +72,84 @@ public abstract class BaseChargeBatteryInfo<M extends BaseChargeBatteryInfo<M>> 
 		return get("endTime");
 	}
 
-	public M setFeeStatus(String feeStatus) {
+	public M setFeeStatus(java.lang.String feeStatus) {
 		set("feeStatus", feeStatus);
 		return (M)this;
 	}
 	
-	public String getFeeStatus() {
+	public java.lang.String getFeeStatus() {
 		return getStr("feeStatus");
 	}
 
-	public M setOperType(String operType) {
+	public M setOperType(java.lang.String operType) {
 		set("operType", operType);
 		return (M)this;
 	}
 	
-	public String getOperType() {
+	public java.lang.String getOperType() {
 		return getStr("operType");
 	}
 
-	public M setServerResultCode(String serverResultCode) {
+	public M setServerResultCode(java.lang.String serverResultCode) {
 		set("serverResultCode", serverResultCode);
 		return (M)this;
 	}
 	
-	public String getServerResultCode() {
+	public java.lang.String getServerResultCode() {
 		return getStr("serverResultCode");
 	}
 
-	public M setServerResultDesc(String serverResultDesc) {
+	public M setServerResultDesc(java.lang.String serverResultDesc) {
 		set("serverResultDesc", serverResultDesc);
 		return (M)this;
 	}
 	
-	public String getServerResultDesc() {
+	public java.lang.String getServerResultDesc() {
 		return getStr("serverResultDesc");
 	}
 
-	public M setStatus(String status) {
+	public M setStatus(java.lang.String status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public String getStatus() {
+	public java.lang.String getStatus() {
 		return getStr("status");
 	}
 
-	public M setCharge(String charge) {
+	public M setCharge(java.lang.String charge) {
 		set("charge", charge);
 		return (M)this;
 	}
 	
-	public String getCharge() {
+	public java.lang.String getCharge() {
 		return getStr("charge");
 	}
 
-	public M setWalletAccount(Integer walletAccount) {
+	public M setWalletAccount(java.lang.Integer walletAccount) {
 		set("walletAccount", walletAccount);
 		return (M)this;
 	}
 	
-	public Integer getWalletAccount() {
+	public java.lang.Integer getWalletAccount() {
 		return getInt("walletAccount");
 	}
 
-	public M setChargeTime(String chargeTime) {
+	public M setChargeTime(java.lang.String chargeTime) {
 		set("chargeTime", chargeTime);
 		return (M)this;
 	}
 	
-	public String getChargeTime() {
+	public java.lang.String getChargeTime() {
 		return getStr("chargeTime");
 	}
 
-	public M setRealChargeTime(String realChargeTime) {
+	public M setRealChargeTime(java.lang.String realChargeTime) {
 		set("realChargeTime", realChargeTime);
 		return (M)this;
 	}
 	
-	public String getRealChargeTime() {
+	public java.lang.String getRealChargeTime() {
 		return getStr("realChargeTime");
 	}
 
@@ -162,30 +162,30 @@ public abstract class BaseChargeBatteryInfo<M extends BaseChargeBatteryInfo<M>> 
 		return get("createDate");
 	}
 
-	public M setMD5(String MD5) {
+	public M setMD5(java.lang.String MD5) {
 		set("MD5", MD5);
 		return (M)this;
 	}
 	
-	public String getMD5() {
+	public java.lang.String getMD5() {
 		return getStr("MD5");
 	}
 
-	public M setPayToAgentStatus(String payToAgentStatus) {
+	public M setPayToAgentStatus(java.lang.String payToAgentStatus) {
 		set("pay_to_agent_status", payToAgentStatus);
 		return (M)this;
 	}
 	
-	public String getPayToAgentStatus() {
+	public java.lang.String getPayToAgentStatus() {
 		return getStr("pay_to_agent_status");
 	}
 
-	public M setAutoCharge(String autoCharge) {
+	public M setAutoCharge(java.lang.String autoCharge) {
 		set("auto_charge", autoCharge);
 		return (M)this;
 	}
 	
-	public String getAutoCharge() {
+	public java.lang.String getAutoCharge() {
 		return getStr("auto_charge");
 	}
 
@@ -198,12 +198,12 @@ public abstract class BaseChargeBatteryInfo<M extends BaseChargeBatteryInfo<M>> 
 		return get("pay_to_agent_time");
 	}
 
-	public M setAddMoney(String addMoney) {
+	public M setAddMoney(java.lang.String addMoney) {
 		set("add_money", addMoney);
 		return (M)this;
 	}
 	
-	public String getAddMoney() {
+	public java.lang.String getAddMoney() {
 		return getStr("add_money");
 	}
 

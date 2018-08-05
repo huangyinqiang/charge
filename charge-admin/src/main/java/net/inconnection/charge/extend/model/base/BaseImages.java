@@ -9,30 +9,30 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseImages<M extends BaseImages<M>> extends Model<M> implements IBean {
 
-	public M setId(Long id) {
+	public M setId(java.lang.Long id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Long getId() {
+	public java.lang.Long getId() {
 		return getLong("id");
 	}
 
-	public M setName(String name) {
+	public M setName(java.lang.String name) {
 		set("name", name);
 		return (M)this;
 	}
 	
-	public String getName() {
+	public java.lang.String getName() {
 		return getStr("name");
 	}
 
-	public M setUrl(String url) {
+	public M setUrl(java.lang.String url) {
 		set("url", url);
 		return (M)this;
 	}
 	
-	public String getUrl() {
+	public java.lang.String getUrl() {
 		return getStr("url");
 	}
 

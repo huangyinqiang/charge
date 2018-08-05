@@ -9,75 +9,75 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseBMap<M extends BaseBMap<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setDeviceId(String deviceId) {
+	public M setDeviceId(java.lang.String deviceId) {
 		set("device_id", deviceId);
 		return (M)this;
 	}
 	
-	public String getDeviceId() {
+	public java.lang.String getDeviceId() {
 		return getStr("device_id");
 	}
 
-	public M setEPoint(Double ePoint) {
+	public M setEPoint(java.lang.Double ePoint) {
 		set("e_point", ePoint);
 		return (M)this;
 	}
 	
-	public Double getEPoint() {
+	public java.lang.Double getEPoint() {
 		return getDouble("e_point");
 	}
 
-	public M setNPoint(Double nPoint) {
+	public M setNPoint(java.lang.Double nPoint) {
 		set("n_point", nPoint);
 		return (M)this;
 	}
 	
-	public Double getNPoint() {
+	public java.lang.Double getNPoint() {
 		return getDouble("n_point");
 	}
 
-	public M setTitle(String title) {
+	public M setTitle(java.lang.String title) {
 		set("title", title);
 		return (M)this;
 	}
 	
-	public String getTitle() {
+	public java.lang.String getTitle() {
 		return getStr("title");
 	}
 
-	public M setAddress(String address) {
+	public M setAddress(java.lang.String address) {
 		set("address", address);
 		return (M)this;
 	}
 	
-	public String getAddress() {
+	public java.lang.String getAddress() {
 		return getStr("address");
 	}
 
-	public M setTel(String tel) {
+	public M setTel(java.lang.String tel) {
 		set("tel", tel);
 		return (M)this;
 	}
 	
-	public String getTel() {
+	public java.lang.String getTel() {
 		return getStr("tel");
 	}
 
-	public M setRemark(String remark) {
+	public M setRemark(java.lang.String remark) {
 		set("remark", remark);
 		return (M)this;
 	}
 	
-	public String getRemark() {
+	public java.lang.String getRemark() {
 		return getStr("remark");
 	}
 

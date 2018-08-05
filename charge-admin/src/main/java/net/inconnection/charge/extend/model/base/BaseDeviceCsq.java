@@ -9,30 +9,30 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseDeviceCsq<M extends BaseDeviceCsq<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setDeviceid(String deviceid) {
+	public M setDeviceid(java.lang.String deviceid) {
 		set("deviceid", deviceid);
 		return (M)this;
 	}
 	
-	public String getDeviceid() {
+	public java.lang.String getDeviceid() {
 		return getStr("deviceid");
 	}
 
-	public M setDevicename(String devicename) {
+	public M setDevicename(java.lang.String devicename) {
 		set("devicename", devicename);
 		return (M)this;
 	}
 	
-	public String getDevicename() {
+	public java.lang.String getDevicename() {
 		return getStr("devicename");
 	}
 
@@ -45,12 +45,12 @@ public abstract class BaseDeviceCsq<M extends BaseDeviceCsq<M>> extends Model<M>
 		return get("jointime");
 	}
 
-	public M setRemark(String remark) {
+	public M setRemark(java.lang.String remark) {
 		set("remark", remark);
 		return (M)this;
 	}
 	
-	public String getRemark() {
+	public java.lang.String getRemark() {
 		return getStr("remark");
 	}
 

@@ -9,30 +9,30 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseDroppedlog<M extends BaseDroppedlog<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setDeviceid(String deviceid) {
+	public M setDeviceid(java.lang.String deviceid) {
 		set("deviceid", deviceid);
 		return (M)this;
 	}
 	
-	public String getDeviceid() {
+	public java.lang.String getDeviceid() {
 		return getStr("deviceid");
 	}
 
-	public M setErcode(String ercode) {
+	public M setErcode(java.lang.String ercode) {
 		set("ercode", ercode);
 		return (M)this;
 	}
 	
-	public String getErcode() {
+	public java.lang.String getErcode() {
 		return getStr("ercode");
 	}
 
@@ -45,21 +45,21 @@ public abstract class BaseDroppedlog<M extends BaseDroppedlog<M>> extends Model<
 		return get("updatedate");
 	}
 
-	public M setReson(String reson) {
+	public M setReson(java.lang.String reson) {
 		set("reson", reson);
 		return (M)this;
 	}
 	
-	public String getReson() {
+	public java.lang.String getReson() {
 		return getStr("reson");
 	}
 
-	public M setRemark(String remark) {
+	public M setRemark(java.lang.String remark) {
 		set("remark", remark);
 		return (M)this;
 	}
 	
-	public String getRemark() {
+	public java.lang.String getRemark() {
 		return getStr("remark");
 	}
 

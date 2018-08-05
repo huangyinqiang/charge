@@ -9,67 +9,67 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseChargeSocketHistory<M extends BaseChargeSocketHistory<M>> extends Model<M> implements IBean {
 
-	public M setId(Long id) {
+	public M setId(java.lang.Long id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Long getId() {
+	public java.lang.Long getId() {
 		return getLong("id");
 	}
 
-	public M setChargeSocketId(Long chargeSocketId) {
+	public M setChargeSocketId(java.lang.Long chargeSocketId) {
 		set("charge_socket_id", chargeSocketId);
 		return (M)this;
 	}
 	
-	public Long getChargeSocketId() {
+	public java.lang.Long getChargeSocketId() {
 		return getLong("charge_socket_id");
 	}
 
-	public M setStartPower(Double startPower) {
+	public M setStartPower(java.lang.Double startPower) {
 		set("start_power", startPower);
 		return (M)this;
 	}
 	
-	public Double getStartPower() {
+	public java.lang.Double getStartPower() {
 		return getDouble("start_power");
 	}
 
-	public M setChargeIntensity(Double chargeIntensity) {
+	public M setChargeIntensity(java.lang.Double chargeIntensity) {
 		set("charge_intensity", chargeIntensity);
 		return (M)this;
 	}
 	
-	public Double getChargeIntensity() {
+	public java.lang.Double getChargeIntensity() {
 		return getDouble("charge_intensity");
 	}
 
-	public M setChargeTime(Long chargeTime) {
+	public M setChargeTime(java.lang.Long chargeTime) {
 		set("charge_time", chargeTime);
 		return (M)this;
 	}
 	
-	public Long getChargeTime() {
+	public java.lang.Long getChargeTime() {
 		return getLong("charge_time");
 	}
 
-	public M setChargeState(Integer chargeState) {
+	public M setChargeState(java.lang.Integer chargeState) {
 		set("charge_state", chargeState);
 		return (M)this;
 	}
 	
-	public Integer getChargeState() {
+	public java.lang.Integer getChargeState() {
 		return getInt("charge_state");
 	}
 
-	public M setUpdateTime(Long updateTime) {
+	public M setUpdateTime(java.util.Date updateTime) {
 		set("update_time", updateTime);
 		return (M)this;
 	}
 	
-	public Long getUpdateTime() {
-		return getLong("update_time");
+	public java.util.Date getUpdateTime() {
+		return get("update_time");
 	}
 
 }

@@ -9,120 +9,120 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BasePayToAgentResp<M extends BasePayToAgentResp<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setReturnCode(String returnCode) {
+	public M setReturnCode(java.lang.String returnCode) {
 		set("return_code", returnCode);
 		return (M)this;
 	}
 	
-	public String getReturnCode() {
+	public java.lang.String getReturnCode() {
 		return getStr("return_code");
 	}
 
-	public M setReturnMsg(String returnMsg) {
+	public M setReturnMsg(java.lang.String returnMsg) {
 		set("return_msg", returnMsg);
 		return (M)this;
 	}
 	
-	public String getReturnMsg() {
+	public java.lang.String getReturnMsg() {
 		return getStr("return_msg");
 	}
 
-	public M setMchAppid(String mchAppid) {
+	public M setMchAppid(java.lang.String mchAppid) {
 		set("mch_appid", mchAppid);
 		return (M)this;
 	}
 	
-	public String getMchAppid() {
+	public java.lang.String getMchAppid() {
 		return getStr("mch_appid");
 	}
 
-	public M setMchid(String mchid) {
+	public M setMchid(java.lang.String mchid) {
 		set("mchid", mchid);
 		return (M)this;
 	}
 	
-	public String getMchid() {
+	public java.lang.String getMchid() {
 		return getStr("mchid");
 	}
 
-	public M setDeviceInfo(String deviceInfo) {
+	public M setDeviceInfo(java.lang.String deviceInfo) {
 		set("device_info", deviceInfo);
 		return (M)this;
 	}
 	
-	public String getDeviceInfo() {
+	public java.lang.String getDeviceInfo() {
 		return getStr("device_info");
 	}
 
-	public M setNonceStr(String nonceStr) {
+	public M setNonceStr(java.lang.String nonceStr) {
 		set("nonce_str", nonceStr);
 		return (M)this;
 	}
 	
-	public String getNonceStr() {
+	public java.lang.String getNonceStr() {
 		return getStr("nonce_str");
 	}
 
-	public M setResultCode(String resultCode) {
+	public M setResultCode(java.lang.String resultCode) {
 		set("result_code", resultCode);
 		return (M)this;
 	}
 	
-	public String getResultCode() {
+	public java.lang.String getResultCode() {
 		return getStr("result_code");
 	}
 
-	public M setErrCode(String errCode) {
+	public M setErrCode(java.lang.String errCode) {
 		set("err_code", errCode);
 		return (M)this;
 	}
 	
-	public String getErrCode() {
+	public java.lang.String getErrCode() {
 		return getStr("err_code");
 	}
 
-	public M setErrCodeDes(String errCodeDes) {
+	public M setErrCodeDes(java.lang.String errCodeDes) {
 		set("err_code_des", errCodeDes);
 		return (M)this;
 	}
 	
-	public String getErrCodeDes() {
+	public java.lang.String getErrCodeDes() {
 		return getStr("err_code_des");
 	}
 
-	public M setPartnerTradeNo(String partnerTradeNo) {
+	public M setPartnerTradeNo(java.lang.String partnerTradeNo) {
 		set("partner_trade_no", partnerTradeNo);
 		return (M)this;
 	}
 	
-	public String getPartnerTradeNo() {
+	public java.lang.String getPartnerTradeNo() {
 		return getStr("partner_trade_no");
 	}
 
-	public M setPaymentNo(String paymentNo) {
+	public M setPaymentNo(java.lang.String paymentNo) {
 		set("payment_no", paymentNo);
 		return (M)this;
 	}
 	
-	public String getPaymentNo() {
+	public java.lang.String getPaymentNo() {
 		return getStr("payment_no");
 	}
 
-	public M setPaymentTime(String paymentTime) {
+	public M setPaymentTime(java.lang.String paymentTime) {
 		set("payment_time", paymentTime);
 		return (M)this;
 	}
 	
-	public String getPaymentTime() {
+	public java.lang.String getPaymentTime() {
 		return getStr("payment_time");
 	}
 

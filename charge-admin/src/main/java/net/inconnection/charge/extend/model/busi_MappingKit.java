@@ -22,9 +22,6 @@ public class busi_MappingKit {
 		arp.addMapping("charge", "id", Charge.class);
 		arp.addMapping("charge_battery_info", "id", ChargeBatteryInfo.class);
 		arp.addMapping("charge_money_info", "id", ChargeMoneyInfo.class);
-		arp.addMapping("charge_pile", "id", ChargePile.class);
-		arp.addMapping("charge_socket", "id", ChargeSocket.class);
-		arp.addMapping("charge_socket_history", "id", ChargeSocketHistory.class);
 		arp.addMapping("chargestatus", "id", Chargestatus.class);
 		arp.addMapping("claw_book_url", "id", ClawBookUrl.class);
 		arp.addMapping("command", "id", Command.class);
@@ -51,6 +48,13 @@ public class busi_MappingKit {
 		arp.addMapping("tuser", "id", Tuser.class);
 		arp.addMapping("tuser_charge", "id", TuserCharge.class);
 		arp.addMapping("weixin_token", "id", WeixinToken.class);
+		arp.addMapping("yc_charge_pile", "id", ChargePile.class);
+		arp.addMapping("yc_charge_socket", "id", ChargeSocket.class);
+		arp.addMapping("yc_charge_socket_history", "id", ChargeSocketHistory.class);
+		arp.addMapping("yc_company", "id", Company.class);
+		arp.addMapping("yc_coupon", "id", Coupon.class);
+		arp.addMapping("yc_project", "id", Project.class);
+		arp.addMapping("yc_tuser_and_coupon", "id", TuserAndCoupon.class);
 	}
 }
 

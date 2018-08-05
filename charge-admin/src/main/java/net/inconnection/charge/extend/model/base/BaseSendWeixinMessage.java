@@ -9,57 +9,57 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseSendWeixinMessage<M extends BaseSendWeixinMessage<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setOpenId(String openId) {
+	public M setOpenId(java.lang.String openId) {
 		set("openId", openId);
 		return (M)this;
 	}
 	
-	public String getOpenId() {
+	public java.lang.String getOpenId() {
 		return getStr("openId");
 	}
 
-	public M setDeviceId(String deviceId) {
+	public M setDeviceId(java.lang.String deviceId) {
 		set("deviceId", deviceId);
 		return (M)this;
 	}
 	
-	public String getDeviceId() {
+	public java.lang.String getDeviceId() {
 		return getStr("deviceId");
 	}
 
-	public M setSocket(String socket) {
+	public M setSocket(java.lang.String socket) {
 		set("socket", socket);
 		return (M)this;
 	}
 	
-	public String getSocket() {
+	public java.lang.String getSocket() {
 		return getStr("socket");
 	}
 
-	public M setContent(String content) {
+	public M setContent(java.lang.String content) {
 		set("content", content);
 		return (M)this;
 	}
 	
-	public String getContent() {
+	public java.lang.String getContent() {
 		return getStr("content");
 	}
 
-	public M setResult(String result) {
+	public M setResult(java.lang.String result) {
 		set("result", result);
 		return (M)this;
 	}
 	
-	public String getResult() {
+	public java.lang.String getResult() {
 		return getStr("result");
 	}
 

@@ -9,138 +9,138 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseTuser<M extends BaseTuser<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setOpenId(String openId) {
+	public M setOpenId(java.lang.String openId) {
 		set("openId", openId);
 		return (M)this;
 	}
 	
-	public String getOpenId() {
+	public java.lang.String getOpenId() {
 		return getStr("openId");
 	}
 
-	public M setNickName(String nickName) {
+	public M setNickName(java.lang.String nickName) {
 		set("nickName", nickName);
 		return (M)this;
 	}
 	
-	public String getNickName() {
+	public java.lang.String getNickName() {
 		return getStr("nickName");
 	}
 
-	public M setHeadimgurl(String headimgurl) {
+	public M setHeadimgurl(java.lang.String headimgurl) {
 		set("headimgurl", headimgurl);
 		return (M)this;
 	}
 	
-	public String getHeadimgurl() {
+	public java.lang.String getHeadimgurl() {
 		return getStr("headimgurl");
 	}
 
-	public M setSex(Integer sex) {
+	public M setSex(java.lang.Integer sex) {
 		set("sex", sex);
 		return (M)this;
 	}
 	
-	public Integer getSex() {
+	public java.lang.Integer getSex() {
 		return getInt("sex");
 	}
 
-	public M setUnionid(String unionid) {
+	public M setUnionid(java.lang.String unionid) {
 		set("unionid", unionid);
 		return (M)this;
 	}
 	
-	public String getUnionid() {
+	public java.lang.String getUnionid() {
 		return getStr("unionid");
 	}
 
-	public M setPrivilege(String privilege) {
+	public M setPrivilege(java.lang.String privilege) {
 		set("privilege", privilege);
 		return (M)this;
 	}
 	
-	public String getPrivilege() {
+	public java.lang.String getPrivilege() {
 		return getStr("privilege");
 	}
 
-	public M setCity(String city) {
+	public M setCity(java.lang.String city) {
 		set("city", city);
 		return (M)this;
 	}
 	
-	public String getCity() {
+	public java.lang.String getCity() {
 		return getStr("city");
 	}
 
-	public M setCountry(String country) {
+	public M setCountry(java.lang.String country) {
 		set("country", country);
 		return (M)this;
 	}
 	
-	public String getCountry() {
+	public java.lang.String getCountry() {
 		return getStr("country");
 	}
 
-	public M setProvince(String province) {
+	public M setProvince(java.lang.String province) {
 		set("province", province);
 		return (M)this;
 	}
 	
-	public String getProvince() {
+	public java.lang.String getProvince() {
 		return getStr("province");
 	}
 
-	public M setEmail(String email) {
+	public M setEmail(java.lang.String email) {
 		set("email", email);
 		return (M)this;
 	}
 	
-	public String getEmail() {
+	public java.lang.String getEmail() {
 		return getStr("email");
 	}
 
-	public M setTel(String tel) {
+	public M setTel(java.lang.String tel) {
 		set("tel", tel);
 		return (M)this;
 	}
 	
-	public String getTel() {
+	public java.lang.String getTel() {
 		return getStr("tel");
 	}
 
-	public M setPassword(String password) {
+	public M setPassword(java.lang.String password) {
 		set("password", password);
 		return (M)this;
 	}
 	
-	public String getPassword() {
+	public java.lang.String getPassword() {
 		return getStr("password");
 	}
 
-	public M setPassword2(String password2) {
+	public M setPassword2(java.lang.String password2) {
 		set("password2", password2);
 		return (M)this;
 	}
 	
-	public String getPassword2() {
+	public java.lang.String getPassword2() {
 		return getStr("password2");
 	}
 
-	public M setRemember(String remember) {
+	public M setRemember(java.lang.String remember) {
 		set("remember", remember);
 		return (M)this;
 	}
 	
-	public String getRemember() {
+	public java.lang.String getRemember() {
 		return getStr("remember");
 	}
 
@@ -162,76 +162,103 @@ public abstract class BaseTuser<M extends BaseTuser<M>> extends Model<M> impleme
 		return get("lastLoginDate");
 	}
 
-	public M setLevel(Integer level) {
+	public M setLevel(java.lang.Integer level) {
 		set("level", level);
 		return (M)this;
 	}
 	
-	public Integer getLevel() {
+	public java.lang.Integer getLevel() {
 		return getInt("level");
 	}
 
-	public M setCardNumber(String cardNumber) {
+	public M setCardNumber(java.lang.String cardNumber) {
 		set("cardNumber", cardNumber);
 		return (M)this;
 	}
 	
-	public String getCardNumber() {
+	public java.lang.String getCardNumber() {
 		return getStr("cardNumber");
 	}
 
-	public M setPhyCardNumber(String phyCardNumber) {
+	public M setPhyCardNumber(java.lang.String phyCardNumber) {
 		set("phyCardNumber", phyCardNumber);
 		return (M)this;
 	}
 	
-	public String getPhyCardNumber() {
+	public java.lang.String getPhyCardNumber() {
 		return getStr("phyCardNumber");
 	}
 
-	public M setCardAccount(Integer cardAccount) {
+	public M setCardAccount(java.lang.Integer cardAccount) {
 		set("cardAccount", cardAccount);
 		return (M)this;
 	}
 	
-	public Integer getCardAccount() {
+	public java.lang.Integer getCardAccount() {
 		return getInt("cardAccount");
 	}
 
-	public M setBand(String band) {
+	public M setBand(java.lang.String band) {
 		set("band", band);
 		return (M)this;
 	}
 	
-	public String getBand() {
+	public java.lang.String getBand() {
 		return getStr("band");
 	}
 
-	public M setStatus(String status) {
+	public M setStatus(java.lang.String status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public String getStatus() {
+	public java.lang.String getStatus() {
 		return getStr("status");
 	}
 
-	public M setWalletNumber(String walletNumber) {
+	public M setWalletNumber(java.lang.String walletNumber) {
 		set("walletNumber", walletNumber);
 		return (M)this;
 	}
 	
-	public String getWalletNumber() {
+	public java.lang.String getWalletNumber() {
 		return getStr("walletNumber");
 	}
 
-	public M setWalletAccount(Integer walletAccount) {
+	public M setWalletAccount(java.lang.Integer walletAccount) {
 		set("walletAccount", walletAccount);
 		return (M)this;
 	}
 	
-	public Integer getWalletAccount() {
+	public java.lang.Integer getWalletAccount() {
 		return getInt("walletAccount");
+	}
+
+	public M setWalletRealMoney(java.lang.Integer walletRealMoney) {
+		set("wallet_real_money", walletRealMoney);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getWalletRealMoney() {
+		return getInt("wallet_real_money");
+	}
+
+	public M setWalletGiftMoney(java.lang.Integer walletGiftMoney) {
+		set("wallet_gift_money", walletGiftMoney);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getWalletGiftMoney() {
+		return getInt("wallet_gift_money");
+	}
+
+	public M setRealGitRate(java.lang.Double realGitRate) {
+		set("real_git_rate", realGitRate);
+		return (M)this;
+	}
+	
+	public java.lang.Double getRealGitRate() {
+		return getDouble("real_git_rate");
 	}
 
 	public M setUpdateTime(java.util.Date updateTime) {

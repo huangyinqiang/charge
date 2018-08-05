@@ -9,48 +9,48 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseClawBookUrl<M extends BaseClawBookUrl<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setSource(String source) {
+	public M setSource(java.lang.String source) {
 		set("source", source);
 		return (M)this;
 	}
 	
-	public String getSource() {
+	public java.lang.String getSource() {
 		return getStr("source");
 	}
 
-	public M setBookName(String bookName) {
+	public M setBookName(java.lang.String bookName) {
 		set("book_name", bookName);
 		return (M)this;
 	}
 	
-	public String getBookName() {
+	public java.lang.String getBookName() {
 		return getStr("book_name");
 	}
 
-	public M setUrl(String url) {
+	public M setUrl(java.lang.String url) {
 		set("url", url);
 		return (M)this;
 	}
 	
-	public String getUrl() {
+	public java.lang.String getUrl() {
 		return getStr("url");
 	}
 
-	public M setStatus(Integer status) {
+	public M setStatus(java.lang.Integer status) {
 		set("status", status);
 		return (M)this;
 	}
 	
-	public Integer getStatus() {
+	public java.lang.Integer getStatus() {
 		return getInt("status");
 	}
 

@@ -9,48 +9,48 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings({"serial", "unchecked"})
 public abstract class BaseLostcard<M extends BaseLostcard<M>> extends Model<M> implements IBean {
 
-	public M setId(Integer id) {
+	public M setId(java.lang.Integer id) {
 		set("id", id);
 		return (M)this;
 	}
 	
-	public Integer getId() {
+	public java.lang.Integer getId() {
 		return getInt("id");
 	}
 
-	public M setGid(Integer gid) {
+	public M setGid(java.lang.Integer gid) {
 		set("gid", gid);
 		return (M)this;
 	}
 	
-	public Integer getGid() {
+	public java.lang.Integer getGid() {
 		return getInt("gid");
 	}
 
-	public M setGname(String gname) {
+	public M setGname(java.lang.String gname) {
 		set("gname", gname);
 		return (M)this;
 	}
 	
-	public String getGname() {
+	public java.lang.String getGname() {
 		return getStr("gname");
 	}
 
-	public M setUname(String uname) {
+	public M setUname(java.lang.String uname) {
 		set("uname", uname);
 		return (M)this;
 	}
 	
-	public String getUname() {
+	public java.lang.String getUname() {
 		return getStr("uname");
 	}
 
-	public M setCardnum(String cardnum) {
+	public M setCardnum(java.lang.String cardnum) {
 		set("cardnum", cardnum);
 		return (M)this;
 	}
 	
-	public String getCardnum() {
+	public java.lang.String getCardnum() {
 		return getStr("cardnum");
 	}
 
@@ -63,12 +63,12 @@ public abstract class BaseLostcard<M extends BaseLostcard<M>> extends Model<M> i
 		return get("losttime");
 	}
 
-	public M setBalance(String balance) {
+	public M setBalance(java.lang.String balance) {
 		set("balance", balance);
 		return (M)this;
 	}
 	
-	public String getBalance() {
+	public java.lang.String getBalance() {
 		return getStr("balance");
 	}
 
