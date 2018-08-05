@@ -78,6 +78,13 @@
 	function submit() {
 		var tel = $('#tel').val();
 
+        if (tel == "" || tel == null) {
+            layer.msg("请输入手机号", {
+                shift : 5
+            });
+            return;
+        }
+
 		$.ajax({
 			type : "post",
 			url : "../user/updateTelNumber",

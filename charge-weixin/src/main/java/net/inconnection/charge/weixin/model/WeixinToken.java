@@ -19,17 +19,22 @@ public class WeixinToken extends Model<WeixinToken> {
     public WeixinToken queryAccessTokenByAppId(String appId) throws Exception {
         log.info("开始查询accessToken:" + appId);
         WeixinToken accessToken = (WeixinToken)this.findFirst("select * from weixin_token where app_id = ?", new Object[]{appId});
-        if (accessToken.get("status") == null) {
-            throw new Exception();
-        } else {
-            String status = (String)accessToken.get("status");
-            if (status.equals("N")) {
-                throw new Exception();
-            } else {
-                log.info("查询accessToken结果" + accessToken);
-                return accessToken;
-            }
+        if (null == accessToken){
+            return null;
         }
+
+        return accessToken;
+//        if (accessToken.get("status") == null) {
+//            throw new Exception();
+//        } else {
+//            String status = (String)accessToken.get("status");
+//            if (status.equals("N")) {
+//                throw new Exception();
+//            } else {
+//                log.info("查询accessToken结果" + accessToken);
+//                return accessToken;
+//            }
+//        }
     }
 
     public int updateAccessTokenByAppId(WeixinTokenBean req) {
