@@ -8,10 +8,7 @@ import net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.Alarm;
 import net.inconnection.charge.extend.chargeDevice.listener.ActiveMQMsgServer;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.MsgConvertUtil;
-import net.inconnection.charge.extend.chargeDevice.protocol.message.GatewayFacet;
-import net.inconnection.charge.extend.chargeDevice.protocol.message.RequestChargePlieFacet;
-import net.inconnection.charge.extend.chargeDevice.protocol.message.RequestMsg;
-import net.inconnection.charge.extend.chargeDevice.protocol.message.RequestSocketFacet;
+import net.inconnection.charge.extend.chargeDevice.protocol.message.*;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.protocol.update.UpdateMsgHandle;
 import net.inconnection.charge.extend.chargeDevice.utils.*;
@@ -428,14 +425,14 @@ public class ChargePileDevice implements GateWay {
     }
 
     //请求插座开始充电
-    public void startCharge(Vector<Long> socketIds, String callBackQueueName){
+    public void startCharge(Map<Long, Integer> socketIdChargeTimeMap, String callBackQueueName){
         RequestMsg requestMsg = new RequestMsg();
 
         Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
         Date utc = new Date();
         requestMsg.setGatewayFacet(new GatewayFacet(sequenceNum, utc, getGatewayIdStr()));
-        for (Long socketId : socketIds){
-            requestMsg.addRequestFacet(new RequestSocketFacet(MSG_REQUEST_CODE_SOCKETSTARTCHARGE, socketId.toString()));
+        for (Map.Entry<Long, Integer>  entry: socketIdChargeTimeMap.entrySet()){
+            requestMsg.addRequestFacet(new RequsetSocketStartChargeFacet(MSG_REQUEST_CODE_SOCKETSTARTCHARGE, entry.getKey().toString(), entry.getValue()));
         }
 
         String requestMsgStr = requestMsg.toString();
@@ -471,7 +468,12 @@ public class ChargePileDevice implements GateWay {
 
         chargePileDevice.requestTestPower(sockets, testQueue);
 
-        chargePileDevice.startCharge(sockets, testQueue);
+        Map<Long, Integer> socketIdChargeTimeMap = new ConcurrentHashMap<>();
+        socketIdChargeTimeMap.put(1L, 60);
+        socketIdChargeTimeMap.put(2L, 120);
+        socketIdChargeTimeMap.put(4L, 240);
+
+        chargePileDevice.startCharge(socketIdChargeTimeMap, testQueue);
 
 
 

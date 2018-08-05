@@ -3,6 +3,7 @@ package net.inconnection.charge.extend.chargeDevice.deviceManage;
 
 import net.inconnection.charge.extend.chargeDevice.deviceManage.device.ChargePileDevice;
 
+import java.util.Map;
 import java.util.Vector;
 
 public class ChargePileCommander {
@@ -41,9 +42,9 @@ public class ChargePileCommander {
     }
 
     //请求插座开始充电
-    public void startCharge(Long gwId, Vector<Long> socketIds, String callBackQueueName){
+    public void startCharge(Long gwId, Map<Long, Integer> socketIdChargeTimeMap, String callBackQueueName){
         ChargePileDevice chargePileDevice = ChargePileManager.getInstance().getChargePile(gwId);
-        chargePileDevice.startCharge(socketIds, callBackQueueName);
+        chargePileDevice.startCharge(socketIdChargeTimeMap, callBackQueueName);
     }
 
 }

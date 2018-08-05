@@ -20,7 +20,7 @@ public class PerformenceTester {
                 for (int index=0; index<1; index++) {
                     final String industry = "CHARGE";
                     final String version = "1";
-                    final String gwId = "1234567890";
+                    final String gwId = "010100000001";
 
 
                     String notifyTopic = "C/" + "GW_INIT" + "/" + version +"/" + gwId + "/" + TOPIC_NOTIFY;
