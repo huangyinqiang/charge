@@ -2,11 +2,11 @@ devMode = true
 
 base_jdbcUrl = jdbc:mysql://127.0.0.1/zcurd_base?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useUnicode=true&relaxAutoCommit=true&useSSL=false&serverTimezone=GMT%2B8
 base_user = root
-base_password = 123456
+base_password = iioss99!
 
-busi_jdbcUrl = jdbc:mysql://127.0.0.1/zcurd_busi?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useUnicode=true&relaxAutoCommit=true&useSSL=false&serverTimezone=GMT%2B8
+busi_jdbcUrl = jdbc:mysql://127.0.0.1/zcurd_busi_last?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useUnicode=true&relaxAutoCommit=true&useSSL=false&serverTimezone=GMT%2B8
 busi_user = root
-busi_password = 123456
+busi_password = iioss99!
 
 
 #线上环境
@@ -20,6 +20,6 @@ busi_password = 123456
 
 
 #代码生成保存地址
-genCodePath = F:/genCode/
+genCodePath = D:/genCode/
 #genCodePath = /Users/user/Desktop/genCode/
 
