@@ -26,15 +26,21 @@ $(function() {
 	});
 });
 // 扫码查询
+// function scanQR() {
+// 	wx.scanQRCode({
+// 		needResult : 1,// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
+// 		desc : 'scanQRCode desc',
+// 		success : function(res) {
+// 			// 扫码后获取结果参数赋值给Input
+// 			queryDevice(res.resultStr);
+// 		}
+// 	});
+// }
+
 function scanQR() {
-	wx.scanQRCode({
-		needResult : 1,// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
-		desc : 'scanQRCode desc',
-		success : function(res) {
-			// 扫码后获取结果参数赋值给Input
-			queryDevice(res.resultStr);
-		}
-	});
+
+            queryDevice("290000001");
+
 }
 // 输入设备充值
 function inputNum() {
@@ -61,7 +67,7 @@ function queryDevice(value) {
 			location.href = "./recharge/recharge?deviceId="
 					+ data.respObj.match_num + "&area="
 					+ encodeURI(encodeURI(data.respObj.area)) + "&activityId="
-					+ data.respObj.activity_id + "&type="+type
+					+ data.respObj.activity_id + "&type=WA"
 		},
 		error : function() {
 

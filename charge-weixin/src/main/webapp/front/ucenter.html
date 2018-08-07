@@ -15,8 +15,10 @@
 <link rel="stylesheet" href="css/weui.css">
 <link rel="stylesheet" href="css/wechat.css">
 <script type="text/javascript" src="js/common/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/recharge/startRecharge.js"></script>
 <script type="text/javascript"
 	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+
 <script type="text/javascript">
 	var openId;
 	$(function() {
@@ -71,6 +73,40 @@
 			}
 		});
 	}
+    function getActivity() {
+
+        queryDevice("290000001");
+
+    }
+
+    // 查询
+    function queryDevice(value) {
+        $.ajax({
+            type : 'GET',
+            url : "./device/queryDeviceInfoByQr",
+            dataType : "json",
+            data : {
+                qr : value
+            },
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : false,// 设置同步方式，false为同步
+            success : function(data) {
+                if (data.respCode != '000000' | null == data.respObj) {
+                    layer.msg("设备暂时离线，请稍后再试...", {
+                        shift : 5
+                    });
+                    return;
+                }
+                location.href = "./recharge/recharge?deviceId="
+                    + data.respObj.match_num + "&area="
+                    + encodeURI(encodeURI(data.respObj.area)) + "&activityId="
+                    + data.respObj.activity_id + "&type=WA"
+            },
+            error : function() {
+
+            }
+        });
+    }
 </script>
 </head>
 <style>
@@ -114,7 +150,7 @@ body {
 							</div>
 						</div>
 						<div class="weui-cells">
-							<a class="weui-cell weui-cell_access" href="./recharge?type=WA">
+							<div class="weui-cell weui-cell_access"  onclick="getActivity();" >
 								<div class="weui-cell__hd">
 									<i class="iconfont icon-qianbao"></i>
 								</div>
@@ -124,7 +160,8 @@ body {
 								<div class="weui-cell__ft">
 									<p id=walletAccount></p>
 								</div>
-							</a>
+
+							</div>
 						</div>
 						<div class="weui-cells">
 							<a class="weui-cell weui-cell_access"
@@ -199,12 +236,13 @@ body {
 				<img src="images/saoma.png" alt="">
 			</div>
 			<p class="weui_tabbar_label">扫码充电</p>
-		<!--</a> <a href="./recharge?type=CH" class="weui_tabbar_item">-->
-			<!--<div class="weui_tabbar_icon">-->
-				<!--<img src="images/chongzhi.png" alt="">-->
-			<!--</div>-->
-			<!--<p class="weui_tabbar_label">充值电卡</p>-->
 		</a>
+		<div onclick="scanQR()" class="weui_tabbar_item">
+			<div class="weui_tabbar_icon">
+				<img src="images/chongzhi.png" alt="">
+			</div>
+			<p class="weui_tabbar_label">扫码充值</p>
+		</div>
 	</div>
 </body>
 <script src="js/common/zepto.min.js"></script>
