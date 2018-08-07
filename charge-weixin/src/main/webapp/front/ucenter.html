@@ -83,10 +83,10 @@
     function queryDevice(value) {
         $.ajax({
             type : 'GET',
-            url : "./device/queryDeviceInfoByQr",
+            url : "./device/queryDeviceInfoByCompanyId",
             dataType : "json",
             data : {
-                qr : value
+                companyId : value
             },
             cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
             async : false,// 设置同步方式，false为同步
