@@ -317,7 +317,7 @@ public class ChargePileDevice implements GateWay {
         }
 
         //todo 这里需要重写
-        String industryAndVersion = "CHARGE"+"/"+"1";
+        String industryAndVersion = MQTT_TOPIC_INDUSTRY_CHARGE+"/"+MQTT_TOPIC_CUR_VERSION;
         ActiveMQMsgServer server = ActiveMQMsgServer.getInstance();
         UpdateMsgHandle.handle(server,industryAndVersion,messageJson);
     }
