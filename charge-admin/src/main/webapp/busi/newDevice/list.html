@@ -2,32 +2,6 @@
 
 <table id="dg"></table>
 
-
- <table class="easyui-datagrid" title="Merge Cells for DataGrid" style="width:700px;height:250px"
-		data-options="
-				rownumbers: true,
-				singleSelect: true,
-				iconCls: 'icon-save',
-				url: 'datagrid_data1.json',
-				method: 'get',
-				onLoadSuccess: onLoadSuccess
-			">
-	 <thead>
-	 <tr>
-		 <th data-options="field:'productid',width:100">Product</th>
-		 <th data-options="field:'itemid',width:80">Item ID</th>
-		 <th data-options="field:'listprice',width:80,align:'right'">List Price</th>
-		 <th data-options="field:'unitcost',width:80,align:'right'">Unit Cost</th>
-		 <th data-options="field:'attr1',width:240">Attribute</th>
-		 <th data-options="field:'status',width:60,align:'center'">Status</th>
-	 </tr>
-	 </thead>
- </table>
-
-
-
-
-
 <div id="tb" style="padding: 2px 5px;">
 	<div class="wrap_search">
 
@@ -58,6 +32,171 @@
 
 </div>
 
+
+ <script type="text/javascript">
+     function onLoadSuccess(data){
+         data=data.rows;
+         var merges=[];
+
+
+
+         var id="";
+         var index=0;
+         var rowspan=0;
+
+         for(var j=0; j<data.length;j++){
+
+             if (id=="") {
+                 id=data[j].id+"";
+                 rowspan+=1;
+                 continue;
+             }else if (id==(data[j].id+"") ){
+                 rowspan+=1;
+                 continue;
+			 }else if (this.id!=(data[j].id+"") ){
+                 var merge={
+                     id:id,
+                     index: index,
+                     rowspan: rowspan
+                 };
+                 merges.push(merge);
+                 id=data[j].id+"";
+                 index+=merge.rowspan;
+                 rowspan=1;
+             }
+             if (j==data.length-1) {
+                 var merge={
+                     id:id,
+                     index: index,
+                     rowspan: rowspan
+                 };
+                 merges.push(merge);
+             }
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'id',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'status',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'sn',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'name',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'province',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'city',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'detail_location',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'lat',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'lng',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'power_max',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'socket_sum',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'company_id',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'total_intensity',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'total_voltage',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'is_online',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'online_date',
+                 rowspan: merges[i].rowspan
+             });
+         }
+         for(var i=0; i<merges.length; i++){
+             $(this).datagrid('mergeCells',{
+                 index: merges[i].index,
+                 field: 'update_time',
+                 rowspan: merges[i].rowspan
+             });
+         }
+
+
+     }
+ </script>
+
 <script type="text/javascript">
 	var datagrid = $("#dg");
 	var dgOptions = {
@@ -73,6 +212,7 @@
 		multiSort : true,
 		singleSelect : true,
 		queryParams : getInitParam(),
+        onLoadSuccess: onLoadSuccess,
 		columns : [ [
 				{
 					field : 'id',
@@ -175,7 +315,60 @@
                 title : '更新时间',
                 width : 120,
                 sortable : true
-            }
+            },
+
+
+            {
+                field : 'chargeSocket_id',
+                title : '插座序号',
+                width : 60,
+            },
+            {
+                field : 'chargeSocket_is_used',
+                title : '占用',
+                width : 60,
+                formatter : function(value, row, index) {
+                    if (value == '1') {
+                        return "<span style='color:red;font-size:20px;'>是</span>";
+                    } else  {
+                        return "<span style='color:green;font-size:20px;'>否</span>";
+                    }
+                }
+            },
+            {
+                field : 'chargeSocket_startPower',
+                title : '开始电压',
+                width : 60,
+            },
+            {
+                field : 'chargeSocket_chargePower',
+                title : '充电电压',
+                width : 60,
+            },
+            {
+                field : 'chargeSocket_chargeIntensity',
+                title : '充电电流',
+                width : 60,
+            },
+            {
+                field : 'chargeSocket_chargeState',
+                title : '充电状态',
+                width : 60,
+            },
+            {
+                field : 'chargeSocket_chargeTime',
+                title : '充电时长',
+                width : 60,
+            },
+			{
+                field : 'chargeSocket_updateTime',
+                title : '更新时间',
+                width : 60,
+			},
+
+
+
+
 				] ]
 	};
 	$(function() {
