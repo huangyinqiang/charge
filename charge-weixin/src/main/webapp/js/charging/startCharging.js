@@ -51,27 +51,37 @@ function getOpenId() {
 }
 
 // 扫码查询
-function scanQR() {
-	if ($("input[type='checkbox']").is(':checked')) {
-		wx.scanQRCode({
-			needResult : 1,// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
-			desc : 'scanQRCode desc',
-			success : function(res) {
-				// 扫码后获取结果参数赋值给Input
-				queryDevice(res.resultStr);
-			}
-		});
-	} else {
-		layer.msg("请查看并勾选‘同意《充电说明》’", {
-			shift : 5
-		});
-		return;
-	}
+// function scanQR() {
+// 	if ($("input[type='checkbox']").is(':checked')) {
+// 		wx.scanQRCode({
+// 			needResult : 1,// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
+// 			desc : 'scanQRCode desc',
+// 			success : function(res) {
+// 				// 扫码后获取结果参数赋值给Input
+// 				queryDevice(res.resultStr);
+// 			}
+// 		});
+// 	} else {
+// 		layer.msg("请查看并勾选‘同意《充电说明》’", {
+// 			shift : 5
+// 		});
+// 		return;
+// 	}
+// }
+
+
+// 扫码查询
+function scanQR1() {
+    queryDevice("290000001");
+
 }
+
+
 // 输入设备充电
 function inputNum() {
 	if ($("input[type='checkbox']").is(':checked')) {
-		queryDevice($("#deviceNum").val()); // 设备编号
+		// queryDevice($("#deviceNum").val()); // 设备编号
+        queryDevice("290000001"); // 设备编号
 	} else {
 		layer.msg("请查看并勾选‘同意《充电说明》’", {
 			shift : 5

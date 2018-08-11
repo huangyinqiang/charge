@@ -42,10 +42,15 @@ public class UserController extends Controller {
 
         if (res_code!=0) {
             log.error("短信验证码发送失败");
+            HnKejueResponse resp =  new HnKejueResponse(RespCode.SEND_SMS_AUTH_FAILD.getKey(), RespCode.SEND_SMS_AUTH_FAILD.getValue());
+            this.renderJson(resp);
             return;
         }
         //验证码放入缓存
         CacheKit.put("tenMinute", tel, smsAuthCode);
+
+        HnKejueResponse resp =  new HnKejueResponse(RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
+        this.renderJson(resp);
 
     }
 
@@ -61,6 +66,7 @@ public class UserController extends Controller {
             HnKejueResponse resp =  new HnKejueResponse(RespCode.SMS_AUTH_FAILD.getKey(), RespCode.SMS_AUTH_FAILD.getValue());
             this.renderJson(resp);
         }
+
 
 
 

@@ -8,6 +8,7 @@ public enum RespCode {
     SUCCESS("000000", "成功"),
     ACCEPT("000001", "已经受理"),
     FAILD("999999", "失败"),
+    SEND_SMS_AUTH_FAILD("999999", "发送短信验证失败"),
     SMS_AUTH_FAILD("999999", "短信验证失败"),
     TIMEOUT("100000", "请求超时");
 

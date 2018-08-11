@@ -17,8 +17,8 @@ public class TokenCheckUtils {
           3. 开发者获得加密后的字符串可与signature对比，标识该请求来源于微信
            */
 
-          private static final Prop prop = PropKit.use("tencent_sms.properties");
-          private static final String TOCKEN 					= prop.get("token");
+          private static final Prop prop = PropKit.use("cjk_config.txt");
+          private static final String TOCKEN 	= prop.get("token");
 
           public static String tokenCheck(String signature,String timestamp,String nonce,String echostr){
                  List<String> list = new ArrayList<>();

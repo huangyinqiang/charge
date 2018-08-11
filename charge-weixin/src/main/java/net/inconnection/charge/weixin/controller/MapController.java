@@ -14,7 +14,7 @@ public class MapController extends Controller {
     public MapController() {
     }
 
-    public void baiDuMap() {
+    public void baiduMap() {
         log.info("跳转到百度地图");
         this.render("map/baidu_map.html");
     }
