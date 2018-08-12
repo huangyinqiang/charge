@@ -1,7 +1,6 @@
-package net.inconnection.charge.extend.chargeDevice.listener;
+package net.inconnection.charge.extend.chargeDevice.jms;
 
 import com.alibaba.fastjson.JSONObject;
-import net.inconnection.charge.extend.chargeDevice.jms.ActiveMQConstant;
 import net.inconnection.charge.extend.chargeDevice.protocol.update.UpdateMsgHandle;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
@@ -13,12 +12,12 @@ import javax.jms.*;
 import java.util.Hashtable;
 import java.util.Map;
 
-public class ActiveMQMsgServer implements MessageListener{
+public class DeviceUpdateMQServer implements MessageListener{
 
     @Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
-    private static Logger _log = LoggerFactory.getLogger(ActiveMQMsgServer.class);
+    private static Logger _log = LoggerFactory.getLogger(DeviceUpdateMQServer.class);
 
     //private BrokerService broker;
     //private final String brokerUrl = TCP_LOCALHOST_ACTIVEMQ;
@@ -47,26 +46,26 @@ public class ActiveMQMsgServer implements MessageListener{
     private Connection connection;
 
     //单例模式
-    private static final ActiveMQMsgServer instance = new ActiveMQMsgServer();
+    private static final DeviceUpdateMQServer instance = new DeviceUpdateMQServer();
 
 
 
     //私有化构造方法
-    private ActiveMQMsgServer(){
+    private DeviceUpdateMQServer(){
         start();
     }
 
     //单例方法
-    public static ActiveMQMsgServer getInstance(){
+    public static DeviceUpdateMQServer getInstance(){
         return instance;
     }
 
     //单利方法
-    /*public static ActiveMQMsgServer getInstance() {
+    /*public static DeviceUpdateMQServer getInstance() {
         if (instance == null) {
-            synchronized (ActiveMQMsgServer.class) {
+            synchronized (DeviceUpdateMQServer.class) {
                 if (instance == null) {
-                    instance = new ActiveMQMsgServer();
+                    instance = new DeviceUpdateMQServer();
                 }
             }
         }
@@ -229,6 +228,6 @@ public class ActiveMQMsgServer implements MessageListener{
     }
 
     public static void main(String[] args) {
-        ActiveMQMsgServer.getInstance();
+        DeviceUpdateMQServer.getInstance();
     }
 }

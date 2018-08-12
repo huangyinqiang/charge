@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import net.inconnection.charge.extend.chargeDevice.deviceInterface.Device;
 import net.inconnection.charge.extend.chargeDevice.deviceInterface.GateWay;
 import net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.Alarm;
-import net.inconnection.charge.extend.chargeDevice.listener.ActiveMQMsgServer;
+import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQServer;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.MsgConvertUtil;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.*;
@@ -29,7 +29,7 @@ public class ChargePileDevice implements GateWay {
     private Long chargePileId;//充电桩Id
     private String name;//充电桩名称
 
-    private Integer voltage;//充电电压
+    private Long voltage;//充电电压
     private Integer power;//充电功率
 
     private Integer batVol;//电池电压
@@ -59,7 +59,7 @@ public class ChargePileDevice implements GateWay {
 
     void saveData(){
         ChargePile chargePileDo = new ChargePile();
-        //chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).save();
+        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).save();
     }
 
 
@@ -135,7 +135,7 @@ public class ChargePileDevice implements GateWay {
         updateAlarm(gwFacetObj, dataTime);
 
         if (gwFacetObj.containsKey(MSG_CHARGEVOLTAGE)){
-            voltage = Integer.parseInt(gwFacetObj.getString(MSG_CHARGEVOLTAGE));
+            voltage = Long.parseLong(gwFacetObj.getString(MSG_CHARGEVOLTAGE));
         }
 
         if (gwFacetObj.containsKey(MSG_CHARGEPOWER)){
@@ -329,9 +329,8 @@ public class ChargePileDevice implements GateWay {
             return;
         }
 
-        //todo 这里需要重写
         String industryAndVersion = MQTT_TOPIC_INDUSTRY_CHARGE+"/"+MQTT_TOPIC_CUR_VERSION;
-        ActiveMQMsgServer server = ActiveMQMsgServer.getInstance();
+        DeviceUpdateMQServer server = DeviceUpdateMQServer.getInstance();
         UpdateMsgHandle.handle(server,industryAndVersion,messageJson);
     }
 

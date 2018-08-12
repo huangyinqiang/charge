@@ -9,8 +9,8 @@ import javax.jms.*;
 import static net.inconnection.charge.extend.chargeDevice.jms.ActiveMQConstant.TCP_LOCALHOST_ACTIVEMQ;
 
 
-public class DeviceUpdateMQProcessor {
-    private static Logger _log = LoggerFactory.getLogger(DeviceUpdateMQProcessor.class);
+public class DeviceUpdateMQClient {
+    private static Logger _log = LoggerFactory.getLogger(DeviceUpdateMQClient.class);
     //private BrokerService broker;
     private final String brokerUrl = TCP_LOCALHOST_ACTIVEMQ;
     private Connection connection;

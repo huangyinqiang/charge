@@ -2,7 +2,7 @@ package net.inconnection.charge.extend.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import net.inconnection.charge.admin.common.base.BaseController;
-import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQProcessor;
+import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQClient;
 import net.inconnection.charge.extend.chargeDevice.utils.SEQGeneration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,19 +74,19 @@ public class DeviceUpdateController extends BaseController {
         json.put("seq",seq);
         json.put("timeStr",timeStr);
 
-        DeviceUpdateMQProcessor deviceUpdateMQProcessor = new DeviceUpdateMQProcessor();
+        DeviceUpdateMQClient deviceUpdateMQClient = new DeviceUpdateMQClient();
         try {
-            deviceUpdateMQProcessor.start();
+            deviceUpdateMQClient.start();
             _log.info("JMSCorrelationID"+key);
-            deviceUpdateMQProcessor.request(key,json.toJSONString());
+            deviceUpdateMQClient.request(key,json.toJSONString());
         } catch (Exception e) {
-            _log.error("DeviceUpdateMQProcessor 客户端启动错误!",e);
+            _log.error("DeviceUpdateMQClient 客户端启动错误!",e);
         }
 
         //阻塞并从队列等待反馈
-        String status = deviceUpdateMQProcessor.onMessage(TIME_OUT);
+        String status = deviceUpdateMQClient.onMessage(TIME_OUT);
         try {
-            deviceUpdateMQProcessor.stop();
+            deviceUpdateMQClient.stop();
         } catch (Exception e) {
             _log.error("activeMQ客户端停止错误!",e);
         }

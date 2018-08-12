@@ -1,4 +1,4 @@
-package net.inconnection.charge.extend.chargeDevice.listener;
+package net.inconnection.charge.extend.chargeDevice.jms;
 
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
@@ -9,10 +9,14 @@ import javax.jms.*;
 
 import static net.inconnection.charge.extend.chargeDevice.jms.ActiveMQConstant.TCP_LOCALHOST_ACTIVEMQ;
 
+/**
+ * 监听从mqtt消息处理器传过来的的对于request消息的response消息
+ * 使用者应该是request消息发送者
+ */
 
-public class CmsResponseMsgReceiver{
+public class ResponseMsgReceiver {
 
-    private static Logger _log = LoggerFactory.getLogger(CmsResponseMsgReceiver.class);
+    private static Logger _log = LoggerFactory.getLogger(ResponseMsgReceiver.class);
 
     public String getProcessedResponseMsg(String queue,long timeout) {
         // 消费者，消息接收者

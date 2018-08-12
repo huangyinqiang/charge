@@ -1,7 +1,7 @@
 package net.inconnection.charge.extend.chargeDevice.protocol.update;
 
 import com.alibaba.fastjson.JSONObject;
-import net.inconnection.charge.extend.chargeDevice.listener.ActiveMQMsgServer;
+import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQServer;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.utils.RedisUtil;
@@ -20,7 +20,7 @@ public class UpdateMsgHandle {
     //处理update的queue,若加入其他业务的处理则在下方加入新的queue
     private static final String UPDATE_QUEUE = "update_queue";
 
-    public static void firstSend(ActiveMQMsgServer server, String key, JSONObject jsonObject){
+    public static void firstSend(DeviceUpdateMQServer server, String key, JSONObject jsonObject){
         _log.info("key:"+key);
         _log.info("正在发送升级数据");
         String industry = jsonObject.getString("industry");
@@ -62,7 +62,7 @@ public class UpdateMsgHandle {
     }
 
     //mqtt接收消息后处理update类型消息的方法
-    public static void handle(ActiveMQMsgServer server,String industryAndVersion,String message) {
+    public static void handle(DeviceUpdateMQServer server, String industryAndVersion, String message) {
         //update消息解析类获取message的各个属性
         UpdateMsgProcesser ump = new UpdateMsgProcesser();
         ump.updateDecode(message);
@@ -158,7 +158,7 @@ public class UpdateMsgHandle {
         }
     }
 
-    private static void response(ActiveMQMsgServer server,String key,int status) {
+    private static void response(DeviceUpdateMQServer server, String key, int status) {
         /*TextMessage tempMessage = server.getTextMessage(key);
         if(tempMessage == null){
             _log.warn("无key:"+key+"对应消息!");
@@ -177,7 +177,7 @@ public class UpdateMsgHandle {
         server.response(key,status+"");
     }
 
-    private static void removeData(ActiveMQMsgServer server, String key){
+    private static void removeData(DeviceUpdateMQServer server, String key){
         Thread deleteDataThread = new Thread(() -> server.removeData(key));
         try {
             Thread.sleep(10*60*1000);
