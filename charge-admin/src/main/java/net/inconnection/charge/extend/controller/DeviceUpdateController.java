@@ -58,7 +58,7 @@ public class DeviceUpdateController extends BaseController {
         String protocolVersion = MQTT_TOPIC_CUR_VERSION;
         String version = filename.split("\\.")[0];
 
-        String key = industry + "/" + protocolVersion + "/" + gwid;
+        String key = gwid;
 
         //生成时间
         String timeStr = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
@@ -78,13 +78,13 @@ public class DeviceUpdateController extends BaseController {
         try {
             deviceUpdateMQClient.start();
             _log.info("JMSCorrelationID"+key);
-            deviceUpdateMQClient.request(key,json.toJSONString());
+            deviceUpdateMQClient.requestStartUpdateDevice(key,json.toJSONString());
         } catch (Exception e) {
             _log.error("DeviceUpdateMQClient 客户端启动错误!",e);
         }
 
         //阻塞并从队列等待反馈
-        String status = deviceUpdateMQClient.onMessage(TIME_OUT);
+        String status = deviceUpdateMQClient.getUpdateResult(TIME_OUT);
         try {
             deviceUpdateMQClient.stop();
         } catch (Exception e) {
