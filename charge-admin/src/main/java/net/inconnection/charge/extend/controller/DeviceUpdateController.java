@@ -3,11 +3,14 @@ package net.inconnection.charge.extend.controller;
 import com.alibaba.fastjson.JSONObject;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQClient;
+import net.inconnection.charge.extend.chargeDevice.utils.RedisUtil;
 import net.inconnection.charge.extend.chargeDevice.utils.SEQGeneration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -21,34 +24,34 @@ public class DeviceUpdateController extends BaseController {
 
     private static int TIME_OUT = 10*30*1000;
 
-    public void updateDevice() {
+    public void listPage() {
 
-        render("/updatedevice/UpdateDevice.html");
+        render("UpdateDevice.html");
     }
 
 
-    public void updateDeviceData(File file, String gwId) {
-//        String industry = "CHARGE";
-//        String protocolVersion = "1";
-//        String keyStr = industry + "/" + protocolVersion + "/" + gwId;
-//        byte[] buff = null;
-//        try {
-//            buff = null;//todo file.getBytes();
-//        } catch (IOException e) {
-//            _log.error("文件获取byte数组错误!",e);
-//        }
-//        byte[] key = null;
-//        try {
-//            key = keyStr.getBytes("ISO-8859-1");
-//        } catch (UnsupportedEncodingException e) {
-//            _log.error("字符编码转换错误!",e);
-//        }
-//        boolean flag = RedisUtil.getJedis().exists(key);
-//        if(!flag){
-//            RedisUtil.set(key,buff,60*10);
-//        }
+/*    public void updateDeviceData(File file, String gwId) {
+        String industry = "CHARGE";
+        String protocolVersion = "1";
+        String keyStr = industry + "/" + protocolVersion + "/" + gwId;
+        byte[] buff = null;
+        try {
+            buff = file.getBytes();
+        } catch (IOException e) {
+            _log.error("文件获取byte数组错误!",e);
+        }
+        byte[] key = null;
+        try {
+            key = keyStr.getBytes("ISO-8859-1");
+        } catch (UnsupportedEncodingException e) {
+            _log.error("字符编码转换错误!",e);
+        }
+        boolean flag = RedisUtil.getJedis().exists(key);
+        if(!flag){
+            RedisUtil.set(key,buff,60*10);
+        }
         renderText("OK");
-    }
+    }*/
 
     public void updateDeviceProcess(String gwid , String filename) {
         long start = System.currentTimeMillis();

@@ -74,6 +74,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/device", QrMatchDeviceController.class, "/busi/device");
 
 		me.add("/newDevice", NewDeviceController.class, "/busi/newDevice");
+		me.add("/updatedevice", DeviceUpdateController.class, "/busi/updatedevice");
 
 	}
 	
