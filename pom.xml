@@ -26,6 +26,9 @@
     <modules>
         <module>charge-admin</module>
         <module>charge-weixin</module>
+        <module>charge-cost</module>
+        <module>charge-push</module>
+        <module>charge-log</module>
     </modules>
 
 </project>
