@@ -14,7 +14,7 @@ public class RequsetSocketStartChargeFacet extends RequestSocketFacet{
         StringBuilder msg = new StringBuilder();
         msg.append(MSG_REQUEST).append(MSG_COMPONENT_SEPARATOR).append(requestType).append(MSG_SEGMENT_SEPARATOR).
                 append(MSG_DEVICESN).append(MSG_COMPONENT_SEPARATOR).append(deviceSn).append(MSG_SEGMENT_SEPARATOR).
-                append(MSG_CHARGETIME).append(MSG_COMPONENT_SEPARATOR).append(chargeTime);
+                append(MSG_CHARGETIME_SET).append(MSG_COMPONENT_SEPARATOR).append(chargeTime);
 
         return msg.toString();
     }

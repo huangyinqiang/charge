@@ -31,25 +31,25 @@ public class DeviceUpdateController extends BaseController {
 
 
     public void updateDeviceData(File file, String gwId) {
-        String industry = "CHARGE";
-        String protocolVersion = "1";
-        String keyStr = industry + "/" + protocolVersion + "/" + gwId;
-        byte[] buff = null;
-        try {
-            buff = file.getBytes();
-        } catch (IOException e) {
-            _log.error("文件获取byte数组错误!",e);
-        }
-        byte[] key = null;
-        try {
-            key = keyStr.getBytes("ISO-8859-1");
-        } catch (UnsupportedEncodingException e) {
-            _log.error("字符编码转换错误!",e);
-        }
-        boolean flag = RedisUtil.getJedis().exists(key);
-        if(!flag){
-            RedisUtil.set(key,buff,60*10);
-        }
+//        String industry = "CHARGE";
+//        String protocolVersion = "1";
+//        String keyStr = industry + "/" + protocolVersion + "/" + gwId;
+//        byte[] buff = null;
+//        try {
+//            buff = null;//todo file.getBytes();
+//        } catch (IOException e) {
+//            _log.error("文件获取byte数组错误!",e);
+//        }
+//        byte[] key = null;
+//        try {
+//            key = keyStr.getBytes("ISO-8859-1");
+//        } catch (UnsupportedEncodingException e) {
+//            _log.error("字符编码转换错误!",e);
+//        }
+//        boolean flag = RedisUtil.getJedis().exists(key);
+//        if(!flag){
+//            RedisUtil.set(key,buff,60*10);
+//        }
         renderText("OK");
     }
 

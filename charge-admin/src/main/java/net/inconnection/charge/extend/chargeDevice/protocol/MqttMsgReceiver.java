@@ -130,7 +130,7 @@ public class MqttMsgReceiver {
         int count = 0;
         topic1[count] = "C/CHARGE/+/+/data";
         count++;
-        topic1[count] = "P/CHARGE/+/+/request";
+        topic1[count] = "C/CHARGE/+/+/request";
         count++;
         topic1[count] = "C/CHARGE/+/+/response";
         count++;
@@ -139,9 +139,9 @@ public class MqttMsgReceiver {
         topic1[count] = "C/CHARGE/+/+/update";
         count++;
 
-        topic1[count]="C/GW_INIT/+/+/notify";
+        topic1[count]="C/CHARGE/+/+/notify";
         count++;
-        topic1[count]="C/GW_INIT/+/+/confirm";
+        topic1[count]="C/CHARGE/+/+/confirm";
         try {
             if(topic1.length>0){
                 client.subscribe(topic1);

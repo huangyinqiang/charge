@@ -31,7 +31,12 @@ public class ChargePileDevice implements GateWay {
 
     private Integer voltage;
     private Integer power;
+
+    private Integer batVol;
+    private Integer batChargeVol;
     private Date lastUpdataTime = null;
+
+
 
     private boolean isOnline;
 
@@ -135,6 +140,14 @@ public class ChargePileDevice implements GateWay {
 
         if (gwFacetObj.containsKey(MSG_CHARGEPOWER)){
             power = Integer.parseInt(gwFacetObj.getString(MSG_CHARGEPOWER));
+        }
+
+        if (gwFacetObj.containsKey(MSG_BAT_VOL)){
+            batVol = Integer.parseInt(gwFacetObj.getString(MSG_BAT_VOL));
+        }
+
+        if (gwFacetObj.containsKey(MSG_BAT_CHARGEVOL)){
+            batChargeVol = Integer.parseInt(gwFacetObj.getString(MSG_BAT_CHARGEVOL));
         }
 
         saveData();
@@ -451,29 +464,30 @@ public class ChargePileDevice implements GateWay {
     public static void main(String[] args){
 
 
-        ChargePileDevice chargePileDevice = new ChargePileDevice(1000L);
+        ChargePileDevice chargePileDevice = new ChargePileDevice(10100000001L);
 
         String testQueue = "testqueue";
 
-        chargePileDevice.permissionOnLine(testQueue);
+//        chargePileDevice.permissionOnLine(testQueue);
 
-        chargePileDevice.shutDownAllSockets(testQueue);
 
+//
+//        chargePileDevice.shutDownAllSockets(testQueue);
+//
         Vector<Long> sockets = new Vector<>();
         sockets.add(1L);
-        sockets.add(2L);
-        sockets.add(4L);
+//        sockets.add(2L);
 
-        chargePileDevice.shutDownChargeSocket(sockets, testQueue);
+//        chargePileDevice.shutDownChargeSocket(sockets, testQueue);
 
         chargePileDevice.requestTestPower(sockets, testQueue);
 
-        Map<Long, Integer> socketIdChargeTimeMap = new ConcurrentHashMap<>();
-        socketIdChargeTimeMap.put(1L, 60);
-        socketIdChargeTimeMap.put(2L, 120);
-        socketIdChargeTimeMap.put(4L, 240);
 
-        chargePileDevice.startCharge(socketIdChargeTimeMap, testQueue);
+//        Map<Long, Integer> socketIdChargeTimeMap = new ConcurrentHashMap<>();
+//        socketIdChargeTimeMap.put(1L, 60);
+//        socketIdChargeTimeMap.put(2L, 60);
+//
+//        chargePileDevice.startCharge(socketIdChargeTimeMap, testQueue);
 
 
 

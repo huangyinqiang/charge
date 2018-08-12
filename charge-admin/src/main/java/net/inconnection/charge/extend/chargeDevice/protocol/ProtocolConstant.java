@@ -43,8 +43,11 @@ public class ProtocolConstant {
     public static final String MSG_GWID                                     = "GWID";        //网关ID
     public static final String MSG_GW_STATUS                                = "STATUS";        //网关硬件状态
 
-    public static final String MSG_CHARGEVOLTAGE = "VOLTAGE";//充电电压
-    public static final String MSG_CHARGEPOWER = "POWER";//充电功率
+    public static final String MSG_CHARGEVOLTAGE = "VOL_AC";//充电桩充电电压
+    public static final String MSG_CHARGEPOWER = "POW";//充电桩充电功率
+
+    public static final String MSG_BAT_VOL = "BAT";//充电桩后备电池电压
+    public static final String MSG_BAT_CHARGEVOL = "VOL";//充电桩后备电池充电电压
 
 
     public static final String MSG_REQUEST                                  = "REQUEST";     //REQUEST主题，请求
@@ -60,11 +63,13 @@ public class ProtocolConstant {
 
     public static final String MSG_MAINTYPE_CHARGESOCKET = "1";//主类型 1， 代表充电插座
 
-    public static final String MSG_INUSE = "USE";//充电桩占用情况
+    public static final String MSG_INUSE = "USE";//充电插座占用情况
     public static final String MSG_STARTPOWER = "SP";//初始充电功率
     public static final String MSG_CHARGEINTENSITY = "CI";//充电电流
     public static final String MSG_CHARGETIME = "CT";//充电时长
     public static final String MSG_CHARGESTATE = "CS";//充电状态
+
+    public static final String MSG_CHARGETIME_SET = "TIMESET";//充电状态
 
 
 
