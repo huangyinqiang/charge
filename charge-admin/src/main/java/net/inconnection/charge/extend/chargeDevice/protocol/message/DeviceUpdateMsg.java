@@ -1,4 +1,4 @@
-package net.inconnection.charge.extend.chargeDevice.protocol.update;
+package net.inconnection.charge.extend.chargeDevice.protocol.message;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -10,7 +10,7 @@ import java.util.Map;
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.*;
 
 
-public class UpdateMsgProcesser   {
+public class DeviceUpdateMsg {
     private String sequenceNum;
     private String timeStr;
     private BigInteger gwid;
@@ -21,9 +21,9 @@ public class UpdateMsgProcesser   {
     private int crc;
     private int status;
 
-    public UpdateMsgProcesser(){}
+    public DeviceUpdateMsg(){}
 
-    public UpdateMsgProcesser(String sequenceNum, String timeStr, BigInteger gwid, String update, int offset, int len, int lenAll, int crc) {
+    public DeviceUpdateMsg(String sequenceNum, String timeStr, BigInteger gwid, String update, int offset, int len, int lenAll, int crc) {
         this.sequenceNum = sequenceNum;
         this.timeStr = timeStr;
         this.gwid = gwid;
@@ -55,8 +55,8 @@ public class UpdateMsgProcesser   {
     }
 
     //初始化数据
-    public void updateDecode(String updateMsgStr) {
-        JSONArray myJsonArray = JSONArray.parseArray(updateMsgStr);
+    public void updateDecode(String updateMsgJsonStr) {
+        JSONArray myJsonArray = JSONArray.parseArray(updateMsgJsonStr);
         Map mapFirst = myJsonArray.getJSONObject(0);
         this.sequenceNum = (String) mapFirst.get(MSG_SERIALNUMBER);
         this.timeStr = (String) mapFirst.get(MSG_TIME);
@@ -95,7 +95,7 @@ public class UpdateMsgProcesser   {
 
     @Override
     public String toString() {
-        return "UpdateMsgProcesser{" +
+        return "DeviceUpdateMsg{" +
                 "sequenceNum='" + sequenceNum + '\'' +
                 ", timeStr='" + timeStr + '\'' +
                 ", gwid=" + gwid +

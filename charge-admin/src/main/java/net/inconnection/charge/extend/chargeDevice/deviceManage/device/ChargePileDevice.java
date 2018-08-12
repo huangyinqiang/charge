@@ -331,7 +331,7 @@ public class ChargePileDevice implements GateWay {
 
         String industryAndVersion = MQTT_TOPIC_INDUSTRY_CHARGE+"/"+MQTT_TOPIC_CUR_VERSION;
         DeviceUpdateMQServer server = DeviceUpdateMQServer.getInstance();
-        UpdateMsgHandle.handle(server,industryAndVersion,messageJson);
+        UpdateMsgHandle.processUpdateResponseMsg(server,industryAndVersion,messageJson);
     }
 
     //通过mqtt向硬件推送数据
