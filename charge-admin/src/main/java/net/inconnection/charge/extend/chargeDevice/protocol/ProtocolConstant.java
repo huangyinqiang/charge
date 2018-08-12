@@ -47,7 +47,7 @@ public class ProtocolConstant {
     public static final String MSG_CHARGEPOWER = "POW";//充电桩充电功率
 
     public static final String MSG_BAT_VOL = "BAT";//充电桩后备电池电压
-    public static final String MSG_BAT_CHARGEVOL = "VOL";//充电桩后备电池充电电压
+    public static final String MSG_CONTROLLER_VOL = "VOL";//充电桩后控制器供电电压
 
 
     public static final String MSG_REQUEST                                  = "REQUEST";     //REQUEST主题，请求

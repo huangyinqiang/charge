@@ -29,11 +29,11 @@ public class ChargePileDevice implements GateWay {
     private Long chargePileId;//充电桩Id
     private String name;//充电桩名称
 
-    private Integer voltage;
-    private Integer power;
+    private Integer voltage;//充电电压
+    private Integer power;//充电功率
 
-    private Integer batVol;
-    private Integer batChargeVol;
+    private Integer batVol;//电池电压
+    private Integer batChargeVol;//控制器供电电压
     private Date lastUpdataTime = null;
 
 
@@ -146,8 +146,8 @@ public class ChargePileDevice implements GateWay {
             batVol = Integer.parseInt(gwFacetObj.getString(MSG_BAT_VOL));
         }
 
-        if (gwFacetObj.containsKey(MSG_BAT_CHARGEVOL)){
-            batChargeVol = Integer.parseInt(gwFacetObj.getString(MSG_BAT_CHARGEVOL));
+        if (gwFacetObj.containsKey(MSG_CONTROLLER_VOL)){
+            batChargeVol = Integer.parseInt(gwFacetObj.getString(MSG_CONTROLLER_VOL));
         }
 
         saveData();
