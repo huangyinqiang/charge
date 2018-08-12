@@ -42,7 +42,7 @@ public class DeviceUpdateMQClient {
         //broker.stop();
     }
 
-    public void request(String id,String request) throws JMSException {
+    public void requestStartUpdateDevice(String id,String request) throws JMSException {
         _log.info("Requesting: " + request);
         TextMessage txtMessage = session.createTextMessage();
         txtMessage.setText(request);
@@ -52,7 +52,7 @@ public class DeviceUpdateMQClient {
         this.producer.send(txtMessage);
     }
 
-    public String  onMessage(int timeOut) {
+    public String getUpdateResult(int timeOut) {
         try {
             Message message = consumer.receive(timeOut);
             if(message == null){

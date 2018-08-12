@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigInteger;
 
+import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.MQTT_TOPIC_CUR_VERSION;
+import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.MQTT_TOPIC_INDUSTRY_CHARGE;
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.TOPIC_UPDATE;
 
 
@@ -54,7 +56,7 @@ public class UpdateMsgHandle {
     }
 
     //mqtt接收消息后处理update类型消息的方法
-    public static void processUpdateResponseMsg(DeviceUpdateMQServer server, String industryAndVersion, String updateResMsgJson) {
+    public static void processUpdateResponseMsg(DeviceUpdateMQServer server, String updateResMsgJson) {
         //update消息解析类获取message的各个属性
         DeviceUpdateMsg deviceUpdateMsgRecive = new DeviceUpdateMsg();
         deviceUpdateMsgRecive.updateDecode(updateResMsgJson);
@@ -66,28 +68,29 @@ public class UpdateMsgHandle {
         int status = deviceUpdateMsgRecive.getStatus();
 
         //socketMap管理socket的唯一key
-        String key = industryAndVersion+"/"+gwid;
+        String gwIdStr = gwid.toString();
 
-        String hardWareVersion = server.getData(key).getString("version");
+        String hardWareVersion = server.getData(gwIdStr).getString("version");
 
         //生成主题
         GeneralTopic generalTopic = new GeneralTopic();
-        String topic = generalTopic.generateTopic(industryAndVersion.split("/")[0], industryAndVersion.split("/")[1], gwid.toString() , TOPIC_UPDATE);
+        String topic = generalTopic.generateTopic(MQTT_TOPIC_INDUSTRY_CHARGE, MQTT_TOPIC_CUR_VERSION, gwid.toString() , TOPIC_UPDATE);
 
-        byte[] keyBytes = (industryAndVersion + "/" + gwid.toString()).getBytes();
-        byte[] buff = RedisUtil.get(keyBytes);
-        byte[] bytes = null;
-        if(buff.length != offset){
-            UpdateDevice ud = new UpdateDevice(buff);
-            ud.analysisFile(offset);
+        byte[] firmwareFileName = RedisUtil.get(gwid.toString().getBytes());
+        byte[] firmwareDataBytes = RedisUtil.get(firmwareFileName);
+        byte[] updateMsgToSend = null;
+        if(firmwareDataBytes.length != offset){
+            UpdateDevice updateDevice = new UpdateDevice(firmwareDataBytes);
+            updateDevice.analysisFile(offset);
 
-            DeviceUpdateMsg deviceUpdateMsgSend = new DeviceUpdateMsg(seq, timeStr, gwid, hardWareVersion, offset, ud.getLength(), ud.getLengthAll(), ud.getCrc());
-            byte[] bytes1 = deviceUpdateMsgSend.updateEncode();
-            byte[] bytes2 = ud.getBytes();
+            DeviceUpdateMsg deviceUpdateMsgSend = new DeviceUpdateMsg(seq, timeStr, gwid, hardWareVersion, offset, updateDevice.getLength(), updateDevice.getLengthAll(), updateDevice.getCrc());
+            byte[] updateMsgPrefix = deviceUpdateMsgSend.updateEncode();//获取到crc校验之前的所有消息数据
+            byte[] firmwareBinDataFrame = updateDevice.getBytes();//获取到当前需要发送的二进制的固件文件
 
-            bytes = new byte[bytes1.length + bytes2.length];
-            System.arraycopy(bytes1, 0, bytes, 0, bytes1.length);
-            System.arraycopy(bytes2, 0, bytes, bytes1.length, bytes2.length);
+            updateMsgToSend = new byte[updateMsgPrefix.length + firmwareBinDataFrame.length];
+            //下面进行消息断的拼接
+            System.arraycopy(updateMsgPrefix, 0, updateMsgToSend, 0, updateMsgPrefix.length);
+            System.arraycopy(firmwareBinDataFrame, 0, updateMsgToSend, updateMsgPrefix.length, firmwareBinDataFrame.length);
         }
 
         _log.info("**********************");
@@ -98,43 +101,43 @@ public class UpdateMsgHandle {
         switch (status) {
             case 0:
                 _log.info("校验有误,正在重发!");
-                sendMqttMsg(topic, bytes);
+                sendMqttMsg(topic, updateMsgToSend);
                 break;
             case 1:
-                if(buff.length == offset){
+                if(firmwareDataBytes.length == offset){
                     _log.info("数据发送成功,网关正在重启请稍后!");
                 }else {
                     _log.info("收到回复,正在发送下一数据包!");
-                    sendMqttMsg(topic, bytes);
+                    sendMqttMsg(topic, updateMsgToSend);
                 }
                 break;
             case 3:
                 _log.info("子站网关处于电池供电,退出更新!");
-                response2Client(server,key , status);
+                response2Client(server,gwIdStr , status);
                 break;
             case 4:
                 _log.info("内部flash损坏,不可升级!");
-                response2Client(server,key, status);
+                response2Client(server,gwIdStr, status);
                 break;
             case 5:
                 _log.info("版本已最新,无需升级!");
-                response2Client(server,key, status);
+                response2Client(server,gwIdStr, status);
                 break;
             case 10:
                 _log.info("升级成功,正在返回页面!");
-                response2Client(server,key, status);
+                response2Client(server,gwIdStr, status);
                 break;
             case 11:
                 _log.info("升级失败,正在返回页面!");
-                response2Client(server,key, status);
+                response2Client(server,gwIdStr, status);
                 break;
             case 12:
                 _log.info("其他用户正在升级，请勿操作!");
-                response2Client(server,key, status);
+                response2Client(server,gwIdStr, status);
                 break;
             default:
                 _log.info("其他错误,正在返回页面!");
-                response2Client(server,key, status);
+                response2Client(server,gwIdStr, status);
                 break;
         }
     }
