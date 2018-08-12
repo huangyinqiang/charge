@@ -162,4 +162,31 @@ public abstract class BaseChargePile<M extends BaseChargePile<M>> extends Model<
 		return getInt("status");
 	}
 
+	public M setBatVol(java.lang.Integer batVol) {
+		set("bat_vol", batVol);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getBatVol() {
+		return getInt("bat_vol");
+	}
+
+	public M setControllerVol(java.lang.Integer controllerVol) {
+		set("controller_vol", controllerVol);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getControllerVol() {
+		return getInt("controller_vol");
+	}
+
+	public M setPowerTotal(java.lang.Long powerTotal) {
+		set("power_total", powerTotal);
+		return (M)this;
+	}
+	
+	public java.lang.Long getPowerTotal() {
+		return getLong("power_total");
+	}
+
 }

@@ -270,4 +270,31 @@ public abstract class BaseTuser<M extends BaseTuser<M>> extends Model<M> impleme
 		return get("updateTime");
 	}
 
+	public M setProxyWalletRealMoney(java.lang.Integer proxyWalletRealMoney) {
+		set("proxy_wallet_real_money", proxyWalletRealMoney);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getProxyWalletRealMoney() {
+		return getInt("proxy_wallet_real_money");
+	}
+
+	public M setProxyWalletGiftMoney(java.lang.Integer proxyWalletGiftMoney) {
+		set("proxy_wallet_gift_money", proxyWalletGiftMoney);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getProxyWalletGiftMoney() {
+		return getInt("proxy_wallet_gift_money");
+	}
+
+	public M setProxyRealGitRate(java.lang.Integer proxyRealGitRate) {
+		set("proxy_real_git_rate", proxyRealGitRate);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getProxyRealGitRate() {
+		return getInt("proxy_real_git_rate");
+	}
+
 }
