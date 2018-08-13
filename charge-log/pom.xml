@@ -149,7 +149,7 @@
              <httpConnector>
              <port>80</port>启动端口号
              </httpConnector>
-             <stopPort>9966</stopPort>
+             <stopPort>9908</stopPort>
              <stopKey>stop</stopKey>
              <scanIntervalSeconds>10</scanIntervalSeconds>
              <webApp>

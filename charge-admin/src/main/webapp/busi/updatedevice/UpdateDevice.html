@@ -3,10 +3,8 @@
 <html>
 <head>
     <title>Title</title>
-    <link href="${basePath}/resources/zheng-admin/plugins/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css"
-          rel="stylesheet"/>
-    <link href="${basePath}/resources/zheng-admin/css/admin.css" rel="stylesheet"/>
-    <link type="text/css" rel="stylesheet" href="${basePath}/resources/Component/Navigation/css/style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <meta charset="UTF-8"/>
     <style type="text/css">
         body{
@@ -53,15 +51,30 @@
 <div class="container">
     <div style="margin:10px;">
         <div>
-            <h2>升级列表</h2>
+            <h2>升级文件</h2>
+
+            <tr >
+
+                <td><input type="text" id="avatval" placeholder="请选择文件···" readonly="readonly" style="vertical-align: middle;"/>
+                    <input type="file" name="file" id="avatar" accept="application/octet-stream"/>
+                   <!-- <a href="javascript:void(0);" class="button-selectimg" id="avatsel">选择文件</a>--></td>
+                <td><input type="button" id="submit" value="文件上传"/></td>
+
+                <td><input type="button" id="update" value="升级"/></td>
+               <!-- <td id="selectAllTd">全选:<input type="checkbox" id="selectAll" class="bs-checkbox"></td>-->
+            </tr>
+
         </div>
-        <table class="table table-striped table-hover table-bordered">
+
+
+
+<!--        <table class="table table-striped table-hover table-bordered">
             <thead>
             <tr>
                 <th class="col-sm-2">编号</th>
                 <th class="col-sm-4">电站名</th>
                 <th class="col-sm-2">网关编号</th>
-                <th id="selectTh" class="col-sm-2">选择需要升级的网关</th>
+                <th id="selectTh" class="col-sm-2">网关</th>
             </tr>
             </thead>
             <tbody>
@@ -75,11 +88,178 @@
                 <td id="selectAllTd">全选:<input type="checkbox" id="selectAll" class="bs-checkbox"></td>
             </tr>
             </tbody>
-        </table>
+        </table>-->
     </div>
 </div>
+<table id="dg"></table>
+
+
+
 <script type="text/javascript">
-    $(function () {
+    var datagrid = $("#dg");
+    var dgOptions = {
+        rownumbers : true,
+        fit : true,
+        border : false,
+        rownumbers : true,
+        url : 'listData',
+        method : 'post',
+        toolbar : '#tb',
+        pageSize : 50,
+        pagination : true,
+        multiSort : true,
+        singleSelect : false,
+        queryParams : getInitParam(),
+        columns : [ [
+            {
+                field : 'id',
+                checkbox : true
+            },
+            {
+                field : 'status',
+                title : '状态',
+                width : 60,
+                sortable : true,
+                formatter : function(value, row, index) {
+                    if (value == '1') {
+                        return "<span style='color:green;font-size:20px;'>正常</span>";
+                    } else if (value == '2') {
+                        return "<span style='color:red;font-size:20px;'>离线</span>";
+                    } else {
+                        return "<span style='color:yellow;font-size:20px;'>故障</span>";
+                    }
+                }
+            },
+            {
+                field : 'sn',
+                title : 'SN编号',
+                width : 60,
+            },
+            {
+                field : 'name',
+                title : '名称',
+                width : 60,
+            },
+            {
+                field : 'province',
+                title : '省',
+                width : 60,
+            },
+            {
+                field : 'city',
+                title : '市',
+                width : 60,
+            },
+            {
+                field : 'detail_location',
+                title : '详细位置信息',
+                width : 120,
+            },
+            {
+                field : 'lat',
+                title : '经度',
+                width : 60,
+            },
+            {
+                field : 'lng',
+                title : '纬度',
+                width : 60,
+            },
+            {
+                field : 'power_max',
+                title : '最大功率',
+                width : 60,
+            },
+            {
+                field : 'socket_sum',
+                title : '插座数量',
+                width : 60,
+            },
+            {
+                field : 'company_id',
+                title : '公司id',
+                width : 60,
+            },
+            {
+                field : 'total_intensity',
+                title : '总电流',
+                width : 60,
+            },
+            {
+                field : 'total_voltage',
+                title : '总电压',
+                width : 60,
+            },
+            {
+                field : 'is_online',
+                title : '是否上线',
+                width : 60,
+                formatter : function(value, row, index) {
+                    if (value == '1') {
+                        return "<span style='color:green;font-size:20px;'>启用</span>";
+                    } else  {
+                        return "<span style='color:red;font-size:20px;'>未上线</span>";
+                    }
+                }
+            }, {
+                field : 'online_date',
+                title : '上线时间',
+                width : 120,
+                sortable : true
+            },
+            {
+                field : 'update_time',
+                title : '更新时间',
+                width : 120,
+                sortable : true
+            }
+        ] ]
+    };
+    $(function() {
+        handleAuthDataRule();
+        datagrid.datagrid(dgOptions);
+    });
+
+    function zcurdSearch() {
+        var param = zcurdGetParam();
+        datagrid.datagrid("load", {
+            queryParams : param
+        })
+    }
+
+    function zcurdGetParam() {
+        var param = {};
+        $("#tb :input[name]").each(function(i, item) {
+            if ($(item).val()) {
+                param[$(item).attr("name")] = $(item).val();
+            }
+        });
+        return param;
+    }
+
+    function getInitParam() {
+        var param = {};
+        $("#tb :input[name]").each(
+            function(i, item) {
+                if ($(item).val()) {
+                    param["queryParams[" + $(item).attr("name") + "]"] = $(
+                        item).val();
+                }
+            });
+        return param;
+    }
+</script>
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
         $("#avatsel").click(function () {
             $("input[type='file']").trigger('click');
         });
@@ -105,16 +285,16 @@
                 alert("请选择升级文件!");
                 return;
             }
-            var flag = false;
-            $('.box:checkbox').each(function() {
+    /*        var flag = false;*/
+/*            $('.box:checkbox').each(function() {
                 if ($(this).prop('checked') === true) {
                     flag = true;
                 }
-            });
-            if(!flag){
+            });*/
+/*            if(!flag){
                 alert("请选择需要升级的网关!");
                 return;
-            }
+            }*/
             $("#selectTh").html("升级状态");
             $("#selectAllTd").empty();
             var formData = new FormData();               //新建FormData对象
@@ -122,14 +302,15 @@
             formData.append('file', fileList[0]);        //将fileList中的文件逐个放入formData中，注意，直接放入fileList后台是取不到的
             formData.append("powerstationId",${powerStationId});
             $.ajax({
-                url: "deviceUpdate/updateDeviceData",    //C# Razor写法,也可写成/home/receive,但是安全性欠佳
+                url: "updateDeviceData",    //C# Razor写法,也可写成/home/receive,但是安全性欠佳
                 data: formData,
                 type: 'POST',
                 contentType: false,                      //这里着重强调contentType和processData都要设置为false,否则文件发送不过去
                 processData: false,                      //这样做是为了防止浏览器自动转换发送出的数据格式为字符串或其他
                 success: function (data) {
                     if (data === "OK") {
-                        getUpdateStatus();
+                      // getUpdateStatus();
+                        alert("文件上传成功！!");
                     }else {
                         alert("升级错误!");
                     }
@@ -139,6 +320,20 @@
                 }
             })
         })
+
+        $("#update").click(function(){
+            var rowsSel = datagrid.datagrid("getSelections");
+            if (rowsSel.length < 1) {
+                showWarnMsg("请选择要编辑的数据！");
+                return;
+            }
+            for(var i= 0;i<rowsSel.length;i++){
+                var id =rowsSel[i];
+
+            }
+
+        })
+
 
         function getUpdateStatus() {
             $('.box:checkbox').each(function() {
