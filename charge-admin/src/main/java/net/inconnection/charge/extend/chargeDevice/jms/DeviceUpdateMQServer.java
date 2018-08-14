@@ -11,10 +11,11 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import javax.jms.*;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class DeviceUpdateMQServer implements MessageListener{
 
-    @Autowired
+   // @Autowired   不再依赖spring
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     private static Logger _log = LoggerFactory.getLogger(DeviceUpdateMQServer.class);
@@ -47,6 +48,17 @@ public class DeviceUpdateMQServer implements MessageListener{
 
     //单例方法
     public static DeviceUpdateMQServer getInstance(){
+
+        //取消配置文件注入方式
+        ThreadPoolTaskExecutor threadPool = new ThreadPoolTaskExecutor();
+        threadPool.setCorePoolSize(50);
+        threadPool.setMaxPoolSize(1000);
+        threadPool.setQueueCapacity(20000);
+        threadPool.setKeepAliveSeconds(3000);
+        threadPool.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        threadPool.initialize();
+        instance.threadPoolTaskExecutor=threadPool;
+
         return instance;
     }
 
