@@ -5,6 +5,8 @@
     <title>Title</title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="${basePath}/res/layer/layer.js"></script>
     <meta charset="UTF-8"/>
     <style type="text/css">
         body{
@@ -60,7 +62,7 @@
                    <!-- <a href="javascript:void(0);" class="button-selectimg" id="avatsel">选择文件</a>--></td>
                 <td><input type="button" id="submit" value="文件上传"/></td>
 
-                <td><input type="button" id="update" value="升级"/></td>
+                <td><input type="button" id="update" value="升级"  /></td>
                <!-- <td id="selectAllTd">全选:<input type="checkbox" id="selectAll" class="bs-checkbox"></td>-->
             </tr>
 
@@ -92,6 +94,9 @@
     </div>
 </div>
 <table id="dg"></table>
+
+
+</button>
 
 
 
@@ -220,13 +225,6 @@
         datagrid.datagrid(dgOptions);
     });
 
-    function zcurdSearch() {
-        var param = zcurdGetParam();
-        datagrid.datagrid("load", {
-            queryParams : param
-        })
-    }
-
     function zcurdGetParam() {
         var param = {};
         $("#tb :input[name]").each(function(i, item) {
@@ -236,7 +234,6 @@
         });
         return param;
     }
-
     function getInitParam() {
         var param = {};
         $("#tb :input[name]").each(
@@ -279,37 +276,28 @@
             }
         });
 
+
+        var update_success=false;
         $("#submit").click(function(){
             var fileVal = $("#avatval").val();
             if(fileVal === "" | fileVal === null){
                 alert("请选择升级文件!");
                 return;
             }
-    /*        var flag = false;*/
-/*            $('.box:checkbox').each(function() {
-                if ($(this).prop('checked') === true) {
-                    flag = true;
-                }
-            });*/
-/*            if(!flag){
-                alert("请选择需要升级的网关!");
-                return;
-            }*/
-            $("#selectTh").html("升级状态");
-            $("#selectAllTd").empty();
             var formData = new FormData();               //新建FormData对象
             var fileList = $("#avatar").prop("files");   //取file控件中的文件,files属性取到的是一个fileList
             formData.append('file', fileList[0]);        //将fileList中的文件逐个放入formData中，注意，直接放入fileList后台是取不到的
-            formData.append("powerstationId",${powerStationId});
+            var fileName=$("#avatval").val();
+
             $.ajax({
-                url: "updateDeviceData",    //C# Razor写法,也可写成/home/receive,但是安全性欠佳
+                url: "updateDeviceData?fileName="+fileName,    //C# Razor写法,也可写成/home/receive,但是安全性欠佳
                 data: formData,
                 type: 'POST',
                 contentType: false,                      //这里着重强调contentType和processData都要设置为false,否则文件发送不过去
                 processData: false,                      //这样做是为了防止浏览器自动转换发送出的数据格式为字符串或其他
                 success: function (data) {
                     if (data === "OK") {
-                      // getUpdateStatus();
+                        update_success=true;
                         alert("文件上传成功！!");
                     }else {
                         alert("升级错误!");
@@ -319,75 +307,75 @@
                     alert("error");
                 }
             })
-        })
+        });
 
         $("#update").click(function(){
+            if (!update_success) {
+                alert("请先上传文件！!");
+                return;
+            }
             var rowsSel = datagrid.datagrid("getSelections");
             if (rowsSel.length < 1) {
                 showWarnMsg("请选择要编辑的数据！");
                 return;
             }
-            for(var i= 0;i<rowsSel.length;i++){
-                var id =rowsSel[i];
-
-            }
-
-        })
-
-
-        function getUpdateStatus() {
-            $('.box:checkbox').each(function() {
-                if ($(this).prop('checked') === true) {
-                    var thisVal = $(this).val();
-                    var parentJq = $(this).parent();
-                    parentJq.html("正在升级,请稍候...");
-                    $.ajax({
-                        url: "deviceUpdate/updateDeviceProcess",
-                        type: 'POST',
-                        data:{"gwid":thisVal,
-                            "powerstationId":${powerStationId},
-                            "filename":$("#avatval").val()
-                        },
-                        timeout:10*60*1000,
-                        success: function (data) {
-                            var tem = "";
-                            switch (data) {
-                                case "3":
-                                    tem = "子站网关处于电池供电,退出更新!";
-                                    break;
-                                case "4":
-                                    tem = "flash损坏,不可升级!";
-                                    break;
-                                case "5":
-                                    tem = "版本已最新,无需升级!";
-                                    break;
-                                case "10":
-                                    tem = "升级成功!";
-                                    break;
-                                case "11":
-                                    tem = "升级失败!";
-                                    break;
-                                case "12":
-                                    tem = "其他用户正在升级，请勿操作!";
-                                    break;
-                                case "13":
-                                    tem = "等待超时,升级失败!";
-                                    break;
-                                case "14":
-                                    tem = "其他错误,升级失败!";
-                                    break;
-                            }
-                            parentJq.html(tem);
-                        },
-                        error:function(){
-                            alert("升级失败,其他错误!");
-                            parentJq.html("升级失败,其他错误!");
-                        }
-                    })
-                }else {
-                    $(this).html("不升级!");
-                }
+            layer.open({
+                title: '在线调试'
+                ,content: '<div id="updateMessageDiv"><span >升级中！！！</span></div>'
             });
+            $("#updateMessageDiv").append("<br><span >总数："+rowsSel.length+"</span>");
+            for(var i= 0;i<rowsSel.length;i++){
+                var id =rowsSel[i].id;
+                $("#updateMessageDiv").append("<br><span >"+rowsSel[i].name+":  正在升级</span>");
+                getUpdateStatus(id,rowsSel[i].name);
+            }
+        });
+
+
+        function getUpdateStatus(id,name) {
+            $.ajax({
+                url: "updateDeviceProcess",
+                type: 'POST',
+                cache:false,
+                data:{
+                    "chargePileId":id,
+                    "filename":$("#avatval").val(),
+                },
+                timeout:10*60*1000,
+                success: function (data) {
+                    var tem = "";
+                    switch (data) {
+                        case "3":
+                            tem = "子站网关处于电池供电,退出更新!";
+                            break;
+                        case "4":
+                            tem = "flash损坏,不可升级!";
+                            break;
+                        case "5":
+                            tem = "版本已最新,无需升级!";
+                            break;
+                        case "10":
+                            tem = "升级成功!";
+                            break;
+                        case "11":
+                            tem = "升级失败!";
+                            break;
+                        case "12":
+                            tem = "其他用户正在升级，请勿操作!";
+                            break;
+                        case "13":
+                            tem = "等待超时,升级失败!";
+                            break;
+                        case "14":
+                            tem = "其他错误,升级失败!";
+                            break;
+                    }
+                    $("#updateMessageDiv").append("<br><span > "+name　+":  " +tem+"</span>");
+                },
+                error:function(){
+                    $("#updateMessageDiv").append("<br><span > "+name　+":  升级失败,其他错误!"+"</span>");
+                }
+            })
         }
     })
 </script>
