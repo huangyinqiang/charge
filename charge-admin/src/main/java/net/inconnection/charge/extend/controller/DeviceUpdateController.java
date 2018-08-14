@@ -36,7 +36,6 @@ public class DeviceUpdateController extends BaseController {
 
 
     public void listData() {
-        System.out.println("sssssssssssssssssssssssssssssssss");
         Object[] queryParams = this.getQueryParams();
         String[] properties = (String[])queryParams[0];
         String[] symbols = (String[])queryParams[1];
@@ -45,22 +44,24 @@ public class DeviceUpdateController extends BaseController {
         if (StringUtil.isEmpty(orderBy)) {
             orderBy = "update_time desc";
         }
-
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "yc_charge_pile", properties, symbols, values, orderBy, this.getPager());
         this.renderDatagrid(list, DBTool.countByMultPropertiesDbSource("zcurd_busi", "yc_charge_pile", properties, symbols, values));
     }
 
 
     public void updateDeviceData() {
-        File file = getFiles().get(0).getFile();
-        String fileName = file.getName();
 
+        File file = getFiles().get(0).getFile();
+
+
+        String fileName = getPara("fileName");
         String industry = "CHARGE";
         String protocolVersion = "1";
         String keyStr = industry + "/" + protocolVersion + "/" + fileName;
+
+
         byte[] buff = null;
         try {
-            //buff = file.getBytes();
             FileInputStream fis = new FileInputStream(file);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             byte[] b = new byte[1024];
@@ -81,29 +82,24 @@ public class DeviceUpdateController extends BaseController {
         } catch (UnsupportedEncodingException e) {
             _log.error("字符编码转换错误!",e);
         }
-        //boolean flag = RedisUtil.getJedis().exists(key);
-        //if(!flag){
-            RedisUtil.set(key,buff,60*20);
-       // }
+        RedisUtil.set(key,buff,60*20);
         renderText("OK");
+
     }
 
-    public void updateDeviceProcess(String gwid , String filename) {
+    public void updateDeviceProcess() {
+
+        String gwid=getPara("chargePileId");
+        String filename=getPara("filename");
         long start = System.currentTimeMillis();
-
-
         String industry = MQTT_TOPIC_INDUSTRY_CHARGE;
         String protocolVersion = MQTT_TOPIC_CUR_VERSION;
         String version = filename.split("\\.")[0];
-
         String key = gwid;
-
         //生成时间
         String timeStr = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
         //sequenceNum生成
         String seq = String.valueOf(SEQGeneration.getInstance().getSEQ());
-
-
         JSONObject json = new JSONObject();
         json.put("industry",industry);
         json.put("protocolVersion",protocolVersion);
@@ -111,16 +107,14 @@ public class DeviceUpdateController extends BaseController {
         json.put("gwid",gwid);
         json.put("seq",seq);
         json.put("timeStr",timeStr);
-
         DeviceUpdateMQClient deviceUpdateMQClient = new DeviceUpdateMQClient();
         try {
             deviceUpdateMQClient.start();
-            _log.info("JMSCorrelationID"+key);
+            _log.info("JMSCorrelationID  "+key);
             deviceUpdateMQClient.requestStartUpdateDevice(key,json.toJSONString());
         } catch (Exception e) {
             _log.error("DeviceUpdateMQClient 客户端启动错误!",e);
         }
-
         //阻塞并从队列等待反馈
         String status = deviceUpdateMQClient.getUpdateResult(TIME_OUT);
         try {
@@ -131,10 +125,10 @@ public class DeviceUpdateController extends BaseController {
         if(status == null){
             status = "13";
         }
-
         long end = System.currentTimeMillis();
         System.out.println("升级用时:" + (end - start) + "毫秒");
         System.out.println("升级状态列表:"+status);
         renderText(status);
+
     }
 }
