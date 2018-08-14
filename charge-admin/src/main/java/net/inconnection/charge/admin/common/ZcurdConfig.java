@@ -18,18 +18,13 @@ import net.inconnection.charge.admin.common.interceptor.ErrorInterceptor;
 import net.inconnection.charge.admin.online.controller.*;
 import net.inconnection.charge.admin.online.model.*;
 import net.inconnection.charge.admin.online.service.TaskService;
-import net.inconnection.charge.extend.chargeDevice.jms.*;
+import net.inconnection.charge.extend.chargeDevice.DemoServiceImpl;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgReceiver;
 import net.inconnection.charge.extend.controller.*;
-import net.inconnection.charge.extend.model.ClawBookUrl;
-import net.inconnection.charge.extend.model.StockHistoryLog;
 import net.inconnection.charge.extend.model.busi_MappingKit;
-
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
-import java.util.Date;
-
-import static net.inconnection.charge.extend.chargeDevice.jms.ActiveMQConstant.MQTT_TO_MqttMsgProcesser;
+import net.inconnection.charge.service.DemoService;
+import net.inconnection.charge.service.dubboPlugin.DubboPlugin;
+import net.inconnection.charge.service.dubboPlugin.DubboServerPlugin;
 
 /**
  * API引导式配置
@@ -130,6 +125,13 @@ public class ZcurdConfig extends JFinalConfig {
 
 
 		MqttMsgReceiver.getInstance().start();
+
+
+
+		//dubbo简单用法
+		DubboServerPlugin dubbo = new DubboServerPlugin("charge-admin-service",  20882);
+		dubbo.addService(DemoService.class,new DemoServiceImpl());
+		me.add(dubbo);
 
 	}
 	

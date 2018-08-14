@@ -29,6 +29,7 @@
         <module>charge-cost</module>
         <module>charge-push</module>
         <module>charge-log</module>
+        <module>charge-service</module>
     </modules>
 
 </project>
