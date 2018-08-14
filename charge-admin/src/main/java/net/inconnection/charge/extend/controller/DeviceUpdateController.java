@@ -55,9 +55,7 @@ public class DeviceUpdateController extends BaseController {
 
 
         String fileName = getPara("fileName");
-        String industry = "CHARGE";
-        String protocolVersion = "1";
-        String keyStr = industry + "/" + protocolVersion + "/" + fileName;
+        String fileRedisKey = fileName;
 
 
         byte[] buff = null;
@@ -75,12 +73,14 @@ public class DeviceUpdateController extends BaseController {
             buff = bos.toByteArray();
         } catch (IOException e) {
             _log.error("文件获取byte数组错误!",e);
+            renderText("file read error!");
         }
         byte[] key = null;
         try {
-            key = keyStr.getBytes("ISO-8859-1");
+            key = fileRedisKey.getBytes("ISO-8859-1");
         } catch (UnsupportedEncodingException e) {
             _log.error("字符编码转换错误!",e);
+            renderText("char code error");
         }
         RedisUtil.set(key,buff,60*20);
         renderText("OK");
