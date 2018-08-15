@@ -34,5 +34,8 @@ public class PowerOffController extends Controller {
         log.info("查看远程断电结束" + resp);
         this.renderJson(resp);
     }
+
+
+
 }
 

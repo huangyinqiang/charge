@@ -11,7 +11,6 @@ public class ChargeController extends Controller {
     private static Log log = Log.getLog(ChargeController.class);
     private static ChargeInfoBatteryService chargeBatteryService = new ChargeInfoBatteryService();
 
-    private static DeviceControlService deviceControlService = DubboServiceContrain.getInstance().getService(DeviceControlService.class);
 
     public ChargeController() {
     }
@@ -64,23 +63,7 @@ public class ChargeController extends Controller {
         this.renderJson(resp);
     }
 
-    public void startMqttCharging(){
-        String openId = this.getPara("openId");
-        String deviceId = this.getPara("deviceId");
-        String devicePort = this.getPara("devicePort");
-        String time = this.getPara("time");
-        String type = this.getPara("type");
-        String money = this.getPara("money");
-        String walletAccount = this.getPara("walletAccount");
-        String operType = this.getPara("operType");
 
-        Long deviceSN = Long.parseLong(deviceId);
-        Long socketSN = Long.parseLong(devicePort);
-        Integer chargeTime = Integer.parseInt(time);
-        Integer startChargeStatus = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTime, 30*1000L);
-
-        renderText(startChargeStatus.toString());
-    }
 
 
     public void charging() {

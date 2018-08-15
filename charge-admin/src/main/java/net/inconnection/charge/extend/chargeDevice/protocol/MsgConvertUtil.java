@@ -2,6 +2,7 @@ package net.inconnection.charge.extend.chargeDevice.protocol;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +11,6 @@ import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConst
 
 public class MsgConvertUtil {
 
-    private static Logger _log = LoggerFactory.getLogger(MsgConvertUtil.class);
 
     //将message转为json
     public static JSONArray msg2Json(String message) {

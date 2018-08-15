@@ -1,16 +1,16 @@
 package net.inconnection.charge.extend.chargeDevice.deviceManage;
 
 
+import com.jfinal.log.Log;
 import net.inconnection.charge.extend.chargeDevice.deviceManage.device.ChargePileDevice;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.util.Map;
 import java.util.Vector;
 
 public class ChargePileCommander {
 
-    private static Logger _log = LoggerFactory.getLogger(ChargePileCommander.class);
+    private static Log _log = Log.getLog(ChargePileCommander.class);
 
     private static ChargePileCommander ourInstance = new ChargePileCommander();
 

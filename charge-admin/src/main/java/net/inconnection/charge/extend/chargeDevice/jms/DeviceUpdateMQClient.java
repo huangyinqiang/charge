@@ -1,8 +1,7 @@
 package net.inconnection.charge.extend.chargeDevice.jms;
 
+import com.jfinal.log.Log;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.jms.*;
 
@@ -10,7 +9,7 @@ import static net.inconnection.charge.extend.chargeDevice.jms.ActiveMQConstant.T
 
 
 public class DeviceUpdateMQClient {
-    private static Logger _log = LoggerFactory.getLogger(DeviceUpdateMQClient.class);
+    private static Log _log = Log.getLog(DeviceUpdateMQClient.class);
     //private BrokerService broker;
     private final String brokerUrl = TCP_LOCALHOST_ACTIVEMQ;
     private Connection connection;

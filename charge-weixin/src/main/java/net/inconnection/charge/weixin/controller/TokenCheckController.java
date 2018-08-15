@@ -11,6 +11,7 @@ public class TokenCheckController extends Controller {
     public void index() {
 
         String echostr = getPara("echostr");
+        System.out.println("echostr from wixin: " + echostr);
 
         if(echostr != null){
             String signature = getPara("signature");
@@ -19,8 +20,9 @@ public class TokenCheckController extends Controller {
 
             System.out.println("signature: " + signature);
 
-            echostr = TokenCheckUtils.tokenCheck(signature,timestamp, nonce, echostr);
+//            echostr = TokenCheckUtils.tokenCheck(signature,timestamp, nonce, echostr);
 
+            System.out.println("echostr: " + echostr);
             this.renderText(echostr);
 
         }

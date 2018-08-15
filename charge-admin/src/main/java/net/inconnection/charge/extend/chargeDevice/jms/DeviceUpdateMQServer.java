@@ -1,11 +1,9 @@
 package net.inconnection.charge.extend.chargeDevice.jms;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.log.Log;
 import net.inconnection.charge.extend.chargeDevice.protocol.update.UpdateMsgHandle;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.jms.*;
@@ -15,10 +13,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 public class DeviceUpdateMQServer implements MessageListener{
 
-   // @Autowired   不再依赖spring
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
-    private static Logger _log = LoggerFactory.getLogger(DeviceUpdateMQServer.class);
+    private static Log _log = Log.getLog(DeviceUpdateMQServer.class);
 
     private Session session;
 

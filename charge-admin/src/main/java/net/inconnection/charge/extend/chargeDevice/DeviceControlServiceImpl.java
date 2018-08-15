@@ -2,7 +2,6 @@ package net.inconnection.charge.extend.chargeDevice;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.mchange.v2.util.DoubleWeakHashMap;
 import net.inconnection.charge.extend.chargeDevice.deviceManage.ChargePileCommander;
 import net.inconnection.charge.extend.chargeDevice.jms.ResponseMsgReceiver;
 import net.inconnection.charge.service.DeviceControlService;

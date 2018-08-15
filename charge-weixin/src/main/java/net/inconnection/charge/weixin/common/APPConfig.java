@@ -65,6 +65,8 @@ public class APPConfig extends JFinalConfig {
         me.add("/about", AboutController.class, "/front");
         me.add("/facade", FacadeController.class, "/front");
         me.add("/map", MapController.class, "/front");
+
+        me.add("/newDevice", NewDeviceController.class, "/front");
     }
 
     public void configPlugin(Plugins me) {

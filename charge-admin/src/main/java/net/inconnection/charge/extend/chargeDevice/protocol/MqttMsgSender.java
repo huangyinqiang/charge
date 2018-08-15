@@ -1,11 +1,10 @@
 package net.inconnection.charge.extend.chargeDevice.protocol;
 
 
+import com.jfinal.log.Log;
 import net.inconnection.charge.extend.chargeDevice.utils.MqttReconnectUtil;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
@@ -14,7 +13,7 @@ import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConst
 
 
 public class MqttMsgSender {
-    private static Logger _log = LoggerFactory.getLogger(MqttMsgSender.class);
+    private static Log _log = Log.getLog(MqttMsgSender.class);
     public static final String HOST = MQTT_BROKER_IP; //设置端口
     private static final String clientid = "MqttMsgSender";
 

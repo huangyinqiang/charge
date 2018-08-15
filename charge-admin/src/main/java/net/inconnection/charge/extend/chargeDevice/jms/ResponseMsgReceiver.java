@@ -1,9 +1,8 @@
 package net.inconnection.charge.extend.chargeDevice.jms;
 
+import com.jfinal.log.Log;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.jms.*;
 
@@ -16,7 +15,7 @@ import static net.inconnection.charge.extend.chargeDevice.jms.ActiveMQConstant.T
 
 public class ResponseMsgReceiver {
 
-    private static Logger _log = LoggerFactory.getLogger(ResponseMsgReceiver.class);
+    private static Log _log = Log.getLog(ResponseMsgReceiver.class);
 
     public String getProcessedResponseMsg(String queue,long timeout) {
         // 消费者，消息接收者

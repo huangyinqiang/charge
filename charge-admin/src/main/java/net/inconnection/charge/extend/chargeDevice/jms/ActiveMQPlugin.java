@@ -1,5 +1,7 @@
 package net.inconnection.charge.extend.chargeDevice.jms;
+import com.jfinal.log.Log;
 import com.jfinal.plugin.IPlugin;
+import net.inconnection.charge.extend.chargeDevice.deviceManage.ChargePileCommander;
 import org.apache.activemq.ActiveMQConnection;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.pool.PooledConnection;
@@ -9,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import javax.jms.JMSException;
 
 public class ActiveMQPlugin implements IPlugin {
-    private static final Logger logger = LoggerFactory.getLogger(Thread.currentThread().getClass());
+    private static Log logger = Log.getLog(Thread.currentThread().getClass());
     private String url;
     private String name;
     public ActiveMQPlugin(String url,

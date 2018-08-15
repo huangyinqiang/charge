@@ -1,5 +1,6 @@
 package net.inconnection.charge.extend.chargeDevice.jms;
 
+import com.jfinal.log.Log;
 import org.apache.activemq.pool.PooledConnection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +9,7 @@ import javax.jms.*;
 
 public class MQTTListener extends JmsReceiver {
 
-
-    private static Logger _log = LoggerFactory.getLogger(MQTTListener.class);
+    private static Log _log = Log.getLog(MQTTListener.class);
 
     public MQTTListener(String name,
                        PooledConnection connection,

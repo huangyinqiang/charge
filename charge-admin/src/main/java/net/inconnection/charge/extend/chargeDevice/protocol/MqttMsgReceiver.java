@@ -1,6 +1,8 @@
 package net.inconnection.charge.extend.chargeDevice.protocol;
 
+import com.jfinal.log.Log;
 import net.inconnection.charge.extend.chargeDevice.deviceManage.MQTTMsgProcessor;
+import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQServer;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.utils.MqttReconnectUtil;
 import org.eclipse.paho.client.mqttv3.*;
@@ -16,7 +18,7 @@ import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConst
 public class MqttMsgReceiver {
 
     private MqttClient client;
-    private static Logger _log = LoggerFactory.getLogger(MqttMsgReceiver.class);
+    private static Log _log = Log.getLog(MqttMsgReceiver.class);
 
     //单例模式获取唯一对象
     private volatile static MqttMsgReceiver mqttMsgReceiver ;

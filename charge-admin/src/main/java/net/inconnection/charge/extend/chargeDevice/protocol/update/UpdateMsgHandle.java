@@ -1,14 +1,12 @@
 package net.inconnection.charge.extend.chargeDevice.protocol.update;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.log.Log;
 import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQServer;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.DeviceUpdateMsg;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.utils.RedisUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.math.BigInteger;
 
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.MQTT_TOPIC_CUR_VERSION;
@@ -18,7 +16,7 @@ import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConst
 
 public class UpdateMsgHandle {
 
-    private static Logger _log = LoggerFactory.getLogger(UpdateMsgHandle.class);
+    private static Log _log = Log.getLog(UpdateMsgHandle.class);
 
     public static void sendFirstFirmwareDataFrame(DeviceUpdateMQServer server, String key, JSONObject jsonObject){
         _log.info("key:"+key);
