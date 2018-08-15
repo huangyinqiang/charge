@@ -89,7 +89,7 @@ public class APPConfig extends JFinalConfig {
         me.add(sp);
 
         //dubbo 客户端引入服务demo
-        DubboClientPlugin dubboClientPlugin = new DubboClientPlugin("charge-cost",20882);
+        DubboClientPlugin dubboClientPlugin = new DubboClientPlugin("charge-weixin",20882);
 
         //获取服务事例，传入对应接口类型和class
         ReferenceConfig<DeviceControlService> reference = new IiossReferenceConfig<DeviceControlService>().setServiceInterface(DeviceControlService.class);
