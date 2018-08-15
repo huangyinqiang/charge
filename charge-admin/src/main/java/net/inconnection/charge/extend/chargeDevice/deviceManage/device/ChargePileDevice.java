@@ -297,7 +297,7 @@ public class ChargePileDevice implements GateWay {
                 if (responseObj.getString(MSG_RESPONCE_RESULT).equals("1")){
                     isOnline = true;
                 }
-                DataSourceUtils.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
+                ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
                 break;
             case MSG_RESPONCE_CODE_SHUTDOWNALLSOCKETS:
 
@@ -306,7 +306,7 @@ public class ChargePileDevice implements GateWay {
             case MSG_RESPONCE_CODE_TESTSOCKETPOWER:
 
             case MSG_RESPONCE_CODE_SOCKETSTARTCHARGE:
-                DataSourceUtils.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
+                ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
                 break;
             default:
                 break;

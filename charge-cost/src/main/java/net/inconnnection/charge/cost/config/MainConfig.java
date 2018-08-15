@@ -9,7 +9,7 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
-import net.inconnection.charge.service.DemoService;
+import net.inconnection.charge.service.DeviceControlService;
 import net.inconnection.charge.service.dubboPlugin.DubboClientPlugin;
 import net.inconnection.charge.service.dubboPlugin.IiossReferenceConfig;
 import net.inconnnection.charge.cost.action.IndexAction;
@@ -49,19 +49,7 @@ public class MainConfig extends JFinalConfig {
         me.add(p);
 
 
-        //dubbo 客户端引入服务demo
-        DubboClientPlugin dubboClientPlugin = new DubboClientPlugin("charge-cost",20882);
 
-        //获取服务事例，传入对应接口类型和class
-        ReferenceConfig<DemoService> reference = new IiossReferenceConfig<DemoService>().setServiceInterface(DemoService.class);
-
-        //此方法获取到服务，
-        DemoService service = dubboClientPlugin.getService(reference);
-        // 也可以在任何其他地方直接从容器中获取 DemoService service = DubboServiceContrain.getInstance().getService(DemoService.class);
-        //注解未实现！！！
-
-
-        me.add(dubboClientPlugin);
 
     }
 

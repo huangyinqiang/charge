@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.jms.*;
 
-public class DataSourceUtils {
+public class ActiveMqSender {
 
-    private static Logger _log = LoggerFactory.getLogger(DataSourceUtils.class);
+    private static Logger _log = LoggerFactory.getLogger(ActiveMqSender.class);
 
 
     private static ConnectionFactory connectionFactory ;
@@ -18,52 +18,34 @@ public class DataSourceUtils {
     private static Queue push2WebQueue ;
     private static MessageProducer push2WebProducer;
 
-	private static DataSourceUtils dataSourceUtilsInstance  = new DataSourceUtils();
+	private static ActiveMqSender activeMqSenderInstance = new ActiveMqSender();
 
-	private DataSourceUtils(){
+	private ActiveMqSender(){
 		try {
 			connectionFactory = new ActiveMQConnectionFactory(ActiveMQConstant.TCP_LOCALHOST_ACTIVEMQ);
 			connection = connectionFactory.createConnection();
-
 			connection.start();
-
 			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-//
-//			push2WebQueue = session.createQueue("insert-all-database");
-//			push2WebProducer = session.createProducer(push2WebQueue);
-//			push2WebProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-
-
 		}catch (Exception e) {
-			_log.error("DataSourceUtils:连接出错!",e);
+			_log.error("ActiveMqSender:连接出错!",e);
 			e.printStackTrace();
 		}
 
 	}
 
-	public static DataSourceUtils getInstance(){
-		if (dataSourceUtilsInstance == null) {
-			dataSourceUtilsInstance = new DataSourceUtils();
+	public static ActiveMqSender getInstance(){
+		if (activeMqSenderInstance == null) {
+			activeMqSenderInstance = new ActiveMqSender();
 		}
-
-		return dataSourceUtilsInstance;
+		return activeMqSenderInstance;
 	}
 
 	public void pushToActiveMQ(String msg, String callBackQueueName){
-		_log.info("DataSourceUtils.pushToActiveMQ : " + msg);
+		_log.info("ActiveMqSender.pushToActiveMQ : " + msg);
 		try {
-//			connectionFactory = new ActiveMQConnectionFactory(ActiveMQConstant.TCP_LOCALHOST_ACTIVEMQ);
-//			connection = connectionFactory.createConnection();
-//
-//			connection.start();
-//
-//			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
 			push2WebQueue = session.createQueue(callBackQueueName);
 			push2WebProducer = session.createProducer(push2WebQueue);
 			push2WebProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-
-			Topic topic = session.createTopic(callBackQueueName);
 			TextMessage textMessage = session.createTextMessage(msg);
 			push2WebProducer.send(textMessage);
 
@@ -72,7 +54,5 @@ public class DataSourceUtils {
 			e.printStackTrace();
 		}
 	}
-
-
 
 }

@@ -23,7 +23,7 @@ public class PerformenceTester {
                     final String gwId = "010100000001";
 
 
-                    String notifyTopic = "C/" + "GW_INIT" + "/" + version +"/" + gwId + "/" + TOPIC_NOTIFY;
+                    String notifyTopic = "C/" + "CHARGE" + "/" + version +"/" + gwId + "/" + TOPIC_NOTIFY;
 
                     String timeStr = (new SimpleDateFormat("yyyyMMddHHmmss")).format(new Date());
                     String seq = String.valueOf(SEQGeneration.getInstance().getSEQ());//sequenceNum生成

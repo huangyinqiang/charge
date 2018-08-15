@@ -5,7 +5,6 @@ import com.alibaba.dubbo.config.ProtocolConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.jfinal.plugin.IPlugin;
-import net.inconnection.charge.service.DemoService;
 
 import java.util.HashMap;
 import java.util.Map;

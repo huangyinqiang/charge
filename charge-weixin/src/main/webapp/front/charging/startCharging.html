@@ -16,6 +16,39 @@
 <script type="text/javascript"
 	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
+
+    // 调用服务器充电
+    function invokeServerCharging() {
+        $.ajax({
+            type : 'POST',
+            url : "../charging/startMqttCharging",
+            dataType : "json",
+            data : {
+                openId : "1",
+                type : "1",
+                deviceId : "010100000001",
+                devicePort : "01",
+                time : "60",
+                money : "200",
+                walletAccount : "5000",
+                operType : "1"
+            },
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
+            // 从缓存里读取,为false只有ＧＥＴ请求时生效
+            async : false,// 设置同步方式，false为同步
+            success : function(data) {
+                if (data == "1") {
+                    layer.msg("充电成功", {
+                        shift : 5
+                    });
+                } else {
+                    layer.msg("充电失败", {
+                        shift : 5
+                    });
+                }
+            }
+        });
+    }
 	
 </script>
 </head>
@@ -36,7 +69,7 @@
 			<input type="checkbox" checked> <a href="./about/mzsm">同意《充电说明》</a>
 		</div>
 		<i class="icon" onclick="scanQR1();"></i> <input type="button"
-			onclick="scanQR1();" value="扫码充电">
+			onclick="invokeServerCharging();" value="扫码充电">
 	</div>
 	<div class="foot">
 		<p class="tit">温馨提示</p>

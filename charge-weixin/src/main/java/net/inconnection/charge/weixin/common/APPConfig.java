@@ -1,5 +1,6 @@
 package net.inconnection.charge.weixin.common;
 
+import com.alibaba.dubbo.config.ReferenceConfig;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.PathKit;
@@ -10,6 +11,9 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
+import net.inconnection.charge.service.DeviceControlService;
+import net.inconnection.charge.service.dubboPlugin.DubboClientPlugin;
+import net.inconnection.charge.service.dubboPlugin.IiossReferenceConfig;
 import net.inconnection.charge.weixin.controller.*;
 import net.inconnection.charge.weixin.model.*;
 import net.inconnection.charge.weixin.scheduler.task.SchedulerPlugin;
@@ -81,6 +85,20 @@ public class APPConfig extends JFinalConfig {
         me.add(new EhCachePlugin());
         SchedulerPlugin sp = new SchedulerPlugin("job.properties");
         me.add(sp);
+
+        //dubbo 客户端引入服务demo
+        DubboClientPlugin dubboClientPlugin = new DubboClientPlugin("charge-cost",20882);
+
+        //获取服务事例，传入对应接口类型和class
+        ReferenceConfig<DeviceControlService> reference = new IiossReferenceConfig<DeviceControlService>().setServiceInterface(DeviceControlService.class);
+
+        //此方法获取到服务，
+        DeviceControlService service = dubboClientPlugin.getService(reference);
+        // 也可以在任何其他地方直接从容器中获取 DeviceControlService service = DubboServiceContrain.getInstance().getService(DeviceControlService.class);
+        //注解未实现！！！
+
+
+        me.add(dubboClientPlugin);
     }
 
     public void configInterceptor(Interceptors me) {

@@ -180,6 +180,12 @@
             <artifactId>jxl</artifactId>
             <version>2.6.12</version>
         </dependency>
+        <dependency>
+            <groupId>net.inconnection</groupId>
+            <artifactId>charge-service</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 

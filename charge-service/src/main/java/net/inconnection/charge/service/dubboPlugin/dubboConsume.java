@@ -2,7 +2,7 @@ package net.inconnection.charge.service.dubboPlugin;
 
 import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
-import net.inconnection.charge.service.DemoService;
+import net.inconnection.charge.service.DeviceControlService;
 
 /**
  * 测试使用类
@@ -16,10 +16,10 @@ public class dubboConsume {
 
 
 
-        ReferenceConfig<DemoService> reference = new ReferenceConfig<DemoService>();
-        reference.setInterface(DemoService.class);
+        ReferenceConfig<DeviceControlService> reference = new ReferenceConfig<DeviceControlService>();
+        reference.setInterface(DeviceControlService.class);
 
-        DemoService service = getService(reference);
+        DeviceControlService service = getService(reference);
 
 
 
