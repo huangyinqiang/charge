@@ -108,4 +108,40 @@ public abstract class BaseCompany<M extends BaseCompany<M>> extends Model<M> imp
 		return getStr("weixin_account");
 	}
 
+	public M setCreateTime(java.util.Date createTime) {
+		set("create_time", createTime);
+		return (M)this;
+	}
+	
+	public java.util.Date getCreateTime() {
+		return get("create_time");
+	}
+
+	public M setUpdateTime(java.util.Date updateTime) {
+		set("update_time", updateTime);
+		return (M)this;
+	}
+	
+	public java.util.Date getUpdateTime() {
+		return get("update_time");
+	}
+
+	public M setContact(java.lang.String contact) {
+		set("contact", contact);
+		return (M)this;
+	}
+	
+	public java.lang.String getContact() {
+		return getStr("contact");
+	}
+
+	public M setContactPhone(java.lang.String contactPhone) {
+		set("contact_phone", contactPhone);
+		return (M)this;
+	}
+	
+	public java.lang.String getContactPhone() {
+		return getStr("contact_phone");
+	}
+
 }
