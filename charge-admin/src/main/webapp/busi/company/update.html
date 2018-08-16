@@ -1,0 +1,194 @@
+ <#include "/common/head.html"/>
+
+
+<div class="easyui-panel updatePage"
+	data-options="fit:true,border:false">
+	<form id="ff" class="easyui-form" method="post">
+		<table class="table1">
+			<tr>
+				<th><span>公司名称：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="company_name"
+							id="company_name" value="${model.company_name!''}"
+							data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+
+			<tr>
+				<th><span>纳税账号：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="taxpayer_id"
+							   id="taxpayer_id" value="${model.taxpayer_id!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+			<tr>
+				<th><span>省：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="province"
+							   id="province" value="${model.province!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+			<tr>
+				<th><span>市：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="city"
+							   id="city" value="${model.city!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+			<tr>
+				<th><span>详细位置：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="detail_location"
+							   id="detail_location" value="${model.detail_location!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+			<tr>
+				<th><span>法人：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="legal_person"
+							   id="legal_person" value="${model.legal_person!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+			<tr>
+				<th><span>微信收款账号：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="weixin_account"
+							   id="weixin_account" value="${model.weixin_account!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+			<tr>
+				<th><span>管理者：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="admin_id"
+							   id="admin_id" value="${model.admin_id!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+
+			<tr>
+				<th><span>结算比例：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="balance_rate"
+							   id="balance_rate" value="${model.balance_rate!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+
+			<tr>
+				<th><span>结算类型：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="balance_type"
+							   id="balance_type" value="${model.balance_type!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+
+			<tr>
+				<th><span>联系人：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="contact"
+							   id="contact" value="${model.contact!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+			<tr>
+				<th><span>联系电话：</span></th>
+				<td>
+					<div class="wrap_input">
+						<input class="easyui-textbox" type="text" name="contact_phone"
+							   id="contact_phone" value="${model.contact_phone!''}"
+							   data-options="fit: true,required:true"></input>
+					</div>
+				</td>
+
+			</tr>
+
+		</table>
+	</form>
+</div>
+<script>
+top.window.subPage.save = save;
+function save() {
+	if($("#zcurdHeadTable").form('validate')) {
+		$.post("update", getParam(), function(data) {
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+		});
+	}
+}
+function getParam() {
+	var param = {
+        "id": ${model.id},
+        "model.company_name": $(":input[name='company_name']").val(),
+        "model.taxpayer_id": $(":input[name='taxpayer_id']").val(),
+        "model.province": $(":input[name='province']").val(),
+        "model.city": $(":input[name='city']").val(),
+        "model.detail_location": $(":input[name='detail_location']").val(),
+        "model.legal_person": $(":input[name='legal_person']").val(),
+        "model.weixin_account": $(":input[name='weixin_account']").val(),
+        "model.admin_id": $(":input[name='admin_id']").val(),
+        "model.balance_rate": $(":input[name='balance_rate']").val(),
+        "model.balance_type": $(":input[name='balance_type']").val(),
+        "model.contact": $(":input[name='contact']").val(),
+        "model.contact_phone": $(":input[name='contact_phone']").val()
+    }
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

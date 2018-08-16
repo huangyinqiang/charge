@@ -8,4 +8,5 @@ import net.inconnection.charge.extend.model.base.BaseCompany;
 @SuppressWarnings("serial")
 public class Company extends BaseCompany<Company> {
 	public static final Company dao = new Company().dao();
+	public static final Company me = new Company();
 }

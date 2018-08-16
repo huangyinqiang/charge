@@ -8,4 +8,5 @@ import net.inconnection.charge.extend.model.base.BaseChargeprice;
 @SuppressWarnings("serial")
 public class Chargeprice extends BaseChargeprice<Chargeprice> {
 	public static final Chargeprice dao = new Chargeprice().dao();
+	public static final Chargeprice me = new Chargeprice();
 }
