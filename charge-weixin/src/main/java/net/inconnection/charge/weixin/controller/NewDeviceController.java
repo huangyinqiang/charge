@@ -93,4 +93,14 @@ public class NewDeviceController extends Controller {
         this.renderJson(json);
     }
 
+    public void quereChargeSocketStatus(){
+        String deviceIdStr = this.getPara("deviceId");
+        Long deviceId = Long.parseLong(deviceIdStr);
+        log.info("查询设备充电插座状态开始,deviceId=" + this.getPara("deviceId"));
+        HnKejueResponse json = newDeviceService.queryChargeSocketStatus(deviceId);
+        log.info("根据设备充电插座状态结束：" + json);
+        this.renderJson(json);
+
+    }
+
 }

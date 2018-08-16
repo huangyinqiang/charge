@@ -28,13 +28,6 @@ public class LoginController extends BaseController {
 	 */
 	public void index() {
 
-
-		//存入数据库的测试逻辑  todo 存入数据库的测试逻辑
-/*		ChargePile chargePile = new ChargePile();
-		chargePile.setId(1l).setName("ceshi").setProvince("陕西省").setCity("西安").setDetailLocation("王座国际城").setLat(23d).setLng(22d).setSocketNumber(2).setTotalIntensity(23d).setTotalVoltage(34d).setIsOnline(true);
-		chargePile.save();*/
-
-
 		setAttr("isShowRandomCode", isShowRandomCode());
 		render("login.html");
 	}
