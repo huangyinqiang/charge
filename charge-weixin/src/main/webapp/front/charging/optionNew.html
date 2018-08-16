@@ -403,17 +403,17 @@
 
             for(var i=0; i<=socketStatus.length; i++){
                 var portStatus = socketStatus[i];
-                var string="<div class='flex-row'>" +
-                    "<div class='flex1 '>" +
-                    "<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
-                    "onclick='selectPort(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" +
-                    "</div>" +
+                // var string="<div class='flex-row'>" +
+                // var string="<div class='flex1 '>" +
+                var string="<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
+                    "onclick='selectPort(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" ;//+
+                    // "</div>" +
                     // "<div class='flex1'>" +
                     // "<a id='7' href='javascript:;' class='rui-btn'" +
                     // "onclick='selectPort(7,this);'>7</a>" +
                     // "</div>" +
-                    "</div>";
-                $("#number").append(string);
+                    // "</div>";
+                $("#chargeSocketStatus").append(string);
 
                 console.log( i +"     "  +JSON.stringify(socketStatus[i]));
                 if (portStatus.is_used == true ) {
@@ -594,7 +594,7 @@
 				<span >说明：</span><span id="explain">会员充满自动断电，保护电瓶不受损！</span>
 			</div>
 
-			<div class="grid" id="number">
+			<div class="grid" id="chargeSocketStatus">
 					<!--<div class="flex-row">-->
 						<!--<div class="flex1 ">-->
 							<!--<a id="1" href="javascript:;" class="rui-btn"-->
