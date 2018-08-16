@@ -82,6 +82,8 @@ public class APPConfig extends JFinalConfig {
         arp.addMapping("money_match_activity", MoneyMatchActivity.class);
         arp.addMapping("pay_to_agent_req", PayToAgentResp.class);
         arp.addMapping("b_map", BaiDuMap.class);
+
+        arp.addMapping("yc_charge_pile", NewDevice.class);
         arp.setShowSql(true);
         me.add(arp);
         me.add(new EhCachePlugin());

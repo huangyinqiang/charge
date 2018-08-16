@@ -88,7 +88,7 @@ function queryNewDevice(value) {
 
     $.ajax({
         type : 'POST',
-        url : "./device/queryDeviceInfoByQr",
+        url : "./newDevice/getDeviceInfo",
         dataType : "json",
         data : {
             qr : value

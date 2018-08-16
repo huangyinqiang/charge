@@ -26,13 +26,10 @@ public class DeviceController extends Controller {
             log.info("处理URL类型的二维码成功，qr＝" + qr);
         }
 
-        if(qr.length() == 9){
-            HnKejueResponse json = deviceService.queryDeviceByQrNum(qr);
-            log.info("根据二维码查询设备结束：" + json);
-            this.renderJson(json);
-        }else {
-            //TODO 处理新设备
-        }
+        HnKejueResponse json = deviceService.queryDeviceByQrNum(qr);
+        log.info("根据二维码查询设备结束：" + json);
+        this.renderJson(json);
+
     }
 
     public void queryDeviceInfoByCompanyId() {

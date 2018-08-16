@@ -75,6 +75,37 @@
             }
         });
     }
+
+    function queryNewDevice(value) {
+
+        $.ajax({
+            type : 'POST',
+            url : "./newDevice/getDeviceInfo",
+            dataType : "json",
+            data : {
+                qr : value
+            },
+            cache : false,
+            async : false,
+            success : function(data) {
+                if (data.respCode != '000000' | null == data.respObj) {
+                    layer.msg("设备暂时离线，请稍后再试...", {
+                        shift : 5
+                    });
+                    return;
+                }
+                location.href = "./charging/chooseNewDevicePortAndTime?deviceId="
+                    + data.respObj.id + "&area="
+                    + encodeURI(encodeURI(data.respObj.province + data.respObj.city + data.respObj.detail_location)) + "&activityId="
+                    + "1"
+
+            },
+            error : function() {
+
+            }
+        });
+
+    }
 	
 </script>
 </head>
@@ -94,12 +125,11 @@
 		<div class="terms">
 			<input type="checkbox" checked> <a href="./about/mzsm">同意《充电说明》</a>
 		</div>
-		<i class="icon" onclick="permissionOnline();"></i> <input type="button"
-			onclick="startMqttCharging();" value="扫码充电">
-        <input type="button"
-               onclick="permissionOnline();" value="允许入网">
-        <input type="button"
-               onclick="startMqttCharging();" value="开始充电">
+		<i class="icon" onclick="scanQR1();"></i>
+		<input type="button" onclick="scanQR1();" value="扫码充电">
+        <input type="button" onclick="permissionOnline();" value="允许入网">
+        <input type="button" onclick="startMqttCharging();" value="开始充电">
+		<input type="button" onclick="queryNewDevice('3');" value="查询设备">
 	</div>
 	<div class="foot">
 		<p class="tit">温馨提示</p>
