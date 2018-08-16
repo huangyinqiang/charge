@@ -133,18 +133,21 @@
     }
     // 开始充电按钮
     function startCharging() {
+
+        if (time == null || time == "0" || time == "") {
+            layer.msg("请选择充电时间!", {
+                shift : 5
+            });
+
+            return;
+        }
         if (devicePort == null || devicePort == "0") {
             layer.msg("请选择充电插座!", {
                 shift : 5
             });
             return;
         }
-        if (time == null || time == "0" || time == "") {
-            layer.msg("请选择充电时间!", {
-                shift : 5
-            });
-            return;
-        }
+
         // 会员(选择智能充电)
         if (walletAccount >= autoPrice && time == 800) {
             type = "auto";// 智能充电
@@ -359,24 +362,7 @@
             }
         });
     }
-    // 查询设备状态
-    // function getDeviceStatus(deviceId) {
-    //     // 查询设备状态
-    //     $.ajax({
-    //         type : "GET",
-    //         url : "../device/getDeviceStatus",
-    //         data : {
-    //             deviceId : deviceId
-    //         },
-    //         cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
-    //         // 从缓存里读取,为false只有ＧＥＴ请求生效
-    //         async : false,// 设置同步方式，false为同步
-    //         dataType : "json",
-    //         success : function(data) {
-    //             portStatus(data);
-    //         }
-    //     });
-    // }
+
 
     // 查询设备状态
     function getDeviceStatus(deviceId) {
@@ -403,17 +389,17 @@
 
             for(var i=0; i<=socketStatus.length; i++){
                 var portStatus = socketStatus[i];
-                var string="<div class='flex-row'>" +
-                    "<div class='flex1 '>" +
-                    "<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
-                    "onclick='selectPort(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" +
-                    "</div>" +
+                // var string="<div class='flex-row'>" +
+                // var string="<div class='flex1 '>" +
+                var string="<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
+                    "onclick='selectPort(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" ;//+
+                    // "</div>" +
                     // "<div class='flex1'>" +
                     // "<a id='7' href='javascript:;' class='rui-btn'" +
                     // "onclick='selectPort(7,this);'>7</a>" +
                     // "</div>" +
-                    "</div>";
-                $("#number").append(string);
+                    // "</div>";
+                $("#chargeSocketStatus").append(string);
 
                 console.log( i +"     "  +JSON.stringify(socketStatus[i]));
                 if (portStatus.is_used == true ) {
@@ -444,60 +430,6 @@
         return null;
     }
 
-    // 设置端口状态
-    function portStatus(data) {
-        if (data.device != null && data.device.onLine == true) {
-            $(".normal").html("正常");
-            var portStatus1 = data.device.portStatus['01'];
-            if (portStatus1) {
-                $("#1").text("插座1充电中");
-            }
-            var portStatus2 = data.device.portStatus['02'];
-            if (portStatus2) {
-                $("#2").text("插座2充电中");
-            }
-            var portStatus3 = data.device.portStatus['03'];
-            if (portStatus3) {
-                $("#3").text("插座3充电中");
-            }
-            var portStatus4 = data.device.portStatus['04'];
-            if (portStatus4) {
-                $("#4").text("插座4充电中");
-            }
-            var portStatus5 = data.device.portStatus['05'];
-            if (portStatus5) {
-                $("#5").text("插座5充电中");
-            }
-            var portStatus6 = data.device.portStatus['06'];
-            if (portStatus6) {
-                $("#6").text("插座6充电中");
-            }
-            var portStatus7 = data.device.portStatus['07'];
-            if (portStatus7) {
-                $("#7").text("插座7充电中");
-            }
-            var portStatus8 = data.device.portStatus['08'];
-            if (portStatus8) {
-                $("#8").text("插座8充电中");
-            }
-            var portStatus9 = data.device.portStatus['09'];
-            if (portStatus9) {
-                $("#9").text("插座9充电中");
-            }
-            var portStatus10 = data.device.portStatus['10'];
-            if (portStatus10) {
-                $("#10").text("插座10充电中");
-            }
-            var portStatus11 = data.device.portStatus['11'];
-            if (portStatus11) {
-                $("#11").text("插座11充电中");
-            }
-            var portStatus12 = data.device.portStatus['12'];
-            if (portStatus12) {
-                $("#12").text("插座12充电中");
-            }
-        }
-    }
 
     function selectPort(value, ele) {
         console.log("test selectPort" + value);
@@ -591,10 +523,10 @@
 				</a> 
 			</div>
 			<div class="weui-cells__tips">
-				<span >说明：</span><span id="explain">会员充满自动断电，保护电瓶不受损！</span>
+				<span >温馨提示：</span><span id="explain">会员充满自动断电，保护电瓶不受损！</span>
 			</div>
 
-			<div class="grid" id="number">
+			<div class="grid" id="chargeSocketStatus">
 					<!--<div class="flex-row">-->
 						<!--<div class="flex1 ">-->
 							<!--<a id="1" href="javascript:;" class="rui-btn"-->
