@@ -134,4 +134,5 @@ CREATE TABLE `yc_tuser_and_coupon` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 
 
-/*2018 8 - 5 数据库的扩展  开始              */
+/*2018 8 - 16 数据库的扩展  开始              */
+alter table yc_charge_socket add `sn` int(2) DEFAULT NULL COMMENT '充电插座的sn';
