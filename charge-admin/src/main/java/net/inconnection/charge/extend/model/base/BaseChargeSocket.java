@@ -27,6 +27,15 @@ public abstract class BaseChargeSocket<M extends BaseChargeSocket<M>> extends Mo
 		return getLong("charge_pile_id");
 	}
 
+	public M setChargeSocketSn(java.lang.Integer chargeSocketSn) {
+		set("charge_socket_sn", chargeSocketSn);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getChargeSocketSn() {
+		return getInt("charge_socket_sn");
+	}
+
 	public M setIsUsed(java.lang.Boolean isUsed) {
 		set("is_used", isUsed);
 		return (M)this;

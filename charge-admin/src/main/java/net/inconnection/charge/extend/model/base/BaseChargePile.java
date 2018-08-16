@@ -18,15 +18,6 @@ public abstract class BaseChargePile<M extends BaseChargePile<M>> extends Model<
 		return getLong("id");
 	}
 
-	public M setSn(java.lang.Long sn) {
-		set("sn", sn);
-		return (M)this;
-	}
-	
-	public java.lang.Long getSn() {
-		return getLong("sn");
-	}
-
 	public M setName(java.lang.String name) {
 		set("name", name);
 		return (M)this;

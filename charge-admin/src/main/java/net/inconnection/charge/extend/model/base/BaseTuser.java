@@ -288,13 +288,13 @@ public abstract class BaseTuser<M extends BaseTuser<M>> extends Model<M> impleme
 		return getInt("proxy_wallet_gift_money");
 	}
 
-	public M setProxyRealGitRate(java.lang.Integer proxyRealGitRate) {
+	public M setProxyRealGitRate(java.lang.Double proxyRealGitRate) {
 		set("proxy_real_git_rate", proxyRealGitRate);
 		return (M)this;
 	}
 	
-	public java.lang.Integer getProxyRealGitRate() {
-		return getInt("proxy_real_git_rate");
+	public java.lang.Double getProxyRealGitRate() {
+		return getDouble("proxy_real_git_rate");
 	}
 
 }

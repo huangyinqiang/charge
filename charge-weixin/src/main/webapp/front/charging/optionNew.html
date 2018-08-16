@@ -18,6 +18,7 @@
     var walletAccount;// 微信钱包
     var autoPrice;// 智能充电预扣费价格
     var device;// 设备信息
+    var socketStatus;//插座状态
     var deviceId;// 设备编号
     var companyId;// 公司编号
     var activityId;// 活动编号
@@ -359,11 +360,30 @@
         });
     }
     // 查询设备状态
+    // function getDeviceStatus(deviceId) {
+    //     // 查询设备状态
+    //     $.ajax({
+    //         type : "GET",
+    //         url : "../device/getDeviceStatus",
+    //         data : {
+    //             deviceId : deviceId
+    //         },
+    //         cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
+    //         // 从缓存里读取,为false只有ＧＥＴ请求生效
+    //         async : false,// 设置同步方式，false为同步
+    //         dataType : "json",
+    //         success : function(data) {
+    //             portStatus(data);
+    //         }
+    //     });
+    // }
+
+    // 查询设备状态
     function getDeviceStatus(deviceId) {
         // 查询设备状态
         $.ajax({
             type : "GET",
-            url : "../device/getDeviceStatus",
+            url : "../newDevice/quereChargeSocketStatus",
             data : {
                 deviceId : deviceId
             },
@@ -372,10 +392,49 @@
             async : false,// 设置同步方式，false为同步
             dataType : "json",
             success : function(data) {
-                portStatus(data);
+                socketStatus(data);
             }
         });
     }
+    function socketStatus(data) {
+        if (data.respObj != null && data.respCode == "000000") {
+            socketStatus = data.respObj;
+
+
+            for(var i=0; i<=socketStatus.length; i++){
+                var portStatus = socketStatus[i];
+                var string="<div class='flex-row'>" +
+                    "<div class='flex1 '>" +
+                    "<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
+                    "onclick='selectPort(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" +
+                    "</div>" +
+                    // "<div class='flex1'>" +
+                    // "<a id='7' href='javascript:;' class='rui-btn'" +
+                    // "onclick='selectPort(7,this);'>7</a>" +
+                    // "</div>" +
+                    "</div>";
+                $("#number").append(string);
+
+                console.log( i +"     "  +JSON.stringify(socketStatus[i]));
+                if (portStatus.is_used == true ) {
+                    $("#" + socketStatus[i].charge_socket_sn).text("插座" + socketStatus[i].charge_socket_sn + "充电中");
+                    $("#" + socketStatus[i].charge_socket_sn).attr("disable","disable");
+                }
+
+			}
+
+            // if(null != socketStatus){
+             //    var portStatus1 = socketStatus[0];
+             //    if (portStatus1.is_used == true ) {
+             //        $("#1").text("插座1充电中");
+			// 	}
+			// }
+        } else {
+
+        }
+
+	}
+
     // 获取URL中的参数值
     function GetQueryString(url) {
         var reg = new RegExp("(^|&)" + url + "=([^&]*)(&|$)");
@@ -441,6 +500,8 @@
     }
 
     function selectPort(value, ele) {
+        console.log("test selectPort" + value);
+
         devicePort = value;// 获取选择的插座
         $('.rui-btn').removeClass('rui-btn-outlined');
         $(ele).addClass('rui-btn-outlined')
@@ -533,71 +594,29 @@
 				<span >说明：</span><span id="explain">会员充满自动断电，保护电瓶不受损！</span>
 			</div>
 
-			<div class="grid">
-					<div class="flex-row">
-						<div class="flex1 ">
-							<a id="1" href="javascript:;" class="rui-btn"
-								onclick="selectPort(1,this);">1</a>
-						</div>
-						<div class="flex1 ">
-							<a id="7" href="javascript:;" class="rui-btn"
-								onclick="selectPort(7,this);">7</a>
-						</div>
-					</div>
-	
-					<div class="flex-row">
-						<div class="flex1 ">
-							<a id="2" href="javascript:;" class="rui-btn"
-								onclick="selectPort(2,this);">2</a>
-						</div>
-						<div class="flex1 ">
-							<a id="8" href="javascript:;" class="rui-btn"
-								onclick="selectPort(8,this);">8</a>
-						</div>
-					</div>
-	
-					<div class="flex-row">
-						<div class="flex1 ">
-							<a id="3" href="javascript:;" class="rui-btn"
-								onclick="selectPort(3,this);">3</a>
-						</div>
-						<div class="flex1 ">
-							<a id="9" href="javascript:;" class="rui-btn"
-								onclick="selectPort(9,this);">9</a>
-						</div>
-					</div>
-	
-					<div class="flex-row">
-						<div class="flex1 ">
-							<a id="4" href="javascript:;" class="rui-btn"
-								onclick="selectPort(4,this);">4</a>
-						</div>
-						<div class="flex1 ">
-							<a id="10" href="javascript:;" class="rui-btn"
-								onclick="selectPort(10,this);">10</a>
-						</div>
-					</div>
-	
-					<div class="flex-row">
-						<div class="flex1 ">
-							<a id="5" href="javascript:;" class="rui-btn"
-								onclick="selectPort(5,this);">5</a>
-						</div>
-						<div class="flex1 ">
-							<a id="11" href="javascript:;" class="rui-btn"
-								onclick="selectPort(11,this);">11</a>
-						</div>
-					</div>
-					<div class="flex-row">
-						<div class="flex1 ">
-							<a id="6" href="javascript:;" class="rui-btn"
-								onclick="selectPort(6,this);">6</a>
-						</div>
-						<div class="flex1 ">
-							<a id="12" href="javascript:;" class="rui-btn"
-								onclick="selectPort(12,this);">12</a>
-						</div>
-					</div>
+			<div class="grid" id="number">
+					<!--<div class="flex-row">-->
+						<!--<div class="flex1 ">-->
+							<!--<a id="1" href="javascript:;" class="rui-btn"-->
+								<!--onclick="selectPort(1,this);">1</a>-->
+						<!--</div>-->
+						<!--<div class="flex1 ">-->
+							<!--<a id="7" href="javascript:;" class="rui-btn"-->
+								<!--onclick="selectPort(7,this);">7</a>-->
+						<!--</div>-->
+					<!--</div>-->
+	<!---->
+					<!--<div class="flex-row">-->
+						<!--<div class="flex1 ">-->
+							<!--<a id="2" href="javascript:;" class="rui-btn"-->
+								<!--onclick="selectPort(2,this);">2</a>-->
+						<!--</div>-->
+						<!--<div class="flex1 ">-->
+							<!--<a id="8" href="javascript:;" class="rui-btn"-->
+								<!--onclick="selectPort(8,this);">8</a>-->
+						<!--</div>-->
+					<!--</div>-->
+
 			</div>
 			<div class="page__bd page__bd_spacing">
 				<a href="javascript:;" onclick="startCharging()"

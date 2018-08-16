@@ -93,7 +93,9 @@ public class ChargeMoneyService {
                 String format = (new SimpleDateFormat("yy/MM/dd HH:mm:ss")).format(new Date());
                 String MD5 = EncDecUtils.getMD5(openId + deviceId + format);
                 chargeMoneyInfoBean.setMd5(MD5);
-                int totalMoney = Integer.parseInt(chargeNum) + Integer.parseInt(coupon);
+                int chargeMoney = Integer.parseInt(chargeNum);
+                int couponMoney = Integer.parseInt(coupon);
+                int totalMoney = chargeMoney + couponMoney;
                 if (chargeType.equals("CH")) {
                     ChargeMoneyService.log.info("充值电卡总额：" + totalMoney);
                     chargeMoneyInfoBean.setAmount(0);
@@ -104,7 +106,7 @@ public class ChargeMoneyService {
                     chargeMoneyInfoBean.setCardAmount(0);
                     Integer account = Integer.valueOf(walletAccount);
                     Integer total = totalMoney + account;
-                    TUser.dao.updateWalletAccount(total, openId);
+                    TUser.dao.updateWalletAccount(total,chargeMoney,couponMoney, openId);
                 }
 
                 ChargeMoneyInfo.dao.addChargeMoneyLog(chargeMoneyInfoBean);

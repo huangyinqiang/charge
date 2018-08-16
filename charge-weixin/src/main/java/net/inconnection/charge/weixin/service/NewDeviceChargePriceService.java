@@ -3,7 +3,6 @@ package net.inconnection.charge.weixin.service;
 import com.jfinal.log.Log;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.code.RespCode;
-import net.inconnection.charge.weixin.model.NewDevice;
 import net.inconnection.charge.weixin.model.NewDeviceChargePrice;
 
 public class NewDeviceChargePriceService {

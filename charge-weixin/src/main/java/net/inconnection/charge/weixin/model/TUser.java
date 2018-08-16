@@ -71,6 +71,14 @@ public class TUser extends Model<TUser> {
         return i;
     }
 
+    public int updateWalletAccount(int walletAccount, int chargeMoney, int couponMoney, String openId) {
+        log.info("根据openId更新微信钱包，walletAccount=" + walletAccount + ",openId=" + openId);
+        double realGiftRate = chargeMoney/(double)(chargeMoney + couponMoney);
+        int i = Db.update("update tuser set walletAccount = ? , wallet_real_money = ? , wallet_gift_money = ?, real_git_rate = ? where openId = ? ", new Object[]{walletAccount, chargeMoney, couponMoney, realGiftRate, openId});
+        log.info("根据openId更新微信钱包结果：" + i);
+        return i;
+    }
+
     public int updateCardNumberByOpendid(String cardNumber, String openId, String tel) {
         log.info("根据openId更新电卡，cardNumber=" + cardNumber + ",openId=" + openId + ",tel=" + tel);
         int i = Db.update("update tuser set cardNumber = ? ,tel = ? ,band = ? where openId = ? ", new Object[]{cardNumber, tel, "Y", openId});
