@@ -124,6 +124,87 @@ public class ChargeInfoBatteryService {
         return (Boolean)jsonObject.get("success");
     }
 
+    public Boolean saveNewDeviceChargeHistory(String openId, String deviceId, String devicePort, String time, String type, String money, String walletAccount, String operType) {
+        log.info("新增新设备充电记录 openId=" + openId + ",deviceId=" + devicePort + ",time=" + time + ",type=" + type + ",money=" + money + ",walletAccount=" + walletAccount + ",operType=" + operType);
+
+        try {
+            if (StringUtils.isBlank(openId)) {
+                log.error("openId不能为空");
+                return false;
+            }
+
+            if (StringUtils.isBlank(deviceId)) {
+                log.error("deviceId不能为空");
+                return false;
+            }
+
+            if (StringUtils.isBlank(devicePort)) {
+                log.error("devicePort不能为空");
+                return false;
+            }
+
+            if (StringUtils.isBlank(time)) {
+                log.error("time不能为空");
+                return false;
+            }
+
+            if (StringUtils.isBlank(type)) {
+                log.error("type不能为空");
+                return false;
+            }
+
+            if (StringUtils.isBlank(money)) {
+                log.error("money不能为空");
+                return false;
+            }
+
+            if (StringUtils.isBlank(walletAccount)) {
+                log.error("walletAccount不能为空");
+                return false;
+            }
+
+            if (StringUtils.isBlank(operType)) {
+                log.error("operType不能为空");
+                return false;
+            }
+
+            ChargeBatteryInfoBean chargeBatteryInfoBean = new ChargeBatteryInfoBean();
+            chargeBatteryInfoBean.setOpenid(openId);
+            chargeBatteryInfoBean.setDeviceid(deviceId);
+            chargeBatteryInfoBean.setDeviceport(devicePort);
+            chargeBatteryInfoBean.setOperstarttime(new Date());
+            chargeBatteryInfoBean.setChargetime(time);
+            chargeBatteryInfoBean.setOpertype(operType);
+            chargeBatteryInfoBean.setCharge(money);
+            int walletAccountInt = Integer.parseInt(walletAccount);
+            int moneyInt = Integer.parseInt(money);
+            if (operType.equals("M")) {
+                walletAccountInt += moneyInt;
+                chargeBatteryInfoBean.setWalletaccount(walletAccountInt);
+            } else {
+                walletAccountInt -= moneyInt;
+                chargeBatteryInfoBean.setWalletaccount(walletAccountInt);
+            }
+
+            chargeBatteryInfoBean.setStatus("U");
+            chargeBatteryInfoBean.setFeestatus("U");
+            chargeBatteryInfoBean.setCreatedate(new Date());
+            chargeBatteryInfoBean.setAutoCharge("N");
+            if (type.equals("auto")) {
+                chargeBatteryInfoBean.setAutoCharge("Y");
+            }
+
+            String format = (new SimpleDateFormat("yy/MM/dd HH:mm:ss")).format(new Date());
+            String MD5 = EncDecUtils.getMD5(openId + deviceId + format);
+            this.addAndUpdate(openId, MD5, operType, chargeBatteryInfoBean, walletAccountInt);
+        } catch (Exception var15) {
+            log.error("新增充电记录失败", var15);
+            return false;
+        }
+
+        return true;
+    }
+
     private void addAndUpdate(final String openId, final String MD5, final String operType, final ChargeBatteryInfoBean chargeBatteryInfoBean, final int walletAccountInt) {
         Db.tx(new IAtom() {
             public boolean run() throws SQLException {

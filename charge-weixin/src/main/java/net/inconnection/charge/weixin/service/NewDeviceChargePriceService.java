@@ -4,22 +4,19 @@ import com.jfinal.log.Log;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.NewDevice;
+import net.inconnection.charge.weixin.model.NewDeviceChargePrice;
 
-public class NewDeviceService {
-    private static Log logger = Log.getLog(NewDeviceService.class);
+public class NewDeviceChargePriceService {
+    private static Log logger = Log.getLog(NewDeviceChargePriceService.class);
 
-    public HnKejueResponse queryDevice(String qrNum) {
+    public HnKejueResponse queryChargePrice(Long companyId) {
         try {
-            NewDevice device = NewDevice.dao.queryDevice(qrNum);
+            NewDeviceChargePrice device = NewDeviceChargePrice.dao.queryDeviceChargePriceByCompanyId(companyId);
             return new HnKejueResponse(device, RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
         } catch (Exception var3) {
-            logger.error("根据二维码查询设备失败", var3);
+            logger.error("根据公司ID查询价格失败", var3);
             return new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
         }
     }
-
-
-
-
 
 }

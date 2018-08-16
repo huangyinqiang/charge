@@ -87,7 +87,8 @@ public class DeviceControlServiceImpl implements DeviceControlService {
             return null;
         }
 
-        return getSingleResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
+        return 1;
+//        return getSingleResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
     }
 
     //获取响应结果

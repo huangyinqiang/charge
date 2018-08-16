@@ -5,12 +5,18 @@ import com.jfinal.log.Log;
 import net.inconnection.charge.service.DeviceControlService;
 import net.inconnection.charge.service.dubboPlugin.DubboServiceContrain;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
+import net.inconnection.charge.weixin.service.ChargeInfoBatteryService;
+import net.inconnection.charge.weixin.service.NewDeviceChargePriceService;
 import net.inconnection.charge.weixin.service.NewDeviceService;
 
 public class NewDeviceController extends Controller {
     private static DeviceControlService deviceControlService = DubboServiceContrain.getInstance().getService(DeviceControlService.class);
 
     private static final NewDeviceService newDeviceService = new NewDeviceService();
+
+    private static final NewDeviceChargePriceService newDeviceChargePriceService = new NewDeviceChargePriceService();
+
+    private static ChargeInfoBatteryService chargeBatteryService = new ChargeInfoBatteryService();
 
     private static final Log log = Log.getLog(NewDeviceController.class);
 
@@ -28,6 +34,12 @@ public class NewDeviceController extends Controller {
         Long socketSN = Long.parseLong(devicePort);
         Integer chargeTime = Integer.parseInt(time);
         Integer startChargeStatus = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTime, 30*1000L);
+
+        if (null == startChargeStatus){
+            startChargeStatus = 9999;
+        }
+
+        chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, type, money, walletAccount, operType);
 
         renderText(startChargeStatus.toString());
     }
@@ -68,6 +80,17 @@ public class NewDeviceController extends Controller {
         log.info("根据二维码查询设备结束：" + json);
         this.renderJson(json);
 
+    }
+
+
+    public void queryDeviceChargePrice() {
+        String deviceId = this.getPara("deviceId");
+        String companyIdStr = this.getPara("companyId");
+        Long companyId = Long.parseLong(companyIdStr);
+        log.info("查询充电价格开始,companyId=" + this.getPara("companyId"));
+        HnKejueResponse json = newDeviceChargePriceService.queryChargePrice(companyId);
+        log.info("根据内部编号查询设备结束：" + json);
+        this.renderJson(json);
     }
 
 }

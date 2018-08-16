@@ -84,6 +84,7 @@ public class APPConfig extends JFinalConfig {
         arp.addMapping("b_map", BaiDuMap.class);
 
         arp.addMapping("yc_charge_pile", NewDevice.class);
+        arp.addMapping("yc_chargeprice", NewDeviceChargePrice.class);
         arp.setShowSql(true);
         me.add(arp);
         me.add(new EhCachePlugin());

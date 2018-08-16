@@ -97,7 +97,8 @@
                 location.href = "./charging/chooseNewDevicePortAndTime?deviceId="
                     + data.respObj.id + "&area="
                     + encodeURI(encodeURI(data.respObj.province + data.respObj.city + data.respObj.detail_location)) + "&activityId="
-                    + "1"
+                    + "1" + "&companyId="
+                    + data.respObj.company_id
 
             },
             error : function() {
@@ -129,7 +130,7 @@
 		<input type="button" onclick="scanQR1();" value="扫码充电">
         <input type="button" onclick="permissionOnline();" value="允许入网">
         <input type="button" onclick="startMqttCharging();" value="开始充电">
-		<input type="button" onclick="queryNewDevice('3');" value="查询设备">
+		<input type="button" onclick="queryNewDevice('10100000001');" value="查询设备">
 	</div>
 	<div class="foot">
 		<p class="tit">温馨提示</p>

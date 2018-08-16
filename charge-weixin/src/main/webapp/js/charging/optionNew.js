@@ -2,6 +2,7 @@ var walletAccount;// 微信钱包
 var autoPrice;// 智能充电预扣费价格
 var device;// 设备信息
 var deviceId;// 设备编号
+var companyId;// 公司编号
 var activityId;// 活动编号
 var devicePort = 0;// 设备插座
 var area;// 设备地址
@@ -46,10 +47,12 @@ $(function() {
 	var localUrl = window.location.href;
 	deviceId = GetQueryString('deviceId');
 	activityId = GetQueryString('activityId');
+    companyId = GetQueryString('companyId');
 	getDeviceStatus(deviceId);
-	getDeviceInfo(deviceId);
+	getDeviceInfo(deviceId, companyId);
 	getUserInfo();
-	$('.icon-ditu1').text(decodeURI(device.area));
+
+	$('.icon-ditu1').text(decodeURI(GetQueryString('area')));
 });
 // 设置非会员加个
 function selectxftime2() {
@@ -112,13 +115,13 @@ function affirm() {
 }
 // 开始充电按钮
 function startCharging() {
-	if (devicePort == "0") {
+	if (devicePort == null || devicePort == "0") {
 		layer.msg("请选择充电插座!", {
 			shift : 5
 		});
 		return;
 	}
-	if (time == "0" || time == null || time == "") {
+	if (time == null || time == "0" || time == "") {
 		layer.msg("请选择充电时间!", {
 			shift : 5
 		});
@@ -286,13 +289,14 @@ function invokeServerCharging() {
 	});
 }
 // 查询设备价格信息
-function getDeviceInfo(deviceId) {
+function getDeviceInfo(deviceId, companyId) {
 	$.ajax({
 		type : 'GET',
-		url : "../device/queryDeviceInfoByDeviceId",
+		url : "../newDevice/queryDeviceChargePrice",
 		dataType : "json",
 		data : {
-			deviceId : deviceId
+			deviceId : deviceId,
+            companyId : companyId
 		},
 		cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
 		// 从缓存里读取,为false只有ＧＥＴ请求时生效
