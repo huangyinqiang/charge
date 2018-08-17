@@ -330,7 +330,7 @@
                     device = data.respObj;
                     autoPrice = device.auto_price;
                 } else {
-                    layer.msg("设备不存在，请联系客服...", {
+                    layer.msg("未查询到充电价格，请联系客服...", {
                         shift : 5
                     });
                 }
@@ -391,30 +391,25 @@
                 var portStatus = socketStatus[i];
                 // var string="<div class='flex-row'>" +
                 // var string="<div class='flex1 '>" +
-                var string="<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
-                    "onclick='selectPort(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" ;//+
+                // var string="<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
+                //     "onclick='selectChargeSocket(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" ;//+
                     // "</div>" +
                     // "<div class='flex1'>" +
                     // "<a id='7' href='javascript:;' class='rui-btn'" +
-                    // "onclick='selectPort(7,this);'>7</a>" +
+                    // "onclick='selectChargeSocket(7,this);'>7</a>" +
                     // "</div>" +
                     // "</div>";
+                var string="<input type='button' id='" + portStatus.charge_socket_sn + "' class='rui-btn'" +
+                    "onclick='selectChargeSocket(" + portStatus.charge_socket_sn + ",this)'; value='" + portStatus.charge_socket_sn + "'>" ;//+
                 $("#chargeSocketStatus").append(string);
 
-                console.log( i +"     "  +JSON.stringify(socketStatus[i]));
                 if (portStatus.is_used == true ) {
-                    $("#" + socketStatus[i].charge_socket_sn).text("插座" + socketStatus[i].charge_socket_sn + "充电中");
-                    $("#" + socketStatus[i].charge_socket_sn).attr("disable","disable");
+                    $("#" + socketStatus[i].charge_socket_sn).attr("value", "插座" + socketStatus[i].charge_socket_sn + "充电中");
+                    $("#" + socketStatus[i].charge_socket_sn).attr("disabled","disabled");
                 }
 
 			}
 
-            // if(null != socketStatus){
-             //    var portStatus1 = socketStatus[0];
-             //    if (portStatus1.is_used == true ) {
-             //        $("#1").text("插座1充电中");
-			// 	}
-			// }
         } else {
 
         }
@@ -431,9 +426,7 @@
     }
 
 
-    function selectPort(value, ele) {
-        console.log("test selectPort" + value);
-
+    function selectChargeSocket(value, ele) {
         devicePort = value;// 获取选择的插座
         $('.rui-btn').removeClass('rui-btn-outlined');
         $(ele).addClass('rui-btn-outlined')
@@ -447,8 +440,8 @@
 	display: -webkit-flex;
 	display: flex;
 	-webkit-box-orient: horizontal;
-	-webkit-flex-flow: row;
-	flex-flow: row;
+	-webkit-flex-flow: column nowrap;
+	flex-flow: column nowrap;
 }
 
 .flex1 {
@@ -469,6 +462,8 @@
 	font-size: 16px;
 	color: #00a1e9;
 	margin:5px auto;
+    flex: 1;
+
 }
 
 .rui-btn-outlined {
@@ -526,26 +521,26 @@
 				<span >温馨提示：</span><span id="explain">会员充满自动断电，保护电瓶不受损！</span>
 			</div>
 
-			<div class="grid" id="chargeSocketStatus">
+			<div class="flex-row" id="chargeSocketStatus">
 					<!--<div class="flex-row">-->
 						<!--<div class="flex1 ">-->
 							<!--<a id="1" href="javascript:;" class="rui-btn"-->
-								<!--onclick="selectPort(1,this);">1</a>-->
+								<!--onclick="selectChargeSocket(1,this);">1</a>-->
 						<!--</div>-->
 						<!--<div class="flex1 ">-->
 							<!--<a id="7" href="javascript:;" class="rui-btn"-->
-								<!--onclick="selectPort(7,this);">7</a>-->
+								<!--onclick="selectChargeSocket(7,this);">7</a>-->
 						<!--</div>-->
 					<!--</div>-->
 	<!---->
 					<!--<div class="flex-row">-->
 						<!--<div class="flex1 ">-->
 							<!--<a id="2" href="javascript:;" class="rui-btn"-->
-								<!--onclick="selectPort(2,this);">2</a>-->
+								<!--onclick="selectChargeSocket(2,this);">2</a>-->
 						<!--</div>-->
 						<!--<div class="flex1 ">-->
 							<!--<a id="8" href="javascript:;" class="rui-btn"-->
-								<!--onclick="selectPort(8,this);">8</a>-->
+								<!--onclick="selectChargeSocket(8,this);">8</a>-->
 						<!--</div>-->
 					<!--</div>-->
 
