@@ -4,6 +4,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.service.ChargeMoneyService;
+import net.inconnection.charge.weixin.service.CompanyActivityService;
 import net.inconnection.charge.weixin.service.MoneyMatchActivityService;
 
 import java.io.UnsupportedEncodingException;
@@ -13,6 +14,8 @@ public class RechargeController extends Controller {
     private static Log log = Log.getLog(RechargeController.class);
     private static MoneyMatchActivityService activityService = new MoneyMatchActivityService();
     private static ChargeMoneyService chargeMoneyService = new ChargeMoneyService();
+
+    private static CompanyActivityService companyActivityService = new CompanyActivityService();
 
     public RechargeController() {
     }
@@ -46,10 +49,28 @@ public class RechargeController extends Controller {
         this.render("recharge/recharge.html");
     }
 
+    public void rechargeNew(){
+        this.setAttr("companyId", this.getPara("companyId"));
+
+
+        log.info("跳转到新充值界面,companyId=" + this.getPara("companyId") );
+        this.render("recharge/rechargeNew.html");
+
+    }
+
+
     public void queryActivityInfo() {
         String activityId = this.getPara("activityId");
         log.info("根据充值类型和优惠编号查询详情开始,activityId=" + this.getPara("activityId"));
         HnKejueResponse response = activityService.queryActivityByType(activityId);
+        log.info("查询优惠信息结束：" + response);
+        this.renderJson(response);
+    }
+
+    public void queryActivityInfoByCompanyId() {
+        String companyId = this.getPara("companyId");
+        log.info("根据充值类型和优惠编号查询详情开始,activityId=" + this.getPara("activityId"));
+        HnKejueResponse response = companyActivityService.queryActivityByCompanyId(companyId);
         log.info("查询优惠信息结束：" + response);
         this.renderJson(response);
     }

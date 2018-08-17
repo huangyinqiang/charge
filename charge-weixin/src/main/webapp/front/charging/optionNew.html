@@ -33,12 +33,12 @@
     var selectedHour;// 传值用
     var openId;
     $(function() {
-        var $iosDialog2 = $('#iosDialog2');
+        var $iosDialog2 = $('#chargeTimeDialog');
         $('.weui-dialog').on('click', '.weui-flex__item', function() {
             $('.weui-flex__item').children().removeClass('active');
-            $(this).children().addClass('active').attr('data-date');
+            $(this).children().addClass('active').attr('chargeTimeMin');
             selectedHour = $(this).children().html();// 充电几小时
-            $('#selectedTime').val($(this).children().attr('data-date'));
+            $('#selectedTime').val($(this).children().attr('chargeTimeMin'));
 
         })
         $('#dialogs').on('click', '.weui-dialog__btn', function() {
@@ -49,7 +49,7 @@
             $('.js_dialog').css('display', 'none')
         })
         // 选择充电时间
-        $('#showIOSDialog2').on('click', function() {
+        $('#showChargeTimeSelcetDialog').on('click', function() {
             $iosDialog2.fadeIn(200);
         });
         // 选择充电插座
@@ -72,32 +72,31 @@
 
         $('.icon-ditu1').text(decodeURI(GetQueryString('area')));
     });
-    // 设置非会员加个
-    function selectxftime2() {
+    // 设置非会员价格
+    function selectCharge2Hours() {
         money = parseInt(device.tow_hours_price);// 非会员价格
     }
-    function selectxftime4() {
+    function selectCharge4Hours() {
         money = parseInt(device.four_hours_price);// 非会员价格
     }
-    function selectxftime8() {
+    function selectCharge8Hours() {
         money = parseInt(device.eight_hours_price);// 非会员价格
     }
-    function selectxftime12() {
-        money = parseInt(device.four_hours_price);// 非会员价格
+    function selectCharge12Hours() {
+        money = parseInt(device.twelve_hours_price);// 非会员价格
     }
-    function selectxftimeauto() {
+    function selectChargeAuto() {
         money = parseInt(device.twelve_hours_price);// 非会员价格
     }
 
     // 确定充电时间和充电端口按钮
-    function affirm() {
-        $("#showIOSDialog2").html(selectedHour);
+    function chargeTimeConfirm() {
+        $("#showChargeTimeSelcetDialog").html(selectedHour);
         time = $('#selectedTime').val();
         if (time == "" || time == null) {
             layer.msg("请选择充电时间!", {
                 shift : 5
             });
-            return;
         }
         // 会员(选择智能充电)
         if (walletAccount >= autoPrice && time == 800) {
@@ -106,12 +105,12 @@
         }
         // 钱包小于价格,认定为非会员(选择智能充电)
         if (walletAccount < money && time == 800) {
-            reCharge();// 直接提示充值钱包
+            rechargeMoneyToWallet();// 直接提示充值钱包
             return;
         }
         // 会员,但钱包小于5块(选择智能充电)
         if (autoPrice > walletAccount && time == 800) {
-            reCharge();// 直接提示充值钱吧
+            rechargeMoneyToWallet();// 直接提示充值钱吧
             return;
         }
         // 会员(未选择智能充电)
@@ -139,6 +138,7 @@
                 shift : 5
             });
 
+            $('#chargeTimeDialog').fadeIn(200);
             return;
         }
         if (devicePort == null || devicePort == "0") {
@@ -156,9 +156,9 @@
             memCharge();
             return;
         }
-        // 会员,但钱包小于5块(选择智能充电)
+        // 会员,但钱包余额不足智能充电单价(选择智能充电)
         if (autoPrice > walletAccount && time == 800) {
-            reCharge();// 充值钱包
+            rechargeMoneyToWallet();// 充值钱包
             return;
         }
         // 会员(未选择智能充电)
@@ -169,13 +169,13 @@
             memCharge();
             return;
         }
-        // 小于1元,认定为非会员 (未选择智能充电)
+        // 钱包余额不够支付本次费用,认定为非会员 (未选择智能充电)
         if (walletAccount < money) {
             chargeOrPay();// 充值钱包或者单次支付
             return;
         }
-        // 会员,但钱包小于5块，只能充电2小时(未选择智能充电)
-        if (autoPrice > walletAccount) {
+        // 会员,钱包余额小于智能充电单价，只能充电2小时(未选择智能充电)
+        if (walletAccount < autoPrice) {
             chargeTwoHoursOrPay();
             return;
         }
@@ -183,7 +183,7 @@
     }
     // 会员充电提示
     function memCharge() {
-        layer.confirm('请确认' + devicePort + '插座，充电' + time + '分钟；点击"确认" 后开始充电', {
+        layer.confirm('请确认' + devicePort + '插座，充电' + time + '分钟；充电费用' + money/100 + '元；点击"确认" 后开始充电', {
             btn : [ '确定', '取消' ]
         }, function() {
             requestNewDeviceStartCharge();
@@ -194,15 +194,14 @@
     // 充值钱包或者单次支付
     function chargeOrPay() {
         layer.confirm('请确认' + devicePort + '插座，充电' + time
-            + '分钟；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！', {
+            + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！', {
             btn : [ '临时支付', '充值' ]
         }, function() {
             // 单次支付
-            wxpay(money);
+            temporaryRechargeMoney(money);
         }, function() {
             // 跳转到充值页面
-            location.href = "../recharge/recharge?deviceId=" + deviceId
-                + "&activityId=" + activityId + "&area=" + encodeURI(area)
+            location.href = "../recharge/rechargeNew?companyId=" + companyId
         });
     }
     // 充值钱包或者扣1块充电两小时
@@ -217,24 +216,23 @@
             time = 120;
             requestNewDeviceStartCharge();
         }, function() {
-            location.href = "../recharge/recharge?deviceId=" + deviceId
-                + "&activityId=" + activityId + "&area=" + encodeURI(area)
+            location.href = "../recharge/rechargeNew?companyId=" + companyId
         });
     }
     // 充值钱包
-    function reCharge() {
+    function rechargeMoneyToWallet() {
         layer.confirm('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
             btn : [ '取消', '确认' ]
         }, function() {
         }, function() {
             // 跳转到充值页面
-            location.href = "../recharge/recharge?deviceId=" + deviceId
-                + "&activityId=" + activityId + "&area=" + encodeURI(area)
+            location.href = "../recharge/rechargeNew?companyId=" + companyId
         });
     }
     /* 微信支付 */
-    function wxpay(money) {
+    function temporaryRechargeMoney(money) {
         $.post("../pay", {
+            openId : openId,
             total_fee : LeadBase.encrypts(money.toString()),
         }, function(res) {
             if (res.code == 0) {
@@ -278,7 +276,7 @@
         });
     }
 	
-    // 调用服务器充电
+    // 打开设备开始充电
     function requestNewDeviceStartCharge() {
         $.ajax({
             type : 'POST',
@@ -508,7 +506,7 @@
 					<div class="weui-cell__bd">
 						<p>充电时间</p>
 					</div>
-					<div class="weui-cell__ft" id="showIOSDialog2">请选择充电时间</div>
+					<div class="weui-cell__ft" id="showChargeTimeSelcetDialog">请选择充电时间</div>
 				</a>
 				<a class="weui-cell weui-cell_access" href="javascript:;">
 					<div class="weui-cell__bd">
@@ -553,7 +551,7 @@
 		</div>
 	</div>
 	<div id="dialogs">
-		<div class="js_dialog" id="iosDialog2" style="display: none;">
+		<div class="js_dialog" id="chargeTimeDialog" style="display: none;">
 			<div class="weui-mask"></div>
 			<div class="weui-dialog">
 			<div class="weui-flex close-box">
@@ -562,34 +560,34 @@
 				<div class="weui-dialog__bd">
 					<div class="weui-flex inline-btn">
 						<div class="weui-flex__item text-left">
-							<a href="javascript:;" onclick="selectxftime2()" data-date='120'
+							<a href="javascript:;" onclick="selectCharge2Hours()" chargeTimeMin='120'
 								class="weui-btn weui-btn_plain-primary">2小时</a>
 						</div>
 						<div class="weui-flex__item text-right">
-							<a href="javascript:;" onclick="selectxftime4()" data-date='240'
+							<a href="javascript:;" onclick="selectCharge4Hours()" chargeTimeMin='240'
 								class="weui-btn weui-btn_plain-primary">4小时</a>
 						</div>
 					</div>
 					<div class="weui-flex inline-btn">
 						<div class="weui-flex__item text-left">
-							<a href="javascript:;" onclick="selectxftime8()" data-date='480'
+							<a href="javascript:;" onclick="selectCharge8Hours()" chargeTimeMin='480'
 								class="weui-btn weui-btn_plain-primary">8小时</a>
 						</div>
 						<div class="weui-flex__item text-right">
-							<a href="javascript:;" onclick="selectxftime12()" data-date='720'
+							<a href="javascript:;" onclick="selectCharge12Hours()" chargeTimeMin='720'
 								class="weui-btn weui-btn_plain-primary">12小时</a>
 						</div>
 					</div>
 					<div class="weui-flex">
 						<div class="weui-flex__item">
-							<a href="javascript:;" onclick="selectxftimeauto()"
-								data-date='800' class="weui-btn weui-btn_plain-primary">智能充电</a>
+							<a href="javascript:;" onclick="selectChargeAuto()"
+								chargeTimeMin='800' class="weui-btn weui-btn_plain-primary">智能充电</a>
 						</div>
 
 					</div>
 					<div class="weui-flex">
 						<div class="weui-flex__item2">
-							<a href="javascript:;" onclick='affirm()'
+							<a href="javascript:;" onclick='chargeTimeConfirm()'
 								class="weui-btn weui-btn_plain-primary weui-dialog__btn">确定</a>
 						</div>
 
@@ -601,5 +599,4 @@
 	</div>
 </body>
 <script src="../js/common/zepto.min.js"></script>
-<script src="../js/common/weui.min.js"></script>
-</html>
+<script src="../js

@@ -86,6 +86,8 @@ public class APPConfig extends JFinalConfig {
         arp.addMapping("yc_charge_pile", NewDevice.class);
         arp.addMapping("yc_chargeprice", NewDeviceChargePrice.class);
         arp.addMapping("yc_charge_socket", NewDeviceChargeSocket.class);
+        arp.addMapping("yc_company_activity", CompanyActivity.class);
+
         arp.setShowSql(true);
         me.add(arp);
         me.add(new EhCachePlugin());

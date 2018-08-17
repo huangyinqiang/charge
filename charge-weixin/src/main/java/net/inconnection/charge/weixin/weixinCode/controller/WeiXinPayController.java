@@ -52,7 +52,8 @@ public class WeiXinPayController extends ApiController
     public void index() {
         AjaxResult ajaxResult = new AjaxResult();
 
-        String openId = (String)getSessionAttr("openId");
+//        String openId = (String)getSessionAttr("openId");
+        String openId = (String)getPara("openId");
         log.info("开始第一次调用微信支付,openId:" + openId);
         if (StrKit.isBlank(openId)) {
             log.error("openId为空，支付失败");

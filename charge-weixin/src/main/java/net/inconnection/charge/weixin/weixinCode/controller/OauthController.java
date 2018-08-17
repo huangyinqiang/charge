@@ -36,9 +36,6 @@ public class OauthController extends ApiController
 
     public void index() throws Exception {
 
-
-        System.out.println("dddddddddddddddddddddddddd");
-
         int subscribe = 0;
 
         String code = getPara("code");

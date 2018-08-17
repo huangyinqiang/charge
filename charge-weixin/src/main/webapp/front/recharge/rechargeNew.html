@@ -88,36 +88,29 @@
 <script src="../js/common/layer/layer.js"></script>
 <!--<script src="../js/recharge/recharge.js"></script>-->
 <script type="text/javascript" >
-    var activityId;// 优惠ID
+	var companyId;//公司ID
     var activityInfo;// 优惠信息
     var walletAccount;// 微信钱包
     var userInfo;// 用户信息
-    var device;// 设备信息
-    var deviceId;// 设备编号
     var type = null;// 充值类型 CH电卡，WA钱包
     var money = null;// 本次充值金额
     var chargeNum = null;// 活动充值金额（分）或者次数
     var coupon = null;// 活动赠送金额（分）或者次
-    var selectedHour;// 传值用
+    var selectedRechargeMoney;// 传值用
 
     $(function() {
         // 获取URL中的设备编号，地址
         var localUrl = window.location.href;
-        deviceId = GetQueryString('deviceId');
-        activityId = GetQueryString('activityId');
+        companyId = GetQueryString('companyId');
         type = 'WA';//充值类型
 
-        // 查询设备信息
-        getDeviceInfo(deviceId);
-        $('.icon-ditu1').text(decodeURI(device.area));
-        // 查询用户信息
         getUserInfo();
         // 设置钱包余额
         $('#walletAccount').text(walletAccount / 100);
         // "充值选项"事件
         $(":radio").click(function () {
             $("#explain").text("充值成为会员，享受更多优惠！");// 选择事件变化，重新赋值
-            selectedHour = '请选择充值金额！'// 选择事件变化，重新赋值
+            selectedRechargeMoney = '请选择充值金额！'// 选择事件变化，重新赋值
             money = null;// 选择事件变化，重新赋值
         });
         getActivityInfo();// 查询活动信息
@@ -142,7 +135,7 @@
                         break;
                     }
                 }
-                selectedHour = $(this).children().html();// 充值金额
+                selectedRechargeMoney = $(this).children().html();// 充值金额
                 $('#selectedMoney').val($(this).children().attr('data-date'));
             })
         });
@@ -198,7 +191,7 @@
         /* 微信支付 */
         function wxpay(money) {
             $.post("../pay", {
-                openId : openId,
+                openId : localStorage.getItem("openId"),
                 total_fee: LeadBase.encrypts(money.toString()),
             }, function (res) {
                 if (res.code == 0) {
@@ -242,29 +235,6 @@
             });
         }
 
-// 查询设备价格信息
-        function getDeviceInfo(deviceId) {
-            $.ajax({
-                type: 'POST',
-                url: "../device/queryDeviceInfoByDeviceId",
-                dataType: "json",
-                data: {
-                    deviceId: deviceId
-                },
-                cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
-                // 从缓存里读取,为false只有ＧＥＴ请求生效
-                async: false,// 设置同步方式，false为同步
-                success: function (data) {
-                    if (data.respObj != null && data.respCode == "000000") {
-                        device = data.respObj;
-                    } else {
-                        layer.msg("设备不存在，请稍等片刻或更换其他设备...", {
-                            shift: 5
-                        });
-                    }
-                }
-            });
-        }
 
 // 查询用户信息
         function getUserInfo() {
@@ -292,10 +262,10 @@
         function getActivityInfo() {
             $.ajax({
                 type: 'POST',
-                url: "../recharge/queryActivityInfo",
+                url: "../recharge/queryActivityInfoByCompanyId",
                 dataType: "json",
                 data: {
-                    activityId: device.activity_id
+                    companyId: companyId
                 },
                 cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
                 async: false,// 设置同步方式，false为同步
@@ -362,11 +332,6 @@
 	<input type="hidden" id="selectedMoney">
 	<div class="container">
 		<div class="page__bd">
-			<!--<div class="weui-cells__title">-->
-				<!--<div class="pull-left">-->
-					<!--<i class="iconfont icon-ditu1"></i>-->
-				<!--</div>-->
-			<!--</div>-->
 			<div class="weui-cells">
 				<div class="weui-cell weui-cell_access">
 					<div class="weui-cell__bd">
@@ -400,35 +365,6 @@
 			</div>
 
 			<div class="money-content">
-				<div id="elecardType" class=" elecard-wallte weui-dialog__bd">
-					<div class="weui-flex inline-btn">
-						<div class="weui-flex__item text-left">
-							<a href="javascript:;" data-date='1001'
-								class="weui-btn weui-btn_plain-primary"></a>
-						</div>
-						<div class="weui-flex__item text-right">
-							<a href="javascript:;" data-date='1002'
-								class="weui-btn weui-btn_plain-primary"></a>
-						</div>
-					</div>
-					<div class="weui-flex inline-btn">
-						<div class="weui-flex__item text-left">
-							<a href="javascript:;" data-date='1003'
-								class="weui-btn weui-btn_plain-primary"></a>
-						</div>
-						<div class="weui-flex__item text-right">
-							<a href="javascript:;" data-date='1005'
-								class="weui-btn weui-btn_plain-primary"></a>
-						</div>
-					</div>
-					<div class="weui-flex">
-						<div class="weui-flex__item">
-							<a href="javascript:;" data-date='1006'
-								class="weui-btn weui-btn_plain-primary"></a>
-						</div>
-
-					</div>
-				</div>
 				<div id="walletType" class="elecard-wallte weui-dialog__bd">
 					<div class="weui-flex inline-btn">
 						<div class="weui-flex__item text-left">
