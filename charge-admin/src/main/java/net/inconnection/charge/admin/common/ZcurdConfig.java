@@ -70,7 +70,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/newDevice", NewDeviceController.class, "/busi/newDevice");
 		me.add("/updatedevice", DeviceUpdateController.class, "/busi/updatedevice");
 		me.add("/company", CompanyController.class, "/busi/company");
-
+		me.add("/pileDevice/record", PileRecordController.class, "/busi/pileDevice");
 	}
 	
 	/**

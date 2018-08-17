@@ -64,7 +64,6 @@ public class IndexController extends Controller {
         log.info("跳转到oauth授权页面");
         String calbackUrl = PropKit.get("domain") + "/oauth";
         String url = SnsAccessTokenApi.getAuthorizeURL(PropKit.get("appId"), calbackUrl, "111", false);
-        log.info("授权页面URL: " + url);
         this.redirect(url);
     }
 

@@ -3,8 +3,11 @@ user=root
 password=123456
 devMode=false
 
+
 #微信服务器回调所用的 token
-token=cjkall
+token=F0932398023
+
+
 
 #公众号
 WeChat=i易充
@@ -13,9 +16,11 @@ Company=西安云创易联信息科技有限公司
 TEL=029-68886789
 qrCode=http://weixin.qq.com/r/4i_AmAjEdFULrUz793rw
 
+
 #测试用的账号
-appId=wx6a2bb19e561f4d40
-appSecret=c25f7684dd8621b3bea94f01e3a67177
+appId=wxf4dc81e9dcb6180d
+appSecret=97d166a2f404b74b3654601193ab7b1e
+
 
 #是否对消息进行加密，是否对消息进行加密，对应于微信平台的消息加解密方式，false支持明文模式及兼容模式，true支持安全模式及兼容模式
 encryptMessage=false
@@ -37,7 +42,7 @@ deviceStatusUrl=http://charge.inconnection.net:8080/ChargeManager/socketServerCo
 
 
 #授权域名
-domain=http://charge.inconnection.net/weixin
+domain=https://109db54.nat123.cc
 subscribe_rul=http://www.henankejue.com/
 
 #RAS加密私钥
