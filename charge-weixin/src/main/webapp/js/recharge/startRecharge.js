@@ -29,13 +29,13 @@ $(function() {
 // function scanQR() {
 // 	wx.scanQRCode({
 // 		needResult : 1,// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
-// 		desc : 'scanQRCode desc',
-// 		success : function(res) {
-// 			// 扫码后获取结果参数赋值给Input
-// 			queryDevice(res.resultStr);
-// 		}
-// 	});
-// }
+// // 		desc : 'scanQRCode desc',
+// // 		success : function(res) {
+// // 			// 扫码后获取结果参数赋值给Input
+// // 			queryDevice(res.resultStr);
+// // 		}
+// // 	});
+// // }
 
 function scanQR() {
 
