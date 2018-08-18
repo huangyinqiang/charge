@@ -1,0 +1,243 @@
+
+<#include "/common/head.html"/>
+    
+    <table id="dg"></table>
+<script type="text/javascript">
+var datagrid = $("#dg");
+var dgOptions = {
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'socketlistData?pile_id=${pile_id!}',
+    	method:'post',
+    	toolbar:'#tb',
+    	singleSelect: true,
+    	pageSize: 50,
+    	pagination:true,
+    	multiSort:true,
+        queryParams: getInitParam(),
+        
+        columns: [[
+		     /*    {field:'id', checkbox:true},
+*/
+            {
+                field : 'charge_pile_id',
+                title : '充电桩',
+                width : 120
+            },
+
+            {
+                field : 'charge_socket_sn',
+                title : 'sn',
+                width : 60
+            },
+            {
+                field : 'is_used',
+                title : '是否占用',
+                width : 60,
+                formatter : function(value, row, index) {
+                    if (value == '1') {
+                        return "<span style='color:green;font-size:20px;'>空闲</span>";
+                    } else  {
+                        return "<span style='color:red;font-size:20px;'>占用</span>";
+                    }
+                }
+            },
+            {
+                field : 'start_power',
+                title : '开始电压',
+                width : 60
+            },
+            {
+                field : 'charge_power',
+                title : '充电电压',
+                width : 60
+            },
+            {
+                field : 'charge_intensity',
+                title : '充电电流',
+                width : 60,
+            },
+            {
+                field : 'charge_state',
+                title : '充电状态',
+                width : 60,
+                formatter : function(value, row, index) {
+                    if (value == '1') {
+                        return "<span style='color:green;font-size:20px;'>充电中</span>";
+                    } else  {
+                        return "<span style='color:red;font-size:20px;'>结束</span>";
+                    }
+                }
+            },
+            {
+                field : 'charge_time',
+                title : '充电时长',
+                width : 60,
+            },
+            {
+                field : 'update_time',
+                title : '更新时间',
+                width : 120,
+            },
+
+	           ]]
+	};
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+});
+
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param[$(item).attr("name")] = $(item).val();	
+		}
+	});
+	return param;
+}
+
+function getInitParam() {
+	var param = {};
+    param["pile_id "] = "${pile_id!''}";
+/*	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+        param["queryParams[pile_id ]"] = "${pile_id!''}";
+    });*/
+	return param;
+}
+
+var initPara = zcurdGetParam();
+
+function socketList() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要所属充电桩！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    var name = rowsSel[0].name;
+    top.window.subPage.loadCurrDatagrid = function() {
+        showMsg("更新成功");
+        datagrid.datagrid("reload");
+    }
+    top.openWindow("查看充电插座", getCurrUrl("socketListPage") + "?id=" + id+ "&name=" + name, {size: '1000x800'});
+}
+
+
+
+
+
+function add() {
+    top.window.subPage.loadCurrDatagrid = function() {
+        showMsg("增加成功");
+        datagrid.datagrid("load");
+    }
+    top.openWindow("微信充值-增加", getCurrUrl("addPage") + "?" + $.param(initPara), {size: '600x400'});
+}
+
+
+
+
+function update() {
+	var rowsSel = datagrid.datagrid("getSelections");
+	if(rowsSel.length != 1) {
+		showWarnMsg("请选择要编辑数据！");
+		return;
+	}
+	var id = rowsSel[0].id;
+	top.window.subPage.loadCurrDatagrid = function() {
+		showMsg("更新成功");
+		datagrid.datagrid("reload");
+	}
+	top.openWindow("公司-编辑", getCurrUrl("updatePage") + "?id=" + id, {size: '600x400'});
+}
+
+function del() {
+	var ids = [];
+	$.each(datagrid.datagrid("getSelections"), function(i, item) {
+		ids.push(item.id);
+	});
+	if(ids.length < 1) {
+		showWarnMsg("请选择要删除的数据");
+		return;
+	}
+	confirmMsg("确认删除", function() {
+		$.post("delete", {id: ids}, function(data) {
+			showMsg("删除成功");
+			datagrid.datagrid("reload");
+		});
+	});
+}
+
+function updatePrice() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要所属运营商！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    var company_name = rowsSel[0].company_name;
+    top.window.subPage.loadCurrDatagrid = function() {
+        showMsg("更新成功");
+        datagrid.datagrid("reload");
+    }
+    top.openWindow("价格-编辑", getCurrUrl("updatePricePage") + "?id=" + id+ "&company_name=" + company_name, {size: '600x400'});
+}
+
+
+
+
+
+function detail() {
+	var rowsSel = datagrid.datagrid("getSelections");
+	if(rowsSel.length != 1) {
+		showWarnMsg("请选择要查看的数据！");
+		return;
+	}
+	var id = rowsSel[0].id;
+	top.openWindow("微信充值-详情", getCurrUrl("detailPage") + "?id=" + id, {size: '600x400'});
+}
+
+function exportCsv() {
+	var option = datagrid.datagrid("options");
+	var param = option.queryParams;
+	param.sortName = option.sortName;
+	param.sortOrder = option.sortOrder;
+	window.location.href = "exportCsv?" + $.param(param);
+}
+
+//按钮事件
+
+/**
+ * 打开子页
+ */
+var _openSubPageFlag = false;
+function _openSubPage(pageUrl) {
+	if(!_openSubPageFlag) {
+		$("#subLayout").layout("expand", "east");
+		setTimeout(function() {
+			$("#subIframe").attr("src", pageUrl);
+		}, 600);
+		_openSubPageFlag = true;
+	}else {
+		$("#subIframe").attr("src", pageUrl);
+	}
+}
+
+//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/>
+<#include "/common/foot.html"/>
