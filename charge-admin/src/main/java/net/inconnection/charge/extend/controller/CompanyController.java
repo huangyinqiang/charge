@@ -221,10 +221,39 @@ public class CompanyController extends BaseController{
     }
 
 
+    //充值历史记录
+    public void chargeListPage() {
+        Long company_id = getParaToLong("id");
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+company_id);
+        Integer money_total=0;
+        for (Record record:list){
+            record.set("company_name",getPara("company_name"));
+            Integer money_sum = record.get("money_sum");
+            if (money_sum!=null){
+                money_total+=money_sum;
+            }
+        }
+        setAttr("money_total",money_total);
+        setAttr("company_id",company_id);
+        setAttr("company_name",getPara("company_name"));
+        render("chargeList.html");
+    }
 
-
-
-
+    //充值历史记录数据
+    public void chargelistData() {
+        Long company_id = getParaToLong("company_id");
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+company_id);
+        Integer money_total=0;
+        for (Record record:list){
+            record.set("company_name",getPara("company_name"));
+            Integer money_sum = record.get("money_sum");
+            if (money_sum!=null){
+                money_total+=money_sum;
+            }
+        }
+        setAttr("money_total",money_total);
+        this.renderDatagrid(list, list.size());
+    }
 
 
 

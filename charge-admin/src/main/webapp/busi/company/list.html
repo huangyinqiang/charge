@@ -63,6 +63,7 @@
             <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="updatePrice()">费用</a>
 
             <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="updateCoupon()">活动</a>
+            <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="chargeList()">充值历史</a>
 
             <div id="searchBtnWrap" style="float:right; padding-right:40px;">
                 <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
@@ -214,6 +215,22 @@ function updateCoupon() {
         datagrid.datagrid("reload");
     }*/
     top.openWindow("活动-编辑", getCurrUrl("updateCouponPage") + "?id=" + id+ "&company_name=" + company_name, {size: '600x400'});
+}
+
+
+function chargeList() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要所属运营商！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    var company_name = rowsSel[0].company_name;
+    /*    top.window.subPage.loadCurrDatagrid = function() {
+            showMsg("更新成功");
+            datagrid.datagrid("reload");
+        }*/
+    top.openWindow("活动-编辑", getCurrUrl("chargeListPage") + "?id=" + id+ "&company_name=" + company_name, {size: '600x400'});
 }
 
 
