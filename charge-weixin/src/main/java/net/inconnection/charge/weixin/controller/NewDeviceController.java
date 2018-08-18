@@ -52,9 +52,12 @@ public class NewDeviceController extends Controller {
         log.info("断电开始 openId=" + openId + ",id=" + id + ",channeNum=" + channeNum + ",deviceId=" + deviceId);
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(channeNum);
-        Integer startChargeStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, 30*1000L);
+        Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, 30*1000L);
 
-        renderText(startChargeStatus.toString());
+        if (null == powerOffStatus){
+            powerOffStatus = 9999;
+        }
+        renderText(powerOffStatus.toString());
 
     }
 

@@ -54,9 +54,16 @@ public class ChargeBatteryInfo extends Model<ChargeBatteryInfo> {
         return page;
     }
 
+//    public List<ChargeBatteryInfo> queryPowerOff(String openId) {
+//        log.info("查询14小时内可以远程断电的端口,openId:" + openId);
+//        List<ChargeBatteryInfo> resp = dao.find("SELECT  DISTINCT cb.id, cb.openId, cb.operStartTime, cb.chargeTime, cb.deviceId, cb.devicePort, cb.operType, dev.area FROM charge_battery_info cb LEFT JOIN qr_match_device dev ON cb.deviceId = dev.match_num WHERE cb.feeStatus = 'S' AND cb.status = 'S' AND cb.operStartTime >= NOW() - INTERVAL 14 HOUR and cb.openId=? GROUP BY cb.deviceId,cb.devicePort", new Object[]{openId});
+//        log.info("查询14小时内可以远程断电的端口结果" + resp);
+//        return resp;
+//    }
+
     public List<ChargeBatteryInfo> queryPowerOff(String openId) {
         log.info("查询14小时内可以远程断电的端口,openId:" + openId);
-        List<ChargeBatteryInfo> resp = dao.find("SELECT  DISTINCT cb.id, cb.openId, cb.operStartTime, cb.chargeTime, cb.deviceId, cb.devicePort, cb.operType, dev.area FROM charge_battery_info cb LEFT JOIN qr_match_device dev ON cb.deviceId = dev.match_num WHERE cb.feeStatus = 'S' AND cb.status = 'S' AND cb.operStartTime >= NOW() - INTERVAL 14 HOUR and cb.openId=? GROUP BY cb.deviceId,cb.devicePort", new Object[]{openId});
+        List<ChargeBatteryInfo> resp = dao.find("select * from charge_battery_info where openId=? ", new Object[]{openId});
         log.info("查询14小时内可以远程断电的端口结果" + resp);
         return resp;
     }

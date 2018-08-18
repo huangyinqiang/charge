@@ -64,8 +64,43 @@
 		}, function() {
 			layer.msg('已取消');
 		}, function() {
-			poweroff();
+
+            var deviceId = $("#deviceId").val();
+		    if (deviceId.length == 11 | deviceId.length == 12) {
+                poweroffNewDevice();
+			}else {
+                poweroff();
+			}
 		});
+	}
+
+    function poweroffNewDevice() {
+        var id = $("#id").val();
+        var deviceId = $("#deviceId").val();
+        var devicePort = $("#devicePort").text();
+        $.ajax({
+            type : 'POST',
+            url : "../newDevice/powerOff",
+            dataType : "json",
+            data : {
+                openId : localStorage.getItem("openId"),
+                id : id,
+                deviceId : deviceId,
+                channeNum : devicePort
+            },
+            async : false,
+            success : function(data) {
+                if (data.respCode == "1") {
+                    layer.msg("远程断电成功...", {
+                        shift : 5
+                    });
+                } else {
+                    layer.msg("远程断电失败...", {
+                        shift : 5
+                    });
+                }
+            }
+        });
 	}
 
 	function poweroff() {
