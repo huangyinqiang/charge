@@ -12,6 +12,7 @@ import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.bean.resp.PageResponse;
 import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.ChargeMoneyInfo;
+import net.inconnection.charge.weixin.model.RechargeHistory;
 import net.inconnection.charge.weixin.model.TUser;
 import net.inconnection.charge.weixin.utils.EncDecUtils;
 import net.inconnection.charge.weixin.utils.HttpUrlConnectionUtil;
@@ -30,7 +31,7 @@ public class ChargeMoneyService {
     public ChargeMoneyService() {
     }
 
-    public HnKejueResponse addRechargInfo(String openId, String deviceId, String chargeType, String walletAccount, String money, String chargeNum, String coupon, String cardNumber) {
+    public HnKejueResponse addRechargInfo(String openId, String deviceId, String chargeType, String walletAccount, String money, String chargeNum, String coupon, String cardNumber, String walletRealMoney, String walletGiftMoney, String companyId) {
         try {
             if (StringUtils.isBlank(openId)) {
                 log.error("openId不能为空");
@@ -64,12 +65,17 @@ public class ChargeMoneyService {
 
             if (StringUtils.isBlank(walletAccount)) {
                 log.error("钱包剩余金额不能为空");
-                return new HnKejueResponse("入帐赠送金额不能为空", RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
+                return new HnKejueResponse("钱包剩余金额不能为空", RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
             }
 
             if (chargeType.equals("CH") && StringUtils.isBlank(cardNumber)) {
                 log.error("电卡号不能为空");
                 return new HnKejueResponse("电卡号不能为空", RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
+            }
+
+            if (StringUtils.isBlank(companyId)){
+                log.error("代理商公司ID不能为空");
+                return new HnKejueResponse("代理商公司ID不能为空", RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
             }
 
             ChargeMoneyInfoBean chargeMoneyInfoBean = new ChargeMoneyInfoBean();
@@ -78,7 +84,7 @@ public class ChargeMoneyService {
             chargeMoneyInfoBean.setMoney(Integer.parseInt(money));
             chargeMoneyInfoBean.setChargetype(chargeType);
             chargeMoneyInfoBean.setCreatetime(new Date());
-            this.addAndUpdate(openId, deviceId, chargeType, walletAccount, chargeNum, coupon, chargeMoneyInfoBean, cardNumber);
+            this.addAndUpdate(openId, deviceId, chargeType, walletAccount, chargeNum, coupon, chargeMoneyInfoBean, cardNumber, walletRealMoney, walletGiftMoney, companyId);
         } catch (Exception var10) {
             log.error("新增充值记录失败" + var10);
             return new HnKejueResponse(false, RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
@@ -87,7 +93,7 @@ public class ChargeMoneyService {
         return new HnKejueResponse(true, RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
     }
 
-    private void addAndUpdate(final String openId, final String deviceId, final String chargeType, final String walletAccount, final String chargeNum, final String coupon, final ChargeMoneyInfoBean chargeMoneyInfoBean, final String cardNumber) {
+    private void addAndUpdate(final String openId, final String deviceId, final String chargeType, final String walletAccount, final String chargeNum, final String coupon, final ChargeMoneyInfoBean chargeMoneyInfoBean, final String cardNumber, final String walletRealMoney, final String walletGiftMoney, final String companyId) {
         Db.tx(new IAtom() {
             public boolean run() throws SQLException {
                 String format = (new SimpleDateFormat("yy/MM/dd HH:mm:ss")).format(new Date());
@@ -106,23 +112,25 @@ public class ChargeMoneyService {
                     chargeMoneyInfoBean.setCardAmount(0);
                     Integer account = Integer.valueOf(walletAccount);
                     Integer total = totalMoney + account;
-                    TUser.dao.updateWalletAccount(total,chargeMoney,couponMoney, openId);
+
+                    Integer walletRealMoneyInt = 0;
+                    if (!StringUtils.isBlank(walletRealMoney)){
+                        walletRealMoneyInt = Integer.parseInt(walletRealMoney);
+                    }else {
+                        walletRealMoneyInt = account;
+                    }
+
+                    Integer walletGiftMoneyInt = 0;
+                    if (!StringUtils.isBlank(walletGiftMoney)){
+                        walletGiftMoneyInt = Integer.parseInt(walletGiftMoney);
+                    }
+
+                    TUser.dao.updateWalletAccount(total,chargeMoney+walletRealMoneyInt,couponMoney+walletGiftMoneyInt, openId);
                 }
 
                 ChargeMoneyInfo.dao.addChargeMoneyLog(chargeMoneyInfoBean);
-                if (chargeType.equals("CH")) {
-                    String kejueServiceUrl = PropKit.get("kejueChargeCardServerUrl");
-                    String serverUrl = kejueServiceUrl + "?devicelId=" + deviceId + "&cardCode=" + cardNumber + "&cardNumber=" + totalMoney + "&openId=" + openId;
-                    String invokeServer = HttpUrlConnectionUtil.invokeServer(serverUrl);
-                    JSONObject jsonObject = JSON.parseObject(invokeServer);
-                    boolean obj = (Boolean)jsonObject.get("success");
-                    if (!obj) {
-                        ChargeMoneyService.log.error("调用服务器充卡失败");
-                        throw new RuntimeException();
-                    }
 
-                    ChargeMoneyService.log.info("调用服务器充卡成功");
-                }
+                RechargeHistory.dao.addRechargeHistoryLog(openId, companyId, totalMoney , chargeMoney, couponMoney);
 
                 return true;
             }

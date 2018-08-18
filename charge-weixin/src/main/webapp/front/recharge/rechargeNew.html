@@ -170,37 +170,34 @@
 
 // 充值金额
         function rechargeAmount() {
-            var selectedtype = type;
-            if (selectedtype == 'WA') {
-                type = "WA";// 充值类型
-                $('#elecardType').css('display', 'none');
-                $('#walletType').css('display', 'block');
-                // 循环优惠活动信息 给页面标签赋值
-                for (var key in activityInfo) {
-                    var act = activityInfo[key];
-                    if ('2001' == act.actNum) {// 活动编号=选中的金额编号
-                        $(".weui-flex__item a[data-date='2001']").text(
-                            act.money / 100 + "元")
-                    }
-                    if ('2002' == act.actNum) {// 活动编号=选中的金额编号
-                        $(".weui-flex__item a[data-date='2002']").text(
-                            act.money / 100 + "元")
-                    }
-                    if ('2003' == act.actNum) {// 活动编号=选中的金额编号
-                        $(".weui-flex__item a[data-date='2003']").text(
-                            act.money / 100 + "元")
-                    }
-                    if ('2005' == act.actNum) {// 活动编号=选中的金额编号
-                        $(".weui-flex__item a[data-date='2005']").text(
-                            act.money / 100 + "元")
-                    }
-                    if ('2006' == act.actNum) {// 活动编号=选中的金额编号
-                        $(".weui-flex__item a[data-date='2006']").text(
-                            act.money / 100 + "元")
-                    }
-                }
 
-            }
+			$('#elecardType').css('display', 'none');
+			$('#walletType').css('display', 'block');
+			// 循环优惠活动信息 给页面标签赋值
+			for (var key in activityInfo) {
+				var act = activityInfo[key];
+				if ('2001' == act.actNum) {// 活动编号=选中的金额编号
+					$(".weui-flex__item a[data-date='2001']").text(
+						act.money / 100 + "元")
+				}
+				if ('2002' == act.actNum) {// 活动编号=选中的金额编号
+					$(".weui-flex__item a[data-date='2002']").text(
+						act.money / 100 + "元")
+				}
+				if ('2003' == act.actNum) {// 活动编号=选中的金额编号
+					$(".weui-flex__item a[data-date='2003']").text(
+						act.money / 100 + "元")
+				}
+				if ('2005' == act.actNum) {// 活动编号=选中的金额编号
+					$(".weui-flex__item a[data-date='2005']").text(
+						act.money / 100 + "元")
+				}
+				if ('2006' == act.actNum) {// 活动编号=选中的金额编号
+					$(".weui-flex__item a[data-date='2006']").text(
+						act.money / 100 + "元")
+				}
+
+			}
         }
 
 // 开始充值
@@ -278,7 +275,10 @@
                     chargeNum: chargeNum,
                     walletAccount: walletAccount,
                     cardNumber: userInfo.cardNumber,
-                    coupon: coupon
+                    coupon: coupon,
+                    wallet_real_money:userInfo.wallet_real_money,
+                    wallet_gift_money:userInfo.wallet_gift_money,
+					companyId:companyId
                 },
                 cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
                 async: false,// 设置同步方式，false为同步

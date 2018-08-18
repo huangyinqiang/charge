@@ -59,7 +59,7 @@ public class TUser extends Model<TUser> {
 
     public TUser queryUserByOpenId(String openId) {
         log.info("根据openid查询用户：" + openId);
-        TUser findFirst = (TUser)this.findFirst("select id,openId,nickName,headimgurl,sex,city,country,country,province,tel,registerDate,level,cardNumber,cardAccount,band,status,walletAccount,updateTime from tuser where openId = ?", new Object[]{openId});
+        TUser findFirst = (TUser)this.findFirst("select * from tuser where openId = ?", new Object[]{openId});
         log.info("根据openid查询用户结果：" + findFirst);
         return findFirst;
     }

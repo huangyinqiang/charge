@@ -84,8 +84,14 @@ public class RechargeController extends Controller {
         String deviceId = this.getPara("deviceId");
         String walletAccount = this.getPara("walletAccount");
         String cardNumber = this.getPara("cardNumber");
-        log.info("新增充值信息结束开始 openId=" + openId + ",deviceId=" + deviceId + ",type=" + chargeType + ",money=" + money + ",入帐金额=" + chargeNum + ",入帐赠送金额=" + coupon + ",电卡卡号=" + cardNumber);
-        HnKejueResponse response = chargeMoneyService.addRechargInfo(openId, deviceId, chargeType, walletAccount, money, chargeNum, coupon, cardNumber);
+
+        String walletRealMoney = this.getPara("wallet_real_money");
+        String walletGiftMoney = this.getPara("wallet_gift_money");
+        String companyId = this.getPara("companyId");
+
+        log.info("新增充值信息结束开始 openId=" + openId + ",deviceId=" + deviceId + ",type=" + chargeType + ",money=" + money
+                    + ",入帐金额=" + chargeNum + ",入帐赠送金额=" + coupon + ",电卡卡号=" + cardNumber + ",钱包实际充值余额=" + walletRealMoney + ",钱包赠费余额" + walletGiftMoney + ",公司ID" + companyId);
+        HnKejueResponse response = chargeMoneyService.addRechargInfo(openId, deviceId, chargeType, walletAccount, money, chargeNum, coupon, cardNumber, walletRealMoney, walletGiftMoney, companyId);
         log.info("新增充值信息结束：" + response);
         this.renderJson(response);
     }
