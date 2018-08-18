@@ -150,11 +150,11 @@ public class CompanyController extends BaseController{
 
 
         if (list==null  || list.size()==0){
-            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2001).save();
-            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2002).save();
-            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2003).save();
-            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2005).save();
-            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2006).save();
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2001).setMoney(2000).setChargeNum(2000).setCoupon(500).setRemark("优惠详情：充值20元送5元").setStartTime(new Date()).save();
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2002).setMoney(2000).setChargeNum(2000).setCoupon(500).setRemark("优惠详情：充值20元送5元").setStartTime(new Date()).save();
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2003).setMoney(2000).setChargeNum(2000).setCoupon(500).setRemark("优惠详情：充值20元送5元").setStartTime(new Date()).save();
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2005).setMoney(2000).setChargeNum(2000).setCoupon(500).setRemark("优惠详情：充值20元送5元").setStartTime(new Date()).save();
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2006).setMoney(2000).setChargeNum(2000).setCoupon(500).setRemark("优惠详情：充值20元送5元").setStartTime(new Date()).save();
         }
         render("couponList.html");
     }
