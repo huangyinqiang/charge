@@ -13,6 +13,7 @@ import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.protocol.update.UpdateMsgHandle;
 import net.inconnection.charge.extend.chargeDevice.utils.*;
 import net.inconnection.charge.extend.model.ChargePile;
+import net.inconnection.charge.extend.model.ChargePileHistory;
 import net.inconnection.charge.extend.model.ChargeSocket;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
@@ -61,6 +62,10 @@ public class ChargePileDevice implements GateWay {
     void updateDataToDb(){
         ChargePile chargePileDo = new ChargePile();
         chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).update();
+
+        ChargePileHistory chargePileHistory = new ChargePileHistory();
+        chargePileHistory.setPileId(chargePileId).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).save();
+
 
     }
 

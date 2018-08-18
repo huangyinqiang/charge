@@ -8,6 +8,7 @@ import net.inconnection.charge.extend.chargeDevice.utils.AlarmConfigManager;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfo;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfoConfig;
 import net.inconnection.charge.extend.model.ChargeSocket;
+import net.inconnection.charge.extend.model.ChargeSocketHistory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,10 @@ public class ChargeSocketComponent implements Device {
         Long socketKey = Long.parseLong(chargePileId.toString() + chargeSocketId.toString());
         chargeSocketDo.setId(socketKey).setIsUsed(used).setStartPower(startPower)
                 .setChargeIntensity(chargeIntensity).setChargeTime(chargeTime).setChargeState(chargeState).setUpdateTime(lastUpdateTime).update();
+
+        ChargeSocketHistory chargeSocketHistory = new ChargeSocketHistory();
+        chargeSocketHistory.setChargeSocketId(socketKey).setStartPower(startPower)
+                .setChargeIntensity(chargeIntensity).setChargeState(chargeState).setUpdateTime(lastUpdateTime).save();
     }
 
 
