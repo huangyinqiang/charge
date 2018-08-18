@@ -91,6 +91,7 @@
 	var companyId;//公司ID
     var activityInfo;// 优惠信息
     var walletAccount;// 微信钱包
+    var deviceId;
     var userInfo;// 用户信息
     var type = null;// 充值类型 CH电卡，WA钱包
     var money = null;// 本次充值金额
@@ -103,6 +104,8 @@
         var localUrl = window.location.href;
         companyId = GetQueryString('companyId');
         type = 'WA';//充值类型
+
+        deviceId=10100000001;
 
         getUserInfo();
         // 设置钱包余额
@@ -140,6 +143,30 @@
             })
         });
     });
+
+
+    // 查询优惠信息
+    function getActivityInfo() {
+        $.ajax({
+            type: 'POST',
+            url: "../recharge/queryActivityInfoByCompanyId",
+            dataType: "json",
+            data: {
+                companyId: companyId
+            },
+            cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
+            async: false,// 设置同步方式，false为同步
+            success: function (data) {
+                if (data.respObj != null && data.respCode == "000000") {
+                    activityInfo = data.respObj;
+                } else {
+                    layer.msg("活动信息不存在，请联系客服...", {
+                        shift: 5
+                    });
+                }
+            }
+        });
+    }
 
 // 充值金额
         function rechargeAmount() {
@@ -185,7 +212,8 @@
                 });
                 return;
             }
-            wxpay(money);
+            // wxpay(money);
+            recharge();
         }
 
         /* 微信支付 */
@@ -236,51 +264,6 @@
         }
 
 
-// 查询用户信息
-        function getUserInfo() {
-            $.ajax({
-                type: "POST",
-                url: "../user/findUserInfo",
-                data: {openId: localStorage.getItem("openId")},
-                cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
-                // 从缓存里读取,为false只有ＧＥＴ请求生效
-                async: false,// 设置同步方式，false为同步
-                dataType: "json",
-                success: function (data) {
-                    if (data.respObj != null && data.respCode == "000000") {
-                        userInfo = data.respObj;
-                        walletAccount = userInfo.walletAccount;
-                    } else {
-                        // 用户不存在 跳转到主页
-                        location.href = "..";
-                    }
-                }
-            });
-        }
-
-// 查询优惠信息
-        function getActivityInfo() {
-            $.ajax({
-                type: 'POST',
-                url: "../recharge/queryActivityInfoByCompanyId",
-                dataType: "json",
-                data: {
-                    companyId: companyId
-                },
-                cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
-                async: false,// 设置同步方式，false为同步
-                success: function (data) {
-                    if (data.respObj != null && data.respCode == "000000") {
-                        activityInfo = data.respObj;
-                    } else {
-                        layer.msg("活动信息不存在，请联系客服...", {
-                            shift: 5
-                        });
-                    }
-                }
-            });
-        }
-
 // 充值
         function recharge() {
             $.ajax({
@@ -318,6 +301,29 @@
                 }
             });
         }
+
+    // 查询用户信息
+    function getUserInfo() {
+        $.ajax({
+            type: "POST",
+            url: "../user/findUserInfo",
+            data: {openId: localStorage.getItem("openId")},
+            cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
+            // 从缓存里读取,为false只有ＧＥＴ请求生效
+            async: false,// 设置同步方式，false为同步
+            dataType: "json",
+            success: function (data) {
+                if (data.respObj != null && data.respCode == "000000") {
+                    userInfo = data.respObj;
+                    walletAccount = userInfo.walletAccount;
+                } else {
+                    // 用户不存在 跳转到主页
+                    location.href = "..";
+                }
+            }
+        });
+    }
+
     // 获取URL中的参数值
     function GetQueryString(url) {
         var reg = new RegExp("(^|&)" + url + "=([^&]*)(&|$)");
@@ -340,21 +346,7 @@
 					<div id="walletAccount"></div>
 					元
 				</div>
-				<!--<div class="weui-cell">-->
-					<!--<div class="weui-cell__hd ">-->
-						<!--<label for="" class="weui-label">充值选项</label>-->
 
-					<!--</div>-->
-					<!--<div class="select-type">-->
-						<!--<label> <input type="radio" name="selectedType" checked-->
-							<!--value="WA"> 钱包-->
-						<!--</label>-->
-                        <!--&lt;!&ndash;<label> <input id="radioCH" type="radio" name="selectedType"&ndash;&gt;-->
-							<!--&lt;!&ndash;value="CH"> 电卡&ndash;&gt;-->
-						<!--&lt;!&ndash;</label>&ndash;&gt;-->
-					<!--</div>-->
-					<!--<div class="weui-cell__ft"></div>-->
-				<!--</div>-->
 			</div>
 			<div class="methods">
 				<span class="wechat-name">微信支付</span> <span
