@@ -1,12 +1,16 @@
 package net.inconnection.charge.extend.controller;
 
+import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.sun.org.apache.bcel.internal.generic.NEW;
 import net.inconnection.charge.admin.common.DBTool;
+import net.inconnection.charge.admin.common.ZcurdTool;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.util.StringUtil;
 import net.inconnection.charge.extend.model.*;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -135,6 +139,94 @@ public class CompanyController extends BaseController{
         this.setAttr("model", model);
         this.render("detail.html");
     }
+
+
+    //修改活动
+    public void updateCouponPage() {
+        Long company_id = getParaToLong("id");
+        setAttr("company_id",company_id);
+        setAttr("company_name",getPara("company_name"));
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_company_activity where company_id="+company_id);
+
+
+        if (list==null  || list.size()==0){
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2001).save();
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2002).save();
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2003).save();
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2005).save();
+            new CompanyActivity().setCompanyId(company_id).setType("CH").setStatus("N").setActNum(2006).save();
+        }
+        render("couponList.html");
+    }
+
+    public void CouponlistData() {
+        Long company_id = getParaToLong("company_id");
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_company_activity where company_id="+company_id);
+       for (Record record:list){
+           record.set("company_name",getPara("company_name"));
+           Integer money =record.get("money");
+           Integer coupon =record.get("coupon");
+           if (null != money){
+               record.set("money",money/100);
+           }
+           if (null != coupon){
+               record.set("coupon",coupon/100);
+           }
+       }
+        this.renderDatagrid(list, list.size());
+    }
+
+
+    //修改页面
+    public void updateActivityPage() {
+        //setAttr("dictDatastatus", Company.me.getDictDatastatus());
+        Record compayActivity = Db.use(ZcurdTool.getDbSource("zcurd_busi")).findById("yc_company_activity", getParaToLong("id"));
+        compayActivity.set("company_name",getPara("company_name"));
+        Integer money =compayActivity.get("money");
+        Integer coupon =compayActivity.get("coupon");
+        if (null != money){
+            compayActivity.set("money",money/100);
+        }
+        if (null != coupon){
+            compayActivity.set("coupon",coupon/100);
+        }
+        setAttr("model", compayActivity);
+        render("updateActivity.html");
+    }
+
+
+
+    public void updateActivityData() {
+        CompanyActivity model = CompanyActivity.dao.findById(this.getPara("id"));
+        model.set("name",this.getPara("model.name"));
+        model.set("status",this.getPara("model.status"));
+        model.set("type",this.getPara("model.type"));
+        model.set("chargeNum",this.getPara("model.chargeNum"));
+        model.set("start_time",this.getPara("model.start_time"));
+        model.set("expiry_time",this.getPara("model.expiry_time"));
+        model.set("sum",this.getPara("model.sum"));
+        model.set("province",this.getPara("model.province"));
+        model.set("city",this.getPara("model.city"));
+        model.set("location",this.getPara("model.location"));
+
+        Integer money = this.getParaToInt("model.money");
+        Integer coupon = this.getParaToInt("model.coupon");
+        if (money!= null && coupon!=null){
+            model.set("money",money * 100);
+            model.set("coupon",coupon * 100);
+            model.set("remark","优惠详情：充值"+money+"元送"+coupon+"元");//优惠详情：充值20元送5元
+        }
+        model.update();
+        this.renderSuccess();
+    }
+
+
+
+
+
+
+
+
 
 
 }

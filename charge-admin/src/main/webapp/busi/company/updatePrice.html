@@ -1,26 +1,35 @@
- <#include "/common/head.html"/>
-
-
-<div class="easyui-panel updatePage"
-	data-options="fit:true,border:false">
-	<form id="ff" class="easyui-form" method="post">
-		<table class="table1">
-			<tr>
+<#include "/common/head.html"/>
+<div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false,novalidate:true">
+	<div style="padding:0px">
+		<form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
+			<table cellpadding="5" width="100%">
+<!--			<tr>
 				<th><span>公司名称：</span></th>
 				<td>
 					<div class="wrap_input">
 						<input class="easyui-textbox" type="text" name="company_name"
 							id="company_name" value="${company_name}"
-							data-options="fit: true,required:true"></input>
+							data-options="fit: true,required:true" disabled></input>
 					</div>
+				</td>
+
+			</tr>-->
+
+
+			<tr>
+				<th><span>公司名称：</span></th>
+				<td>
+					<input class="easyui-textbox" type="text" name="company_name" value="${company_name}" data-options="" style="width: 200px;" disabled></input>
 				</td>
 
 			</tr>
 
+
+
 			<tr>
 				<th><span>两小时价格：</span></th>
 				<td>
-					<input class="easyui-textbox" type="text" name="tow_hours_price" value="${model.tow_hours_price}" data-options="" style="width: 130px;"></input>
+					<input class="easyui-textbox" type="text" name="tow_hours_price" value="${model.tow_hours_price}" data-options="" style="width: 200px;"></input>
 				</td>
 
 			</tr>
@@ -28,7 +37,7 @@
 			<tr>
 				<th><span>四小时价格：</span></th>
 				<td>
-					<input class="easyui-textbox" type="text" name="four_hours_price" value="${model.four_hours_price}" data-options="" style="width: 130px;"></input>
+					<input class="easyui-textbox" type="text" name="four_hours_price" value="${model.four_hours_price}" data-options="" style="width: 200px;"></input>
 				</td>
 
 			</tr>
@@ -36,7 +45,7 @@
 			<tr>
 				<th><span>八小时价格：</span></th>
 				<td>
-					<input class="easyui-textbox" type="text" name="eight_hours_price" value="${model.eight_hours_price}" data-options="" style="width: 130px;"></input>
+					<input class="easyui-textbox" type="text" name="eight_hours_price" value="${model.eight_hours_price}" data-options="" style="width: 200px;"></input>
 				</td>
 
 			</tr>
@@ -44,37 +53,47 @@
 			<tr>
 				<th><span>十二小时价格：</span></th>
 				<td>
-					<input class="easyui-textbox" type="text" name="twelve_hours_price" value="${model.twelve_hours_price}" data-options="" style="width: 130px;"></input>
+					<input class="easyui-textbox" type="text" name="twelve_hours_price" value="${model.twelve_hours_price}" data-options="" style="width: 200px;"></input>
 				</td>
 
 			</tr>
 
+
+			<tr>
+				<th><span>会员两小时价格：</span></th>
+				<td>
+					<input class="easyui-textbox" type="text" name="tow_hours_mem_price" value="${model.tow_hours_mem_price}" data-options="" style="width: 200px;"></input>
+				</td>
+
+			</tr>
+
+<!--
 			<tr>
 				<th><span>会员两小时价格：</span></th>
 				<td>
 					<input class="easyui-textbox" type="text" name="tow_hours_mem_price" value="${model.tow_hours_mem_price}" data-options="" style="width: 130px;"></input>
 				</td>
 
-			</tr>
+			</tr>-->
 
 			<tr>
 				<th><span>会员四小时价格：</span></th>
 				<td>
-					<input class="easyui-textbox" type="text" name="four_hours_mem_price" value="${model.four_hours_mem_price}" data-options="" style="width: 130px;"></input>
+					<input class="easyui-textbox" type="text" name="four_hours_mem_price" value="${model.four_hours_mem_price}" data-options="" style="width: 200px;"></input>
 				</td>
 
 			</tr>
 			<tr>
 				<th><span>会员八小时价格：</span></th>
 				<td>
-					<input class="easyui-textbox" type="text" name="eight_hours_mem_price" value="${model.eight_hours_mem_price}" data-options="" style="width: 130px;"></input>
+					<input class="easyui-textbox" type="text" name="eight_hours_mem_price" value="${model.eight_hours_mem_price}" data-options="" style="width: 200px;"></input>
 				</td>
 
 			</tr>
 			<tr>
 				<th><span>会员十二小时价格：</span></th>
 				<td>
-					<input class="easyui-textbox" type="text" name="twelve_hours_mem_price" value="${model.twelve_hours_mem_price}" data-options="" style="width: 130px;"></input>
+					<input class="easyui-textbox" type="text" name="twelve_hours_mem_price" value="${model.twelve_hours_mem_price}" data-options="" style="width: 200px;"></input>
 				</td>
 
 			</tr>
@@ -82,7 +101,7 @@
 			<tr>
 				<th><span>自动充电价格：</span></th>
 				<td>
-					<input class="easyui-textbox" type="text" name="auto_price" value="${model.auto_price}" data-options="" style="width: 130px;"></input>
+					<input class="easyui-textbox" type="text" name="auto_price" value="${model.auto_price}" data-options="" style="width: 200px;"></input>
 				</td>
 
 			</tr>

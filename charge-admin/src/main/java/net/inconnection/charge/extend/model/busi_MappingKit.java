@@ -57,6 +57,7 @@ public class busi_MappingKit {
 		arp.addMapping("yc_tuser_and_coupon", "id", TuserAndCoupon.class);
 		arp.addMapping("yc_chargeprice", "id", Chargeprice.class);
 		arp.addMapping("yc_charge_socket_history", "id", ChargeSocketHistory.class);
+		arp.addMapping("yc_company_activity", "id", CompanyActivity.class);
 	}
 }
 
