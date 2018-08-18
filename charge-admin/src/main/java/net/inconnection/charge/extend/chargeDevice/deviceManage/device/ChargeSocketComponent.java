@@ -43,16 +43,13 @@ public class ChargeSocketComponent implements Device {
         this.chargeSocketId = chargeSocketId;
     }
 
-    public void saveData(){
+    public void updateDataToDb(){
         ChargeSocket chargeSocketDo = new ChargeSocket();
-//        chargeSocketDo.setId(chargePileId).setIsUsed(used).setStartPower(startPower)
-//                .setChargeIntensity(chargeIntensity).setChargeTime(chargeTime).setChargeState(chargeState).setUpdateTime(lastUpdateTime).save();
+        Long socketKey = Long.parseLong(chargePileId.toString() + chargeSocketId.toString());
+        chargeSocketDo.setId(socketKey).setIsUsed(used).setStartPower(startPower)
+                .setChargeIntensity(chargeIntensity).setChargeTime(chargeTime).setChargeState(chargeState).setUpdateTime(lastUpdateTime).update();
     }
 
-    public void saveNewModel(){
-        ChargeSocket chargeSocketDo = new ChargeSocket();
-        chargeSocketDo.setId(chargePileId).setChargePileId(chargePileId).save();
-    }
 
     @Override
     public void setGWId(Long gwId) {
@@ -130,6 +127,7 @@ public class ChargeSocketComponent implements Device {
                 chargeTime = 0L;
                 chargeState = 0;
             }
+            updateDataToDb();
         }else {
             _log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_INUSE);
         }

@@ -13,6 +13,7 @@ import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.protocol.update.UpdateMsgHandle;
 import net.inconnection.charge.extend.chargeDevice.utils.*;
 import net.inconnection.charge.extend.model.ChargePile;
+import net.inconnection.charge.extend.model.ChargeSocket;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,7 @@ public class ChargePileDevice implements GateWay {
     private String name;//充电桩名称
 
     private Long voltage;//充电电压
-    private Integer power;//充电功率
+    private Long power;//充电功率
 
     private Integer batVol;//电池电压
     private Integer controllerVol;//控制器供电电压
@@ -52,17 +53,50 @@ public class ChargePileDevice implements GateWay {
         isOnline = false;//仅仅是初始化，未上线
     }
 
-    void saveNewModel(){
+    void updateOnLineToDb(){
         ChargePile chargePileDo = new ChargePile();
-        chargePileDo.setId(chargePileId).setIsOnline(isOnline).save();
+        chargePileDo.setId(chargePileId).setIsOnline(isOnline).update();
     }
 
-    void saveData(){
+    void updateDataToDb(){
         ChargePile chargePileDo = new ChargePile();
-        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).save();
+        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).update();
+
     }
 
+    void addNewDeviceToDb(Long chargePileId, Long socketSn){
+        ChargeSocket chargeSocket = new ChargeSocket();
+        Long socketKey = Long.parseLong(chargePileId.toString() + socketSn.toString());
+        chargeSocket.setId(socketKey).setChargePileId(chargePileId).setChargeSocketSn(Integer.parseInt(socketSn.toString())).save();
+    }
 
+    public void setVoltage(Long voltage) {
+        this.voltage = voltage;
+    }
+
+    public void setPower(Long power) {
+        this.power = power;
+    }
+
+    public void setBatVol(Integer batVol) {
+        this.batVol = batVol;
+    }
+
+    public void setControllerVol(Integer controllerVol) {
+        this.controllerVol = controllerVol;
+    }
+
+    public void setLastUpdataTime(Date lastUpdataTime) {
+        this.lastUpdataTime = lastUpdataTime;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
+    }
+
+    public void setChargeSocketMap(Map<Long, Device> chargeSocketMap) {
+        this.chargeSocketMap = chargeSocketMap;
+    }
 
     @Override
     public void setID(Long id) {
@@ -139,7 +173,7 @@ public class ChargePileDevice implements GateWay {
         }
 
         if (gwFacetObj.containsKey(MSG_CHARGEPOWER)){
-            power = Integer.parseInt(gwFacetObj.getString(MSG_CHARGEPOWER));
+            power = Long.parseLong(gwFacetObj.getString(MSG_CHARGEPOWER));
         }
 
         if (gwFacetObj.containsKey(MSG_BAT_VOL)){
@@ -150,7 +184,7 @@ public class ChargePileDevice implements GateWay {
             controllerVol = Integer.parseInt(gwFacetObj.getString(MSG_CONTROLLER_VOL));
         }
 
-        saveData();
+        updateDataToDb();
 
         for (int i=1; i<msgJArray.size(); i++){
             JSONObject chargeSocketObj = msgJArray.getJSONObject(i);
@@ -160,6 +194,7 @@ public class ChargePileDevice implements GateWay {
             if (!chargeSocketMap.containsKey(socketSn)){
                 ChargeSocketComponent chargeSocketComponent = new ChargeSocketComponent(chargePileId, socketSn);
                 chargeSocketMap.put(socketSn, chargeSocketComponent);
+                addNewDeviceToDb(chargePileId, socketSn);
             }
 
             Device chargeSocket = chargeSocketMap.get(socketSn);
@@ -297,6 +332,7 @@ public class ChargePileDevice implements GateWay {
                 if (responseObj.getString(MSG_RESPONCE_RESULT).equals("1")){
                     isOnline = true;
                 }
+                updateOnLineToDb();
                 ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
                 break;
             case MSG_RESPONCE_CODE_SHUTDOWNALLSOCKETS:
