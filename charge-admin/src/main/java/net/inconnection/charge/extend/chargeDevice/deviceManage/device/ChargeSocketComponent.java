@@ -8,6 +8,7 @@ import net.inconnection.charge.extend.chargeDevice.utils.AlarmConfigManager;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfo;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfoConfig;
 import net.inconnection.charge.extend.model.ChargeSocket;
+import net.inconnection.charge.extend.model.ChargeSocketHistory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,16 +44,17 @@ public class ChargeSocketComponent implements Device {
         this.chargeSocketId = chargeSocketId;
     }
 
-    public void saveData(){
+    public void updateDataToDb(){
         ChargeSocket chargeSocketDo = new ChargeSocket();
-//        chargeSocketDo.setId(chargePileId).setIsUsed(used).setStartPower(startPower)
-//                .setChargeIntensity(chargeIntensity).setChargeTime(chargeTime).setChargeState(chargeState).setUpdateTime(lastUpdateTime).save();
+        Long socketKey = Long.parseLong(chargePileId.toString() + chargeSocketId.toString());
+        chargeSocketDo.setId(socketKey).setIsUsed(used).setStartPower(startPower)
+                .setChargeIntensity(chargeIntensity).setChargeTime(chargeTime).setChargeState(chargeState).setUpdateTime(lastUpdateTime).update();
+
+        ChargeSocketHistory chargeSocketHistory = new ChargeSocketHistory();
+        chargeSocketHistory.setChargeSocketId(socketKey).setStartPower(startPower)
+                .setChargeIntensity(chargeIntensity).setChargeState(chargeState).setUpdateTime(lastUpdateTime).save();
     }
 
-    public void saveNewModel(){
-        ChargeSocket chargeSocketDo = new ChargeSocket();
-        chargeSocketDo.setId(chargePileId).setChargePileId(chargePileId).save();
-    }
 
     @Override
     public void setGWId(Long gwId) {
@@ -130,6 +132,7 @@ public class ChargeSocketComponent implements Device {
                 chargeTime = 0L;
                 chargeState = 0;
             }
+            updateDataToDb();
         }else {
             _log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_INUSE);
         }

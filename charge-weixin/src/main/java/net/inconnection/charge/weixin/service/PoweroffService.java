@@ -74,7 +74,9 @@ public class PoweroffService {
                         if (abs < -10000L) {
                             log.info("当前时间大于充电时长，继续判断下一条充电信息");
                         } else {
-                            resp.add(chargeBatteryInfo);
+                            if (!chargeBatteryInfo.get("status").equals("F")) {
+                                resp.add(chargeBatteryInfo);
+                            }
                             log.info("判断在充电时间内，可远程断电的信息" + chargeBatteryInfo.toString());
                         }
                     }

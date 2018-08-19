@@ -27,22 +27,22 @@ public abstract class BaseChargeSocketHistory<M extends BaseChargeSocketHistory<
 		return getLong("charge_socket_id");
 	}
 
-	public M setStartPower(java.lang.Double startPower) {
+	public M setStartPower(java.lang.Long startPower) {
 		set("start_power", startPower);
 		return (M)this;
 	}
 	
-	public java.lang.Double getStartPower() {
-		return getDouble("start_power");
+	public java.lang.Long getStartPower() {
+		return getLong("start_power");
 	}
 
-	public M setChargeIntensity(java.lang.Double chargeIntensity) {
+	public M setChargeIntensity(java.lang.Long chargeIntensity) {
 		set("charge_intensity", chargeIntensity);
 		return (M)this;
 	}
 	
-	public java.lang.Double getChargeIntensity() {
-		return getDouble("charge_intensity");
+	public java.lang.Long getChargeIntensity() {
+		return getLong("charge_intensity");
 	}
 
 	public M setChargeTime(java.lang.Long chargeTime) {

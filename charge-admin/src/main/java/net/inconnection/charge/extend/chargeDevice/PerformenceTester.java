@@ -17,7 +17,7 @@ public class PerformenceTester {
 
             //while (true)
             {
-                for (int index=0; index<1; index++) {
+
                     final String industry = "CHARGE";
                     final String version = "1";
                     final String gwId = "010100000001";
@@ -34,6 +34,7 @@ public class PerformenceTester {
 
                     sendMqttMsg(notifyTopic, notifyMsg);
 
+                    for (int index=0; index<10; index++) {
 
                     String dataTopic = "C/" + industry + "/" + version +"/" + gwId + "/" + TOPIC_DATA;
 
@@ -41,7 +42,7 @@ public class PerformenceTester {
                     timeStr = (new SimpleDateFormat("yyyyMMddHHmmss")).format(new Date());
                     seq = String.valueOf(SEQGeneration.getInstance().getSEQ());//sequenceNum生成
 
-                    String dataMsg = "GWID:" + gwId + ";SEQ:" + seq + ";TIME:" + timeStr + ";VOLTAGE:220;POWER:12000" + ";STATUS:1" + MSG_FACET_SEPARATOR_INSIDE +
+                    String dataMsg = "GWID:" + gwId + ";SEQ:" + seq + ";TIME:" + timeStr + ";BAT:3364;VOL:11446;VOL_AC:220;POW:12000" + ";STATUS:1" + MSG_FACET_SEPARATOR_INSIDE +
                             "DEVICESN:01;MAINTYPE:1;USE:1;SP:100;CI:234;CT:332;CS:1;WARN:1,2" + MSG_FACET_SEPARATOR_INSIDE +
                             "DEVICESN:02;MAINTYPE:1;USE:1;SP:100;CI:234;CT:332;CS:1";
 

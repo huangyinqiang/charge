@@ -1,6 +1,5 @@
 package net.inconnnection.charge.cost.config;
 
-import com.alibaba.dubbo.config.ReferenceConfig;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.PathKit;
@@ -9,9 +8,6 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
-import net.inconnection.charge.service.DeviceControlService;
-import net.inconnection.charge.service.dubboPlugin.DubboClientPlugin;
-import net.inconnection.charge.service.dubboPlugin.IiossReferenceConfig;
 import net.inconnnection.charge.cost.action.IndexAction;
 import net.inconnnection.charge.cost.model.ChargeBatteryInfo;
 import net.inconnnection.charge.cost.model.TUser;

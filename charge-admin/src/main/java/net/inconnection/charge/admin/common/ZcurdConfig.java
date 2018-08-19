@@ -124,7 +124,6 @@ public class ZcurdConfig extends JFinalConfig {
 //		}
 
 
-		MqttMsgReceiver.getInstance().start();
 
 
 
@@ -160,6 +159,9 @@ public class ZcurdConfig extends JFinalConfig {
 		} catch (TemplateModelException e) {
 			e.printStackTrace();
 		}
+
+
+		MqttMsgReceiver.getInstance().start();
 		
 		//定时任务
 		TaskService taskService = Duang.duang(TaskService.class);

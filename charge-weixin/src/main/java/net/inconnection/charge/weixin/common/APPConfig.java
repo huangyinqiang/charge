@@ -13,7 +13,7 @@ import com.jfinal.render.ViewType;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import net.inconnection.charge.service.DeviceControlService;
 import net.inconnection.charge.service.dubboPlugin.DubboClientPlugin;
-import net.inconnection.charge.service.dubboPlugin.IiossReferenceConfig;
+import net.inconnection.charge.service.dubboPlugin.ChargeReferenceConfig;
 import net.inconnection.charge.weixin.controller.*;
 import net.inconnection.charge.weixin.model.*;
 import net.inconnection.charge.weixin.scheduler.task.SchedulerPlugin;
@@ -99,7 +99,7 @@ public class APPConfig extends JFinalConfig {
         DubboClientPlugin dubboClientPlugin = new DubboClientPlugin("charge-weixin",20882);
 
         //获取服务事例，传入对应接口类型和class
-        ReferenceConfig<DeviceControlService> reference = new IiossReferenceConfig<DeviceControlService>().setServiceInterface(DeviceControlService.class);
+        ReferenceConfig<DeviceControlService> reference = new ChargeReferenceConfig<DeviceControlService>().setServiceInterface(DeviceControlService.class);
 
         //此方法获取到服务，
         DeviceControlService service = dubboClientPlugin.getService(reference);

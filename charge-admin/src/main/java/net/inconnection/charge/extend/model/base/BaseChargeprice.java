@@ -108,6 +108,15 @@ public abstract class BaseChargeprice<M extends BaseChargeprice<M>> extends Mode
 		return getInt("auto_price");
 	}
 
+	public M setAutoUnitPrice(java.lang.Integer autoUnitPrice) {
+		set("auto_unit_price", autoUnitPrice);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getAutoUnitPrice() {
+		return getInt("auto_unit_price");
+	}
+
 	public M setUpdatetime(java.util.Date updatetime) {
 		set("updatetime", updatetime);
 		return (M)this;
