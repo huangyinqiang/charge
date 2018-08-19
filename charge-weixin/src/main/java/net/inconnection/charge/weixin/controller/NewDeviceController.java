@@ -5,6 +5,7 @@ import com.jfinal.log.Log;
 import net.inconnection.charge.service.DeviceControlService;
 import net.inconnection.charge.service.dubboPlugin.DubboServiceContrain;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
+import net.inconnection.charge.weixin.model.ChargeBatteryInfo;
 import net.inconnection.charge.weixin.service.ChargeInfoBatteryService;
 import net.inconnection.charge.weixin.service.NewDeviceChargePriceService;
 import net.inconnection.charge.weixin.service.NewDeviceService;
@@ -54,9 +55,17 @@ public class NewDeviceController extends Controller {
         Long socketSN = Long.parseLong(channeNum);
         Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, 30*1000L);
 
+
+
         if (null == powerOffStatus){
             powerOffStatus = 9999;
         }
+
+        if (powerOffStatus == 1) {
+            //断电成功
+            ChargeBatteryInfo.dao.updateEndTimeById(id);
+        }
+
         renderText(powerOffStatus.toString());
 
     }
