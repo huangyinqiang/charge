@@ -64,7 +64,7 @@ public class ChargePileDevice implements GateWay {
         chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).update();
 
         ChargePileHistory chargePileHistory = new ChargePileHistory();
-        chargePileHistory.setPileId(chargePileId).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).save();
+//        chargePileHistory.setPileId(chargePileId).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).save();
 
 
     }
@@ -149,7 +149,7 @@ public class ChargePileDevice implements GateWay {
 
         long endTime=System.currentTimeMillis();//记录结束时间
         float excTime=(float)(endTime-startTime)/1000;
-        _log.info("PVStation dataMsgHandle convertDataValue2StandardUnit 执行时间："+excTime+"s");
+        _log.info("dataMsgHandle convertDataValue2StandardUnit 执行时间："+excTime+"s");
     }
 
     private void updateDataAndAlarm(JSONArray msgJArray){
@@ -194,7 +194,7 @@ public class ChargePileDevice implements GateWay {
         for (int i=1; i<msgJArray.size(); i++){
             JSONObject chargeSocketObj = msgJArray.getJSONObject(i);
 
-            Long socketSn = Long.parseLong(gwFacetObj.getString(MSG_GWID) + chargeSocketObj.getString(MSG_DEVICESN));
+            Long socketSn = Long.parseLong(chargeSocketObj.getString(MSG_DEVICESN));
 
             if (!chargeSocketMap.containsKey(socketSn)){
                 ChargeSocketComponent chargeSocketComponent = new ChargeSocketComponent(chargePileId, socketSn);
@@ -338,6 +338,8 @@ public class ChargePileDevice implements GateWay {
                     isOnline = true;
                 }
                 updateOnLineToDb();
+                System.out.println("callBackQueueName : " + callBackQueueName);
+                System.out.println("message: " + messageJsonArr);
                 ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
                 break;
             case MSG_RESPONCE_CODE_SHUTDOWNALLSOCKETS:
@@ -348,6 +350,9 @@ public class ChargePileDevice implements GateWay {
 
             case MSG_RESPONCE_CODE_SOCKETSTARTCHARGE:
                 ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
+
+                System.out.println("callBackQueueName : " + callBackQueueName);
+                System.out.println("message: " + messageJsonArr);
                 break;
             default:
                 break;
@@ -513,20 +518,20 @@ public class ChargePileDevice implements GateWay {
 //
 //        chargePileDevice.shutDownAllSockets(testQueue);
 //
-        Vector<Long> sockets = new Vector<>();
-        sockets.add(1L);
-//        sockets.add(2L);
-
-//        chargePileDevice.shutDownChargeSocket(sockets, testQueue);
-
-        chargePileDevice.requestTestPower(sockets, testQueue);
-
-
-//        Map<Long, Integer> socketIdChargeTimeMap = new ConcurrentHashMap<>();
-//        socketIdChargeTimeMap.put(1L, 60);
-//        socketIdChargeTimeMap.put(2L, 60);
+//        Vector<Long> sockets = new Vector<>();
+//        sockets.add(1L);
+////        sockets.add(2L);
 //
-//        chargePileDevice.startCharge(socketIdChargeTimeMap, testQueue);
+////        chargePileDevice.shutDownChargeSocket(sockets, testQueue);
+//
+//        chargePileDevice.requestTestPower(sockets, testQueue);
+
+
+        Map<Long, Integer> socketIdChargeTimeMap = new ConcurrentHashMap<>();
+        socketIdChargeTimeMap.put(1L, 60);
+        socketIdChargeTimeMap.put(2L, 60);
+
+        chargePileDevice.startCharge(socketIdChargeTimeMap, testQueue);
 
 
 

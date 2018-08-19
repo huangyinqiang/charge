@@ -49,7 +49,7 @@ public class GatewayFacet {
         SimpleDateFormat currentTimeFormat = new SimpleDateFormat("yyyyMMddHHmmss");//设置日期格式
         currentTimeStr=currentTimeFormat.format(utc);
 
-        return MSG_GWID + MSG_COMPONENT_SEPARATOR + gatewayID + MSG_SEGMENT_SEPARATOR +MSG_SERIALNUMBER
+        return MSG_GWID + MSG_COMPONENT_SEPARATOR + String.format("%2d", gatewayID) + MSG_SEGMENT_SEPARATOR +MSG_SERIALNUMBER
                 + MSG_COMPONENT_SEPARATOR +sequenceNum+ MSG_SEGMENT_SEPARATOR + MSG_TIME + MSG_COMPONENT_SEPARATOR +currentTimeStr ;
 
     }

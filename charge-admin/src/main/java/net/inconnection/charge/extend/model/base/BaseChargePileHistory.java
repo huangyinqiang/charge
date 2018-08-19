@@ -27,24 +27,6 @@ public abstract class BaseChargePileHistory<M extends BaseChargePileHistory<M>> 
 		return getLong("pile_id");
 	}
 
-	public M setPowerMax(java.lang.Long powerMax) {
-		set("power_max", powerMax);
-		return (M)this;
-	}
-	
-	public java.lang.Long getPowerMax() {
-		return getLong("power_max");
-	}
-
-	public M setSocketSum(java.lang.Long socketSum) {
-		set("socket_sum", socketSum);
-		return (M)this;
-	}
-	
-	public java.lang.Long getSocketSum() {
-		return getLong("socket_sum");
-	}
-
 	public M setTotalIntensity(java.lang.Long totalIntensity) {
 		set("total_intensity", totalIntensity);
 		return (M)this;
@@ -61,24 +43,6 @@ public abstract class BaseChargePileHistory<M extends BaseChargePileHistory<M>> 
 	
 	public java.lang.Long getTotalVoltage() {
 		return getLong("total_voltage");
-	}
-
-	public M setUpdateTime(java.util.Date updateTime) {
-		set("update_time", updateTime);
-		return (M)this;
-	}
-	
-	public java.util.Date getUpdateTime() {
-		return get("update_time");
-	}
-
-	public M setStatus(java.lang.Integer status) {
-		set("status", status);
-		return (M)this;
-	}
-	
-	public java.lang.Integer getStatus() {
-		return getInt("status");
 	}
 
 	public M setBatVol(java.lang.Integer batVol) {
@@ -106,6 +70,15 @@ public abstract class BaseChargePileHistory<M extends BaseChargePileHistory<M>> 
 	
 	public java.lang.Long getPowerTotal() {
 		return getLong("power_total");
+	}
+
+	public M setUpdateTime(java.util.Date updateTime) {
+		set("update_time", updateTime);
+		return (M)this;
+	}
+	
+	public java.util.Date getUpdateTime() {
+		return get("update_time");
 	}
 
 }
