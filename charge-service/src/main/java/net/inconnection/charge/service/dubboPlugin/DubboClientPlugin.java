@@ -48,6 +48,8 @@ public class DubboClientPlugin implements IPlugin{
      * @return
      */
     public <T>T getService(ReferenceConfig<T> reference){
+        reference.setTimeout(3000);
+        reference.setCheck(false);
         reference.setApplication(application);
         reference.setVersion(VERSION);
         reference.setUrl(DUBBOLOCALHOST+":"+port);
