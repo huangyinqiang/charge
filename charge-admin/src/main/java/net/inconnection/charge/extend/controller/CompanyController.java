@@ -126,6 +126,7 @@ public class CompanyController extends BaseController{
         model.set("eight_hours_mem_price",this.getPara("model.eight_hours_mem_price"));
         model.set("twelve_hours_mem_price",this.getPara("model.twelve_hours_mem_price"));
         model.set("auto_price",this.getPara("model.auto_price"));
+        model.set("auto_unit_price",this.getPara("model.auto_unit_price"));
 
         model.setUpdatetime(new Date());
         model.update();

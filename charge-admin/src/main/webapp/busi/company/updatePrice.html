@@ -3,147 +3,155 @@
 	<div style="padding:0px">
 		<form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
 			<table cellpadding="5" width="100%">
-<!--			<tr>
-				<th><span>公司名称：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="company_name"
-							id="company_name" value="${company_name}"
-							data-options="fit: true,required:true" disabled></input>
-					</div>
-				</td>
+				<!--			<tr>
+                                <th><span>公司名称：</span></th>
+                                <td>
+                                    <div class="wrap_input">
+                                        <input class="easyui-textbox" type="text" name="company_name"
+                                            id="company_name" value="${company_name}"
+                                            data-options="fit: true,required:true" disabled></input>
+                                    </div>
+                                </td>
 
-			</tr>-->
-
-
-			<tr>
-				<th><span>公司名称：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="company_name" value="${company_name}" data-options="" style="width: 200px;" disabled></input>
-				</td>
-
-			</tr>
+                            </tr>-->
 
 
+				<tr>
+					<th><span>公司名称：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="company_name" value="${company_name}" data-options="" style="width: 200px;" disabled></input>
+					</td>
 
-			<tr>
-				<th><span>两小时价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="tow_hours_price" value="${model.tow_hours_price}" data-options="" style="width: 200px;"></input>
-				</td>
-
-			</tr>
-
-			<tr>
-				<th><span>四小时价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="four_hours_price" value="${model.four_hours_price}" data-options="" style="width: 200px;"></input>
-				</td>
-
-			</tr>
-
-			<tr>
-				<th><span>八小时价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="eight_hours_price" value="${model.eight_hours_price}" data-options="" style="width: 200px;"></input>
-				</td>
-
-			</tr>
-
-			<tr>
-				<th><span>十二小时价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="twelve_hours_price" value="${model.twelve_hours_price}" data-options="" style="width: 200px;"></input>
-				</td>
-
-			</tr>
-
-
-			<tr>
-				<th><span>会员两小时价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="tow_hours_mem_price" value="${model.tow_hours_mem_price}" data-options="" style="width: 200px;"></input>
-				</td>
-
-			</tr>
-
-<!--
-			<tr>
-				<th><span>会员两小时价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="tow_hours_mem_price" value="${model.tow_hours_mem_price}" data-options="" style="width: 130px;"></input>
-				</td>
-
-			</tr>-->
-
-			<tr>
-				<th><span>会员四小时价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="four_hours_mem_price" value="${model.four_hours_mem_price}" data-options="" style="width: 200px;"></input>
-				</td>
-
-			</tr>
-			<tr>
-				<th><span>会员八小时价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="eight_hours_mem_price" value="${model.eight_hours_mem_price}" data-options="" style="width: 200px;"></input>
-				</td>
-
-			</tr>
-			<tr>
-				<th><span>会员十二小时价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="twelve_hours_mem_price" value="${model.twelve_hours_mem_price}" data-options="" style="width: 200px;"></input>
-				</td>
-
-			</tr>
-
-			<tr>
-				<th><span>自动充电价格：</span></th>
-				<td>
-					<input class="easyui-textbox" type="text" name="auto_price" value="${model.auto_price}" data-options="" style="width: 200px;"></input>
-				</td>
-
-			</tr>
+				</tr>
 
 
 
+				<tr>
+					<th><span>两小时价格(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="tow_hours_price" value="${model.tow_hours_price}" data-options="" style="width: 200px;"></input>
+					</td>
+
+				</tr>
+
+				<tr>
+					<th><span>四小时价格(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="four_hours_price" value="${model.four_hours_price}" data-options="" style="width: 200px;"></input>
+					</td>
+
+				</tr>
+
+				<tr>
+					<th><span>八小时价格(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="eight_hours_price" value="${model.eight_hours_price}" data-options="" style="width: 200px;"></input>
+					</td>
+
+				</tr>
+
+				<tr>
+					<th><span>十二小时价格(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="twelve_hours_price" value="${model.twelve_hours_price}" data-options="" style="width: 200px;"></input>
+					</td>
+
+				</tr>
 
 
-		</table>
-	</form>
-</div>
-<script>
-top.window.subPage.save = save;
-function save() {
-	if($("#zcurdHeadTable").form('validate')) {
-		$.post("updatePrice", getParam(), function(data) {
-			top.window.closeWindow();
-			top.window.subPage.loadCurrDatagrid();
-		});
-	}
-}
-function getParam() {
-	var param = {
-        "id": ${model.id},
-        "model.tow_hours_price": $(":input[name='tow_hours_price']").val(),
-        "model.four_hours_price": $(":input[name='four_hours_price']").val(),
-        "model.eight_hours_price": $(":input[name='eight_hours_price']").val(),
-        "model.twelve_hours_price": $(":input[name='twelve_hours_price']").val(),
-        "model.tow_hours_mem_price": $(":input[name='tow_hours_mem_price']").val(),
-        "model.four_hours_mem_price": $(":input[name='four_hours_mem_price']").val(),
-        "model.eight_hours_mem_price": $(":input[name='eight_hours_mem_price']").val(),
-        "model.twelve_hours_mem_price": $(":input[name='twelve_hours_mem_price']").val(),
-        "model.auto_price": $(":input[name='auto_price']").val(),
-    }
-	for(key in param) {
-		if(!param[key]) {
-			delete param[key];
-		}
-	}
-	return param;
-}
+				<tr>
+					<th><span>会员两小时价格(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="tow_hours_mem_price" value="${model.tow_hours_mem_price}" data-options="" style="width: 200px;"></input>
+					</td>
 
-//扩展js
-</script>
-<#include "/common/foot.html"/>
+				</tr>
+
+				<!--
+                            <tr>
+                                <th><span>会员两小时价格：</span></th>
+                                <td>
+                                    <input class="easyui-textbox" type="text" name="tow_hours_mem_price" value="${model.tow_hours_mem_price}" data-options="" style="width: 130px;"></input>
+                                </td>
+
+                            </tr>-->
+
+				<tr>
+					<th><span>会员四小时价格(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="four_hours_mem_price" value="${model.four_hours_mem_price}" data-options="" style="width: 200px;"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th><span>会员八小时价格(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="eight_hours_mem_price" value="${model.eight_hours_mem_price}" data-options="" style="width: 200px;"></input>
+					</td>
+
+				</tr>
+				<tr>
+					<th><span>会员十二小时价格(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="twelve_hours_mem_price" value="${model.twelve_hours_mem_price}" data-options="" style="width: 200px;"></input>
+					</td>
+
+				</tr>
+
+				<tr>
+					<th><span>自动充电最小余额(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="auto_price" value="${model.auto_price}" data-options="" style="width: 200px;"></input>
+					</td>
+
+				</tr>
+
+
+				<tr>
+					<th><span>自动充电单价(分)：</span></th>
+					<td>
+						<input class="easyui-textbox" type="text" name="auto_unit_price" value="${model.auto_unit_price}" data-options="" style="width: 200px;"></input>
+					</td>
+
+				</tr>
+
+
+
+			</table>
+		</form>
+	</div>
+	<script>
+        top.window.subPage.save = save;
+        function save() {
+            if($("#zcurdHeadTable").form('validate')) {
+                $.post("updatePrice", getParam(), function(data) {
+                    top.window.closeWindow();
+                    top.window.subPage.loadCurrDatagrid();
+                });
+            }
+        }
+        function getParam() {
+            var param = {
+                "id": ${model.id},
+                "model.tow_hours_price": $(":input[name='tow_hours_price']").val(),
+                "model.four_hours_price": $(":input[name='four_hours_price']").val(),
+                "model.eight_hours_price": $(":input[name='eight_hours_price']").val(),
+                "model.twelve_hours_price": $(":input[name='twelve_hours_price']").val(),
+                "model.tow_hours_mem_price": $(":input[name='tow_hours_mem_price']").val(),
+                "model.four_hours_mem_price": $(":input[name='four_hours_mem_price']").val(),
+                "model.eight_hours_mem_price": $(":input[name='eight_hours_mem_price']").val(),
+                "model.twelve_hours_mem_price": $(":input[name='twelve_hours_mem_price']").val(),
+                "model.auto_price": $(":input[name='auto_price']").val(),
+                "model.auto_unit_price": $(":input[name='auto_unit_price']").val(),
+            }
+            for(key in param) {
+                if(!param[key]) {
+                    delete param[key];
+                }
+            }
+            return param;
+        }
+
+        //扩展js
+	</script>
+	<#include "/common/foot.html"/>
