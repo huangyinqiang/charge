@@ -50,7 +50,7 @@ function getOpenId() {
 	});
 }
 
-扫码查询
+//扫码查询
 function scanQR() {
 	if ($("input[type='checkbox']").is(':checked')) {
 		wx.scanQRCode({
@@ -58,7 +58,7 @@ function scanQR() {
 			desc : 'scanQRCode desc',
 			success : function(res) {
 				// 扫码后获取结果参数赋值给Input
-				if (res.resultStr.length == 11) {
+				if (res.resultStr.length == 11 || res.resultStr.length == 12) {
 					//新设备
                     queryNewDevice(res.resultStr);
 				}else {
@@ -78,11 +78,6 @@ function scanQR() {
 }
 
 
-// 扫码查询
-function scanQR1() {
-    queryDevice("290000001");
-
-}
 
 function queryNewDevice(value) {
 

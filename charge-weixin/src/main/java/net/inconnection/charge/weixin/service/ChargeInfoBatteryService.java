@@ -13,6 +13,7 @@ import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.bean.resp.PageResponse;
 import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.ChargeBatteryInfo;
+import net.inconnection.charge.weixin.model.NewDeviceChargeHistory;
 import net.inconnection.charge.weixin.model.TUser;
 import net.inconnection.charge.weixin.utils.EncDecUtils;
 import net.inconnection.charge.weixin.utils.HttpUrlConnectionUtil;
@@ -124,8 +125,10 @@ public class ChargeInfoBatteryService {
         return (Boolean)jsonObject.get("success");
     }
 
-    public Boolean saveNewDeviceChargeHistory(String openId, String deviceId, String devicePort, String time, String type, String money, String walletAccount, String operType) {
-        log.info("新增新设备充电记录 openId=" + openId + ",deviceId=" + devicePort + ",time=" + time + ",type=" + type + ",money=" + money + ",walletAccount=" + walletAccount + ",operType=" + operType);
+    public Boolean saveNewDeviceChargeHistory(String openId, String deviceId, String devicePort, String time, String type,
+                                              String money, String walletAccount, String operType, String realGiftRate, String companyId, String autoUnitPrice) {
+        log.info("新增新设备充电记录 openId=" + openId + ",deviceId=" + devicePort + ",time=" + time + ",type=" + type + ",money=" + money
+                + ",walletAccount=" + walletAccount + ",operType=" + operType + ",realGiftRate=" + realGiftRate);
 
         try {
             if (StringUtils.isBlank(openId)) {
@@ -168,6 +171,25 @@ public class ChargeInfoBatteryService {
                 return false;
             }
 
+            if (StringUtils.isBlank(companyId)) {
+                log.error("companyId不能为空");
+                return false;
+            }
+
+            if (StringUtils.isBlank(autoUnitPrice)) {
+                //如果没有，就默认50分
+                autoUnitPrice = "50";
+            }
+
+            Integer autoUnitPriceInt = Integer.parseInt(autoUnitPrice);
+
+            Long companyIdInt = Long.parseLong(companyId);
+
+            if (StringUtils.isBlank(realGiftRate)) {
+                realGiftRate = "1";
+            }
+            Double raelRate = Double.parseDouble(realGiftRate);//用户账号中的实充金额占比
+
             ChargeBatteryInfoBean chargeBatteryInfoBean = new ChargeBatteryInfoBean();
             chargeBatteryInfoBean.setOpenid(openId);
             chargeBatteryInfoBean.setDeviceid(deviceId);
@@ -178,8 +200,16 @@ public class ChargeInfoBatteryService {
             chargeBatteryInfoBean.setCharge(money);
             int walletAccountInt = Integer.parseInt(walletAccount);
             int moneyInt = Integer.parseInt(money);
+
+            Double walletRealAccountDouble = (((double)walletAccountInt-moneyInt)*raelRate) ;
+            int walletRealAccount = walletRealAccountDouble.intValue();
+            int walletGiftAccount = walletAccountInt - moneyInt - walletRealAccount;
+
+            int realMoney = new Double((double) moneyInt*raelRate).intValue();
+            int giftMoney = moneyInt - realMoney;
+
             if (operType.equals("M")) {
-                walletAccountInt += moneyInt;
+                //微信充值的，账户余额不变
                 chargeBatteryInfoBean.setWalletaccount(walletAccountInt);
             } else {
                 walletAccountInt -= moneyInt;
@@ -187,22 +217,41 @@ public class ChargeInfoBatteryService {
             }
 
             chargeBatteryInfoBean.setStatus("U");
-            chargeBatteryInfoBean.setFeestatus("U");
+            chargeBatteryInfoBean.setFeestatus("S");
             chargeBatteryInfoBean.setCreatedate(new Date());
+            chargeBatteryInfoBean.setStarttime(new Date());
             chargeBatteryInfoBean.setAutoCharge("N");
             if (type.equals("auto")) {
                 chargeBatteryInfoBean.setAutoCharge("Y");
+                //智能充电等到充电结束再结费
+                chargeBatteryInfoBean.setFeestatus("U");
             }
 
             String format = (new SimpleDateFormat("yy/MM/dd HH:mm:ss")).format(new Date());
             String MD5 = EncDecUtils.getMD5(openId + deviceId + format);
-            this.addAndUpdate(openId, MD5, operType, chargeBatteryInfoBean, walletAccountInt);
+            this.addAndUpdateNewDevice(openId, MD5, operType, type, chargeBatteryInfoBean, walletAccountInt, walletRealAccount, walletGiftAccount, companyIdInt, realMoney, giftMoney, raelRate,autoUnitPriceInt);
         } catch (Exception var15) {
             log.error("新增充电记录失败", var15);
             return false;
         }
 
         return true;
+    }
+    private void addAndUpdateNewDevice(final String openId, final String MD5, final String operType, final String type, final ChargeBatteryInfoBean chargeBatteryInfoBean,
+                                       final int walletAccountInt , final int walletRealAccount, final int walletGiftAccount, final Long companyId, final int realMoney,
+                                       final int giftMoney, final Double raelRate, final Integer autoUnitPriceInt) {
+        Db.tx(new IAtom() {
+            public boolean run() throws SQLException {
+                chargeBatteryInfoBean.setMd5(MD5);
+                ChargeBatteryInfo.dao.addChargeLog(chargeBatteryInfoBean);
+                NewDeviceChargeHistory.dao.addChargeHistory(chargeBatteryInfoBean, companyId, type, realMoney, giftMoney, raelRate, autoUnitPriceInt);
+                if (operType.equals("W") && type.equals("charge")) {
+                    TUser.dao.updateWalletAccount(walletAccountInt, walletRealAccount ,walletGiftAccount, openId);
+                }
+
+                return true;
+            }
+        });
     }
 
     private void addAndUpdate(final String openId, final String MD5, final String operType, final ChargeBatteryInfoBean chargeBatteryInfoBean, final int walletAccountInt) {

@@ -26,21 +26,30 @@ public class NewDeviceController extends Controller {
         String deviceId = this.getPara("deviceId");
         String devicePort = this.getPara("devicePort");
         String time = this.getPara("time");
-        String type = this.getPara("type");
+        String chargeType = this.getPara("type");
         String money = this.getPara("money");
         String walletAccount = this.getPara("walletAccount");
         String operType = this.getPara("operType");
+        String realGiftRate = this.getPara("realGiftRate");
+        String companyId = this.getPara("companyId");
+        String autoUnitPrice = this.getPara("autoUnitPrice");
 
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(devicePort);
         Integer chargeTime = Integer.parseInt(time);
+        log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
         Integer startChargeStatus = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTime, 30*1000L);
 
         if (null == startChargeStatus){
             startChargeStatus = 9999;
         }
+        log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
 
-        chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, type, money, walletAccount, operType);
+        if (startChargeStatus.equals(1)){
+            //充电成功
+            chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money, walletAccount, operType, realGiftRate, companyId ,autoUnitPrice);
+        }
+
 
         renderText(startChargeStatus.toString());
     }
@@ -50,16 +59,16 @@ public class NewDeviceController extends Controller {
         String deviceId = this.getPara("deviceId");
         String channeNum = this.getPara("channeNum");
         String openId = this.getPara("openId");
-        log.info("断电开始 openId=" + openId + ",id=" + id + ",channeNum=" + channeNum + ",deviceId=" + deviceId);
+        log.info("断电开始 openId=" + openId + ",id=" + id + ",channelNum=" + channeNum + ",deviceId=" + deviceId);
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(channeNum);
         Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, 30*1000L);
 
-
-
         if (null == powerOffStatus){
             powerOffStatus = 9999;
         }
+
+        log.info("断电结果 openId=" + openId + ",id=" + id + ",channelNum=" + channeNum + ",deviceId=" + deviceId + ",powerOffStatus=" + powerOffStatus);
 
         if (powerOffStatus == 1) {
             //断电成功

@@ -17,38 +17,93 @@
 	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
 
-    // 调用服务器充电
-    function startMqttCharging() {
+
+    var localUrl = window.location.href;
+    var openId;
+    $(function() {
+        openId = localStorage.getItem("openId");// 获取名称为“key”的值
+        if (null == openId) {
+            getOpenId();
+        }
+        getJsSdk();
+    });
+    function getJsSdk() {
         $.ajax({
-            type : 'POST',
-            url : "../newDevice/startCharge",
-            dataType : "json",
+            type : "POST",
+            url : "./scan/getJsSdk",
             data : {
-                openId : "1",
-                type : "1",
-                deviceId : "010100000001",
-                devicePort : "01",
-                time : "60",
-                money : "200",
-                walletAccount : "5000",
-                operType : "1"
+                url : localUrl
             },
-            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
-            // 从缓存里读取,为false只有ＧＥＴ请求时生效
-            async : false,// 设置同步方式，false为同步
+            cache : false,
+            async : false,//
+            dataType : "json",
             success : function(data) {
-                if (data == "1") {
-                    layer.msg("充电成功", {
-                        shift : 5
-                    });
+                wx.config({
+                    debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                    appId : data.appId, // 必填，公众号的唯一标识
+                    timestamp : data.timestamp, // 必填，生成签名的时间戳
+                    nonceStr : data.nonceStr, // 必填，生成签名的随机串
+                    signature : data.signature,// 必填，签名，见附录1
+                    jsApiList : [ 'scanQRCode' ]
+                    // 必填，需要使用的JS接口列表
+                });
+            }
+        });
+    }
+    // 获取session中的openId
+    function getOpenId() {
+        $.ajax({
+            type : "POST",
+            url : "./getOpenId",
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
+            // 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : false,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(data) {
+                if (data.respObj != null && data.respCode == "000000") {
+                    openId = data.respObj;
+                    localStorage.setItem("openId", data.respObj);// 以“key”为名称存储一个值“value”
                 } else {
-                    layer.msg("充电失败", {
-                        shift : 5
-                    });
+                    location.href = ".?type=2";
                 }
             }
         });
     }
+
+    //扫码查询
+    function scanQR() {
+        if ($("input[type='checkbox']").is(':checked')) {
+            wx.scanQRCode({
+                needResult : 1,// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
+                desc : 'scanQRCode desc',
+                success : function(res) {
+                    // 扫码后获取结果参数赋值给Input
+                    if (res.resultStr.length == 11 || res.resultStr.length == 12) {
+                        //新设备
+                        queryNewDevice(res.resultStr);
+                    }else {
+                        //老设备
+                        queryDevice(res.resultStr);
+                    }
+
+
+                }
+            });
+        } else {
+            layer.msg("请查看并勾选‘同意《充电说明》’", {
+                shift : 5
+            });
+            return;
+        }
+    }
+
+
+    // 扫码查询
+    function scanQR1() {
+        queryDevice("290000001");
+
+    }
+
 
     function permissionOnline() {
         $.ajax({
@@ -107,6 +162,36 @@
 
     }
 
+    // 查询
+    function queryDevice(value) {
+        $.ajax({
+            type : 'POST',
+            url : "./device/queryDeviceInfoByQr",
+            dataType : "json",
+            data : {
+                qr : value
+            },
+            cache : false,
+            async : false,
+            success : function(data) {
+                if (data.respCode != '000000' | null == data.respObj) {
+                    layer.msg("设备暂时离线，请稍后再试...", {
+                        shift : 5
+                    });
+                    return;
+                }
+                location.href = "./charging/choosePortAndTime?deviceId="
+                    + data.respObj.match_num + "&area="
+                    + encodeURI(encodeURI(data.respObj.area)) + "&activityId="
+                    + data.respObj.activity_id + "&type=" + data.respObj.type
+
+            },
+            error : function() {
+
+            }
+        });
+    }
+
 	
 </script>
 </head>
@@ -129,7 +214,6 @@
 		<i class="icon" onclick="scanQR1();"></i>
 		<input type="button" onclick="scanQR1();" value="扫码充电">
         <input type="button" onclick="permissionOnline();" value="允许入网">
-        <input type="button" onclick="startMqttCharging();" value="开始充电">
 		<input type="button" onclick="queryNewDevice('10100000001');" value="查询设备">
 	</div>
 	<div class="foot">

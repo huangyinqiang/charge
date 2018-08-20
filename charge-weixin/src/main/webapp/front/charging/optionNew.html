@@ -16,20 +16,18 @@
 <!--<script src="../js/charging/optionNew.js"></script>-->
 <script type="text/javascript" >
     var walletAccount;// 微信钱包
-    var autoPrice;// 智能充电预扣费价格
+    var autoPrice;// 智能充电钱包最小余额
     var device;// 设备信息
     var socketStatus;//插座状态
     var deviceId;// 设备编号
     var companyId;// 公司编号
     var activityId;// 活动编号
     var devicePort = 0;// 设备插座
-    var area;// 设备地址
     var userInfo;// 设备插座
     var time;// 充电时间
     var money;// 本次充电金额
-    var type;// 充电类型
-    var operType;// 支付类型
-    var flag;// 重复提交标记
+    var chargeType;// 充电类型 auto 智能充电（先充电，后结算） charge 正常充电（直接结算）  temp 临时充电（微信付款）
+    var operType;// 支付类型 W: 会员扣费（钱包扣费） M：微信单次支付
     var selectedHour;// 传值用
     var openId;
     $(function() {
@@ -74,19 +72,35 @@
     });
     // 设置非会员价格
     function selectCharge2Hours() {
-        money = parseInt(device.tow_hours_price);// 非会员价格
+        if(walletAccount < autoPrice){
+            money = parseInt(device.tow_hours_price);// 非会员价格
+		}else {
+            money = parseInt(device.tow_hours_mem_price);// 会员价格
+		}
     }
     function selectCharge4Hours() {
-        money = parseInt(device.four_hours_price);// 非会员价格
+        if(walletAccount < autoPrice){
+            money = parseInt(device.four_hours_price);// 非会员价格
+        }else {
+            money = parseInt(device.four_hours_mem_price);// 会员价格
+        }
     }
     function selectCharge8Hours() {
-        money = parseInt(device.eight_hours_price);// 非会员价格
+        if(walletAccount < autoPrice){
+            money = parseInt(device.eight_hours_price);// 非会员价格
+        }else {
+            money = parseInt(device.eight_hours_mem_price);// 会员价格
+        }
     }
     function selectCharge12Hours() {
-        money = parseInt(device.twelve_hours_price);// 非会员价格
+        if(walletAccount < autoPrice){
+            money = parseInt(device.twelve_hours_price);// 非会员价格
+        }else {
+            money = parseInt(device.twelve_hours_mem_price);// 会员价格
+        }
     }
     function selectChargeAuto() {
-        money = parseInt(device.twelve_hours_price);// 非会员价格
+        money = parseInt(device.auto_price);// 智能充电价格
     }
 
     // 确定充电时间和充电端口按钮
@@ -115,7 +129,7 @@
         }
         // 会员(未选择智能充电)
         if (walletAccount >= autoPrice) {
-            $("#explain").text('会员充电' + time + '分钟，根据功率自动计算费用。');// 充电说明
+            $("#explain").text('会员充电' + time + '分钟，费用' + money/100 + '元。');// 充电说明
             return;
         }
         // 认定为非会员 (未选择智能充电)
@@ -124,10 +138,8 @@
             return;
         }
         // 会员,但钱包小于5块(未选择智能充电)
-        if (autoPrice > walletAccount) {
-            $("#explain").text('亲，钱包余额少于五元，只能充电二小时按功率自动计费');// 充电说明
-            return;
-        }
+		$("#explain").text('亲，钱包余额较低，最多只能充电二小时');// 充电说明
+
 
     }
     // 开始充电按钮
@@ -150,7 +162,7 @@
 
         // 会员(选择智能充电)
         if (walletAccount >= autoPrice && time == 800) {
-            type = "auto";// 智能充电
+            chargeType = "auto";// 智能充电
             operType = "W";// 会员扣费
             money = autoPrice;
             memCharge();
@@ -163,9 +175,8 @@
         }
         // 会员(未选择智能充电)
         if (walletAccount >= autoPrice) {
-            type = "charge";// 按功率扣费
+            chargeType = "charge";// 按功率扣费
             operType = "W";// 会员扣费
-            money = autoPrice;// 预扣费5元
             memCharge();
             return;
         }
@@ -175,10 +186,7 @@
             return;
         }
         // 会员,钱包余额小于智能充电单价，只能充电2小时(未选择智能充电)
-        if (walletAccount < autoPrice) {
-            chargeTwoHoursOrPay();
-            return;
-        }
+		chargeTwoHoursOrPay();
 
     }
     // 会员充电提示
@@ -210,9 +218,9 @@
             + '分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！', {
             btn : [ '充电', '充值' ]
         }, function() {
-            type = "charge";// 按功率扣费
+            chargeType = "charge";// 功率充电
             operType = "W";// 会员扣费
-            money = 100;
+            money = parseInt(device.tow_hours_price);
             time = 120;
             requestNewDeviceStartCharge();
         }, function() {
@@ -265,7 +273,7 @@
         WeixinJSBridge.invoke('getBrandWCPayRequest', json, function(res) {
             // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回 ok，但并不保证它绝对可靠。
             if (res.err_msg == "get_brand_wcpay_request:ok") {
-                type = "temp";// 按功率扣费
+                chargeType = "temp";// 临时充电收费
                 operType = "M";// 微信单次支付
                 requestNewDeviceStartCharge();
             } else {
@@ -284,13 +292,16 @@
             dataType : "json",
             data : {
                 openId : openId,
-                type : type,
+                companyId : companyId,
+                type : chargeType,
                 deviceId : deviceId,
                 devicePort : devicePort,
                 time : time,
                 money : money,
                 walletAccount : walletAccount,
-                operType : operType
+                operType : operType,
+				realGiftRate : userInfo.real_git_rate,
+                autoUnitPrice : device.auto_unit_price
             },
             cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
             // 从缓存里读取,为false只有ＧＥＴ请求时生效
@@ -387,17 +398,7 @@
 
             for(var i=0; i<=socketStatus.length; i++){
                 var portStatus = socketStatus[i];
-                // var string="<div class='flex-row'>" +
-                // var string="<div class='flex1 '>" +
-                // var string="<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
-                //     "onclick='selectChargeSocket(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" ;//+
-                    // "</div>" +
-                    // "<div class='flex1'>" +
-                    // "<a id='7' href='javascript:;' class='rui-btn'" +
-                    // "onclick='selectChargeSocket(7,this);'>7</a>" +
-                    // "</div>" +
-                    // "</div>";
-                var string="<input type='button' id='" + portStatus.charge_socket_sn + "' class='rui-btn'" +
+                var string="<input chargeType='button' id='" + portStatus.charge_socket_sn + "' class='rui-btn'" +
                     "onclick='selectChargeSocket(" + portStatus.charge_socket_sn + ",this)'; value='" + portStatus.charge_socket_sn + "'>" ;//+
                 $("#chargeSocketStatus").append(string);
 
