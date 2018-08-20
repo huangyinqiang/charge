@@ -1,158 +1,101 @@
  <#include "/common/head.html"/>
 
-
+ <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script type="text/javascript" src="${basePath}/res/distpicker/distpicker.data.js"></script>
+ <script type="text/javascript" src="${basePath}/res/distpicker/distpicker.js"></script>
 <div class="easyui-panel updatePage"
 	data-options="fit:true,border:false">
 	<form id="ff" class="easyui-form" method="post">
-		<table class="table1">
-			<tr>
-				<th><span>公司名称：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="company_name"
-							id="company_name" value="${model.company_name!''}"
-							data-options="fit: true,required:true"></input>
+
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="company_name">公司名称：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="company_name" name="company_name" value="${model.company_name!''}" >
+				</div>
+			</div>
+
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="company_name">纳税账号：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="taxpayer_id" name="taxpayer_id" value="${model.taxpayer_id!''}" >
+				</div>
+			</div>
+
+
+			<div data-toggle="distpicker">
+				<div class="form-group form-group--xs">
+					<input type=text style="display:none" id="province" name="province">
+					<label class="col-sm-5 control-label" for="province1">所在省：</label>
+					<div class="col-sm-5">
+						<select class="form-control" id="province1"  data-province="${model.province!''}"></select>
 					</div>
-				</td>
-
-			</tr>
-
-
-			<tr>
-				<th><span>纳税账号：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="taxpayer_id"
-							   id="taxpayer_id" value="${model.taxpayer_id!''}"
-							   data-options="fit: true,required:true"></input>
+				</div>
+				<div class="form-group form-group--xs">
+					<input type=text style="display:none" id="city" name="city" >
+					<label class="col-sm-5 control-label" for="city1">所在市：</label>
+					<div class="col-sm-5">
+						<select class="form-control" id="city1" data-city="${model.city!''}"></select>
 					</div>
-				</td>
+				</div>
+			</div>
 
-			</tr>
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="detail_location">详细位置：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="detail_location" name="detail_location" value="${model.detail_location!''}" >
+				</div>
+			</div>
 
-			<tr>
-				<th><span>省：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="province"
-							   id="province" value="${model.province!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="legal_person">法人：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="legal_person" name="legal_person" value="${model.legal_person!''}" >
+				</div>
+			</div>
 
-			</tr>
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="weixin_account">微信收款账号：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="weixin_account" name="weixin_account" value="${model.weixin_account!''}" >
+				</div>
+			</div>
 
-			<tr>
-				<th><span>市：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="city"
-							   id="city" value="${model.city!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="admin_id">管理者：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="admin_id" name="admin_id" value="${model.admin_id!''}" >
+				</div>
+			</div>
 
-			</tr>
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="balance_rate">结算比例：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="balance_rate" name="balance_rate" value="${model.balance_rate!''}" >
+				</div>
+			</div>
 
-			<tr>
-				<th><span>详细位置：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="detail_location"
-							   id="detail_location" value="${model.detail_location!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="balance_type">结算类型：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="balance_type" name="balance_type" value="${model.balance_type!''}" >
+				</div>
+			</div>
 
-			</tr>
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="contact">联系人：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="contact" name="contact" value="${model.contact!''}" >
+				</div>
+			</div>
 
-			<tr>
-				<th><span>法人：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="legal_person"
-							   id="legal_person" value="${model.legal_person!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
+			<div class="form-group form-group-xs">
+				<label class="col-sm-5 control-label" for="contact_phone">联系电话：</label>
+				<div class="col-sm-5">
+					<input class="form-control input-xs" type="text" id="contact_phone" name="contact_phone" value="${model.contact_phone!''}" >
+				</div>
+			</div>
 
-			</tr>
-			<tr>
-				<th><span>微信收款账号：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="weixin_account"
-							   id="weixin_account" value="${model.weixin_account!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
-
-			</tr>
-
-			<tr>
-				<th><span>管理者：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="admin_id"
-							   id="admin_id" value="${model.admin_id!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
-
-			</tr>
-
-
-			<tr>
-				<th><span>结算比例：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="balance_rate"
-							   id="balance_rate" value="${model.balance_rate!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
-
-			</tr>
-
-
-			<tr>
-				<th><span>结算类型：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="balance_type"
-							   id="balance_type" value="${model.balance_type!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
-
-			</tr>
-
-
-			<tr>
-				<th><span>联系人：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="contact"
-							   id="contact" value="${model.contact!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
-
-			</tr>
-
-			<tr>
-				<th><span>联系电话：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="contact_phone"
-							   id="contact_phone" value="${model.contact_phone!''}"
-							   data-options="fit: true,required:true"></input>
-					</div>
-				</td>
-
-			</tr>
-
-		</table>
 	</form>
 </div>
 <script>
@@ -166,12 +109,13 @@ function save() {
 	}
 }
 function getParam() {
+
 	var param = {
         "id": ${model.id},
         "model.company_name": $(":input[name='company_name']").val(),
         "model.taxpayer_id": $(":input[name='taxpayer_id']").val(),
-        "model.province": $(":input[name='province']").val(),
-        "model.city": $(":input[name='city']").val(),
+        "model.province": $("#province1  option:selected").text(),
+        "model.city":  $("#city1  option:selected").text(),
         "model.detail_location": $(":input[name='detail_location']").val(),
         "model.legal_person": $(":input[name='legal_person']").val(),
         "model.weixin_account": $(":input[name='weixin_account']").val(),
