@@ -72,15 +72,16 @@ public class NewDeviceController extends Controller {
 
     public void permissionOnLine(){
         String deviceId = this.getPara("deviceId");
-        String openId = this.getPara("openId");
-        log.info("设备允许入网 openId=" + openId + "deviceId=" + deviceId);
+        log.info("新设备允许入网 deviceId=" + deviceId);
         Long deviceSN = Long.parseLong(deviceId);
         Boolean permissonOnlineSuccess = deviceControlService.requestPermissionOnLine(deviceSN, 30*1000L);
 
         if (permissonOnlineSuccess){
+            log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功");
             renderText("success");
         }else {
             renderText("fail");
+            log.info("新设备入网结果 deviceId=" + deviceId + ", 入网失败");
         }
     }
 

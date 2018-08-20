@@ -21,13 +21,16 @@ public class DeviceControlServiceImpl implements DeviceControlService {
 
     @Override
     public Boolean requestPermissionOnLine(Long gwId, Long timeout) {
-        String callBackQueueName = UUID.randomUUID().toString();
+//        String callBackQueueName = UUID.randomUUID().toString();
+        String callBackQueueName = "requestPermissionOnLine";
         boolean sendSuccess = ChargePileCommander.getInstance().permissionOnLine(gwId, callBackQueueName);
         if (!sendSuccess){
             return false;
         }
 
-        return getResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
+//        return true;
+        Boolean result = getResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
+        return result;
     }
 
 
@@ -38,6 +41,7 @@ public class DeviceControlServiceImpl implements DeviceControlService {
         if (!sendSuccess){
             return false;
         }
+//        return  true;
         return getResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
     }
 
@@ -63,6 +67,7 @@ public class DeviceControlServiceImpl implements DeviceControlService {
             return null;
         }
 
+//        return 1;
         return getSingleResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
     }
 
@@ -87,8 +92,8 @@ public class DeviceControlServiceImpl implements DeviceControlService {
             return null;
         }
 
-        return 1;
-//        return getSingleResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
+//        return 1;
+        return getSingleResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
     }
 
     //获取响应结果
@@ -141,4 +146,5 @@ public class DeviceControlServiceImpl implements DeviceControlService {
         }
         return resultMap;
     }
+
 }
