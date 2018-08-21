@@ -68,27 +68,14 @@ var dgOptions = {
         queryParams: getInitParam(),
         
         columns: [[
-		         {field:'id', checkbox:true},
-            {field:'pile_id', hidden:true}
-	           	 ,{field:'pile_name', title: '充电桩名称', width:120, sortable: true}
-	           	 ,{field:'status', title: '状态', width:120,height:20, sortable: true,
-                formatter : function(value, row, index) {
-                    if (value == '1') {
-                        return "<span >正常</span>";
-                    } else if (value == '2') {
-                        return "<span>离线</span>";
-                    } else{
-                        return "<span>故障</span>";
-                    }
-                }}
-	           	 ,{field:'socket_sum', title: '插头数', width:120, sortable: true}
-	           	 ,{field:'power_max', title: '最大功率', width:120, sortable: true}
-	           	 ,{field:'total_intensity', title: '总电流', width:120, sortable: true}
-	           	 ,{field:'total_voltage', title: '总电压', width:120, sortable: true}
-            ,{field:'bat_vol', title: '电池电压', width:120}
-	           	 ,{field:'controller_vol', title: '控制器供电电压', width:120, sortable: true}
+		         {field:'id', checkbox:true}
+		         ,{field:'pile_id', title: '充电桩ID', width:120,sortable: true}
+	           	 ,{field:'total_intensity', title: '总电流(A)', width:120, sortable: true}
+	           	 ,{field:'total_voltage', title: '总电压(V)', width:120, sortable: true}
+                 ,{field:'bat_vol', title: '电池电压（mV）', width:120}
+	           	 ,{field:'controller_vol', title: '控制器供电电压(mV)', width:120, sortable: true}
                  ,{field:'power_total', title: '总功率', width:120, sortable: true}
-                ,{field:'update_time', title: '时间', width:120, sortable: true}
+                 ,{field:'update_time', title: '时间', width:120, sortable: true}
 
 	           ]]
 	};

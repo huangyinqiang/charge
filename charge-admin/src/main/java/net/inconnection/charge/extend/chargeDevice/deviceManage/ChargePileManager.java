@@ -36,9 +36,9 @@ public class ChargePileManager {
             chargePileDevice.setPower(chargePile.getPowerTotal());
 
             List<ChargeSocket> chargeSockets= ChargeSocket.dao.find("select * from yc_charge_socket where charge_pile_id=" + chargePileId);
-            Map<Long, Device> chargeSocketComponentMap = new HashMap<>();
+            Map<Long, ChargeSocketComponent> chargeSocketComponentMap = new HashMap<>();
             for (ChargeSocket chargeSocket: chargeSockets){
-                Device device = new ChargeSocketComponent(chargePileId, (Long.valueOf(chargeSocket.getChargeSocketSn())));
+                ChargeSocketComponent device = new ChargeSocketComponent(chargePileId, (Long.valueOf(chargeSocket.getChargeSocketSn())));
 
 
                 chargeSocketComponentMap.put((Long.valueOf(chargeSocket.getChargeSocketSn())),device);

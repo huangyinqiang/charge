@@ -32,6 +32,7 @@ public class ChargePileDevice implements GateWay {
     private String name;//充电桩名称
 
     private Long voltage;//充电电压
+    private Long intensity;//充电电流
     private Long power;//充电功率
 
     private Integer batVol;//电池电压
@@ -44,7 +45,7 @@ public class ChargePileDevice implements GateWay {
 
     private Map<Integer, Alarm> alarmMap = new HashMap<>();//Tag， alarm   保存的状态数据
 
-    private Map<Long, Device> chargeSocketMap = new HashMap<>();//该充电桩下的所有插座
+    private Map<Long, ChargeSocketComponent> chargeSocketMap = new HashMap<>();//该充电桩下的所有插座
 
     private static Logger _log = LoggerFactory.getLogger(ChargePileDevice.class);
     private Map<Integer, String> requestSNAndCallBackQueueNameMap = new ConcurrentHashMap();
@@ -61,10 +62,12 @@ public class ChargePileDevice implements GateWay {
 
     void updateDataToDb(){
         ChargePile chargePileDo = new ChargePile();
-        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).update();
+        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).setTotalIntensity(intensity).
+                setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).update();
 
         ChargePileHistory chargePileHistory = new ChargePileHistory();
-        chargePileHistory.setPileId(chargePileId).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).save();
+        chargePileHistory.setPileId(chargePileId).setTotalVoltage(voltage).setTotalIntensity(intensity).
+                setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).save();
 
     }
 
@@ -98,7 +101,7 @@ public class ChargePileDevice implements GateWay {
         isOnline = online;
     }
 
-    public void setChargeSocketMap(Map<Long, Device> chargeSocketMap) {
+    public void setChargeSocketMap(Map<Long, ChargeSocketComponent> chargeSocketMap) {
         this.chargeSocketMap = chargeSocketMap;
     }
 
@@ -186,8 +189,8 @@ public class ChargePileDevice implements GateWay {
             controllerVol = Integer.parseInt(gwFacetObj.getString(MSG_CONTROLLER_VOL));
         }
 
-        updateDataToDb();
 
+        intensity = 0L;
         for (int i=1; i<msgJArray.size(); i++){
             JSONObject chargeSocketObj = msgJArray.getJSONObject(i);
 
@@ -199,13 +202,18 @@ public class ChargePileDevice implements GateWay {
                 addNewDeviceToDb(chargePileId, socketSn);
             }
 
-            Device chargeSocket = chargeSocketMap.get(socketSn);
+            ChargeSocketComponent chargeSocket = chargeSocketMap.get(socketSn);
 
             chargeSocket.updateData(dataTime, chargeSocketObj);
 
             chargeSocket.updateStatus(dataTime, chargeSocketObj);
 
+            intensity += chargeSocket.getChargeIntensity();
         }
+
+
+
+        updateDataToDb();
 
         displayAll();
     }
