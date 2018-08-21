@@ -42,7 +42,7 @@ public class ChargeSocketComponent implements Device {
     private Long chargeIntensity;//电流，单位mA
     private Long chargeTime;//充电时长，单位s
     private Integer chargeState;//充电状态， 1：充电中  0：充电截止 2：过流保护
-    private Integer lastChargeState;//上次的充电状态
+    private Integer lastChargeState = 0;//上次的充电状态
     private Date lastUpdateTime;
 
 
@@ -143,8 +143,12 @@ public class ChargeSocketComponent implements Device {
                 chargeState = 0;
             }
             updateDataToDb();
+//            _log.info("pile id = " + chargePileId + ", socket Id  =  " + chargeSocketId);
             if (lastChargeState.equals(CHARGE_ING) && chargeState.equals(CHARGE_DONE) && chargeTime>0){
                 //充电完成,结算费用
+
+                //向设备发送关闭消息
+                shutDownChargeSocket();
 
                 calculateFeeAndUpdata(chargePileId, chargeSocketId);
             }
@@ -159,13 +163,7 @@ public class ChargeSocketComponent implements Device {
 
     private void calculateFeeAndUpdata(Long chargePileId, Long chargeSocketId){
 
-        //向设备发送关闭消息
-//        shutDownChargeSocket();
-
         ChargeHistory chargeHistory = ChargeHistory.dao.findFirst("select * from yc_charge_history where deviceId = ? and socketSn = ? order by operStartTime desc ",new Object[]{chargePileId, chargeSocketId});
-
-
-
 
         Integer autoChargeUnitPrice = 0;
         Integer autoChargeMoney = 0;
@@ -207,7 +205,7 @@ public class ChargeSocketComponent implements Device {
         }
 
 
-        ChargeBatteryInfo chargeBatteryInfo = ChargeBatteryInfo.dao.findFirst("select * from charge_battery_info where deviceId = ? and devicePort = ?", new Object[]{chargePileId, chargeSocketId});
+        ChargeBatteryInfo chargeBatteryInfo = ChargeBatteryInfo.dao.findFirst("select * from charge_battery_info where deviceId = ? and devicePort = ? order by operStartTime desc ", new Object[]{chargePileId, chargeSocketId});
         if (chargeBatteryInfo != null){
 
             chargeBatteryInfo.setFeeStatus("S");

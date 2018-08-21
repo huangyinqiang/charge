@@ -19,10 +19,6 @@ public class MQTTMsgProcessor {
     }
 
     public void processIncomeMsg(String topic, String message) {
-
-        System.out.println("topic : " + topic);
-        System.out.println("msg : " + message);
-
         GeneralTopic generalTopic = new GeneralTopic(topic);
         Long gwId = Long.parseLong(generalTopic.getGwId());
         String messageType = generalTopic.getMessageType();
@@ -37,11 +33,11 @@ public class MQTTMsgProcessor {
 
             ChargePileDevice chargePileDevice = chargePileManager.getChargePile(gwId);
 
-            System.out.println("----chargePileManager----");
-            System.out.println(chargePileManager);
-
-            System.out.println("----chargePileDevice----");
-            System.out.println(chargePileDevice);
+//            System.out.println("----chargePileManager----");
+//            System.out.println(chargePileManager);
+//
+//            System.out.println("----chargePileDevice----");
+//            System.out.println(chargePileDevice);
 
             if (null == chargePileDevice){
                 return;

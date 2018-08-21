@@ -153,8 +153,6 @@ public class ChargePileDevice implements GateWay {
 
     private void updateDataAndAlarm(JSONArray msgJArray){
 
-        System.out.println("updateDataAndAlarm jarray: " + msgJArray);
-
         JSONObject gwFacetObj = msgJArray.getJSONObject(0);
 
         if (chargePileId != Long.parseLong(gwFacetObj.getString(MSG_GWID))){
