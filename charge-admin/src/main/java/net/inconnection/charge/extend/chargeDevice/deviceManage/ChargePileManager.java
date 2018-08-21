@@ -39,6 +39,8 @@ public class ChargePileManager {
             Map<Long, Device> chargeSocketComponentMap = new HashMap<>();
             for (ChargeSocket chargeSocket: chargeSockets){
                 Device device = new ChargeSocketComponent(chargePileId, (Long.valueOf(chargeSocket.getChargeSocketSn())));
+
+
                 chargeSocketComponentMap.put((Long.valueOf(chargeSocket.getChargeSocketSn())),device);
             }
 
