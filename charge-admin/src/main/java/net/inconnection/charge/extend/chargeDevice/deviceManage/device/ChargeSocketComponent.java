@@ -143,11 +143,11 @@ public class ChargeSocketComponent implements Device {
                 chargeState = 0;
             }
             updateDataToDb();
-//            if (lastChargeState.equals(CHARGE_ING) && chargeState.equals(CHARGE_DONE) && chargeTime>0){
+            if (lastChargeState.equals(CHARGE_ING) && chargeState.equals(CHARGE_DONE) && chargeTime>0){
                 //充电完成,结算费用
 
                 calculateFeeAndUpdata(chargePileId, chargeSocketId);
-//            }
+            }
 
             lastChargeState = chargeState;
 
