@@ -43,8 +43,8 @@ public class PerformenceTester {
                     seq = String.valueOf(SEQGeneration.getInstance().getSEQ());//sequenceNum生成
 
                     String dataMsg = "GWID:" + gwId + ";SEQ:" + seq + ";TIME:" + timeStr + ";BAT:3364;VOL:11446;VOL_AC:220;POW:12000" + ";STATUS:1" + MSG_FACET_SEPARATOR_INSIDE +
-                            "DEVICESN:01;MAINTYPE:1;USE:1;SP:100;CI:234;CT:332;CS:1;WARN:1,2" + MSG_FACET_SEPARATOR_INSIDE +
-                            "DEVICESN:02;MAINTYPE:1;USE:1;SP:100;CI:234;CT:332;CS:1";
+                            "DEVICESN:07;MAINTYPE:1;USE:1;SP:100;CI:234;CT:332;CS:1;WARN:1,2" + MSG_FACET_SEPARATOR_INSIDE +
+                            "DEVICESN:08;MAINTYPE:1;USE:1;SP:100;CI:234;CT:150;CS:1";
 
                     sendMqttMsg(dataTopic, dataMsg);
                 }

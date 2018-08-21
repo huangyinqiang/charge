@@ -143,11 +143,11 @@ public class ChargeSocketComponent implements Device {
                 chargeState = 0;
             }
             updateDataToDb();
-            if (lastChargeState.equals(CHARGE_ING) && chargeState.equals(CHARGE_DONE) && chargeTime>0){
+//            if (lastChargeState.equals(CHARGE_ING) && chargeState.equals(CHARGE_DONE) && chargeTime>0){
                 //充电完成,结算费用
 
                 calculateFeeAndUpdata(chargePileId, chargeSocketId);
-            }
+//            }
 
             lastChargeState = chargeState;
 
@@ -160,9 +160,12 @@ public class ChargeSocketComponent implements Device {
     private void calculateFeeAndUpdata(Long chargePileId, Long chargeSocketId){
 
         //向设备发送关闭消息
-        shutDownChargeSocket();
+//        shutDownChargeSocket();
 
-        ChargeHistory chargeHistory = ChargeHistory.dao.findFirst("select * from yc_charge_history where deviceId = ? and devicePort = ?", new Object[]{chargePileId, chargeSocketId});
+        ChargeHistory chargeHistory = ChargeHistory.dao.findFirst("select * from yc_charge_history where deviceId = ? and socketSn = ? order by operStartTime desc ",new Object[]{chargePileId, chargeSocketId});
+
+
+
 
         Integer autoChargeUnitPrice = 0;
         Integer autoChargeMoney = 0;

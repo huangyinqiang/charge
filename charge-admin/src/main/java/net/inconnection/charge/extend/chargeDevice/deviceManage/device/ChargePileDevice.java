@@ -64,8 +64,7 @@ public class ChargePileDevice implements GateWay {
         chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).update();
 
         ChargePileHistory chargePileHistory = new ChargePileHistory();
-//        chargePileHistory.setPileId(chargePileId).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).save();
-
+        chargePileHistory.setPileId(chargePileId).setTotalVoltage(voltage).setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).save();
 
     }
 

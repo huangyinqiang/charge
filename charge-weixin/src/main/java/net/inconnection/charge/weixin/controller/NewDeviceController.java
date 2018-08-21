@@ -41,7 +41,7 @@ public class NewDeviceController extends Controller {
         Integer startChargeStatus = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTime, 30*1000L);
 
         if (null == startChargeStatus){
-            startChargeStatus = 9999;
+            startChargeStatus = 1;
         }
         log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
 
