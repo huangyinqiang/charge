@@ -39,11 +39,13 @@ public class ChargeSocketComponent implements Device {
 
     private boolean used;
     private Long startPower;//初始充电功率，单位mW
-    private Long chargeIntensity;//电流，单位mA
+    private Long chargeIntensity = 0L;//电流，单位mA
     private Long chargeTime;//充电时长，单位s
     private Integer chargeState;//充电状态， 1：充电中  0：充电截止 2：过流保护
     private Integer lastChargeState = 0;//上次的充电状态
     private Date lastUpdateTime;
+    private Long chargeVoltage = 0L;
+    private Long chargePower = 0L;
 
 
 
@@ -57,11 +59,11 @@ public class ChargeSocketComponent implements Device {
     public void updateDataToDb(){
         ChargeSocket chargeSocketDo = new ChargeSocket();
         Long socketKey = Long.parseLong(chargePileId.toString() + chargeSocketId.toString());
-        chargeSocketDo.setId(socketKey).setIsUsed(used).setStartPower(startPower)
+        chargeSocketDo.setId(socketKey).setIsUsed(used).setStartPower(startPower).setChargePower(chargePower)
                 .setChargeIntensity(chargeIntensity).setChargeTime(chargeTime).setChargeState(chargeState).setUpdateTime(lastUpdateTime).update();
 
         ChargeSocketHistory chargeSocketHistory = new ChargeSocketHistory();
-        chargeSocketHistory.setChargeSocketId(socketKey).setStartPower(startPower)
+        chargeSocketHistory.setChargeSocketId(socketKey).setChargePileId(chargePileId).setStartPower(startPower).setChargePower(chargePower)
                 .setChargeIntensity(chargeIntensity).setChargeState(chargeState).setUpdateTime(lastUpdateTime).save();
     }
 
@@ -96,7 +98,10 @@ public class ChargeSocketComponent implements Device {
                 ", chargeIntensity=" + chargeIntensity +
                 ", chargeTime=" + chargeTime +
                 ", chargeState=" + chargeState +
+                ", lastChargeState=" + lastChargeState +
                 ", lastUpdateTime=" + lastUpdateTime +
+                ", chargeVoltage=" + chargeVoltage +
+                ", chargePower=" + chargePower +
                 ", alarmMap=" + alarmMap +
                 '}';
     }
@@ -142,6 +147,9 @@ public class ChargeSocketComponent implements Device {
                 chargeTime = 0L;
                 chargeState = 0;
             }
+
+            chargePower = chargeIntensity * chargeVoltage;
+
             updateDataToDb();
 //            _log.info("pile id = " + chargePileId + ", socket Id  =  " + chargeSocketId);
             if (lastChargeState.equals(CHARGE_ING) && chargeState.equals(CHARGE_DONE) && chargeTime>0){
@@ -333,5 +341,9 @@ public class ChargeSocketComponent implements Device {
 
     public Date getLastUpdateTime() {
         return lastUpdateTime;
+    }
+
+    public void setChargeVoltage(Long chargeVoltage) {
+        this.chargeVoltage = chargeVoltage;
     }
 }

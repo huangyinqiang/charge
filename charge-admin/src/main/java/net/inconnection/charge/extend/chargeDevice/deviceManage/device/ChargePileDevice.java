@@ -204,14 +204,14 @@ public class ChargePileDevice implements GateWay {
 
             ChargeSocketComponent chargeSocket = chargeSocketMap.get(socketSn);
 
+            chargeSocket.setChargeVoltage(voltage);
+
             chargeSocket.updateData(dataTime, chargeSocketObj);
 
             chargeSocket.updateStatus(dataTime, chargeSocketObj);
 
             intensity += chargeSocket.getChargeIntensity();
         }
-
-
 
         updateDataToDb();
 
