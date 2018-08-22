@@ -21,6 +21,7 @@ public class NewDeviceController extends Controller {
 
     private static final Log log = Log.getLog(NewDeviceController.class);
 
+
     public void startCharge(){
         String openId = this.getPara("openId");
         String deviceId = this.getPara("deviceId");
@@ -79,19 +80,49 @@ public class NewDeviceController extends Controller {
 
     }
 
-    public void permissionOnLine(){
+
+    public void permissionOnlineAndUpdate(){
         String deviceId = this.getPara("deviceId");
-        log.info("新设备允许入网 deviceId=" + deviceId);
-        Long deviceSN = Long.parseLong(deviceId);
-        Boolean permissonOnlineSuccess = deviceControlService.requestPermissionOnLine(deviceSN, 30*1000L);
+        String openId = this.getPara("openId");
+        String chargePileName = this.getPara("chargePileName");
+        String province = this.getPara("province");
+        String city = this.getPara("city");
+        String location = this.getPara("location");
+        String latitude = this.getPara("latitude");
+        String longitude = this.getPara("longitude");
+        String powerMax = this.getPara("powerMax");
+        String socketSum = this.getPara("socketSum");
+        String companyId = this.getPara("companyId");
+
+        Long chargePileId = Long.parseLong(deviceId);
+        Double latitudeDouble = Double.parseDouble(latitude);
+        Double longitudeDouble = Double.parseDouble(longitude);
+        Long powerMaxLong = Long.parseLong(powerMax);
+        Integer socketSumInt = Integer.parseInt(socketSum);
+        Long companyIdLong = Long.parseLong(companyId);
+
+        Boolean permissonOnlineSuccess = true;//deviceControlService.requestPermissionOnLine(chargePileId, 30*1000L);
 
         if (permissonOnlineSuccess){
             log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功");
-            renderText("success");
+
+            Boolean updateResult = newDeviceService.updateInstallInfo(chargePileId, chargePileName, province, city, location, latitudeDouble,
+                    longitudeDouble, powerMaxLong, socketSumInt , companyIdLong);
+
+            if (updateResult != null && updateResult.equals(true)) {
+
+                log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功，信息更新成功");
+                renderText("success");
+            }else {
+                log.info("新设备入网结果 deviceId=" + deviceId + ", 安装信息更新失败");
+                renderText("updateFailed");
+            }
         }else {
-            renderText("fail");
             log.info("新设备入网结果 deviceId=" + deviceId + ", 入网失败");
+            renderText("fail");
         }
+
+
     }
 
     public void getDeviceInfo(){
@@ -104,6 +135,15 @@ public class NewDeviceController extends Controller {
 
     }
 
+    public void getNotifyDeviceInfo(){
+        String deviceId = this.getPara("deviceId");
+
+        HnKejueResponse json = newDeviceService.queryNotifyDevice(deviceId);
+        log.info("根据二维码查询未安装设备结束：" + json);
+        this.renderJson(json);
+
+    }
+
 
     public void queryDeviceChargePrice() {
         String deviceId = this.getPara("deviceId");
@@ -111,7 +151,7 @@ public class NewDeviceController extends Controller {
         Long companyId = Long.parseLong(companyIdStr);
         log.info("查询充电价格开始,companyId=" + this.getPara("companyId"));
         HnKejueResponse json = newDeviceChargePriceService.queryChargePrice(companyId);
-        log.info("根据内部编号查询设备结束：" + json);
+        log.info("查询充电价格结束：" + json);
         this.renderJson(json);
     }
 
@@ -124,5 +164,16 @@ public class NewDeviceController extends Controller {
         this.renderJson(json);
 
     }
+
+    public void getAllCompany(){
+        log.info("查询所有运营商公司");
+
+        HnKejueResponse json = newDeviceService.getAllCompany();
+        log.info("查询所有运营商公司结束：" + json);
+        this.renderJson(json);
+
+    }
+
+
 
 }
