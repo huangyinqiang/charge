@@ -20,7 +20,8 @@
 
     var localUrl = window.location.href;
     var openId;
-    var location;
+    var latitude = 34.123453;
+    var longitude = 108.89876;
 
     $(function() {
         openId = localStorage.getItem("openId");// 获取名称为“key”的值
@@ -52,7 +53,8 @@
                 wx.ready(function() {
                     wx.getLocation({
                         success : function(res) {
-                            location = res;
+                            latitude = res.latitude;
+                            longitude = res.longitude;
                         },
                         fail : function(res) {
                             layer.msg("获取当前位置失败", {
@@ -133,12 +135,10 @@
                     layer.msg("设备暂时离线，请稍后再试...", {
                         shift : 5
                     });
-                    // return;
+                    return;
                 }
-                // location.href = "./install/editInstallInfo?deviceId="
-                //     + data.respObj.id + "&latitude=" + location.latitude + "&longitude=" + location.longitude
                 location.href = "./install/editInstallInfo?deviceId="
-                    + data.respObj.id + "&latitude=" + "108.9987" + "&longitude=" + "39.9765"
+                    + data.respObj.id + "&latitude=" + latitude + "&longitude=" + longitude
 
             },
             error : function() {

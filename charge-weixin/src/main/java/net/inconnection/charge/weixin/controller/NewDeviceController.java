@@ -5,6 +5,7 @@ import com.jfinal.log.Log;
 import net.inconnection.charge.service.DeviceControlService;
 import net.inconnection.charge.service.dubboPlugin.DubboServiceContrain;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
+import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.ChargeBatteryInfo;
 import net.inconnection.charge.weixin.service.ChargeInfoBatteryService;
 import net.inconnection.charge.weixin.service.NewDeviceChargePriceService;
@@ -42,7 +43,7 @@ public class NewDeviceController extends Controller {
         Integer startChargeStatus = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTime, 30*1000L);
 
         if (null == startChargeStatus){
-            startChargeStatus = 1;
+            startChargeStatus = 9999;
         }
         log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
 
@@ -52,7 +53,7 @@ public class NewDeviceController extends Controller {
         }
 
 
-        renderText(startChargeStatus.toString());
+        this.renderText(startChargeStatus.toString());
     }
 
     public void powerOff(){
@@ -76,7 +77,7 @@ public class NewDeviceController extends Controller {
             ChargeBatteryInfo.dao.updateEndTimeById(id);
         }
 
-        renderText(powerOffStatus.toString());
+        this.renderText(powerOffStatus.toString());
 
     }
 
@@ -112,16 +113,19 @@ public class NewDeviceController extends Controller {
             if (updateResult != null && updateResult.equals(true)) {
 
                 log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功，信息更新成功");
-                renderText("success");
+
+                HnKejueResponse json = new HnKejueResponse(RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
+                this.renderJson(json);
             }else {
                 log.info("新设备入网结果 deviceId=" + deviceId + ", 安装信息更新失败");
-                renderText("updateFailed");
+                HnKejueResponse json = new HnKejueResponse(RespCode.DB_UPDATE_FAIL.getKey(), RespCode.DB_UPDATE_FAIL.getValue());
+                this.renderJson(json);
             }
         }else {
             log.info("新设备入网结果 deviceId=" + deviceId + ", 入网失败");
-            renderText("fail");
+            HnKejueResponse json = new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
+            this.renderJson(json);
         }
-
 
     }
 

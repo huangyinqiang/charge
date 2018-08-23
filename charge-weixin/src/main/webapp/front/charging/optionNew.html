@@ -387,24 +387,24 @@
             async : false,// 设置同步方式，false为同步
             dataType : "json",
             success : function(data) {
-                companys(data);
+                showSocketStatus(data);
             }
         });
     }
-    function socketStatus(data) {
+    function showSocketStatus(data) {
         if (data.respObj != null && data.respCode == "000000") {
             socketStatus = data.respObj;
 
 
-            for(var i=0; i<=companys.length; i++){
-                var portStatus = companys[i];
+            for(var i=0; i<=socketStatus.length; i++){
+                var portStatus = socketStatus[i];
                 var string="<input chargeType='button' id='" + portStatus.charge_socket_sn + "' class='rui-btn'" +
                     "onclick='selectChargeSocket(" + portStatus.charge_socket_sn + ",this)'; value='" + portStatus.charge_socket_sn + "'>" ;//+
                 $("#chargeSocketStatus").append(string);
 
                 if (portStatus.is_used == true ) {
-                    $("#" + companys[i].charge_socket_sn).attr("value", "插座" + companys[i].charge_socket_sn + "充电中");
-                    $("#" + companys[i].charge_socket_sn).attr("disabled","disabled");
+                    $("#" + socketStatus[i].charge_socket_sn).attr("value", "插座" + socketStatus[i].charge_socket_sn + "充电中");
+                    $("#" + socketStatus[i].charge_socket_sn).attr("disabled","disabled");
                 }
 
 			}
