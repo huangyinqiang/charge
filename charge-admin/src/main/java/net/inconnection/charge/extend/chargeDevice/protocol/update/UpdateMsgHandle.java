@@ -7,6 +7,8 @@ import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.DeviceUpdateMsg;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.utils.RedisUtil;
+
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.MQTT_TOPIC_CUR_VERSION;
@@ -28,9 +30,10 @@ public class UpdateMsgHandle {
         String seq = jsonObject.getString("seq");
         String timeStr = jsonObject.getString("timeStr");
 
+        byte[] firmwareFileName = RedisUtil.get(gwid.toString().getBytes());
 
         //获取升级的buff
-        byte[] buff = RedisUtil.get((industry + "/" + protocolVersion + "/" + gwid.toString()).getBytes());
+        byte[] buff = RedisUtil.get(firmwareFileName);
 
         if(buff == null || buff.length == 0){
             response2Client(server,key,13);
@@ -40,7 +43,7 @@ public class UpdateMsgHandle {
 
         //生成主题
         GeneralTopic generalTopic = new GeneralTopic();
-        String topic = generalTopic.generateTopic(industry, protocolVersion, gwid.toString() , TOPIC_UPDATE);
+        String topic = generalTopic.generateTopic(industry, protocolVersion, String.format("%012d",gwid) , TOPIC_UPDATE);
 
         //update数据处理类,可进行编码解码等操作
         DeviceUpdateMsg deviceUpdateMsg = new DeviceUpdateMsg(seq, timeStr, gwid, hardWareVersion, 0, 0, buff.length, 0);
@@ -72,7 +75,7 @@ public class UpdateMsgHandle {
 
         //生成主题
         GeneralTopic generalTopic = new GeneralTopic();
-        String topic = generalTopic.generateTopic(MQTT_TOPIC_INDUSTRY_CHARGE, MQTT_TOPIC_CUR_VERSION, gwid.toString() , TOPIC_UPDATE);
+        String topic = generalTopic.generateTopic(MQTT_TOPIC_INDUSTRY_CHARGE, MQTT_TOPIC_CUR_VERSION, String.format("%012d",gwid) , TOPIC_UPDATE);
 
         byte[] firmwareFileName = RedisUtil.get(gwid.toString().getBytes());
         byte[] firmwareDataBytes = RedisUtil.get(firmwareFileName);
@@ -146,7 +149,7 @@ public class UpdateMsgHandle {
             _log.info("向mqtt服务器发送数据,消息主题为:"+topic);
             MqttMsgSender.getInstance().Send(topic, bytes, 1);
         } catch (Exception e) {
-            _log.error("UpdateMsgHandle >> sendMqttMsg Exception",e);
+            _log.error("ImageMsgHandle >> sendMqttMsg Exception",e);
         }
     }
 

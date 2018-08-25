@@ -104,9 +104,16 @@ public class DeviceUpdateController extends BaseController {
         json.put("industry",industry);
         json.put("protocolVersion",protocolVersion);
         json.put("version",version);
+        json.put("fileName",filename);
         json.put("gwid",gwid);
         json.put("seq",seq);
         json.put("timeStr",timeStr);
+
+        Long gwIdLong = Long.parseLong(gwid);
+
+        RedisUtil.set(gwIdLong.toString().getBytes(), filename.getBytes(),60*20);
+
+
         DeviceUpdateMQClient deviceUpdateMQClient = new DeviceUpdateMQClient();
         try {
             deviceUpdateMQClient.start();

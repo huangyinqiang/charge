@@ -132,7 +132,7 @@ public class DeviceUpdateMQServer implements MessageListener{
     @Override
     public void onMessage(Message message) {
         // 使用线程池多线程处理
-        threadPoolTaskExecutor.execute(() -> {
+//        threadPoolTaskExecutor.execute(() -> {
             try {
                 if (message instanceof TextMessage) {
                     TextMessage txtMsg = (TextMessage) message;
@@ -147,7 +147,7 @@ public class DeviceUpdateMQServer implements MessageListener{
             } catch (JMSException e) {
                 _log.error("接收消息出错,请检查配置是否正确!",e);
             }
-        });
+//        });
 
     }
 
