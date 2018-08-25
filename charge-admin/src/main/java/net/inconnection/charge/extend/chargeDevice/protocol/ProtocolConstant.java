@@ -109,6 +109,7 @@ public class ProtocolConstant {
     public static final String MSG_UPDATE_CRC                              =   "CRC";      //校验,一个字节,对本次所发数据按字节异或操作所得到的结果
     public static final String MSG_UPDATE_STATUS                           =   "STATUS";   //升级状态,可选值为 0、1、3、4、5、10,0 代表该段数据校验有误;1 代表校验成功;3 代表子站网关处于电池供电,升级有可能会中断;4 代表内部 flash 损坏,不可升级;5代表已最新无需升级;10升级成功
 
+    public static final String MSG_IMAGE_NAME                           =   "IMAGE";   //传输的图片的名称
 
 }
 

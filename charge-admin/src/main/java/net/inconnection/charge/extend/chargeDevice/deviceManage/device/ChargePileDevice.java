@@ -6,8 +6,10 @@ import net.inconnection.charge.extend.chargeDevice.deviceInterface.Device;
 import net.inconnection.charge.extend.chargeDevice.deviceInterface.GateWay;
 import net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.Alarm;
 import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQServer;
+import net.inconnection.charge.extend.chargeDevice.jms.ImageTransMQServer;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.MsgConvertUtil;
+import net.inconnection.charge.extend.chargeDevice.protocol.image.ImageMsgHandle;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.*;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.protocol.update.UpdateMsgHandle;
@@ -291,7 +293,14 @@ public class ChargePileDevice implements GateWay {
         }
 
         //不需要转换
+        String messageJson = MsgConvertUtil.msg2Json(message).toString();
+        //判断消息是否为空
+        if (messageJson.equals("[]")){
+            return;
+        }
 
+        ImageTransMQServer server = ImageTransMQServer.getInstance();
+        ImageMsgHandle.processImageResponseMsg(server,messageJson);
 
     }
     public void requestMsgHandle(String message){
