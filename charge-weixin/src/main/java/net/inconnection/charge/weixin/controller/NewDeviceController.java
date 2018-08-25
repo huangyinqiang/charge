@@ -38,9 +38,10 @@ public class NewDeviceController extends Controller {
 
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(devicePort);
-        Integer chargeTime = Integer.parseInt(time);
+        Integer chargeTime = Integer.parseInt(time);//分钟
+        Integer chargeTimeSenconds = chargeTime*60;
         log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
-        Integer startChargeStatus = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTime, 30*1000L);
+        Integer startChargeStatus = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, 30*1000L);
 
         if (null == startChargeStatus){
             startChargeStatus = 9999;
@@ -102,7 +103,7 @@ public class NewDeviceController extends Controller {
         Integer socketSumInt = Integer.parseInt(socketSum);
         Long companyIdLong = Long.parseLong(companyId);
 
-        Boolean permissonOnlineSuccess = true;//deviceControlService.requestPermissionOnLine(chargePileId, 30*1000L);
+        Boolean permissonOnlineSuccess = deviceControlService.requestPermissionOnLine(chargePileId, 30*1000L);
 
         if (permissonOnlineSuccess){
             log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功");
