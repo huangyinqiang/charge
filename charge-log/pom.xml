@@ -98,7 +98,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>logserver</finalName>
+        <finalName>charge-log</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
@@ -147,7 +147,7 @@
              <version>9.3.11.v20160721</version>
              <configuration>
              <httpConnector>
-             <port>80</port>启动端口号
+             <port>9060</port>启动端口号
              </httpConnector>
              <stopPort>9908</stopPort>
              <stopKey>stop</stopKey>
