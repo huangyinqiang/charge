@@ -1,6 +1,9 @@
 package net.inconnection.charge.extend.chargeDevice.protocol.message;
 
 
+import net.inconnection.charge.extend.chargeDevice.protocol.message.facet.GatewayFacet;
+import net.inconnection.charge.extend.chargeDevice.protocol.message.facet.RequestFacet;
+
 import java.util.Vector;
 
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.MSG_FACET_SEPARATOR_INSIDE;
