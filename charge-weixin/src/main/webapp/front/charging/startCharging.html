@@ -125,9 +125,8 @@
                 }
                 location.href = "./charging/chooseNewDevicePortAndTime?deviceId="
                     + data.respObj.id + "&area="
-                    + encodeURI(encodeURI(data.respObj.province + data.respObj.city + data.respObj.detail_location)) + "&activityId="
-                    + "1" + "&companyId="
-                    + data.respObj.company_id
+                    + encodeURI(encodeURI(data.respObj.province + data.respObj.city + data.respObj.detail_location)) + "&projectId="
+                    + data.respObj.projectId + "&companyId=" + data.respObj.company_id
 
             },
             error : function() {

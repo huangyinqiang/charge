@@ -1,4 +1,6 @@
 package net.inconnection.charge.service;
+
+import com.alibaba.fastjson.JSONObject;
 import java.util.Map;
 import java.util.Vector;
 
@@ -16,7 +18,7 @@ public interface DeviceControlService {
 
    Map requestStartCharge(Long gwId, Map<Long, Integer> socketIdChargeTimeMap, Long timeout);
 
-   Integer requestStartCharge(Long gwId, Long socketId, Integer chargeTime, Long timeout);
+   JSONObject requestStartCharge(Long gwId, Long socketId, Integer chargeTime, Long timeout);
 
 
 

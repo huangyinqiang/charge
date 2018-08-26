@@ -50,9 +50,11 @@ public class ChargeController extends Controller {
     }
 
     public void chooseNewDevicePortAndTime() {
-        this.setAttr("activityId", this.getPara("activityId"));
+        this.setAttr("projectId", this.getPara("projectId"));
         this.setAttr("deviceId", this.getPara("deviceId"));
-        log.info("跳转到新设备选择时间插座页面  activityId=" + this.getPara("activityId") + ",deviceId=" + this.getPara("deviceId") );
+
+        this.setAttr("companyId", this.getPara("companyId"));
+        log.info("跳转到新设备选择时间插座页面  projectId=" + this.getPara("projectId") + ",deviceId=" + this.getPara("deviceId") + ",companyId=" + this.getPara("companyId") );
 
         log.info("跳转到新设备小功率选择插座页面");
         this.render("charging/optionNew.html");

@@ -1,5 +1,6 @@
 package net.inconnection.charge.weixin.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import net.inconnection.charge.service.DeviceControlService;
@@ -36,20 +37,55 @@ public class NewDeviceController extends Controller {
         String companyId = this.getPara("companyId");
         String autoUnitPrice = this.getPara("autoUnitPrice");
 
+        String autoUnitPriceA1 = this.getPara("power_a1");
+        String autoUnitPriceA2 = this.getPara("power_a2");
+        String autoUnitPriceA3 = this.getPara("power_a3");
+        String autoUnitPriceA4 = this.getPara("power_a4");
+        String autoUnitPriceA5 = this.getPara("power_a5");
+        String autoUnitPriceA6 = this.getPara("power_a6");
+        String autoUnitPriceA7 = this.getPara("power_a7");
+
+
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(devicePort);
         Integer chargeTime = Integer.parseInt(time);//分钟
         Integer chargeTimeSenconds = chargeTime*60;
         log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
-        Integer startChargeStatus = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, 30*1000L);
 
-        if (null == startChargeStatus){
-            startChargeStatus = 9999;
+
+
+        JSONObject startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, 30*1000L);
+
+        Integer startChargeStatus =9999;
+        Integer startPower = 0;
+        if (null != startChargeResltJson){
+            startChargeStatus = startChargeResltJson.getInteger("RESULT");
+            startPower = startChargeResltJson.getInteger("POW");
+
         }
+
+
         log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
 
         if (startChargeStatus.equals(1)){
             //充电成功
+
+            if (startPower < 200){
+                autoUnitPrice = autoUnitPriceA1;
+            }else if (startPower < 300){
+                autoUnitPrice = autoUnitPriceA2;
+            }else if (startPower < 350){
+                autoUnitPrice = autoUnitPriceA3;
+            }else if (startPower < 500){
+                autoUnitPrice = autoUnitPriceA4;
+            }else if (startPower < 700){
+                autoUnitPrice = autoUnitPriceA5;
+            }else if (startPower < 1000){
+                autoUnitPrice = autoUnitPriceA6;
+            }else {
+                autoUnitPrice = autoUnitPriceA7;
+            }
+
             chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money, walletAccount, operType, realGiftRate, companyId ,autoUnitPrice);
         }
 
@@ -152,10 +188,10 @@ public class NewDeviceController extends Controller {
 
     public void queryDeviceChargePrice() {
         String deviceId = this.getPara("deviceId");
-        String companyIdStr = this.getPara("companyId");
-        Long companyId = Long.parseLong(companyIdStr);
+        String projectIdStr = this.getPara("projectId");
+        Long projectId = Long.parseLong(projectIdStr);
         log.info("查询充电价格开始,companyId=" + this.getPara("companyId"));
-        HnKejueResponse json = newDeviceChargePriceService.queryChargePrice(companyId);
+        HnKejueResponse json = newDeviceChargePriceService.queryProjectChargePrice(projectId);
         log.info("查询充电价格结束：" + json);
         this.renderJson(json);
     }

@@ -197,9 +197,13 @@ public class ChargeInfoBatteryService {
             chargeBatteryInfoBean.setOperstarttime(new Date());
             chargeBatteryInfoBean.setChargetime(time);
             chargeBatteryInfoBean.setOpertype(operType);
-            chargeBatteryInfoBean.setCharge(money);
             int walletAccountInt = Integer.parseInt(walletAccount);
-            int moneyInt = Integer.parseInt(money);
+            Integer moneyInt = Integer.parseInt(money);
+            if (operType.equals("M")){
+                //按照时间计算总价
+                moneyInt = new Double(Double.parseDouble(time)/60.0 * autoUnitPriceInt).intValue();
+            }
+            chargeBatteryInfoBean.setCharge(moneyInt.toString());
 
             Double walletRealAccountDouble = (((double)walletAccountInt-moneyInt)*raelRate) ;
             int walletRealAccount = walletRealAccountDouble.intValue();

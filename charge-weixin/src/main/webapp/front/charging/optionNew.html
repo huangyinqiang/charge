@@ -21,7 +21,7 @@
     var socketStatus;//插座状态
     var deviceId;// 设备编号
     var companyId;// 公司编号
-    var activityId;// 活动编号
+    var projectId;// 项目编号
     var devicePort = 0;// 设备插座
     var userInfo;// 设备插座
     var time;// 充电时间
@@ -62,7 +62,7 @@
         // 获取URL中的设备编号，地址
         var localUrl = window.location.href;
         deviceId = GetQueryString('deviceId');
-        activityId = GetQueryString('activityId');
+        projectId = GetQueryString('projectId');
         companyId = GetQueryString('companyId');
         getDeviceStatus(deviceId);
         getNewDeviceChargePrice(deviceId, companyId);
@@ -301,7 +301,15 @@
                 walletAccount : walletAccount,
                 operType : operType,
 				realGiftRate : userInfo.real_git_rate,
-                autoUnitPrice : device.auto_unit_price
+                autoUnitPrice : device.auto_unit_price,
+                power_a1 : device.power_a1,
+                power_a2 : device.power_a2,
+                power_a3 : device.power_a3,
+                power_a4 : device.power_a4,
+                power_a5 : device.power_a5,
+                power_a6 : device.power_a6,
+                power_a7 : device.power_a7
+
             },
             cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
             // 从缓存里读取,为false只有ＧＥＴ请求时生效
@@ -329,7 +337,8 @@
             dataType : "json",
             data : {
                 deviceId : deviceId,
-                companyId : companyId
+                companyId : companyId,
+				projectId : projectId
             },
             cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
             // 从缓存里读取,为false只有ＧＥＴ请求时生效

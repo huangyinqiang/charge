@@ -83,7 +83,7 @@ public class DeviceControlServiceImpl implements DeviceControlService {
     }
 
     @Override
-    public Integer requestStartCharge(Long gwId, Long socketId, Integer chargeTime, Long timeout) {
+    public JSONObject requestStartCharge(Long gwId, Long socketId, Integer chargeTime, Long timeout) {
         String callBackQueueName = UUID.randomUUID().toString();
         Map<Long, Integer> socketIdChargeTimeMap  = new HashMap<>();
         socketIdChargeTimeMap.put(socketId, chargeTime);
@@ -93,7 +93,7 @@ public class DeviceControlServiceImpl implements DeviceControlService {
         }
 
 //        return 1;
-        return getSingleResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
+        return getJsonObjResult(timeout, callBackQueueName);
     }
 
     //获取响应结果
@@ -126,6 +126,20 @@ public class DeviceControlServiceImpl implements DeviceControlService {
             }
         }
         return false;
+    }
+
+    private JSONObject getJsonObjResult(Long timeout, String callBackQueueName){
+        ResponseMsgReceiver cmsResponseMsgReceiver = new ResponseMsgReceiver();
+        String processedResponseMsg = cmsResponseMsgReceiver.getProcessedResponseMsg(callBackQueueName,timeout);
+        if(processedResponseMsg != null){
+            JSONArray jsonArray = JSONArray.parseArray(processedResponseMsg);
+            if(jsonArray.size() == 2){
+                return jsonArray.getJSONObject(1);
+            }
+        }
+
+        return null;
+
     }
 
     private Map getMapResult(Long timeout, String callBackQueueName) {

@@ -91,6 +91,7 @@ public class APPConfig extends JFinalConfig {
         arp.addMapping("yc_recharge_history", RechargeHistory.class);
         arp.addMapping("yc_charge_history", NewDeviceChargeHistory.class);
         arp.addMapping("yc_company", Company.class);
+        arp.addMapping("yc_project", NewDeviceProject.class);
 
         arp.setShowSql(true);
         me.add(arp);
