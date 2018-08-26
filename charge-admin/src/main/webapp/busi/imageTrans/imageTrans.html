@@ -53,16 +53,16 @@
 <div class="container">
     <div style="margin:10px;">
         <div>
-            <h2>升级文件</h2>
+            <h2>传输图片</h2>
 
             <tr >
 
-                <td><input type="text" id="avatval" placeholder="请选择文件···" readonly="readonly" style="vertical-align: middle;"/>
+                <td><input type="text" id="avatval" placeholder="请选择图片···" readonly="readonly" style="vertical-align: middle;"/>
                     <input type="file" name="file" id="avatar" accept="application/octet-stream"/>
                    <!-- <a href="javascript:void(0);" class="button-selectimg" id="avatsel">选择文件</a>--></td>
-                <td><input type="button" id="submit" value="文件上传"/></td>
+                <td><input type="button" id="submit" value="图片上传"/></td>
 
-                <td><input type="button" id="update" value="升级"  /></td>
+                <td><input type="button" id="update" value="传输"  /></td>
                <!-- <td id="selectAllTd">全选:<input type="checkbox" id="selectAll" class="bs-checkbox"></td>-->
             </tr>
 
@@ -290,7 +290,7 @@
             var fileName=$("#avatval").val();
 
             $.ajax({
-                url: "updateDeviceData?fileName="+fileName,    //C# Razor写法,也可写成/home/receive,但是安全性欠佳
+                url: "uploadImage?fileName="+fileName,    //C# Razor写法,也可写成/home/receive,但是安全性欠佳
                 data: formData,
                 type: 'POST',
                 contentType: false,                      //这里着重强调contentType和processData都要设置为false,否则文件发送不过去
@@ -298,9 +298,9 @@
                 success: function (data) {
                     if (data === "OK") {
                         update_success=true;
-                        alert("文件上传成功！!");
+                        alert("图片上传成功！!");
                     }else {
-                        alert("升级错误!");
+                        alert("传输错误!");
                     }
                 },
                 error:function(){
@@ -311,7 +311,7 @@
 
         $("#update").click(function(){
             if (!update_success) {
-                alert("请先上传文件！!");
+                alert("请先上传图片！!");
                 return;
             }
             var rowsSel = datagrid.datagrid("getSelections");
@@ -321,12 +321,12 @@
             }
             layer.open({
                 title: '在线调试'
-                ,content: '<div id="updateMessageDiv"><span >升级中！！！</span></div>'
+                ,content: '<div id="updateMessageDiv"><span >传输中！！！</span></div>'
             });
             $("#updateMessageDiv").append("<br><span >总数："+rowsSel.length+"</span>");
             for(var i= 0;i<rowsSel.length;i++){
                 var id =rowsSel[i].id;
-                $("#updateMessageDiv").append("<br><span >"+rowsSel[i].name+":  正在升级</span>");
+                $("#updateMessageDiv").append("<br><span >"+rowsSel[i].name+":  正在传输</span>");
                 getUpdateStatus(id,rowsSel[i].name);
             }
         });
@@ -334,7 +334,7 @@
 
         function getUpdateStatus(id,name) {
             $.ajax({
-                url: "updateDeviceProcess",
+                url: "transImageProcess",
                 type: 'POST',
                 cache:false,
                 data:{

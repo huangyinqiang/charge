@@ -40,7 +40,7 @@ public class ImageMsgHandle {
 
         //生成主题
         GeneralTopic generalTopic = new GeneralTopic();
-        String topic = generalTopic.generateTopic(industry, protocolVersion, String.format("%012d",gwid) , TOPIC_UPDATE);
+        String topic = generalTopic.generateTopic(industry, protocolVersion, String.format("%012d",gwid) , TOPIC_IMAGE);
 
         //update数据处理类,可进行编码解码等操作
         ImageTransMsg imageTransMsg = new ImageTransMsg(seq, timeStr, gwid, imageName, 0, 0, buff.length, 0);
@@ -72,7 +72,7 @@ public class ImageMsgHandle {
 
         //生成主题
         GeneralTopic generalTopic = new GeneralTopic();
-        String topic = generalTopic.generateTopic(MQTT_TOPIC_INDUSTRY_CHARGE, MQTT_TOPIC_CUR_VERSION, String.format("%012d",gwid) , TOPIC_UPDATE);
+        String topic = generalTopic.generateTopic(MQTT_TOPIC_INDUSTRY_CHARGE, MQTT_TOPIC_CUR_VERSION, String.format("%012d",gwid) , TOPIC_IMAGE);
 
         byte[] imageFileName = RedisUtil.get(gwid.toString().getBytes());
         byte[] imageDataBytes = RedisUtil.get(imageFileName);
