@@ -65,6 +65,8 @@
             <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="updateCoupon()">活动</a>
             <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="chargeList()">充值历史</a>
 
+            <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="chargeElectricityHistory()">充电记录</a>
+
             <div id="searchBtnWrap" style="float:right; padding-right:40px;">
                 <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
@@ -230,8 +232,25 @@ function chargeList() {
             showMsg("更新成功");
             datagrid.datagrid("reload");
         }*/
-    top.openWindow("活动-编辑", getCurrUrl("chargeListPage") + "?id=" + id+ "&company_name=" + company_name, {size: '600x400'});
+    top.openWindow("充值记录", getCurrUrl("chargeListPage") + "?id=" + id+ "&company_name=" + company_name, {size: '600x400'});
 }
+
+//充电记录
+function chargeElectricityHistory() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要所属运营商！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    var company_name = rowsSel[0].company_name;
+    /*    top.window.subPage.loadCurrDatagrid = function() {
+            showMsg("更新成功");
+            datagrid.datagrid("reload");
+        }*/
+    top.openWindow("充电记录", getCurrUrl("chargeElectricityHistoryPage") + "?id=" + id+ "&company_name=" + company_name, {size: '600x400'});
+}
+
 
 
 function detail() {

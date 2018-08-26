@@ -58,21 +58,30 @@ var dgOptions = {
             {
                 field : 'money_sum',
                 title : '账户金额',
-                width : 60
+                width : 60,
+                formatter : function(value, row, index) {
+                        return value+" 元";
+                }
             },
 
 
             {
                 field : 'real_money',
                 title : '真实金额',
-                width : 60
+                width : 60,
+                formatter : function(value, row, index) {
+                    return value+" 元";
+                }
             },
 
 
             {
                 field : 'coupon',
                 title : '赠送金额',
-                width : 60
+                width : 60,
+                formatter : function(value, row, index) {
+                    return value+" 元";
+                }
             },
 
 
@@ -112,7 +121,7 @@ var dgOptions = {
 $(function() {
 	handleAuthDataRule();
 	datagrid.datagrid(dgOptions);
-    $("#money_total").text("${money_total ! }");
+    $("#money_total").text("${money_total ! }"+" 元");
 });
 
 function zcurdSearch() {

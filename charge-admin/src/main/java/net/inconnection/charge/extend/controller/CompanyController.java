@@ -234,7 +234,7 @@ public class CompanyController extends BaseController{
                 money_total+=money_sum;
             }
         }
-        setAttr("money_total",money_total);
+        setAttr("money_total",money_total/100.00);
         setAttr("company_id",company_id);
         setAttr("company_name",getPara("company_name"));
         render("chargeList.html");
@@ -244,19 +244,70 @@ public class CompanyController extends BaseController{
     public void chargelistData() {
         Long company_id = getParaToLong("company_id");
         List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+company_id);
-        Integer money_total=0;
         for (Record record:list){
             record.set("company_name",getPara("company_name"));
-            Integer money_sum = record.get("money_sum");
+
+            Integer money_sum=record.get("money_sum");
+            record.set("money_sum",money_sum/100.00);
+
+            Integer realMoney=record.get("real_money");
+            record.set("real_money",realMoney/100.00);
+
+            Integer coupon=record.get("coupon");
+            record.set("coupon",coupon/100.00);
+
+        }
+        this.renderDatagrid(list, list.size());
+    }
+
+    //充电记录页面
+    public void chargeElectricityHistoryPage() {
+        Long company_id = getParaToLong("id");
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_charge_history where company_id="+company_id);
+        Integer money_total=0;//总金额和
+        Integer gift_total=0;//总赠送金额和
+        for (Record record:list){
+            record.set("company_name",getPara("company_name"));
+            Integer money_sum = record.get("chargeMoney");
+            Integer gift_sum = record.get("giftMoney");
             if (money_sum!=null){
                 money_total+=money_sum;
             }
+            if (gift_sum!=null){
+                gift_total+=gift_sum;
+            }
         }
-        setAttr("money_total",money_total);
-        this.renderDatagrid(list, list.size());
+        setAttr("money_total",money_total/100.00);
+        setAttr("gift_total",gift_total/100.00);
+        setAttr("company_id",company_id);
+        setAttr("company_name",getPara("company_name"));
+        render("chargeElectricityPage.html");
     }
 
 
 
+
+    //充电记录页面数据
+    public void chargeElectricityHistoryData() {
+        Long company_id = getParaToLong("company_id");
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_charge_history where company_id="+company_id);
+        for (Record record:list){
+            record.set("company_name",getPara("company_name"));
+
+            Integer chargeMoney=record.get("chargeMoney");
+            record.set("chargeMoney",chargeMoney/100.00);
+
+            Integer realMoney=record.get("realMoney");
+            record.set("realMoney",realMoney/100.00);
+
+            Integer giftMoney=record.get("giftMoney");
+            record.set("giftMoney",giftMoney/100.00);
+
+            Integer autoUnitPrice=record.get("autoUnitPrice");
+            record.set("autoUnitPrice",autoUnitPrice/100.00);
+
+        }
+        this.renderDatagrid(list, list.size());
+    }
 
 }

@@ -165,7 +165,7 @@
     </dependencies>
 
     <build>
-        <finalName>charge</finalName>
+        <finalName>charge-admin</finalName>
         <plugins>
 
             <plugin>
