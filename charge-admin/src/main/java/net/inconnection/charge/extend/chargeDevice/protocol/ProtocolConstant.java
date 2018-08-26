@@ -88,6 +88,8 @@ public class ProtocolConstant {
     public static final String MSG_REQUEST_CODE_SHUTDOWNSOCKET =   "3";        //3:请求切断充电插座电源
     public static final String MSG_REQUEST_CODE_TESTSOCKETPOWER =   "4";        //4:请求测试插座充电功率
     public static final String MSG_REQUEST_CODE_SOCKETSTARTCHARGE =   "5";        //5:插座开始充电
+    public static final String MSG_REQUEST_CODE_DELETEIMAGE =   "6";        //6:删除照片
+    public static final String MSG_REQUEST_CODE_SHOWIMAGE =   "7";        //7:展示照片
 
 
     public static final String MSG_RESPONCE_CODE_REVERSE                    =   "0";        //0:保留
@@ -96,6 +98,8 @@ public class ProtocolConstant {
     public static final String MSG_RESPONCE_CODE_SHUTDOWNSOCKET              =   "3";        //3:响应切断充电插座
     public static final String MSG_RESPONCE_CODE_TESTSOCKETPOWER         =   "4";        //4:响应测试充电功率
     public static final String MSG_RESPONCE_CODE_SOCKETSTARTCHARGE         =   "5";        //5:响应插座开始充电
+    public static final String MSG_RESPONCE_CODE_DELETEIMAGE         =   "6";        //6:响应删除照片
+    public static final String MSG_RESPONCE_CODE_SHOWIMAGE        =   "7";        //7:响应展示照片
 
     public static final String MSG_RESPONCE_RESULT = "RESULT";
 
@@ -110,6 +114,13 @@ public class ProtocolConstant {
     public static final String MSG_UPDATE_STATUS                           =   "STATUS";   //升级状态,可选值为 0、1、3、4、5、10,0 代表该段数据校验有误;1 代表校验成功;3 代表子站网关处于电池供电,升级有可能会中断;4 代表内部 flash 损坏,不可升级;5代表已最新无需升级;10升级成功
 
     public static final String MSG_IMAGE_NAME                           =   "IMAGE";   //传输的图片的名称
+    public static final String MSG_IMAGE_TIMELAST                           =   "TIMELAST";   //图片的单次显示持续时间
+
+    public static final String MSG_IMAGE_XPOINT                           =   "X";   //图片的显示坐标X
+    public static final String MSG_IMAGE_YPOINT                           =   "Y";   //图片的显示坐标Y
+    public static final String MSG_IMAGE_STARTTIME                           =   "START";   //图片的显示时间段的开始时间
+    public static final String MSG_IMAGE_ENDTIME                           =   "END";   //图片的显示时间段的结束时间
+    public static final String MSG_IMAGE_DAYLAST                           =   "DAYLAST";   //图片的显示时间段的持续天数
 
 }
 

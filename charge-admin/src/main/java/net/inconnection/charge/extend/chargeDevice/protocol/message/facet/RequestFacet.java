@@ -1,4 +1,4 @@
-package net.inconnection.charge.extend.chargeDevice.protocol.message;
+package net.inconnection.charge.extend.chargeDevice.protocol.message.facet;
 
 
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.MSG_COMPONENT_SEPARATOR;

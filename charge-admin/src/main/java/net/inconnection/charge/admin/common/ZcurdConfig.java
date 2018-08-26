@@ -20,6 +20,7 @@ import net.inconnection.charge.admin.online.model.*;
 import net.inconnection.charge.admin.online.service.TaskService;
 import net.inconnection.charge.extend.chargeDevice.DeviceControlServiceImpl;
 import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQServer;
+import net.inconnection.charge.extend.chargeDevice.jms.ImageTransMQServer;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgReceiver;
 import net.inconnection.charge.extend.controller.*;
 import net.inconnection.charge.extend.model.busi_MappingKit;
@@ -72,6 +73,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/updatedevice", DeviceUpdateController.class, "/busi/updatedevice");
 		me.add("/company", CompanyController.class, "/busi/company");
 		me.add("/pileDevice/record", PileRecordController.class, "/busi/pileDevice");
+		me.add("/imageTrans", ImageTransController.class, "/busi/imageTrans");
 	}
 	
 	/**
@@ -165,6 +167,7 @@ public class ZcurdConfig extends JFinalConfig {
 		MqttMsgReceiver.getInstance().start();
 
 		DeviceUpdateMQServer.getInstance();
+		ImageTransMQServer.getInstance();
 		
 		//定时任务
 		TaskService taskService = Duang.duang(TaskService.class);

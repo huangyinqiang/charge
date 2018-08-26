@@ -11,6 +11,7 @@ import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.MsgConvertUtil;
 import net.inconnection.charge.extend.chargeDevice.protocol.image.ImageMsgHandle;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.*;
+import net.inconnection.charge.extend.chargeDevice.protocol.message.facet.*;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.protocol.update.UpdateMsgHandle;
 import net.inconnection.charge.extend.chargeDevice.utils.*;
@@ -363,6 +364,11 @@ public class ChargePileDevice implements GateWay {
             case MSG_RESPONCE_CODE_TESTSOCKETPOWER:
 
             case MSG_RESPONCE_CODE_SOCKETSTARTCHARGE:
+
+            case MSG_RESPONCE_CODE_DELETEIMAGE:
+
+            case MSG_RESPONCE_CODE_SHOWIMAGE:
+
                 ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
 
                 System.out.println("callBackQueueName : " + callBackQueueName);
@@ -508,7 +514,7 @@ public class ChargePileDevice implements GateWay {
 
         String requestMsgStr = requestMsg.toString();
 
-        System.out.println("startCharge: \n\r" + requestMsgStr);
+        _log.info("startCharge: \n\r" + requestMsgStr);
 
         sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
         //将sn存储起来，等待接受response消息使用
@@ -516,6 +522,43 @@ public class ChargePileDevice implements GateWay {
 
     }
 
+    //请求删除某广告图片
+    public void deleteImage(String imageName, String callBackQueueName){
+        RequestMsg requestMsg = new RequestMsg();
+
+        Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
+        Date utc = new Date();
+        requestMsg.setGatewayFacet(new GatewayFacet(sequenceNum, utc, getGatewayIdStr()));
+        requestMsg.addRequestFacet(new RequestDeleteImageFacet(MSG_REQUEST_CODE_DELETEIMAGE, imageName));
+
+        String requestMsgStr = requestMsg.toString();
+
+        System.out.println("deleteImage: \n\r" + requestMsgStr);
+
+        sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
+        //将sn存储起来，等待接受response消息使用
+        requestSNAndCallBackQueueNameMap.put(sequenceNum, callBackQueueName);
+
+    }
+
+    //请求设置某广告图片显示效果
+    public void showImage(String imageName, Integer timeLast, Integer xPoint, Integer yPoint, String startTime, String endTime, Integer dayLast, String callBackQueueName){
+        RequestMsg requestMsg = new RequestMsg();
+
+        Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
+        Date utc = new Date();
+        requestMsg.setGatewayFacet(new GatewayFacet(sequenceNum, utc, getGatewayIdStr()));
+        requestMsg.addRequestFacet(new RequestShowImageFacet(MSG_REQUEST_CODE_SHOWIMAGE, imageName,timeLast, xPoint, yPoint, startTime, endTime, dayLast));
+
+        String requestMsgStr = requestMsg.toString();
+
+        System.out.println("set show image: \n\r" + requestMsgStr);
+
+        sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
+        //将sn存储起来，等待接受response消息使用
+        requestSNAndCallBackQueueNameMap.put(sequenceNum, callBackQueueName);
+
+    }
 
 
 

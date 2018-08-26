@@ -1,4 +1,4 @@
-package net.inconnection.charge.extend.chargeDevice.protocol.message;
+package net.inconnection.charge.extend.chargeDevice.protocol.message.facet;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
