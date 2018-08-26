@@ -590,6 +590,10 @@ public class ChargePileDevice implements GateWay {
 
         chargePileDevice.startCharge(socketIdChargeTimeMap, testQueue);
 
+        chargePileDevice.deleteImage("123", testQueue);
+
+        chargePileDevice.showImage("123",60,null,null,null,null,null , testQueue);
+
 
 
     }

@@ -106,6 +106,7 @@ public class UpdateMsgHandle {
                 break;
             case 1:
                 if(firmwareDataBytes.length == offset){
+                    response2Client(server,gwIdStr , status);
                     _log.info("数据发送成功,网关正在重启请稍后!");
                 }else {
                     _log.info("收到回复,正在发送下一数据包!");

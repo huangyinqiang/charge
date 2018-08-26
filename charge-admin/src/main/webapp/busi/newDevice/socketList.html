@@ -24,13 +24,13 @@ var dgOptions = {
             {
                 field : 'charge_pile_id',
                 title : '充电桩',
-                width : 120
+                width : 110
             },
 
             {
                 field : 'charge_socket_sn',
                 title : 'sn',
-                width : 60
+                width : 40
             },
             {
                 field : 'is_used',
@@ -46,13 +46,13 @@ var dgOptions = {
             },
             {
                 field : 'start_power',
-                title : '开始电压',
-                width : 60
+                title : '初始功率(W)',
+                width : 80
             },
             {
                 field : 'charge_power',
-                title : '充电电压',
-                width : 60
+                title : '充电功率(W)',
+                width : 80
             },
             {
                 field : 'charge_intensity',
@@ -62,7 +62,7 @@ var dgOptions = {
             {
                 field : 'charge_state',
                 title : '充电状态',
-                width : 60,
+                width : 90,
                 formatter : function(value, row, index) {
                     if (value == '1') {
                         return "<span style='color:green;font-size:20px;'>充电中</span>";
@@ -75,8 +75,11 @@ var dgOptions = {
             },
             {
                 field : 'charge_time',
-                title : '充电时长',
-                width : 60,
+                title : '充电时长(分)',
+                width : 80,
+                formatter : function(value, row, index) {
+                    return value/60;
+                }
             },
             {
                 field : 'update_time',

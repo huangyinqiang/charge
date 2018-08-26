@@ -103,7 +103,8 @@ public class ImageMsgHandle {
                 break;
             case 1:
                 if(imageDataBytes.length == offset){
-                    _log.info("数据发送成功,网关正在重启请稍后!");
+                    _log.info("图片全部数据发送成功!");
+                    response2Client(server,gwIdStr , status);
                 }else {
                     _log.info("收到回复,正在发送下一数据包!");
                     sendMqttMsg(topic, imageTransMsgToSend);
@@ -118,9 +119,39 @@ public class ImageMsgHandle {
                 response2Client(server,gwIdStr, status);
                 break;
             case 4:
+                _log.info("flash损坏");
+                response2Client(server,gwIdStr, status);
+                break;
+            case 5:
+                _log.info("重试次数过多");
+                response2Client(server,gwIdStr, status);
+                break;
+            case 6:
+                _log.info("错误帧序列");
+                response2Client(server,gwIdStr, status);
+                break;
+            case 7:
+                _log.info("最终写入成功");
+                response2Client(server,gwIdStr, status);
+                break;
+            case 8:
+                _log.info("最终写入失败");
+                response2Client(server,gwIdStr, status);
+                break;
+            case 9:
+                _log.info("上一个image还没完成");
+                try {
+                    Thread.sleep(5*1000);
+                } catch (InterruptedException e) {
+                    _log.error("休眠出错!",e);
+                }
+                sendMqttMsg(topic, imageTransMsgToSend);
+                break;
+            case 10:
                 _log.info("图片大小超限");
                 response2Client(server,gwIdStr, status);
                 break;
+
             default:
                 _log.info("其他错误,正在返回页面!");
                 response2Client(server,gwIdStr, status);

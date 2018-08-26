@@ -345,6 +345,9 @@
                 success: function (data) {
                     var tem = "";
                     switch (data) {
+                        case "1":
+                            tem = "图片传输成功";
+                            break;
                         case "2":
                             tem = "子站网关存储空间不够!";
                             break;
@@ -352,6 +355,21 @@
                             tem = "图片索引已满";
                             break;
                         case "4":
+                            tem = "flash损坏";
+                            break;
+                        case "5":
+                            tem = "重试次数过多";
+                            break;
+                        case "6":
+                            tem = "错误帧序列";
+                            break;
+                        case "7":
+                            tem = "最终写入成功";
+                            break;
+                        case "8":
+                            tem = "最终写入失败";
+                            break;
+                        case "10":
                             tem = "图片大小超限";
                             break;
                         case "13":
