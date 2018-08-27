@@ -16,10 +16,10 @@ table,tbody,tr,th,td{border-collapse:collapse;border-spacing:0}
 img{border:0}
 
 .top{ width:7.5rem; height:4.16rem; background:url(../temp/bg.jpg) no-repeat center top; background-size:7.5rem}
-.top ul{ padding:1.78rem 0 0 2.46rem}
+.top ul{ padding:1.6rem 0 0 3.3rem}
 .top li{ font-size:.2rem; line-height:1.8; color:#070707; letter-spacing:.02rem; float:left}
 .top li img{ width:.4rem; height:.4rem; padding-right:.1rem; float:left; vertical-align:top}
-.top li p{ width:4.14rem; float:left}
+.top li p{ width:3.5rem; float:left}
 .cen{ font-size:.24rem; text-align:center}
 .cen .terms{ padding:.4rem 0}
 .cen .terms input[type="checkbox"]{ width:.4rem; height:.4rem; background:#0075a9; vertical-align:middle}
