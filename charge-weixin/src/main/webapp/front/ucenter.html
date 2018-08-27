@@ -67,6 +67,10 @@
 					}
 					$('#walletAccount').text(
 							"余额：" + data.respObj.walletAccount / 100 + "元");
+					if (data.respObj.role != 1){
+                        $('#newDeviceInstall').hide();
+					}
+
 				} else {
 					location.href = ".";
 				}
@@ -243,7 +247,7 @@ body {
 							</a>
 						</div>
 
-						<div class="weui-cells">
+						<div class="weui-cells" id="newDeviceInstall">
 							<a class="weui-cell weui-cell_access" href="./install">
 								<div class="weui-cell__hd">
 									<i class="iconfont icon-iconzhuanqu33"></i>
