@@ -14,6 +14,7 @@
             <a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="update()">充值</a>
             <a href="javascript:void(0)" class="easyui-linkbutton detailBtn" iconCls="glyphicon-map-marker" plain="true" onclick="detail()">详情</a>
             <a href="javascript:void(0)" class="easyui-linkbutton exportBtn" iconCls="glyphicon-export" plain="true" onclick="exportCsv()">导出</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="editRole()">编辑角色</a>
             <div id="searchBtnWrap" style="float:right; padding-right:40px;">
                 <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
@@ -80,12 +81,19 @@ var dgOptions = {
 	           		 }
 	           	 }}
 	           	 ,{field:'walletAccount', title: '钱包(元)', width:120, sortable: true,formatter:function(value,row,index){
-	           		 if(value=='0'){
-	           			 return "0";
-	           		 }else{
-		           		return "<span style='color:red;font-size:18px;'>"+(value/100)+"</span>";
-	           		 }
-	           	 }}
+                    if(value=='0'){
+                        return "0";
+                    }else{
+                        return "<span style='color:red;font-size:18px;'>"+(value/100)+"</span>";
+                    }
+                }}
+                ,{field:'role', title: '角色', width:120, sortable: true,formatter:function(value,row,index){
+                        if(value=='1'){
+                            return "安装人员";
+                        }else{
+                            return "普通用户";
+                        }
+                }}
 	           ]]
 	};
 $(function() {
@@ -135,6 +143,20 @@ function update() {
 	}
 	top.openWindow("在线充值", getCurrUrl("updatePage") + "?id=" + id, {size: '600x400'});
 }
+function editRole() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要编辑的数据！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    top.window.subPage.loadCurrDatagrid = function() {
+        showMsg("角色编辑成功");
+        datagrid.datagrid("reload");
+    }
+    top.openWindow("角色编辑", getCurrUrl("editRole") + "?id=" + id, {size: '600x400'});
+}
+
 
 function detail() {
 	var rowsSel = datagrid.datagrid("getSelections");

@@ -48,6 +48,11 @@ public class TuserController extends BaseController {
         this.render("update.html");
     }
 
+    public void editRole() {
+        this.setAttr("model", Tuser.me.findById(this.getPara("id")));
+        this.render("editRole.html");
+    }
+
     public void update() {
         Tuser model = (Tuser)Tuser.me.findById(this.getPara("id"));
         int id = (Integer)model.get("id");
@@ -66,6 +71,25 @@ public class TuserController extends BaseController {
         tCharge.save();
         model.update();
         this.addOpLog("[在线用户] 修改");
+        this.renderSuccess();
+    }
+
+    public void editRoleUpdate() {
+        Tuser model = (Tuser)Tuser.me.findById(this.getPara("id"));
+        int id = (Integer)model.get("id");
+        int last = model.getInt("walletAccount");
+        String name = (String)model.get("nickName");
+        model.set("nickName", this.getPara("model.nickName"));
+        String role = this.getPara("model.role");
+        model.set("role", role);
+        TuserCharge tCharge = new TuserCharge();
+        tCharge.set("tuserid", id);
+        tCharge.set("name", name);
+        tCharge.set("last", last);
+        tCharge.set("jointime", new Date());
+        tCharge.save();
+        model.update();
+        this.addOpLog("[在线用户] 修改角色");
         this.renderSuccess();
     }
 
