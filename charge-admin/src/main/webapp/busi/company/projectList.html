@@ -1,0 +1,246 @@
+
+<#include "/common/head.html"/>
+    
+    <table id="dg"></table>
+
+<div id="tb" style="padding:2px 5px;">
+    <div style="text-align: left; margin:6px;">
+        <a href="#" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="updateProject()">编辑</a>
+        <a href="#" class="easyui-linkbutton updateBtn" iconCls="glyphicon-plus" plain="true" onclick="addProject()">新增</a>
+    </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+var datagrid = $("#dg");
+var dgOptions = {
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'ProjectListData?company_id=${company_id!}&company_name=${company_name!}',
+    	method:'post',
+    	toolbar:'#tb',
+    	singleSelect: true,
+    	pageSize: 50,
+    	pagination:true,
+    	multiSort:true,
+        queryParams: getInitParam(),
+        
+        columns: [[
+		        {field:'id', checkbox:true},
+
+            {
+                field : 'name',
+                title : '项目名称',
+                width : 120
+            },
+
+            {
+                field : 'introduce',
+                title : '项目简介',
+                width : 120
+            },
+
+            {
+                field : 'admin_name',
+                title : '管理员姓名',
+                width : 120
+            },
+
+            {
+                field : 'admin_tel',
+                title : '管理员电话',
+                width : 120
+            },
+
+
+            {
+                field : 'tow_hours_price',
+                title : '非会员2小时价格',
+                width : 120
+            },
+            {
+                field : 'four_hours_price',
+                title : '非会员4小时价格',
+                width : 120
+            },
+            {
+                field : 'eight_hours_price',
+                title : '非会员8小时价格',
+                width : 120
+            },
+            {
+                field : 'twelve_hours_price',
+                title : '非会员12小时价格',
+                width : 120
+            },
+
+            {
+                field : 'tow_hours_mem_price',
+                title : '员会2小时价格',
+                width : 120
+            },
+            {
+                field : 'four_hours_mem_price',
+                title : '员会4小时价格',
+                width : 120
+            },
+            {
+                field : 'eight_hours_mem_price',
+                title : '员会8小时价格',
+                width : 120
+            },
+            {
+                field : 'twelve_hours_mem_price',
+                title : '员会12小时价格',
+                width : 120
+            },
+
+            {
+                field : 'auto_price',
+                title : '会员最低余额',
+                width : 120
+            },
+
+
+
+
+
+            {
+                field : 'power_a1',
+                title : 'A1段单价',
+                width : 120
+            },
+            {
+                field : 'power_a2',
+                title : 'A2段单价',
+                width : 120
+            },
+            {
+                field : 'power_a3',
+                title : 'A3段单价',
+                width : 120
+            },
+            {
+                field : 'power_a4',
+                title : 'A4段单价',
+                width : 120
+            },
+            {
+                field : 'power_a5',
+                title : 'A5段单价',
+                width : 120
+            },
+            {
+                field : 'power_a6',
+                title : 'A6段单价',
+                width : 120
+            },
+            {
+                field : 'power_a7',
+                title : 'A7段单价',
+                width : 120
+            },
+
+            {
+                field : 'free',
+                title : '是否免费',
+                width : 60,
+                formatter : function(value, row, index) {
+                    if (value == 'Y') {
+                        return "<span style='color:green;font-size:20px;'>免费</span>";
+                    } else  if (value == 'N') {
+                        return "<span style='color:red;font-size:20px;'>收费</span>";
+                    }
+                }
+            }
+
+
+	           ]]
+	};
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+});
+
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param[$(item).attr("name")] = $(item).val();	
+		}
+	});
+	return param;
+}
+
+function getInitParam() {
+	var param = {};
+    param["pile_id "] = "${pile_id!''}";
+/*	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+        param["queryParams[pile_id ]"] = "${pile_id!''}";
+    });*/
+	return param;
+}
+
+var initPara = zcurdGetParam();
+top.window.subPage.save = save;
+function save(successFunc) {
+    top.window.closeWindow();
+    top.window.subPage.loadCurrDatagrid();
+}
+
+
+function updateProject() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要编辑数据！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    var projectName = rowsSel[0].name;
+    top.window.subPage.loadCurrDatagrid = function() {
+        showMsg("更新成功");
+        datagrid.datagrid("reload");
+    }
+    top.openWindow("活动-编辑", getCurrUrl("updateProjectPage") + "?id=" + id+"&projectName="+projectName, {size: '600x400'});
+}
+
+
+
+
+function addProject() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要编辑数据！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    var projectName = rowsSel[0].name;
+    top.window.subPage.loadCurrDatagrid = function() {
+        showMsg("更新成功");
+        datagrid.datagrid("reload");
+    }
+    top.openWindow("活动-编辑", getCurrUrl("updateProjectPage") + "?id=" + id+"&projectName="+projectName, {size: '600x400'});
+}
+
+
+
+//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/>
+<#include "/common/foot.html"/>

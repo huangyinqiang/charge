@@ -160,24 +160,6 @@ public class CompanyController extends BaseController{
         render("couponList.html");
     }
 
-    public void CouponlistData() {
-        Long company_id = getParaToLong("company_id");
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_company_activity where company_id="+company_id);
-       for (Record record:list){
-           record.set("company_name",getPara("company_name"));
-           Integer money =record.get("money");
-           Integer coupon =record.get("coupon");
-           if (null != money){
-               record.set("money",money/100);
-           }
-           if (null != coupon){
-               record.set("coupon",coupon/100);
-           }
-       }
-        this.renderDatagrid(list, list.size());
-    }
-
-
     //修改页面
     public void updateActivityPage() {
         //setAttr("dictDatastatus", Company.me.getDictDatastatus());
@@ -194,7 +176,6 @@ public class CompanyController extends BaseController{
         setAttr("model", compayActivity);
         render("updateActivity.html");
     }
-
 
 
     public void updateActivityData() {
@@ -220,6 +201,81 @@ public class CompanyController extends BaseController{
         model.update();
         this.renderSuccess();
     }
+
+
+    public void CouponlistData() {
+        Long company_id = getParaToLong("company_id");
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_company_activity where company_id="+company_id);
+        for (Record record:list){
+            record.set("company_name",getPara("company_name"));
+            Integer money =record.get("money");
+            Integer coupon =record.get("coupon");
+            if (null != money){
+                record.set("money",money/100);
+            }
+            if (null != coupon){
+                record.set("coupon",coupon/100);
+            }
+        }
+        this.renderDatagrid(list, list.size());
+    }
+
+    public void editProject() {
+        Long company_id = getParaToLong("id");
+        setAttr("company_id",company_id);
+        setAttr("company_name",getPara("company_name"));
+//        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_project where company_id="+company_id);
+
+        render("projectList.html");
+    }
+
+    public void ProjectListData() {
+        Long company_id = getParaToLong("company_id");
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_project where company_id="+company_id);
+
+        this.renderDatagrid(list, list.size());
+    }
+
+
+    //修改页面
+    public void updateProjectPage() {
+        //setAttr("dictDatastatus", Company.me.getDictDatastatus());
+        Record project = Db.use(ZcurdTool.getDbSource("zcurd_busi")).findById("yc_project", getParaToLong("id"));
+        project.set("projectName",getPara("projectName"));
+
+        setAttr("model", project);
+        render("updateProject.html");
+    }
+
+
+    public void updateProjectData() {
+        Project model = Project.dao.findById(this.getPara("id"));
+        model.set("name",this.getPara("model.name"));
+        model.set("introduce",this.getPara("model.introduce"));
+        model.set("admin_name",this.getPara("model.admin_name"));
+        model.set("admin_tel",this.getPara("model.admin_tel"));
+        model.set("tow_hours_price",this.getPara("model.tow_hours_price"));
+        model.set("four_hours_price",this.getPara("model.four_hours_price"));
+        model.set("eight_hours_price",this.getPara("model.eight_hours_price"));
+        model.set("twelve_hours_price",this.getPara("model.twelve_hours_price"));
+        model.set("tow_hours_mem_price",this.getPara("model.tow_hours_mem_price"));
+        model.set("four_hours_mem_price",this.getPara("model.four_hours_mem_price"));
+        model.set("eight_hours_mem_price",this.getPara("model.eight_hours_mem_price"));
+        model.set("twelve_hours_mem_price",this.getPara("model.twelve_hours_mem_price"));
+        model.set("auto_price",this.getPara("model.auto_price"));
+        model.set("power_a1",this.getPara("model.power_a1"));
+        model.set("power_a2",this.getPara("model.power_a2"));
+        model.set("power_a3",this.getPara("model.power_a3"));
+        model.set("power_a4",this.getPara("model.power_a4"));
+        model.set("power_a5",this.getPara("model.power_a5"));
+        model.set("power_a6",this.getPara("model.power_a6"));
+        model.set("power_a7",this.getPara("model.power_a7"));
+        model.set("free",this.getPara("model.free"));
+
+        model.update();
+        this.renderSuccess();
+    }
+
 
 
     //充值历史记录
