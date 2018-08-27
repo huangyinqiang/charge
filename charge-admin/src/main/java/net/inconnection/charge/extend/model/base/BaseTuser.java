@@ -297,4 +297,13 @@ public abstract class BaseTuser<M extends BaseTuser<M>> extends Model<M> impleme
 		return getDouble("proxy_real_git_rate");
 	}
 
+	public M setRole(java.lang.Integer role) {
+		set("role", role);
+		return (M)this;
+	}
+	
+	public java.lang.Integer getRole() {
+		return getInt("role");
+	}
+
 }

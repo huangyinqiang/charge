@@ -189,4 +189,13 @@ public abstract class BaseChargePile<M extends BaseChargePile<M>> extends Model<
 		return getLong("power_total");
 	}
 
+	public M setProjectId(java.lang.Long projectId) {
+		set("projectId", projectId);
+		return (M)this;
+	}
+	
+	public java.lang.Long getProjectId() {
+		return getLong("projectId");
+	}
+
 }
