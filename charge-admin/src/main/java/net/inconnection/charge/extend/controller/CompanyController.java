@@ -276,6 +276,45 @@ public class CompanyController extends BaseController{
         this.renderSuccess();
     }
 
+    public void addProjectData() {
+//        Project model = Project.dao.findById(this.getPara("id"));
+//        model.set("name",this.getPara("model.name"));
+//        model.set("introduce",this.getPara("model.introduce"));
+//        model.set("admin_name",this.getPara("model.admin_name"));
+//        model.set("admin_tel",this.getPara("model.admin_tel"));
+//        model.set("tow_hours_price",this.getPara("model.tow_hours_price"));
+//        model.set("four_hours_price",this.getPara("model.four_hours_price"));
+//        model.set("eight_hours_price",this.getPara("model.eight_hours_price"));
+//        model.set("twelve_hours_price",this.getPara("model.twelve_hours_price"));
+//        model.set("tow_hours_mem_price",this.getPara("model.tow_hours_mem_price"));
+//        model.set("four_hours_mem_price",this.getPara("model.four_hours_mem_price"));
+//        model.set("eight_hours_mem_price",this.getPara("model.eight_hours_mem_price"));
+//        model.set("twelve_hours_mem_price",this.getPara("model.twelve_hours_mem_price"));
+//        model.set("auto_price",this.getPara("model.auto_price"));
+//        model.set("power_a1",this.getPara("model.power_a1"));
+//        model.set("power_a2",this.getPara("model.power_a2"));
+//        model.set("power_a3",this.getPara("model.power_a3"));
+//        model.set("power_a4",this.getPara("model.power_a4"));
+//        model.set("power_a5",this.getPara("model.power_a5"));
+//        model.set("power_a6",this.getPara("model.power_a6"));
+//        model.set("power_a7",this.getPara("model.power_a7"));
+//        model.set("free",this.getPara("model.free"));
+//
+//        model.update();
+//        this.renderSuccess();
+
+        Project model = getModel(Project.class, "model");
+        model.setCreatetime(new Date());
+        model.save();
+        renderSuccess();
+    }
+
+    //新增项目
+    public void addProjectPage() {
+        setAttr("company_id",getPara("company_id"));
+        render("addProject.html");
+    }
+
 
 
     //充值历史记录

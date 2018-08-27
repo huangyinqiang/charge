@@ -4,90 +4,233 @@
         <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
             <table cellpadding="5" width="100%">
                 <tr>
-                    <th><span>公司名称：</span></th>
+                    <th><span>项目名称</span></th>
                     <td>
-                        <input class="easyui-textbox" disabled type="text" name="company_name" value="${company_name!''}" data-options="" style="width: 200px;"></input>
-                    </td>
-                <tr>
-                    <th><span>两小时价格(分)：</span></th>
-                    <td>
-                        <input class="easyui-textbox" type="text" name="tow_hours_price" value="" data-options="" style="width: 200px;"></input>
-                    </td>
-
-                </tr>
-
-                <tr>
-                    <th><span>四小时价格(分)：</span></th>
-                    <td>
-                        <input class="easyui-textbox" type="text" name="four_hours_price" value="" data-options="" style="width: 200px;"></input>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="name"
+                                   id="name"
+                                   style="width: 200px;"></input>
+                        </div>
                     </td>
 
                 </tr>
 
-                <tr>
-                    <th><span>八小时价格(分)：</span></th>
-                    <td>
-                        <input class="easyui-textbox" type="text" name="eight_hours_price" value="" data-options="" style="width: 200px;"></input>
-                    </td>
 
+                <tr>
+                    <th><span>简介</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="introduce"
+                                   id="introduce"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
                 </tr>
 
                 <tr>
-                    <th><span>十二小时价格(分)：</span></th>
+                    <th><span>管理员</span></th>
                     <td>
-                        <input class="easyui-textbox" type="text" name="twelve_hours_price" value="" data-options="" style="width: 200px;"></input>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="admin_name"
+                                   id="admin_name"
+                                   style="width: 200px;"></input>
+                        </div>
                     </td>
 
+                </tr>
+
+
+                <tr>
+                    <th><span>管理员电话</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="admin_tel"
+                                   id="admin_tel"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+
+                </tr>
+
+
+
+                <tr>
+                    <th><span>非员会2小时价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="tow_hours_price"
+                                   id="tow_hours_price"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>非员会4小时价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="four_hours_price"
+                                   id="four_hours_price"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>非员会8小时价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="eight_hours_price"
+                                   id="eight_hours_price"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>非员会12小时价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="twelve_hours_price"
+                                   id="twelve_hours_price"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>员会2小时价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="tow_hours_mem_price"
+                                   id="tow_hours_mem_price"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>员会4小时价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="four_hours_mem_price"
+                                   id="four_hours_mem_price"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
                 </tr>
 
                 <tr>
-                    <th><span>会员两小时价格(分)：</span></th>
+                    <th><span>员会8小时价格(分)</span></th>
                     <td>
-                        <input class="easyui-textbox" type="text" name="tow_hours_mem_price" value="" data-options="" style="width: 200px;"></input>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="eight_hours_mem_price"
+                                   id="eight_hours_mem_price"
+                                   style="width: 200px;"></input>
+                        </div>
                     </td>
-
+                </tr>
+                <tr>
+                    <th><span>员会12小时价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="twelve_hours_mem_price"
+                                   id="twelve_hours_mem_price"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>会员最低余额(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="auto_price"
+                                   id="auto_price"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>A1功率段价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="power_a1"
+                                   id="power_a1"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
                 </tr>
 
                 <tr>
-                    <th><span>会员四小时价格(分)：</span></th>
+                    <th><span>A2功率段价格(分)</span></th>
                     <td>
-                        <input class="easyui-textbox" type="text" name="four_hours_mem_price" value="" data-options="" style="width: 200px;"></input>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="power_a2"
+                                   id="power_a2"
+                                   style="width: 200px;"></input>
+                        </div>
                     </td>
-
                 </tr>
                 <tr>
-                    <th><span>会员八小时价格(分)：</span></th>
+                    <th><span>A3功率段价格(分)</span></th>
                     <td>
-                        <input class="easyui-textbox" type="text" name="eight_hours_mem_price" value="" data-options="" style="width: 200px;"></input>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="power_a3"
+                                   id="power_a3"
+                                   style="width: 200px;"></input>
+                        </div>
                     </td>
-
                 </tr>
                 <tr>
-                    <th><span>会员十二小时价格(分)：</span></th>
+                    <th><span>A4功率段价格(分)</span></th>
                     <td>
-                        <input class="easyui-textbox" type="text" name="twelve_hours_mem_price" value="" data-options="" style="width: 200px;"></input>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="power_a4"
+                                   id="power_a4"
+                                   style="width: 200px;"></input>
+                        </div>
                     </td>
-
                 </tr>
+                <tr>
+                    <th><span>A5功率段价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="power_a5"
+                                   id="power_a5"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>A6功率段价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="power_a6"
+                                   id="power_a6"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>A7功率段价格(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="power_a7"
+                                   id="power_a7"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+
 
                 <tr>
-                    <th><span>自动充电最小余额(分)：</span></th>
+                    <th><span>是否免费</span></th>
                     <td>
-                        <input class="easyui-textbox" type="text" name="auto_price" value="" data-options="" style="width: 200px;"></input>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="free"
+                                   id="free"
+                                   style="width: 200px;"></input>
+                        </div>
                     </td>
-
-                </tr>
-
-                <tr>
-                    <th><span>自动充电单价(分)：</span></th>
-                    <td>
-                        <input class="easyui-textbox" type="text" name="auto_unit_price" value="" data-options="" style="width: 200px;"></input>
-                    </td>
-
                 </tr>
 
 
-                </tr>
+
             </table>
         </form>
     </div>
@@ -95,19 +238,21 @@
 <script>
     top.window.subPage.save = save;
     function save(successFunc) {
-        if($("#ff").form('enableValidation').form('validate')) {
-            $.post("addPrice", getParam(), function(data) {
+            $.post("addProjectData", getParam(), function(data) {
                 if(successFunc) {
                     successFunc();
                 }
                 top.window.closeWindow();
                 top.window.subPage.loadCurrDatagrid();
             });
-        }
+
     }
     function getParam() {
         var param = {
-            "model.company_id": ${company_id},
+            "model.name": $(":input[name='name']").val(),
+            "model.introduce": $(":input[name='introduce']").val(),
+            "model.admin_name": $(":input[name='admin_name']").val(),
+            "model.admin_tel": $(":input[name='admin_tel']").val(),
             "model.tow_hours_price": $(":input[name='tow_hours_price']").val(),
             "model.four_hours_price": $(":input[name='four_hours_price']").val(),
             "model.eight_hours_price": $(":input[name='eight_hours_price']").val(),
@@ -116,8 +261,16 @@
             "model.four_hours_mem_price": $(":input[name='four_hours_mem_price']").val(),
             "model.eight_hours_mem_price": $(":input[name='eight_hours_mem_price']").val(),
             "model.twelve_hours_mem_price": $(":input[name='twelve_hours_mem_price']").val(),
+            "model.company_id": ${company_id!},
             "model.auto_price": $(":input[name='auto_price']").val(),
-            "model.auto_unit_price": $(":input[name='auto_unit_price']").val(),
+            "model.power_a1": $(":input[name='power_a1']").val(),
+            "model.power_a2": $(":input[name='power_a2']").val(),
+            "model.power_a3": $(":input[name='power_a3']").val(),
+            "model.power_a4": $(":input[name='power_a4']").val(),
+            "model.power_a5": $(":input[name='power_a5']").val(),
+            "model.power_a6": $(":input[name='power_a6']").val(),
+            "model.power_a7": $(":input[name='power_a7']").val(),
+            "model.free": $(":input[name='free']").val()
         };
         for(key in param) {
             if(!param[key]) {

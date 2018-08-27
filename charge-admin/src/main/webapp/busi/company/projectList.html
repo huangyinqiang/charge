@@ -216,25 +216,18 @@ function updateProject() {
         showMsg("更新成功");
         datagrid.datagrid("reload");
     }
-    top.openWindow("活动-编辑", getCurrUrl("updateProjectPage") + "?id=" + id+"&projectName="+projectName, {size: '600x400'});
+    top.openWindow("项目-编辑", getCurrUrl("updateProjectPage") + "?id=" + id+"&projectName="+projectName, {size: '600x400'});
 }
 
 
 
 
 function addProject() {
-    var rowsSel = datagrid.datagrid("getSelections");
-    if(rowsSel.length != 1) {
-        showWarnMsg("请选择要编辑数据！");
-        return;
-    }
-    var id = rowsSel[0].id;
-    var projectName = rowsSel[0].name;
     top.window.subPage.loadCurrDatagrid = function() {
-        showMsg("更新成功");
+        showMsg("添加成功");
         datagrid.datagrid("reload");
     }
-    top.openWindow("活动-编辑", getCurrUrl("updateProjectPage") + "?id=" + id+"&projectName="+projectName, {size: '600x400'});
+    top.openWindow("项目-新增", getCurrUrl("addProjectPage?company_id=${company_id!}"), {size: '600x400'});
 }
 
 
