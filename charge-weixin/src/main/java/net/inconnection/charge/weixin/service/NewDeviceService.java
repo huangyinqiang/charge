@@ -6,6 +6,7 @@ import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.Company;
 import net.inconnection.charge.weixin.model.NewDevice;
 import net.inconnection.charge.weixin.model.NewDeviceChargeSocket;
+import net.inconnection.charge.weixin.model.NewDeviceProject;
 
 import java.util.List;
 
@@ -53,19 +54,25 @@ public class NewDeviceService {
     }
 
     public Boolean updateInstallInfo(Long deviceId, String chargePileName, String province, String city, String location, Double latitude,
-                                             Double longitude, Long powerMax, Integer socketSum , Long companyId) {
+                                             Double longitude, Long powerMax, Integer socketSum , Long companyId, Long projectId) {
         try {
             Boolean updateResult = NewDevice.dao.updateInstallInfo(deviceId, chargePileName, province, city, location, latitude,
-                    longitude, powerMax, socketSum , companyId);
+                    longitude, powerMax, socketSum , companyId, projectId);
             return updateResult;
         } catch (Exception var3) {
             return null;
         }
     }
 
-
-
-
+    public HnKejueResponse getProjectByCompanyId(Long companyId) {
+        try {
+            List<NewDeviceProject> newDeviceProjects = NewDeviceProject.dao.queryProjectByCompanyId(companyId);
+            return new HnKejueResponse(newDeviceProjects, RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
+        } catch (Exception var3) {
+            logger.error("根据运营商ID获取项目名称数据失败", var3);
+            return new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
+        }
+    }
 
 
 

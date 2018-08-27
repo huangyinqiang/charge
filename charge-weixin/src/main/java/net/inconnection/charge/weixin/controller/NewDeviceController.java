@@ -131,6 +131,7 @@ public class NewDeviceController extends Controller {
         String powerMax = this.getPara("powerMax");
         String socketSum = this.getPara("socketSum");
         String companyId = this.getPara("companyId");
+        String projectIdStr = this.getPara("projectId");
 
         Long chargePileId = Long.parseLong(deviceId);
         Double latitudeDouble = Double.parseDouble(latitude);
@@ -138,6 +139,7 @@ public class NewDeviceController extends Controller {
         Long powerMaxLong = Long.parseLong(powerMax);
         Integer socketSumInt = Integer.parseInt(socketSum);
         Long companyIdLong = Long.parseLong(companyId);
+        Long projectId = Long.parseLong(projectIdStr);
 
         Boolean permissonOnlineSuccess = deviceControlService.requestPermissionOnLine(chargePileId, 30*1000L);
 
@@ -145,7 +147,7 @@ public class NewDeviceController extends Controller {
             log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功");
 
             Boolean updateResult = newDeviceService.updateInstallInfo(chargePileId, chargePileName, province, city, location, latitudeDouble,
-                    longitudeDouble, powerMaxLong, socketSumInt , companyIdLong);
+                    longitudeDouble, powerMaxLong, socketSumInt , companyIdLong, projectId);
 
             if (updateResult != null && updateResult.equals(true)) {
 
@@ -211,6 +213,19 @@ public class NewDeviceController extends Controller {
 
         HnKejueResponse json = newDeviceService.getAllCompany();
         log.info("查询所有运营商公司结束：" + json);
+        this.renderJson(json);
+
+    }
+
+    public void getProjectByCompanyId(){
+        String companyIdStr = this.getPara("companyId");
+
+        log.info("查询运营商公司下面所有的项目， companyId=" + companyIdStr);
+
+        Long companyId = Long.parseLong(companyIdStr);
+
+        HnKejueResponse json = newDeviceService.getProjectByCompanyId(companyId);
+        log.info("查询运营商公司下面所有的项目结束：" + json);
         this.renderJson(json);
 
     }

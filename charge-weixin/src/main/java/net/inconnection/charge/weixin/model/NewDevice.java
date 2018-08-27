@@ -26,7 +26,7 @@ public class NewDevice extends Model<NewDevice> {
     }
 
     public boolean updateInstallInfo(Long deviceId, String chargePileName, String province, String city, String location, Double latitude,
-                                     Double longitude, Long powerMax, Integer socketSum , Long companyId) {
+                                     Double longitude, Long powerMax, Integer socketSum , Long companyId, Long projectId) {
         log.info("更新设备安装信息：" );
         NewDevice info = new NewDevice();
         info.set("id", deviceId);
@@ -39,6 +39,7 @@ public class NewDevice extends Model<NewDevice> {
         info.set("power_max", powerMax);
         info.set("socket_sum", socketSum);
         info.set("company_id", companyId);
+        info.set("projectId", projectId);
         boolean update = info.update();
         log.info("更新设备安装信息结果:" + update);
         return update;

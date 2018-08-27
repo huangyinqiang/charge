@@ -199,7 +199,7 @@ public class ChargeInfoBatteryService {
             chargeBatteryInfoBean.setOpertype(operType);
             int walletAccountInt = Integer.parseInt(walletAccount);
             Integer moneyInt = Integer.parseInt(money);
-            if (operType.equals("M")){
+            if (operType.equals("W") && type.equals("charge")){
                 //按照时间计算总价
                 moneyInt = new Double(Double.parseDouble(time)/60.0 * autoUnitPriceInt).intValue();
             }
