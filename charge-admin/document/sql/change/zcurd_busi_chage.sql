@@ -136,3 +136,20 @@ CREATE TABLE `yc_tuser_and_coupon` (
 
 /*2018 8 - 16 数据库的扩展  开始              */
 alter table yc_charge_socket add `charge_socket_sn` int(2) DEFAULT NULL COMMENT '充电插座的sn';
+
+
+/*2018 8 - 28 数据库的修改              */
+CREATE TABLE `sysuser_company` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sysuser_id` int(11) DEFAULT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sysuser_company_id_uindex` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8
+
+update yc_company set id=3  where company_name='昊方';
+insert into yc_company(id,pid,company_name) values(1,0,'总部');
+update yc_company set pid=1  where company_name='云创';
+update yc_company set pid=100000  where company_name='昊方';
+update yc_company set pid=100000  where company_name='旺座';
+update yc_company set pid=100000  where company_name='测试公司';

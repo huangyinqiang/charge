@@ -5,3 +5,8 @@ alter table zcurd_head_js add `sql_content` varchar(2000) DEFAULT NULL COMMENT '
 update sys_menu set menu_url='/zcurdHead/listPage'  where menu_name='在线表单';
 
 update sys_menu set order_num=3 where id=14;
+
+
+
+/*2018 8 - 28 数据库的修改              */
+update sys_menu set menu_url='/mySysuser/listPage'  where menu_name='系统用户';

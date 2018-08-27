@@ -74,6 +74,10 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/company", CompanyController.class, "/busi/company");
 		me.add("/pileDevice/record", PileRecordController.class, "/busi/pileDevice");
 		me.add("/imageTrans", ImageTransController.class, "/busi/imageTrans");
+
+		//原来的用户管理是根据框架生成页面，现在需要自己重新编写页面
+		me.add("/mySysuser", MySysUserController.class, "/busi/mySysUser");
+
 	}
 	
 	/**

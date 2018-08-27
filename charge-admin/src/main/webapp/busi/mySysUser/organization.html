@@ -1,0 +1,143 @@
+ <#include "/common/head.html"/>
+ <link href="${basePath}/res/zTree_v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet"/>
+ <script type="text/javascript" src="${basePath}/res/zTree_v3/js/jquery.ztree.all.min.js"></script>
+ <script type="text/javascript" src="${basePath}/res/zTree_v3/js/jquery.ztree.core.min.js"></script>
+ <script type="text/javascript" src="${basePath}/res/zTree_v3/js/jquery.ztree.excheck.min.js"></script>
+
+
+<div class="easyui-panel updatePage"
+	data-options="fit:true,border:false">
+	<form id="ff" class="easyui-form" method="post">
+		<input class="easyui-textbox" type="hidden" name="userId"
+			   id="userId" value="${userId!''}"/>
+		<div>
+			<ul id="jkTree" class="ztree"></ul>
+		</div>
+	</form>
+</div>
+<script>
+
+    var zTreeObj;
+    setting = {
+        check : {
+            enable: true,
+            chkStyle: "checkbox",
+            chkboxType: { "Y" : "s", "N" : "ps" }
+        },
+        data : {
+            simpleData : {
+                enable : true
+            }
+        },
+        callback: {
+            onCheck: function() {
+                onCheck();
+            }
+        }
+
+    };
+
+
+    var ids = [];
+    var names = [];
+    var childIds = [];
+    function onCheck(){
+        ids = [];
+        names = [];
+        var nodes = new Array();
+        nodes=zTreeObj.getCheckedNodes(true);
+        if(nodes.length==0){
+        }else{
+            for(var i=0;i<nodes.length;i++){
+                if(nodes[i].isParent){
+                    if(nodes[i].getCheckStatus().half){
+                    }else{
+                        var parent = nodes[i].getParentNode();
+                        if(parent==null){
+                            ids.push(nodes[i].id);
+                            names.push(nodes[i].name);
+                        }else{
+                            if(!parent.getCheckStatus().half){
+                            }else{
+                                ids.push(nodes[i].id);
+                                names.push(nodes[i].name);
+                                var childs = nodes[i].children;
+                                if(childs){
+                                    for(var j=0;j<childs.length;j++){
+                                        childIds+= " id="+childs[j].id+" name="+childs[j].name;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }else{
+                    var parent = nodes[i].getParentNode();
+                    if(parent==null){
+                        ids.push(nodes[i].id);
+                        names.push(nodes[i].name);
+                    }else{
+                        if(parent.getCheckStatus().half){
+                            ids.push(nodes[i].id);
+                            names.push(nodes[i].name);
+                        }else{
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    $(document).ready(function() {
+        zTreeObj = $.fn.zTree.init($('#jkTree'), setting, eval(${sb}));
+        zTreeObj.expandAll(true);
+    });
+
+
+    top.window.subPage.save = save;
+    function save() {
+
+
+        if($("#zcurdHeadTable").form('validate')) {
+            $.post("updateOrganization", getParam(), function(data) {
+                top.window.closeWindow();
+                top.window.subPage.loadCurrDatagrid();
+            });
+        }
+    }
+    function getParam() {
+
+
+        console.log("ids  "+ids);
+
+
+        var stringIds="";
+        var stringNames="";
+
+        for(var i=0;i<ids.length;i++){
+            stringIds+=ids[i];
+            stringIds+=",";
+        }
+
+        for(var j=0;j<names.length;j++){
+            stringNames+=names[j];
+            stringNames+=",";
+        }
+        var param = {
+            "model.userId": $(":input[name='userId']").val(),
+            "model.stringIds": stringIds,
+        }
+        for(key in param) {
+            if(!param[key]) {
+                delete param[key];
+            }
+        }
+        return param;
+    }
+
+
+
+
+
+</script>
+<#include "/common/foot.html"/>
