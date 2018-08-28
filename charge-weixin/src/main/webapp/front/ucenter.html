@@ -15,7 +15,7 @@
 <link rel="stylesheet" href="css/weui.css">
 <link rel="stylesheet" href="css/wechat.css">
 <script type="text/javascript" src="js/common/jquery-2.1.1.min.js"></script>
-	<script type="text/javascript" src="js/recharge/startRecharge.js"></script>
+	<!--<script type="text/javascript" src="js/recharge/startRecharge.js"></script>-->
 <script type="text/javascript"
 	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 
@@ -26,7 +26,7 @@
 		if (null == openId) {
 			getOpenId();
 		}
-		getUsetInfo(openId);
+		getUserInfo(openId);
 	});
 	//获取session中的openId
 	function getOpenId() {
@@ -47,7 +47,7 @@
 		});
 	}
 	//获取用户信息
-	function getUsetInfo(openId) {
+	function getUserInfo(openId) {
 		$.ajax({
 			type : "POST",
 			url : "./user/findUserInfo",
@@ -77,28 +77,6 @@
 			}
 		});
 	}
-
-    function getActivityInfoByCompanyId(companyId) {
-        $.ajax({
-            type: 'POST',
-            url: "../recharge/queryActivityInfoByCompanyId",
-            dataType: "json",
-            data: {
-                companyId: companyId
-            },
-            cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
-            async: false,// 设置同步方式，false为同步
-            success: function (data) {
-                if (data.respObj != null && data.respCode == "000000") {
-                    activityInfo = data.respObj;
-                } else {
-                    layer.msg("活动信息不存在，请联系客服...", {
-                        shift: 5
-                    });
-                }
-            }
-        });
-    }
 
     function getActivity() {
 	    //查询云易智行公司的优惠活动

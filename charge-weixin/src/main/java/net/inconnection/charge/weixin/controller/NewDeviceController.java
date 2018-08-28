@@ -172,14 +172,13 @@ public class NewDeviceController extends Controller {
     }
 
     public void getDeviceInfo(){
-        String deviceId = this.getPara("qr");
+        String deviceId = this.getPara("deviceId");
         log.info("根据二维码查询设备 deviceId = " + deviceId);
 
         //todo qr是设备sn，这里需要完成的工作是查出对应设备的插座数和总功率，最大功率，所属公司，传给前端   后续可以考虑查出该充电桩下面所有插座的使用情况
         HnKejueResponse json = newDeviceService.queryDevice(deviceId);
         log.info("根据二维码查询设备结束：" + json);
         this.renderJson(json);
-
     }
 
     public void getNotifyDeviceInfo(){
@@ -195,6 +194,14 @@ public class NewDeviceController extends Controller {
         log.info("根据二维码查询未安装设备结束：" + json);
         this.renderJson(json);
 
+    }
+
+    public void getDeviceCompanyInfo(){
+        String deviceId = this.getPara("deviceId");
+        log.info("根据deviceId查询设备 deviceId = " + deviceId);
+        HnKejueResponse json = newDeviceService.queryDevice(deviceId);
+        log.info("根据deviceId查询设备结束：" + json);
+        this.renderJson(json);
     }
 
 

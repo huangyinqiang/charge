@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>我要充值</title>
+<title>优惠活动</title>
 <link rel="stylesheet" href="css/weui.css">
 <link rel="stylesheet" href="css/wechat.css">
 <script type="text/javascript" src="js/common/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script type="text/javascript" src="js/recharge/startRecharge.js"></script>
+<!--<script type="text/javascript" src="js/recharge/startRecharge.js"></script>-->
 <script src="./js/common/layer/layer.js"></script>
 <link rel="stylesheet" href="./js/common/layer/theme/default/layer.css">
 <script type="text/javascript">
@@ -40,14 +40,30 @@
             }
         });
     });
-    扫码查询
+    //扫码查询
     function scanQR() {
     	wx.scanQRCode({
     		needResult : 1,// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
     		desc : 'scanQRCode desc',
     		success : function(res) {
-    			// 扫码后获取结果参数赋值给Input
-    			quereActivityByCompanyId(res.resultStr);
+    			quereActivityByNewDeviceId(res.resultStr);
+
+                var deviceId = res.resultStr;
+                if(res.resultStr.indexOf("deviceid")>=0 && res.resultStr.indexOf("=")>=0 && res.resultStr.indexOf("?")>=0){
+
+                    var strs = res.resultStr.split("=");
+                    deviceId = strs[1];
+                }
+
+                if (deviceId.length == 11 || deviceId.length == 12) {
+                    //新设备
+                    quereActivityByNewDeviceId(deviceId)
+                }else {
+                    queryDevice(deviceId);
+                }
+
+
+
     		}
     	});
     }
@@ -55,13 +71,65 @@
     function scanQRTest(){
 
         //todo 测试账号,正式部署使用正常扫码
-        quereActivityByCompanyId("123456");
+        quereActivityByNewDeviceId("10100000001");
 
     }
 
     // 查询
-    function quereActivityByCompanyId(companyId) {
-        location.href = "../recharge/rechargeNew?companyId=" + companyId
+    function queryDevice(value) {
+        $.ajax({
+            type : 'GET',
+            url : "./device/queryDeviceInfoByQr",
+            dataType : "json",
+            data : {
+                qr : value
+            },
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : false,// 设置同步方式，false为同步
+            success : function(data) {
+                if (data.respCode != '000000' | null == data.respObj) {
+                    layer.msg("设备暂时离线，请稍后再试...", {
+                        shift : 5
+                    });
+                    return;
+                }
+                location.href = "./recharge/recharge?deviceId="
+                    + data.respObj.match_num + "&area="
+                    + encodeURI(encodeURI(data.respObj.area)) + "&activityId="
+                    + data.respObj.activity_id + "&type=WA"
+            },
+            error : function() {
+
+            }
+        });
+    }
+
+    // 查询
+    function quereActivityByNewDeviceId(deviceId) {
+        $.ajax({
+            type : 'GET',
+            url : "./newDevice/getDeviceCompanyInfo",
+            dataType : "json",
+            data : {
+                deviceId : deviceId
+            },
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : false,// 设置同步方式，false为同步
+            success : function(data) {
+                if (data.respCode != '000000' | null == data.respObj) {
+                    layer.msg("设备优惠信息查询有误，请稍后再试...", {
+                        shift : 5
+                    });
+                    return;
+                }
+                location.href = "../recharge/rechargeNew?companyId=" + data.respObj.company_id
+            },
+            error : function() {
+
+            }
+        });
+
+        // location.href = "../recharge/rechargeNew?companyId=" + companyId
     }
 
     //获取URL中的参数值

@@ -86,7 +86,7 @@ function queryNewDevice(value) {
         url : "./newDevice/getDeviceInfo",
         dataType : "json",
         data : {
-            qr : value
+            deviceId : value
         },
         cache : false,
         async : false,

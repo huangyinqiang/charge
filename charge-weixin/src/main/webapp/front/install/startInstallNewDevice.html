@@ -10,7 +10,7 @@
 <title>设备安装</title>
 <link rel="stylesheet" type="text/css" href="temp/main.css">
 <script type="text/javascript" src="temp/jquery.js"></script>
-<script type="text/javascript" src="js/charging/startCharging.js"></script>
+<!--<script type="text/javascript" src="js/charging/startCharging.js"></script>-->
 <script src="js/common/layer/layer.js"></script>
 <link rel="stylesheet" href="js/common/layer/theme/default/layer.css">
 <script type="text/javascript"
@@ -93,7 +93,6 @@
                 needResult : 1,// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
                 desc : 'scanQRCode desc',
                 success : function(res) {
-                    // 扫码后获取结果参数赋值给Input
 
                     var deviceId = res.resultStr;
                     if(res.resultStr.indexOf("deviceid")>=0 && res.resultStr.indexOf("=")>=0 && res.resultStr.indexOf("?")>=0){
