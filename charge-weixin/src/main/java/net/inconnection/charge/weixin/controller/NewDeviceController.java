@@ -54,7 +54,7 @@ public class NewDeviceController extends Controller {
 
 
 
-        JSONObject startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, 30*1000L);
+        JSONObject startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, 10*1000L);
 
         Integer startChargeStatus =9999;
         Integer startPower = 0;
@@ -101,7 +101,7 @@ public class NewDeviceController extends Controller {
         log.info("断电开始 openId=" + openId + ",id=" + id + ",channelNum=" + channeNum + ",deviceId=" + deviceId);
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(channeNum);
-        Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, 30*1000L);
+        Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, 10*1000L);
 
         if (null == powerOffStatus){
             powerOffStatus = 9999;
@@ -141,7 +141,10 @@ public class NewDeviceController extends Controller {
         Long companyIdLong = Long.parseLong(companyId);
         Long projectId = Long.parseLong(projectIdStr);
 
-        Boolean permissonOnlineSuccess = deviceControlService.requestPermissionOnLine(chargePileId, 30*1000L);
+        log.info("开始入网 deviceId=" + deviceId );
+
+
+        Boolean permissonOnlineSuccess = deviceControlService.requestPermissionOnLine(chargePileId, 10*1000L);
 
         if (permissonOnlineSuccess){
             log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功");
@@ -170,6 +173,7 @@ public class NewDeviceController extends Controller {
 
     public void getDeviceInfo(){
         String deviceId = this.getPara("qr");
+        log.info("根据二维码查询设备 deviceId = " + deviceId);
 
         //todo qr是设备sn，这里需要完成的工作是查出对应设备的插座数和总功率，最大功率，所属公司，传给前端   后续可以考虑查出该充电桩下面所有插座的使用情况
         HnKejueResponse json = newDeviceService.queryDevice(deviceId);
@@ -179,7 +183,13 @@ public class NewDeviceController extends Controller {
     }
 
     public void getNotifyDeviceInfo(){
+
         String deviceId = this.getPara("deviceId");
+        log.info("查询充电充电编号开始，deviceId=" + deviceId);
+        if (deviceId.contains("deviceid") && deviceId.contains("=") && deviceId.contains("?")) {
+            deviceId = deviceId.split("=")[1].replaceAll(" ", "");
+            log.info("处理URL类型的二维码成功，deviceId＝" + deviceId);
+        }
 
         HnKejueResponse json = newDeviceService.queryNotifyDevice(deviceId);
         log.info("根据二维码查询未安装设备结束：" + json);

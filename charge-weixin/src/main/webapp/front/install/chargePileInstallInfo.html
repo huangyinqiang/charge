@@ -210,7 +210,6 @@
         }
 
 
-
 		$.ajax({
 			type : "post",
 			url : "../newDevice/permissionOnlineAndUpdate",
@@ -231,6 +230,15 @@
 			cache : false,
 			async : false,//
 			dataType : "json",
+            beforeSend : function(){
+                // $("#submit").text('数据正在上传，请稍候...');
+                // $('#submit').prop("disabled", true);
+            },
+            complete: function(){
+                // 设置 进度条到80%
+                // $('#submit').prop("disabled", true);
+                // $("#submit").text('数据上传完成');
+            },
 			success : function(data) {
 
 			    console.log(data);
@@ -241,6 +249,8 @@
                     });
                     window.location.href = "../index"
 				}else {
+                    $('#submit').prop("disabled", false);
+                    $("#submit").text('尝试再次提交');
                     layer.msg(data.respMsg, {
                         shift : 5
                     });
@@ -315,7 +325,7 @@
 				</tr>
 
 			</table>
-			<a href="#" onclick="submit()" class="recharge">提交</a>
+			<a id="submit" href="#" onclick="submit()" class="recharge">提交</a>
 		</div>
 	</div>
 </body>

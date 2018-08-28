@@ -52,7 +52,6 @@ public class RechargeController extends Controller {
     public void rechargeNew(){
         this.setAttr("companyId", this.getPara("companyId"));
 
-
         log.info("跳转到新充值界面,companyId=" + this.getPara("companyId") );
         this.render("recharge/rechargeNew.html");
 

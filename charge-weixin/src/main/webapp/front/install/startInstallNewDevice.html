@@ -94,9 +94,17 @@
                 desc : 'scanQRCode desc',
                 success : function(res) {
                     // 扫码后获取结果参数赋值给Input
-                    if (res.resultStr.length == 11 || res.resultStr.length == 12) {
+
+                    var deviceId = res.resultStr;
+                    if(res.resultStr.indexOf("deviceid")>=0 && res.resultStr.indexOf("=")>=0 && res.resultStr.indexOf("?")>=0){
+
+                        var strs = res.resultStr.split("=");
+                        deviceId = strs[1];
+                    }
+
+                    if (deviceId.length == 11 || deviceId.length == 12) {
                         //新设备
-                        queryNewDevice(res.resultStr)
+                        queryNewDevice(deviceId)
                     }else {
                         layer.msg("错误的设备ID！", {
                             shift : 5
@@ -117,10 +125,7 @@
 
     }
 
-
-
     function queryNewDevice(deviceId) {
-
         $.ajax({
             type : 'POST',
             url : "./newDevice/getNotifyDeviceInfo",
@@ -147,8 +152,6 @@
         });
     }
 
-
-	
 </script>
 </head>
 <body>
@@ -167,17 +170,6 @@
 		<i class="icon" onclick="scanQR();"></i>
 		<input type="button" onclick="scanQRTest();" value="扫码安装">
 	</div>
-	<!--<div class="foot">-->
-		<!--<p class="tit">温馨提示</p>-->
-		<!--<ul>-->
-			<!--<li><img src="../temp/footNum01.png" alt="1">-->
-				<!--<p>确保您的手机GPS定位功能打开，并且处于信号良好的地方。</p></li>-->
-			<!--<li><img src="../temp/footNum02.png" alt="2">-->
-				<!--<p>点击扫码安装。</p></li>-->
-			<!--<li><img src="../temp/footNum03.png" alt="3">-->
-				<!--<p>根据提示继续操作。</p></li>-->
-		<!--</ul>-->
-	<!--</div>-->
 </body>
 </html>
 
