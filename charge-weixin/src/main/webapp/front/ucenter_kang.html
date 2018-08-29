@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>个人中心</title>
+	<link rel="stylesheet" href="./personal.css" />
+	<link href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css" rel="stylesheet">
+	<script type="text/javascript">
+
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+
+//              750 代表设计稿的宽度,设计稿多宽,就改成多大
+                    if(clientWidth>=750){
+                        docEl.style.fontSize = '100px';
+                    }else{
+                        docEl.style.fontSize = 100 * (clientWidth / 750) + 'px';
+                    }
+                };
+
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+
+	</script>
+</head>
+<body>
+<div class="personalBox">
+	<a href="">
+		<div class="Recognition">
+			<div class="RecognitionImg"></div>
+			<div class="userNmae">
+				<h1>显示用户名</h1>
+				<p>余额：<span>￥10</span></p>
+			</div>
+		</div>
+	</a>
+	<!-- 余额 -->
+	<!-- <div class="balance">
+        <ul>
+            <li>
+                <div class="yue">
+                    <i class="iconfont icon-yue"></i>
+                </div>
+                <p>余额</p>
+                <p style="font-size: 0.12rem">￥10</p>
+            </li>
+        </ul>
+    </div>	 -->
+</div>
+
+<!-- 常用功能 -->
+<div class="function">
+	<div class="functionTitle">
+		<img src="images/gongn.png">
+	</div>
+
+	<div class="funContent">
+		<ul>
+			<li>
+				<i class="iconfont icon-qianbao"></i>
+				<p>钱包充值</p>
+			</li>
+			<li>
+				<i class="iconfont icon-chongzhijilu"></i>
+				<p>充值记录</p>
+			</li>
+			<li>
+				<i class="iconfont icon-iconzhuanqu33"></i>
+				<p>充电记录</p>
+			</li>
+			<li>
+				<i class="iconfont icon-duandian"></i>
+				<p>远程断电</p>
+			</li>
+		</ul>
+	</div>
+</div>
+<!-- 其它功能 -->
+<div class="function">
+	<div class="functionTitle">
+		<img src="images/qitagn.png">
+	</div>
+	<div class="funContent">
+		<ul>
+			<li>
+				<i class="iconfont icon-ditu"></i>
+				<p>充电地图</p>
+			</li>
+			<li>
+				<i class="iconfont icon-iconzhuanqu33"></i>
+				<p>设备安装</p>
+			</li>
+			<li>
+				<i class="iconfont icon-moban"></i>
+				<p>关于我们</p>
+			</li>
+			<li>
+				<i class="iconfont icon-moban"></i>
+				<p>特别提示</p>
+			</li>
+
+		</ul>
+	</div>
+</div>
+<!-- 底部 -->
+<div class="weui_tabbar ">
+	<a href="./charging" class="weui_tabbar_item">
+		<div class="weui_tabbar_icon">
+			<img src="images/saoma.png" alt="">
+		</div>
+		<p class="weui_tabbar_label">扫码充电</p>
+	</a>
+	<a href="./recharge" class="weui_tabbar_item">
+		<div class="weui_tabbar_icon">
+			<img src="images/chongzhi.png" alt="">
+		</div>
+		<p class="weui_tabbar_label">优惠活动</p>
+	</a>
+</div>
+
+</body>
+
+</html>
