@@ -6,6 +6,7 @@ import net.inconnection.charge.weixin.bean.TencentMapSuperBean;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.BaiDuMap;
+import net.inconnection.charge.weixin.model.NewDevice;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -38,12 +39,27 @@ public class TencentMapService {
                 tMaplist.add(tMapBean);
             }
 
-            log.info("充电设备数量：" + (mapList.size() - 1));
+            List<NewDevice> newDeviceList = NewDevice.dao.queryDeviceLocation();
+            Iterator var7 = newDeviceList.iterator();
+
+            while(var7.hasNext()) {
+                NewDevice newDevice = (NewDevice)var7.next();
+                ++i;
+                TencentMapBean tMapBean = new TencentMapBean();
+                tMapBean.setId(i);
+                tMapBean.setName((String)newDevice.get("name"));
+                tMapBean.setLocate((String)newDevice.get("detail_location"));
+                tMapBean.setLongitude(Double.toString((Double)newDevice.get("lng")));
+                tMapBean.setLatitude(Double.toString((Double)newDevice.get("lat")));
+                tMaplist.add(tMapBean);
+            }
+
+
+            log.info("充电设备数量：" + (tMaplist.size()));
             TencentMapSuperBean tMapSuperBean = new TencentMapSuperBean();
             tMapSuperBean.setData(tMaplist);
             tMapSuperBean.setCode(0);
             tMapSuperBean.setMsg("success");
-            tMapSuperBean.setData(tMaplist);
             hnKejueResponse.setRespObj(tMapSuperBean);
             hnKejueResponse.setRespCode(RespCode.SUCCESS.getKey());
             hnKejueResponse.setRespMsg(RespCode.SUCCESS.getValue());

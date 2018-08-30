@@ -3,6 +3,8 @@ package net.inconnection.charge.weixin.model;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Model;
 
+import java.util.List;
+
 public class NewDevice extends Model<NewDevice> {
     private static final long serialVersionUID = 3097666259122699423L;
     private static final Log log = Log.getLog(NewDevice.class);
@@ -23,6 +25,13 @@ public class NewDevice extends Model<NewDevice> {
         NewDevice newDevice = (NewDevice)this.findFirst("select * from yc_charge_pile where id = ? and is_online = 0", new Object[]{deviceId});
         log.info("根据设备编码查询未安装设备信息结果:" + newDevice);
         return newDevice;
+    }
+
+    public List<NewDevice> queryDeviceLocation() {
+        log.info("查询设备地理位置信息开始");
+        List<NewDevice> find = dao.find("select * from yc_charge_pile where lat is not null and lng is not null");
+        log.info("查询设备地理位置信息结果：" + find);
+        return find;
     }
 
     public boolean updateInstallInfo(Long deviceId, String chargePileName, String province, String city, String location, Double latitude,

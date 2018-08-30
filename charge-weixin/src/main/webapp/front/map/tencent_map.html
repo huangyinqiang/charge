@@ -79,7 +79,7 @@ body {
 		$(function() {
 			getMapData();
 			getJsSdk();
-						showMap(39.9244100000,116.5184500000);      //假设要以这个地址为中心点显示地图
+			showMap(34.11234,108.51234);      //假设要以这个地址为中心点显示地图
 		});
 
 		// 获取微信js-sdk
@@ -121,15 +121,16 @@ body {
 		//查询地图信息		
 		function getMapData() {
 			$.ajax({
-				type : "GET",
+				type : "POST",
 				url : "../map/queryTencentMap",
 				cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
-				async : true,// 设置同步方式，false为同步
+				async : false,// 设置同步方式，false为同步
 				dataType : "json",
 				success : function(data) {
 					if (data.respObj != null && data.respCode == "000000") {
 						mapData = data.respObj;
 						// 获取jssdk
+                        console.log("mapdata = " + mapData);
 					} else {
 						layer.msg("未找到设备位置信息...", {
 							shift : 5
@@ -142,9 +143,9 @@ body {
 		//显示地图
 		function showMap(latitude, longitude) {
 			var map = new qq.maps.Map(document.getElementById("mapBox"), { //地图部分初始化
-				zoom : 35, //设置地图缩放级别
+				zoom : 15, //设置地图缩放级别
 				center : new qq.maps.LatLng(latitude, longitude), //设置中心点
-				zoomControl : false, //不启用缩放控件
+				zoomControl : true, //启用缩放控件
 				mapTypeControlOptions : { //设置控件的地图类型为普通街道地图
 					mapTypeIds : qq.maps.MapTypeId.ROADMAP
 				}
@@ -154,6 +155,9 @@ body {
 			}); //添加提示窗
 
 			var result = mapData;
+
+			console.log(result);
+
 			//result中数据 用于显示标记、和标记点击时的提示信息
 			if (result.code == 0 && result.msg == "success") {
 				for (var i = 0; i < result.data.length; i++) {
@@ -164,31 +168,31 @@ body {
 						map : map
 					}); //创建标记
 					//***将必要的数据存入每一个对应的marker对象
+
 					marker.id = data.id;
 					marker.name = data.name;
 					marker.locate = data.locate;
-					qq.maps.event
-							.addListener(
-									marker,
-									'click',
-									function() { //获取标记的点击事件
-										info.open(); //点击标记打开提示窗
-										info
-												.setContent('<div class="mapInfo"><p class="center">'
-														+ this.name
-														+ '</p><p>'
-														+ this.locate
-														+ '</p><button type="button" onclick="bindShop(\''
-														+ this.id
-														+ ','
-														+ this.position.lat
-														+ ','
-														+ this.position.lng
-														+ '\')">坐标</button></div>'); //***设置提示窗内容（这里用到了marker对象中保存的数据）
-										info.setPosition(new qq.maps.LatLng(
-												this.position.lat,
-												this.position.lng)); //提示窗位置
-									});
+					// qq.maps.event.addListener(
+					// 				marker,
+					// 				'click',
+					// 				function() { //获取标记的点击事件
+                     //                    console.log("pos = " + marker.name);
+					// 					info.open(); //点击标记打开提示窗
+					// 					info.setContent('<div class="mapInfo"><p class="center">'
+					// 									+ marker.name
+					// 									+ '</p><p>'
+					// 									+ this.locate
+					// 									+ '</p><button type="button" onclick="bindShop(\''
+					// 									+ marker.id
+					// 									// + ','
+					// 									// + this.position.lat
+					// 									// + ','
+					// 									// + this.position.lng
+					// 									+ '\')">坐标</button></div>'); //***设置提示窗内容（这里用到了marker对象中保存的数据）
+					// 					info.setPosition(new qq.maps.LatLng(
+                     //                        marker.position.lat,
+                     //                        marker.position.lng)); //提示窗位置
+					// 				});
 				}
 			} else {
 				//layer.open({ content: "获取附近商铺失败", skin: 'msg', time: 2 });
