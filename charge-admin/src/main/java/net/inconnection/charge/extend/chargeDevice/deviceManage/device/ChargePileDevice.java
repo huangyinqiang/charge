@@ -60,7 +60,7 @@ public class ChargePileDevice implements GateWay {
 
     void updateOnLineToDb(){
         ChargePile chargePileDo = new ChargePile();
-        chargePileDo.setId(chargePileId).setIsOnline(isOnline).update();
+        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setOnlineDate(new Date()).update();
     }
 
     void updateDataToDb(){

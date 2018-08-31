@@ -1,7 +1,9 @@
 package net.inconnection.charge.extend.chargeDevice.protocol;
 
 public class ProtocolConstant {
-    public static final String MQTT_BROKER_IP = "tcp://120.227.8.223:1883";//云创服务器
+//    public static final String MQTT_BROKER_IP = "tcp://120.227.8.223:1883";//云创服务器
+    public static final String MQTT_BROKER_IP = "tcp://charge.inconnection.net:1883";//云创服务器
+
 //    public static final String MQTT_BROKER_IP = "tcp://139.199.78.128:1883";
 //    public static final String MQTT_BROKER_IP = "tcp://127.0.0.1:1883";
 

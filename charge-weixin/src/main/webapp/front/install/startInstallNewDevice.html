@@ -88,7 +88,7 @@
     }
 
     //扫码查询
-    function scanQR() {
+    function scanQR(type) {
             wx.scanQRCode({
                 needResult : 1,// 默认为0，扫描结果由微信处理，1则直接返回扫描结果
                 desc : 'scanQRCode desc',
@@ -103,7 +103,7 @@
 
                     if (deviceId.length == 11 || deviceId.length == 12) {
                         //新设备
-                        queryNewDevice(deviceId)
+                        queryNewDevice(deviceId, type)
                     }else {
                         layer.msg("错误的设备ID！", {
                             shift : 5
@@ -119,12 +119,15 @@
 
 
     // 扫码查询
-    function scanQRTest() {
-        queryNewDevice("10100000001");
+    function scanQRTest(type) {
+        queryNewDevice("201808000011", type);
 
     }
 
-    function queryNewDevice(deviceId) {
+    function queryNewDevice(deviceId, type) {
+
+        console.log("type = " + type);
+
         $.ajax({
             type : 'POST',
             url : "./newDevice/getNotifyDeviceInfo",
@@ -141,8 +144,20 @@
                     });
                     return;
                 }
-                location.href = "./install/editInstallInfo?deviceId="
-                    + data.respObj.id + "&latitude=" + latitude + "&longitude=" + longitude
+
+                if (data.respObj.is_online == 1) {
+                    layer.msg("设备已经上线，将会被重新配置数据", {
+                        shift : 3
+                    });
+
+                    location.href = "./install/editInstallInfo?deviceId="
+                        + data.respObj.id + "&latitude=" + latitude + "&longitude=" + longitude  + "&installed=1"
+				}else {
+
+                    location.href = "./install/editInstallInfo?deviceId="
+                        + data.respObj.id + "&latitude=" + latitude + "&longitude=" + longitude  + "&installed=" + type
+				}
+
 
             },
             error : function() {
@@ -166,8 +181,9 @@
 		</ul>
 	</div>
 	<div class="cen">
-		<i class="icon" onclick="scanQR();"></i>
-		<input type="button" onclick="scanQRTest();" value="扫码安装">
+		<i class="icon" onclick="scanQR('0');"></i>
+		<input type="button" onclick="scanQR('0');" value="入网安装">
+		<input type="button" onclick="scanQR('1');" value="重新设置">
 	</div>
 </body>
 </html>

@@ -78,12 +78,12 @@
                 desc : 'scanQRCode desc',
                 success : function(res) {
                     // 扫码后获取结果参数赋值给Input
-					var deviceId = res.resultStr;
-					if(res.resultStr.indexOf("deviceid")>=0 && res.resultStr.indexOf("=")>=0 && res.resultStr.indexOf("?")>=0){
+                    var deviceId = res.resultStr;
+                    if(res.resultStr.indexOf("deviceid")>=0 && res.resultStr.indexOf("=")>=0 && res.resultStr.indexOf("?")>=0){
 
                         var strs = res.resultStr.split("=");
                         deviceId = strs[1];
-					}
+                    }
 
                     if (deviceId.length == 11 || deviceId.length == 12) {
                         //新设备
@@ -112,18 +112,12 @@
 
 
     function queryNewDevice(value) {
-        var deviceId;
-        if(value.indexOf("deviceid") >=0 && value.indexOf("=")>=0 && value.indexOf("?")>=0 ){
-            var strs = value.split("=");
-            deviceId = strs[1];
-		}
-
         $.ajax({
             type : 'POST',
             url : "./newDevice/getDeviceInfo",
             dataType : "json",
             data : {
-                deviceId : deviceId
+                deviceId : value
             },
             cache : false,
             async : false,
@@ -197,7 +191,7 @@
 			<input type="checkbox" checked> <a href="./about/mzsm">同意《充电说明》</a>
 		</div>
 		<i class="icon" onclick="scanQR();"></i>
-		<input type="button" onclick="queryNewDevice('http://4009d2a8.nat123.cc?deviceid=10100000001');" value="扫码充电">
+		<input type="button" onclick="queryNewDevice('201808000012');" value="扫码充电">
 	</div>
 	<div class="foot">
 		<p class="tit">温馨提示</p>

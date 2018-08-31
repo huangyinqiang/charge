@@ -22,7 +22,8 @@ public class NewDevice extends Model<NewDevice> {
 
     public NewDevice queryNotifyDevice(String deviceId) {
         log.info("根据设备编码查询未安装设备信息:" + deviceId);
-        NewDevice newDevice = (NewDevice)this.findFirst("select * from yc_charge_pile where id = ? and is_online = 0", new Object[]{deviceId});
+//        NewDevice newDevice = (NewDevice)this.findFirst("select * from yc_charge_pile where id = ? and is_online = 0", new Object[]{deviceId});
+        NewDevice newDevice = (NewDevice)this.findFirst("select * from yc_charge_pile where id = ?", new Object[]{deviceId});
         log.info("根据设备编码查询未安装设备信息结果:" + newDevice);
         return newDevice;
     }

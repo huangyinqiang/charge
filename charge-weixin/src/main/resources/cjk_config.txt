@@ -18,8 +18,8 @@ qrCode=http://weixin.qq.com/r/4i_AmAjEdFULrUz793rw
 
 
 #测试用的账号
-appId=wxf4dc81e9dcb6180d
-appSecret=97d166a2f404b74b3654601193ab7b1e
+appId=wx04f87d66d4fe7fd4
+appSecret=75742b807e77f3c6e1e6ce4fea2f7bb0
 
 
 #是否对消息进行加密，是否对消息进行加密，对应于微信平台的消息加解密方式，false支持明文模式及兼容模式，true支持安全模式及兼容模式
@@ -28,9 +28,9 @@ encodingAesKey=5C8csBd4cG4c9039OKDnNaZmYlkAzXV31piXQFRZKHC
 
 #微信支付
 #商户号
-mch_id=1502725311
+mch_id=1501378781
 #密钥设置
-paternerKey=c25f7684dd8621b3bea94f01e3a67178
+paternerKey=c64f32b87e4f7207e7bbfe0771e6cea5
 #充电服务端地址
 kejueServiceUrl=http://charge.inconnection.net:8080/ChargeManager/socketServerController/doCharge.do
 #充卡服务端地址
@@ -42,11 +42,11 @@ deviceStatusUrl=http://charge.inconnection.net:8080/ChargeManager/socketServerCo
 
 
 #授权域名
-domain=https://109db54.nat123.cc
+domain=http://pay.inconnection.net
 subscribe_rul=http://www.henankejue.com/
 
 #RAS加密私钥
 privateKey=MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBANdBdg5jqrAe7PjyI3Ro2iyaHz37fedNi+0j3o63NLB3GqiKs6z+PSI/JMBXo3+Jds1ZKlBh+6EM+iEqx0SO9M6XEKPF7LF27RD1VhLel27doaAA+vdJI++oBkXQZUWIwbwxSiiHmu2i7QiwuDw1gu894f6RJapnEwzfzTEocyRhAgMBAAECgYEAzQVvgXMSfx9ljBNtC5JWw4akXS/tkmJ89QhmET6UM8Oto3xAeHPLHJRR19VhR7dRbXMQ53D770Bh+Tc6hqU2qtNtpxaWqr0Ps0FGzR0RFW73+9WvyC8ZSeAfuuc0hndbMfINn56k2SurnzeiBmtg7fAEeVqyeJ9Ztlw7P/Bd6VUCQQDsdzP97mjH3nLSEiub2GIzfL72oV21PDwWuK3xLxZZBVzPUMjfe9sR3EZWH81/wafcQI5RZ2SL99AO0jXo02hHAkEA6Qm1YrHvWED1Xa2dJyLlFGyt5meaFSsZs6f+22VTHg+lWQ9WOynOW5Uw5F2Sci/CY23p7SNO7rqsGijPvI4KFwJBAOwMDmWE8SnbgAj9xHR864J0G3i9GnsJVv5jepeRJqDUvpHhFbQpwkSw+7GLa6sFmNg/xRGzwWYLibDR3Ki/KI8CQFhMVW4P/aBy/IWCQwmRLzuN8lZa6wcaTaLFBMwcmGHLi9sy9Hl2XbpVzTC6Q8MAVadW/kvcFQxfrtY6oHvRVgECQQC0W1tylN11+TpyKP2+8JudjhI3TbYX3oI63RE+wpum0RjjB+m6UnNFRDNCBXIklO4w1M38wPs4IwOkqJPsctXb
 
 #企业付款证书
-cert=weilaikejue.p12
+cert=apiclient_cert.p12

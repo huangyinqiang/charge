@@ -132,6 +132,8 @@ public class NewDeviceController extends Controller {
         String socketSum = this.getPara("socketSum");
         String companyId = this.getPara("companyId");
         String projectIdStr = this.getPara("projectId");
+        String installed = this.getPara("installed");
+
 
         Long chargePileId = Long.parseLong(deviceId);
         Double latitudeDouble = Double.parseDouble(latitude);
@@ -144,9 +146,16 @@ public class NewDeviceController extends Controller {
         log.info("开始入网 deviceId=" + deviceId );
 
 
-        Boolean permissonOnlineSuccess = deviceControlService.requestPermissionOnLine(chargePileId, 10*1000L);
+        Boolean permissionOnlineSuccess;
 
-        if (permissonOnlineSuccess){
+        if (installed.equals("1")){
+            //重新设置
+            permissionOnlineSuccess = true;
+        }else {
+            permissionOnlineSuccess = deviceControlService.requestPermissionOnLine(chargePileId, 10*1000L);
+        }
+
+        if (permissionOnlineSuccess){
             log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功");
 
             Boolean updateResult = newDeviceService.updateInstallInfo(chargePileId, chargePileName, province, city, location, latitudeDouble,

@@ -25,6 +25,8 @@ public class NewDeviceInstallController extends Controller {
         this.setAttr("deviceId", this.getPara("deviceId"));
         this.setAttr("latitude", this.getPara("latitude"));
         this.setAttr("longitude", this.getPara("longitude"));
+        this.setAttr("installed", this.getPara("installed"));
+
         log.info("转到安装信息编辑页面 ,latitude=  " + this.getPara("latitude") + ", longitude=" + this.getPara("longitude"));
         this.render("install/chargePileInstallInfo.html");
     }

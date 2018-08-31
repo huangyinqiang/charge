@@ -29,11 +29,11 @@ public class ChargePileManager {
             Long chargePileId = chargePile.getId();
             ChargePileDevice chargePileDevice = new ChargePileDevice(chargePileId);
             chargePileDevice.setName(chargePile.getName());
-            chargePileDevice.setBatVol(chargePile.getBatVol());
-            chargePileDevice.setControllerVol(chargePile.getControllerVol());
-            chargePileDevice.setOnline(chargePile.getIsOnline());
-            chargePileDevice.setVoltage(chargePile.getTotalVoltage());
-            chargePileDevice.setPower(chargePile.getPowerTotal());
+//            chargePileDevice.setBatVol(chargePile.getBatVol());
+//            chargePileDevice.setControllerVol(chargePile.getControllerVol());
+//            chargePileDevice.setOnline(chargePile.getIsOnline());
+//            chargePileDevice.setVoltage(chargePile.getTotalVoltage());
+//            chargePileDevice.setPower(chargePile.getPowerTotal());
 
             List<ChargeSocket> chargeSockets= ChargeSocket.dao.find("select * from yc_charge_socket where charge_pile_id=" + chargePileId);
             Map<Long, ChargeSocketComponent> chargeSocketComponentMap = new HashMap<>();
@@ -68,6 +68,7 @@ public class ChargePileManager {
     public void addChargePile(Long chargePileId){
         chargePileMap.put(chargePileId, new ChargePileDevice(chargePileId));
         ChargePile chargePileDo = new ChargePile();
+        chargePileDo.setIsOnline(false);
         chargePileDo.setId(chargePileId).save();
     }
 

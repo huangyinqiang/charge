@@ -66,14 +66,12 @@
     var latitude;
     var longitude;
     var openId;
-    var installed;
 
 	$(function() {
         openId = localStorage.getItem("openId");
         deviceId = GetQueryString('deviceId');
         latitude = GetQueryString('latitude');
         longitude = GetQueryString('longitude');
-        installed = GetQueryString('installed');
 
 		$.ajax({
 			type : "post",
@@ -230,8 +228,7 @@
                 powerMax : powerMax,
                 socketSum : socketSum,
                 companyId : companyId,
-                projectId : projectId,
-                installed : installed
+                projectId : projectId
     		},
 			cache : false,
 			async : false,//
@@ -306,7 +303,7 @@
 				</tr>
 
 				<tr>
-					<td style="width: 120px;">最大功率 W</td>
+					<td style="width: 120px;">最大功率 KW</td>
 					<td><input align="right" type="text" placeholder="请输入设备最大功率" id="powerMax"></input></td>
 				</tr>
 
