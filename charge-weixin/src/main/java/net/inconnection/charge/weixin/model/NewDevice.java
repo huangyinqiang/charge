@@ -50,6 +50,7 @@ public class NewDevice extends Model<NewDevice> {
         info.set("socket_sum", socketSum);
         info.set("company_id", companyId);
         info.set("projectId", projectId);
+        info.set("is_online", true);
         boolean update = info.update();
         log.info("更新设备安装信息结果:" + update);
         return update;
