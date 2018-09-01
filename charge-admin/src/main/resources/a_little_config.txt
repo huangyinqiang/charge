@@ -1,12 +1,12 @@
 devMode = true
 
 base_jdbcUrl = jdbc:mysql://127.0.0.1/zcurd_base?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useUnicode=true&relaxAutoCommit=true&useSSL=false&serverTimezone=GMT%2B8
-base_user = root
-base_password = iioss99!
+base_user = zcurd
+base_password = 4js720dja82
 
-busi_jdbcUrl = jdbc:mysql://127.0.0.1/zcurd_busi_last?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useUnicode=true&relaxAutoCommit=true&useSSL=false&serverTimezone=GMT%2B8
-busi_user = root
-busi_password = iioss99!
+busi_jdbcUrl = jdbc:mysql://127.0.0.1/zcurd_busi?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useUnicode=true&relaxAutoCommit=true&useSSL=false&serverTimezone=GMT%2B8
+busi_user = zcurd
+busi_password = 4js720dja82
 
 
 #线上环境
