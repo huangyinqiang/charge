@@ -43,7 +43,7 @@ public class NewDeviceController extends BaseController {
                 record.set("company_name",company.getCompanyName());
             }
         }
-        this.renderDatagrid(list, DBTool.countByMultPropertiesDbSource("zcurd_busi", "yc_charge_socket", properties, symbols, values));
+        this.renderDatagrid(list, DBTool.countByMultPropertiesDbSource("zcurd_busi", "yc_charge_pile", properties, symbols, values));
     }
 
 
