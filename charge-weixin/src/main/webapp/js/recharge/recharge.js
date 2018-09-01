@@ -177,6 +177,7 @@ $(function () {
     {
         $.post("../pay", {
                 total_fee : LeadBase.encrypts(money.toString()),
+                openId : openId
             },
             function (res)
             {

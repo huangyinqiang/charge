@@ -215,6 +215,7 @@ function reCharge() {
 function wxpay(money) {
 	$.post("../pay", {
 		total_fee : LeadBase.encrypts(money.toString()),
+        openId : openId
 	}, function(res) {
 		if (res.code == 0) {
 			var data = $.parseJSON(res.data);

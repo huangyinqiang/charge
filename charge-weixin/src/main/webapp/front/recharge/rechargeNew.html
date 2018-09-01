@@ -217,7 +217,7 @@
         function wxpay(money) {
             $.post("../pay", {
                 openId : localStorage.getItem("openId"),
-                total_fee: LeadBase.encrypts(money.toString()),
+                total_fee: LeadBase.encrypts(money.toString())
             }, function (res) {
                 if (res.code == 0) {
                     var data = $.parseJSON(res.data);
