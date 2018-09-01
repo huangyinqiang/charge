@@ -78,13 +78,15 @@ public class ChargeMoneyService {
                 return new HnKejueResponse("代理商公司ID不能为空", RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
             }
 
+            log.info("openId = " + openId+ ", deviceId=" + deviceId + ",chargeType=" + chargeType + ",walletAccount=" + walletAccount + ",money=" + money + ",chargeNum=" + chargeNum + ",coupon=" + coupon + ",cardNumber" + cardNumber + ",walletRealMoney=" + walletRealMoney + ",walletGiftMoney=" + walletGiftMoney);
+
             ChargeMoneyInfoBean chargeMoneyInfoBean = new ChargeMoneyInfoBean();
             chargeMoneyInfoBean.setOpenid(openId);
             chargeMoneyInfoBean.setDeviceid(deviceId);
             chargeMoneyInfoBean.setMoney(Integer.parseInt(money));
             chargeMoneyInfoBean.setChargetype(chargeType);
             chargeMoneyInfoBean.setCreatetime(new Date());
-            this.addAndUpdate(openId, deviceId, chargeType, walletAccount, chargeNum, coupon, chargeMoneyInfoBean, cardNumber, walletRealMoney, walletGiftMoney, companyId);
+            this.addAndUpdate(openId, deviceId, chargeType, walletAccount, money, coupon, chargeMoneyInfoBean, cardNumber, walletRealMoney, walletGiftMoney, companyId);
         } catch (Exception var10) {
             log.error("新增充值记录失败" + var10);
             return new HnKejueResponse(false, RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
@@ -93,13 +95,13 @@ public class ChargeMoneyService {
         return new HnKejueResponse(true, RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
     }
 
-    private void addAndUpdate(final String openId, final String deviceId, final String chargeType, final String walletAccount, final String chargeNum, final String coupon, final ChargeMoneyInfoBean chargeMoneyInfoBean, final String cardNumber, final String walletRealMoney, final String walletGiftMoney, final String companyId) {
+    private void addAndUpdate(final String openId, final String deviceId, final String chargeType, final String walletAccount, final String money, final String coupon, final ChargeMoneyInfoBean chargeMoneyInfoBean, final String cardNumber, final String walletRealMoney, final String walletGiftMoney, final String companyId) {
         Db.tx(new IAtom() {
             public boolean run() throws SQLException {
                 String format = (new SimpleDateFormat("yy/MM/dd HH:mm:ss")).format(new Date());
                 String MD5 = EncDecUtils.getMD5(openId + deviceId + format);
                 chargeMoneyInfoBean.setMd5(MD5);
-                int chargeMoney = Integer.parseInt(chargeNum);
+                int chargeMoney = Integer.parseInt(money);
                 int couponMoney = Integer.parseInt(coupon);
                 int totalMoney = chargeMoney + couponMoney;
                 if (chargeType.equals("CH")) {

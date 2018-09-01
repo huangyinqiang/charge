@@ -59,7 +59,8 @@
                     //新设备
                     quereActivityByNewDeviceId(deviceId)
                 }else {
-                    queryDevice(deviceId);
+                    //老设备直接处理
+                    queryDevice(res.resultStr);
                 }
 
 
