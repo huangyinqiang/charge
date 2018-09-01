@@ -29,6 +29,7 @@ public class ProtocolConstant {
     public static final String TOPIC_REQUEST = "request";
     public static final String TOPIC_CONTROL = "control";
     public static final String TOPIC_UPDATE = "update";
+    public static final String TOPIC_WILL = "will";
     public static final String TOPIC_NOTIFY = "notify";
     public static final String TOPIC_CONFIG = "config";
     public static final String TOPIC_CONFIRM = "confirm";

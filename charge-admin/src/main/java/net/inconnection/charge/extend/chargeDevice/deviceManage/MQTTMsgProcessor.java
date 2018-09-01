@@ -53,6 +53,9 @@ public class MQTTMsgProcessor {
                 case TOPIC_UPDATE:
                     chargePileDevice.updateMsgHandle(message);
                     break;
+                case TOPIC_WILL:
+                    chargePileDevice.willMsgHandle(message);
+                    break;
                 default:
                     break;
             }

@@ -31,6 +31,11 @@ import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConst
 
 
 public class ChargePileDevice implements GateWay {
+
+    private static final Integer STATUS_OK = 1;
+    private static final Integer STATUS_OFFLINE = 2;
+    private static final Integer STATUS_ALARM = 3;
+
     private Long chargePileId;//充电桩Id
     private String name;//充电桩名称
 
@@ -41,6 +46,8 @@ public class ChargePileDevice implements GateWay {
     private Integer batVol;//电池电压
     private Integer controllerVol;//控制器供电电压
     private Date lastUpdataTime = null;
+
+    private Integer status;
 
 
 
@@ -65,12 +72,18 @@ public class ChargePileDevice implements GateWay {
 
     void updateDataToDb(){
         ChargePile chargePileDo = new ChargePile();
-        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setTotalVoltage(voltage).setTotalIntensity(intensity).
+        chargePileDo.setId(chargePileId).setIsOnline(isOnline).setStatus(status).setTotalVoltage(voltage).setTotalIntensity(intensity).
                 setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).update();
 
         ChargePileHistory chargePileHistory = new ChargePileHistory();
         chargePileHistory.setPileId(chargePileId).setTotalVoltage(voltage).setTotalIntensity(intensity).
                 setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).save();
+
+    }
+
+    void updateStatusToDb(Integer status){
+        ChargePile chargePileDo = new ChargePile();
+        chargePileDo.setId(chargePileId).setSocketSum(status).setUpdateTime(lastUpdataTime).update();
 
     }
 
@@ -174,6 +187,8 @@ public class ChargePileDevice implements GateWay {
 
         lastUpdataTime = dataTime;
 
+        status = STATUS_OK;
+
         updateAlarm(gwFacetObj, dataTime);
 
         if (gwFacetObj.containsKey(MSG_CHARGEVOLTAGE)){
@@ -218,7 +233,7 @@ public class ChargePileDevice implements GateWay {
 
         updateDataToDb();
 
-        displayAll();
+//        displayAll();
     }
 
     private void displayAll(){
@@ -397,6 +412,18 @@ public class ChargePileDevice implements GateWay {
 
         DeviceUpdateMQServer server = DeviceUpdateMQServer.getInstance();
         UpdateMsgHandle.processUpdateResponseMsg(server,messageJson);
+    }
+
+    public void willMsgHandle(String message){
+
+        //判断消息是否为空
+        if (message.isEmpty() || message.equals("")){
+            return;
+        }
+
+        status = STATUS_OFFLINE;
+        updateStatusToDb(status);
+
     }
 
     //通过mqtt向硬件推送数据

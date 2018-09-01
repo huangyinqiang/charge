@@ -20,7 +20,7 @@ public class PerformenceTester {
 
                     final String industry = "CHARGE";
                     final String version = "1";
-                    final String gwId = "010100000001";
+                    final String gwId = "201808000003";
 
 
                     String notifyTopic = "C/" + "CHARGE" + "/" + version +"/" + gwId + "/" + TOPIC_NOTIFY;
