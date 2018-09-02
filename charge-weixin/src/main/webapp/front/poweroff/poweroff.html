@@ -80,7 +80,7 @@
         var devicePort = $("#devicePort").text();
         $.ajax({
             type : 'POST',
-            url : "../newDevice/powerOff",
+            url : "./newDevice/powerOff",
             dataType : "json",
             data : {
                 openId : localStorage.getItem("openId"),
