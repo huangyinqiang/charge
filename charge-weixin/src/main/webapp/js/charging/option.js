@@ -215,23 +215,20 @@ function wxpay(money) {
         openId : openId
 	}, function(res) {
 		if (res.code == 0) {
-			// var data = $.parseJSON(res.data);
-			// if (typeof WeixinJSBridge == "undefined") {
-			// 	if (document.addEventListener) {
-			// 		document.addEventListener('WeixinJSBridgeReady',
-			// 				onBridgeReady(data), false);
-			// 	} else if (document.attachEvent) {
-			// 		document.attachEvent('WeixinJSBridgeReady',
-			// 				onBridgeReady(data));
-			// 		document.attachEvent('onWeixinJSBridgeReady',
-			// 				onBridgeReady(data));
-			// 	}
-			// } else {
-			// 	onBridgeReady(data);
-			// }
-            type = "temp";// 按功率扣费
-            operType = "M";// 微信单次支付
-            invokeServerCharging();
+			var data = $.parseJSON(res.data);
+			if (typeof WeixinJSBridge == "undefined") {
+				if (document.addEventListener) {
+					document.addEventListener('WeixinJSBridgeReady',
+							onBridgeReady(data), false);
+				} else if (document.attachEvent) {
+					document.attachEvent('WeixinJSBridgeReady',
+							onBridgeReady(data));
+					document.attachEvent('onWeixinJSBridgeReady',
+							onBridgeReady(data));
+				}
+			} else {
+				onBridgeReady(data);
+			}
 		} else {
 			if (res.code == 2) {
 				layer.alert(res.message);
