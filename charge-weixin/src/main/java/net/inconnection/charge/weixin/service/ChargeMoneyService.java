@@ -104,31 +104,27 @@ public class ChargeMoneyService {
                 int chargeMoney = Integer.parseInt(money);
                 int couponMoney = Integer.parseInt(coupon);
                 int totalMoney = chargeMoney + couponMoney;
-                if (chargeType.equals("CH")) {
-                    ChargeMoneyService.log.info("充值电卡总额：" + totalMoney);
-                    chargeMoneyInfoBean.setAmount(0);
-                    chargeMoneyInfoBean.setCardAmount(totalMoney);
-                } else {
-                    ChargeMoneyService.log.info("充值钱包总额：" + totalMoney);
-                    chargeMoneyInfoBean.setAmount(totalMoney);
-                    chargeMoneyInfoBean.setCardAmount(0);
-                    Integer account = Integer.valueOf(walletAccount);
-                    Integer total = totalMoney + account;
 
-                    Integer walletRealMoneyInt = 0;
-                    if (!StringUtils.isBlank(walletRealMoney)){
-                        walletRealMoneyInt = Integer.parseInt(walletRealMoney);
-                    }else {
-                        walletRealMoneyInt = account;
-                    }
+                ChargeMoneyService.log.info("充值钱包总额：" + totalMoney);
+                chargeMoneyInfoBean.setAmount(totalMoney);
+                chargeMoneyInfoBean.setCardAmount(0);
+                Integer account = Integer.valueOf(walletAccount);
+                Integer total = totalMoney + account;
 
-                    Integer walletGiftMoneyInt = 0;
-                    if (!StringUtils.isBlank(walletGiftMoney)){
-                        walletGiftMoneyInt = Integer.parseInt(walletGiftMoney);
-                    }
-
-                    TUser.dao.updateWalletAccount(total,chargeMoney+walletRealMoneyInt,couponMoney+walletGiftMoneyInt, openId);
+                Integer walletRealMoneyInt = 0;
+                if (!StringUtils.isBlank(walletRealMoney)){
+                    walletRealMoneyInt = Integer.parseInt(walletRealMoney);
+                }else {
+                    walletRealMoneyInt = account;
                 }
+
+                Integer walletGiftMoneyInt = 0;
+                if (!StringUtils.isBlank(walletGiftMoney)){
+                    walletGiftMoneyInt = Integer.parseInt(walletGiftMoney);
+                }
+
+                TUser.dao.updateWalletAccount(total,chargeMoney+walletRealMoneyInt,couponMoney+walletGiftMoneyInt, openId);
+
 
                 ChargeMoneyInfo.dao.addChargeMoneyLog(chargeMoneyInfoBean);
 

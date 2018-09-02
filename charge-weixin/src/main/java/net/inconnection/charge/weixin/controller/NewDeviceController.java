@@ -52,9 +52,12 @@ public class NewDeviceController extends Controller {
         Integer chargeTimeSenconds = chargeTime*60;
         log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
 
-
-
-        JSONObject startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, 10*1000L);
+        JSONObject startChargeResltJson;
+        if(chargeType.equals("auto")){
+            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, 0, 10*1000L);
+        }else {
+            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, 10*1000L);
+        }
 
         Integer startChargeStatus =9999;
         Integer startPower = 0;

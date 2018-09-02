@@ -119,29 +119,24 @@
         getActivityInfo();// 查询活动信息
         rechargeAmount();//判断充值选项
         // 选择充值金额
-        $('.select-type').on('click', function () {
-            rechargeAmount();
-        });
         // 选择金额
-        $('.elecard-wallte').on('click', '.weui-flex__item', function () {
-            $('.elecard-wallte').on('click', '.weui-flex__item', function () {
-                $('.weui-flex__item').children().removeClass('active');
-                var actNum = $(this).children().addClass('active').attr('data-date');
-                // 循环优惠活动信息
-                for (var key in activityInfo) {
-                    var act = activityInfo[key];
-                    if (actNum == act.actNum) {// 活动编号=选中的金额编号
-                        money = act.money;// 金额(分)
-                        chargeNum = act.chargeNum;// 活动充值金额（分）/次
-                        coupon = act.coupon;// 活动赠送金额（分）/次
-                        $("#explain").text(act.remark);// 活动说明
-                        break;
-                    }
-                }
-                selectedRechargeMoney = $(this).children().html();// 充值金额
-                $('#selectedMoney').val($(this).children().attr('data-date'));
-            })
-        });
+		$('.elecard-wallte').on('click', '.weui-flex__item', function () {
+			$('.weui-flex__item').children().removeClass('active');
+			var actNum = $(this).children().addClass('active').attr('data-date');
+			// 循环优惠活动信息
+			for (var key in activityInfo) {
+				var act = activityInfo[key];
+				if (actNum == act.actNum) {// 活动编号=选中的金额编号
+					money = act.money;// 金额(分)
+					chargeNum = act.chargeNum;// 活动充值金额（分）/次
+					coupon = act.coupon;// 活动赠送金额（分）/次
+					$("#explain").text(act.remark);// 活动说明
+					break;
+				}
+			}
+			selectedRechargeMoney = $(this).children().html();// 充值金额
+			$('#selectedMoney').val($(this).children().attr('data-date'));
+		})
     });
 
 
