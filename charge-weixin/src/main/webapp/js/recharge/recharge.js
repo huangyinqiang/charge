@@ -183,21 +183,23 @@ $(function () {
             {
                 if (res.code == 0)
                 {
-                    var data = $.parseJSON(res.data);
-                    if (typeof WeixinJSBridge == "undefined")
-                    {
-                        if (document.addEventListener) {
-                            document.addEventListener('WeixinJSBridgeReady', onBridgeReady(data), false);
-                        }
-                        else if (document.attachEvent)
-                        {
-                            document.attachEvent('WeixinJSBridgeReady', onBridgeReady(data));
-                            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady(data));
-                        }
-                    }
-                    else {
-                        onBridgeReady(data);
-                    }
+                    // var data = $.parseJSON(res.data);
+                    // if (typeof WeixinJSBridge == "undefined")
+                    // {
+                    //     if (document.addEventListener) {
+                    //         document.addEventListener('WeixinJSBridgeReady', onBridgeReady(data), false);
+                    //     }
+                    //     else if (document.attachEvent)
+                    //     {
+                    //         document.attachEvent('WeixinJSBridgeReady', onBridgeReady(data));
+                    //         document.attachEvent('onWeixinJSBridgeReady', onBridgeReady(data));
+                    //     }
+                    // }
+                    // else {
+                    //     onBridgeReady(data);
+                    // }
+
+                    recharge();
                 }
                 else
                 {
