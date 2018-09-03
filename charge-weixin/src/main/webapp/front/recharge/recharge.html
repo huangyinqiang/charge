@@ -99,6 +99,7 @@
     var chargeNum = null;// 活动充值金额（分）或者次数
     var coupon = null;// 活动赠送金额（分）或者次
     var selectedHour;// 传值用
+    var companyId = 1;
 
     $(function() {
         // 获取URL中的设备编号，地址
@@ -302,6 +303,7 @@
             });
         }
 
+
 // 充值
         function recharge() {
             $.ajax({
@@ -316,7 +318,10 @@
                     chargeNum: chargeNum,
                     walletAccount: walletAccount,
                     cardNumber: userInfo.cardNumber,
-                    coupon: coupon
+                    coupon: coupon,
+                    wallet_real_money:userInfo.wallet_real_money,
+                    wallet_gift_money:userInfo.wallet_gift_money,
+                    companyId:companyId
                 },
                 cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
                 async: false,// 设置同步方式，false为同步
