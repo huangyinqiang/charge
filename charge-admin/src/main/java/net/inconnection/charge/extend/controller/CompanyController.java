@@ -277,31 +277,6 @@ public class CompanyController extends BaseController{
     }
 
     public void addProjectData() {
-//        Project model = Project.dao.findById(this.getPara("id"));
-//        model.set("name",this.getPara("model.name"));
-//        model.set("introduce",this.getPara("model.introduce"));
-//        model.set("admin_name",this.getPara("model.admin_name"));
-//        model.set("admin_tel",this.getPara("model.admin_tel"));
-//        model.set("tow_hours_price",this.getPara("model.tow_hours_price"));
-//        model.set("four_hours_price",this.getPara("model.four_hours_price"));
-//        model.set("eight_hours_price",this.getPara("model.eight_hours_price"));
-//        model.set("twelve_hours_price",this.getPara("model.twelve_hours_price"));
-//        model.set("tow_hours_mem_price",this.getPara("model.tow_hours_mem_price"));
-//        model.set("four_hours_mem_price",this.getPara("model.four_hours_mem_price"));
-//        model.set("eight_hours_mem_price",this.getPara("model.eight_hours_mem_price"));
-//        model.set("twelve_hours_mem_price",this.getPara("model.twelve_hours_mem_price"));
-//        model.set("auto_price",this.getPara("model.auto_price"));
-//        model.set("power_a1",this.getPara("model.power_a1"));
-//        model.set("power_a2",this.getPara("model.power_a2"));
-//        model.set("power_a3",this.getPara("model.power_a3"));
-//        model.set("power_a4",this.getPara("model.power_a4"));
-//        model.set("power_a5",this.getPara("model.power_a5"));
-//        model.set("power_a6",this.getPara("model.power_a6"));
-//        model.set("power_a7",this.getPara("model.power_a7"));
-//        model.set("free",this.getPara("model.free"));
-//
-//        model.update();
-//        this.renderSuccess();
 
         Project model = getModel(Project.class, "model");
         model.setCreatetime(new Date());
@@ -322,14 +297,28 @@ public class CompanyController extends BaseController{
         Long company_id = getParaToLong("id");
         List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+company_id);
         Integer money_total=0;
+        Integer real_total = 0;
+        Integer gift_total = 0;
         for (Record record:list){
             record.set("company_name",getPara("company_name"));
             Integer money_sum = record.get("money_sum");
             if (money_sum!=null){
                 money_total+=money_sum;
             }
+            Integer real_money = record.get("real_money");
+            if (real_money != null){
+                real_total += real_money;
+            }
+            Integer coupon = record.get("coupon");
+            if (coupon != null){
+                gift_total += coupon;
+            }
+
+
         }
         setAttr("money_total",money_total/100.00);
+        setAttr("real_total",real_total/100.00);
+        setAttr("gift_total",gift_total/100.00);
         setAttr("company_id",company_id);
         setAttr("company_name",getPara("company_name"));
         render("chargeList.html");
