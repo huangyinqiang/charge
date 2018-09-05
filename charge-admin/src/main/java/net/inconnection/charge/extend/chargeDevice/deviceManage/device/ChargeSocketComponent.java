@@ -111,8 +111,12 @@ public class ChargeSocketComponent implements Device {
 
         if (deviceObj.containsKey(MSG_INUSE)){
             lastUpdateTime = updateTime;
-            if (DEVICEUSED.equals(deviceObj.getString(MSG_INUSE))){
+            if (DEVICEUSED.equals(deviceObj.getString(MSG_INUSE))) {
                 used = true;
+            }else {
+                //设备没有被占用，
+                used = false;
+            }
 
                 if (deviceObj.containsKey(MSG_STARTPOWER)){
                     startPower = Long.parseLong(deviceObj.getString(MSG_STARTPOWER));
@@ -137,16 +141,6 @@ public class ChargeSocketComponent implements Device {
                 } else {
                     _log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_CHARGESTATE);
                 }
-
-            }else {
-
-                //设备没有被占用，
-                used = false;
-                startPower = 0L;
-                chargeIntensity = 0L;
-                chargeTime = 0L;
-                chargeState = 0;
-            }
 
             chargePower = chargeIntensity * chargeVoltage;
 
@@ -182,7 +176,7 @@ public class ChargeSocketComponent implements Device {
             if (chargeHistory.getChargeType().equals("auto")){
 
                 autoChargeUnitPrice = chargeHistory.getAutoUnitPrice();
-                autoChargeMoney = new Double(autoChargeUnitPrice * (double)chargeTime/60).intValue();
+                autoChargeMoney = new Double(autoChargeUnitPrice * (double)chargeTime/3600).intValue();
                 chargeHistory.setChargeMoney(autoChargeMoney);
 
                 Double realRate = chargeHistory.getRealRate();
