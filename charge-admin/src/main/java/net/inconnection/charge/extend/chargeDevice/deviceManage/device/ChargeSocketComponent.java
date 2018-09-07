@@ -138,6 +138,7 @@ public class ChargeSocketComponent implements Device {
 
                 if (deviceObj.containsKey(MSG_CHARGESTATE)){
                     chargeState = Integer.parseInt(deviceObj.getString(MSG_CHARGESTATE));
+                    //TODO 如果是过流保护，应该添加报警处理
                 } else {
                     _log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_CHARGESTATE);
                 }
@@ -146,8 +147,8 @@ public class ChargeSocketComponent implements Device {
 
             updateDataToDb();
 //            _log.info("pile id = " + chargePileId + ", socket Id  =  " + chargeSocketId);
-            if (lastChargeState.equals(CHARGE_ING) && chargeState.equals(CHARGE_DONE) && chargeTime>0){
-                //充电完成,结算费用
+            if (lastChargeState.equals(CHARGE_ING) && (!chargeState.equals(CHARGE_ING)) && chargeTime>0){
+                //充电结束,结算费用
 
                 //向设备发送关闭消息
                 shutDownChargeSocket();
@@ -171,7 +172,7 @@ public class ChargeSocketComponent implements Device {
         Integer autoChargeMoney = 0;
         if (chargeHistory != null){
             chargeHistory.setFeeStatus("S");
-            chargeHistory.setRealChargeTime(chargeTime.intValue());
+            chargeHistory.setRealChargeTime(chargeTime.intValue()/60);
             chargeHistory.setEndTime(new Date());
             if (chargeHistory.getChargeType().equals("auto")){
 
@@ -189,16 +190,31 @@ public class ChargeSocketComponent implements Device {
 
                 Tuser tuser = Tuser.dao.findFirst("select * from tuser where openId = ? ", new Object[]{chargeHistory.getOpenId()});
 
-                int walletAccount = tuser.getWalletAccount() - autoChargeMoney;
-                int walletRaelMoney = tuser.getWalletRealMoney() - realMoney;
-                int walletGiftMony = tuser.getWalletGiftMoney() - giftMoney;
-                double raelGiftRate = walletGiftMony/(double)walletAccount;
-                tuser.setWalletAccount(walletAccount);
-                tuser.setWalletRealMoney(walletRaelMoney);
-                tuser.setWalletGiftMoney(walletGiftMony);
-                tuser.setRealGitRate(raelGiftRate);
+                if (tuser != null) {
 
-                tuser.update();
+                    int walletAccount = tuser.getWalletAccount() - autoChargeMoney;
+                    int walletRaelMoney;
+                    int walletGiftMony;
+                    if (tuser.get("wallet_real_money") != null) {
+                        walletRaelMoney = tuser.getWalletRealMoney() - realMoney;
+                        if (tuser.get("wallet_gift_money") != null) {
+                            walletGiftMony = tuser.getWalletGiftMoney() - giftMoney;
+                        } else {
+                            walletGiftMony = 0;
+                        }
+                    } else {
+                        walletRaelMoney = tuser.getWalletAccount() - realMoney;
+                        walletGiftMony = 0;
+                    }
+
+                    double raelGiftRate = walletRaelMoney / (double) walletAccount;
+                    tuser.setWalletAccount(walletAccount);
+                    tuser.setWalletRealMoney(walletRaelMoney);
+                    tuser.setWalletGiftMoney(walletGiftMony);
+                    tuser.setRealGitRate(raelGiftRate);
+
+                    tuser.update();
+                }
 
             }
 
