@@ -23,6 +23,15 @@ public class NewDeviceService {
         }
     }
 
+    public NewDevice queryDeviceInfo(String deviceId) {
+        try {
+            NewDevice device = NewDevice.dao.queryDevice(deviceId);
+            return device;
+        } catch (Exception var3) {
+            return null;
+        }
+    }
+
     public HnKejueResponse queryChargeSocketStatus(Long chargePileId) {
         try {
             List<NewDeviceChargeSocket> chargeSockets = NewDeviceChargeSocket.dao.queryChargeSocketStatus(chargePileId);

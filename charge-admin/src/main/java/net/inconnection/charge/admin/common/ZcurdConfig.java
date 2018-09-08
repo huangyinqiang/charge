@@ -19,19 +19,20 @@ import net.inconnection.charge.admin.online.controller.*;
 import net.inconnection.charge.admin.online.model.*;
 import net.inconnection.charge.admin.online.service.TaskService;
 import net.inconnection.charge.extend.chargeDevice.DeviceControlServiceImpl;
-import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQServer;
-import net.inconnection.charge.extend.chargeDevice.jms.ImageTransMQServer;
+import net.inconnection.charge.extend.chargeDevice.jms.*;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgReceiver;
 import net.inconnection.charge.extend.controller.*;
 import net.inconnection.charge.extend.model.busi_MappingKit;
 import net.inconnection.charge.service.DeviceControlService;
 import net.inconnection.charge.service.dubboPlugin.DubboServerPlugin;
 
+import javax.jms.JMSException;
+
 /**
  * API引导式配置
  */
 public class ZcurdConfig extends JFinalConfig {
-    public static final String MQTT2PROCESSOR = "testSender1";
+    public static final String PUSH2WEIXIN = "sendtoWeixinPush";
     public static final String MQTTLISTENER = "testReceiver1";
     AccountConfig accountConfig = new AccountConfig();
 	
@@ -116,21 +117,15 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add(arpAir);
 
 
-//		ActiveMQPlugin p = new ActiveMQPlugin("failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=1000");
-//		p.start();
+		ActiveMQPlugin p = new ActiveMQPlugin(PropKit.get("mqaddress"));
+		p.start();
+		me.add(p);
 
-//		try {
-//			ActiveMQ.addSender(new JmsSender(MQTT2PROCESSOR, ActiveMQ.getConnection(), DestinationType.Queue, MQTT_TO_MqttMsgProcesser));//定义发送者
-//		} catch (JMSException e) {
-//			e.printStackTrace();
-//		}
-//		try {
-//			ActiveMQ.addReceiver(new MQTTListener(MQTTLISTENER, ActiveMQ.getConnection(), DestinationType.Queue, MQTT_TO_MqttMsgProcesser));//定义接受者
-//		} catch (JMSException e) {
-//			e.printStackTrace();
-//		}
-
-
+		try {
+			ActiveMQ.addSender(new JmsSender("sendtoWeixinPush", ActiveMQ.getConnection(), DestinationType.Queue, PropKit.get("mqsubject")));
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 
 
 

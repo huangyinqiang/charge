@@ -23,3 +23,7 @@ busi_password = 4js720dja82
 genCodePath = D:/genCode/
 #genCodePath = /Users/user/Desktop/genCode/
 
+#推送消息的activeMq配置
+mqaddress = failover://(tcp://127.0.0.1:61616)?initialReconnectDelay=1000
+mqsubject = WeixinMessage_xa
+

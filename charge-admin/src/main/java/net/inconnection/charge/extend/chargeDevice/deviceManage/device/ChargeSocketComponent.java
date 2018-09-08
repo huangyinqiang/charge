@@ -1,9 +1,12 @@
 package net.inconnection.charge.extend.chargeDevice.deviceManage.device;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import net.inconnection.charge.extend.chargeDevice.deviceInterface.Device;
 import net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.Alarm;
+import net.inconnection.charge.extend.chargeDevice.jms.ActiveMQ;
+import net.inconnection.charge.extend.chargeDevice.jms.JmsSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.facet.GatewayFacet;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.RequestMsg;
@@ -18,6 +21,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 import java.util.*;
 
 import static net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.AlarmStatus.CONTINUE;
@@ -32,7 +37,7 @@ public class ChargeSocketComponent implements Device {
     private static final Integer CHARGE_ING = 1;
     private static final Integer OVER_FLOW_PROTECT = 2;
 
-    private static Logger _log = LoggerFactory.getLogger(ChargeSocketComponent.class);
+    private static Logger log = LoggerFactory.getLogger(ChargeSocketComponent.class);
 
     private Long chargeSocketId;
     private Long chargePileId;
@@ -121,32 +126,32 @@ public class ChargeSocketComponent implements Device {
                 if (deviceObj.containsKey(MSG_STARTPOWER)){
                     startPower = Long.parseLong(deviceObj.getString(MSG_STARTPOWER));
                 } else {
-                    _log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_STARTPOWER);
+                    log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_STARTPOWER);
                 }
 
                 if (deviceObj.containsKey(MSG_CHARGEINTENSITY)){
                     chargeIntensity = Long.parseLong(deviceObj.getString(MSG_CHARGEINTENSITY));
                 } else {
-                    _log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_CHARGEINTENSITY);
+                    log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_CHARGEINTENSITY);
                 }
 
                 if (deviceObj.containsKey(MSG_CHARGETIME)){
                     chargeTime = Long.parseLong(deviceObj.getString(MSG_CHARGETIME));
                 } else {
-                    _log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_CHARGETIME);
+                    log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_CHARGETIME);
                 }
 
                 if (deviceObj.containsKey(MSG_CHARGESTATE)){
                     chargeState = Integer.parseInt(deviceObj.getString(MSG_CHARGESTATE));
                     //TODO 如果是过流保护，应该添加报警处理
                 } else {
-                    _log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_CHARGESTATE);
+                    log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_CHARGESTATE);
                 }
 
             chargePower = chargeIntensity * chargeVoltage;
 
             updateDataToDb();
-//            _log.info("pile id = " + chargePileId + ", socket Id  =  " + chargeSocketId);
+//            log.info("pile id = " + chargePileId + ", socket Id  =  " + chargeSocketId);
             if (lastChargeState.equals(CHARGE_ING) && (!chargeState.equals(CHARGE_ING)) && chargeTime>0){
                 //充电结束,结算费用
 
@@ -159,7 +164,7 @@ public class ChargeSocketComponent implements Device {
             lastChargeState = chargeState;
 
         }else {
-            _log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_INUSE);
+            log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_INUSE);
         }
         return true;
     }
@@ -170,25 +175,30 @@ public class ChargeSocketComponent implements Device {
 
         Integer autoChargeUnitPrice = 0;
         Integer autoChargeMoney = 0;
+
+        Integer chargerMoney = 0;
+        Integer walletAccountForWeixinPush = 0;
+
         if (chargeHistory != null){
             chargeHistory.setFeeStatus("S");
             chargeHistory.setRealChargeTime(chargeTime.intValue()/60);
             chargeHistory.setEndTime(new Date());
+
+            Tuser tuser = Tuser.dao.findFirst("select * from tuser where openId = ? ", new Object[]{chargeHistory.getOpenId()});
+
             if (chargeHistory.getChargeType().equals("auto")){
 
                 autoChargeUnitPrice = chargeHistory.getAutoUnitPrice();
-                autoChargeMoney = new Double(autoChargeUnitPrice * (double)chargeTime/3600).intValue();
-                chargeHistory.setChargeMoney(autoChargeMoney);
+                autoChargeMoney = new Double(autoChargeUnitPrice * (double)chargeTime/3600.0D).intValue();
+                chargerMoney = autoChargeMoney;
 
                 Double realRate = chargeHistory.getRealRate();
-                int realMoney = new Double(autoChargeMoney * realRate).byteValue();
+                int realMoney = new Double((double)autoChargeMoney * realRate).intValue();
                 int giftMoney = autoChargeMoney - realMoney;
 
                 chargeHistory.setChargeMoney(autoChargeMoney);
                 chargeHistory.setRealMoney(realMoney);
                 chargeHistory.setGiftMoney(giftMoney);
-
-                Tuser tuser = Tuser.dao.findFirst("select * from tuser where openId = ? ", new Object[]{chargeHistory.getOpenId()});
 
                 if (tuser != null) {
 
@@ -214,11 +224,20 @@ public class ChargeSocketComponent implements Device {
                     tuser.setRealGitRate(raelGiftRate);
 
                     tuser.update();
+
+                    walletAccountForWeixinPush = walletAccount;
                 }
 
+            }else {
+                chargerMoney = chargeHistory.getChargeMoney();
+                if (tuser != null){
+                    walletAccountForWeixinPush = tuser.getWalletAccount();
+                }
             }
 
             chargeHistory.update();
+
+            sendActiveMqStartCharge(chargeHistory.getOpenId(), chargePileId, chargeSocketId, chargerMoney, walletAccountForWeixinPush, chargeTime.intValue()/60);
 
         }
 
@@ -237,6 +256,56 @@ public class ChargeSocketComponent implements Device {
             chargeBatteryInfo.update();
         }
     }
+
+    private void sendActiveMqStartCharge(String openId, Long deviceId, Long devicePort,Integer money, Integer walletAccount, Integer chargeTime){
+        JmsSender jmsSender = ActiveMQ.getSender("sendtoWeixinPush");
+
+        ChargePile chargePile = ChargePile.dao.findFirst("select * from yc_charge_pile where id = ? ",new Object[]{deviceId});
+
+        String title;
+        String area;
+
+        if (chargePile != null){
+            String province = chargePile.get("province");
+            String city = chargePile.get("city");
+            String detail_location = chargePile.get("detail_location");
+            String name = chargePile.get("name");
+
+            title = province + city + detail_location + name;
+            area =  name;
+
+        }else {
+            log.error("查询不到充电设备");
+
+            title = deviceId.toString() ;
+            area =  devicePort.toString();
+        }
+
+
+        WeiXin weixin = new WeiXin();
+        weixin.setArea(area);
+        weixin.setChannelNum(devicePort.toString());
+        weixin.setDeviceId(deviceId.toString());
+        weixin.setMessage("开始充电");
+        weixin.setOpenId(openId);
+        weixin.setTitle(title );
+        weixin.setType("D");
+        weixin.setMoney(money.toString());//单位 分
+        weixin.setWalletAccount(walletAccount);//单位 分
+        weixin.setChargeTime(chargeTime.toString());
+        weixin.setOperStartTime(new Date());
+        String str = JSON.toJSONString(weixin);
+        System.out.println(str);
+        TextMessage msg = null;
+        try {
+            msg = jmsSender.getSession().createTextMessage(str);
+            jmsSender.sendMessage(msg);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     //请求关闭插座
     private void shutDownChargeSocket(){
         RequestMsg requestMsg = new RequestMsg();
@@ -260,7 +329,7 @@ public class ChargeSocketComponent implements Device {
             String msgReplace = msg.replaceAll(MSG_FACET_SEPARATOR_INSIDE, MSG_FACET_SEPARATOR);
             MqttMsgSender.getInstance().Send(stationInfoSend.getTopic(), msgReplace,1);
         } catch (MqttException e) {
-            _log.error("向mqtt推送消息错误!",e.getMessage());
+            log.error("向mqtt推送消息错误!",e.getMessage());
         }
     }
 
@@ -324,7 +393,7 @@ public class ChargeSocketComponent implements Device {
                 alarmMap.put(alarmTag, alarm);
 
             }else {
-                _log.error("PVInverter.updateAlarm(): error, cannot find alarmInfo of " + alarmTag + ", the divice type is " + "CHARGE_SOCKET");
+                log.error("PVInverter.updateAlarm(): error, cannot find alarmInfo of " + alarmTag + ", the divice type is " + "CHARGE_SOCKET");
             }
         }
     }

@@ -16,12 +16,17 @@ import net.inconnection.charge.service.dubboPlugin.DubboClientPlugin;
 import net.inconnection.charge.service.dubboPlugin.ChargeReferenceConfig;
 import net.inconnection.charge.weixin.controller.*;
 import net.inconnection.charge.weixin.model.*;
+import net.inconnection.charge.weixin.plugin.ActiveMQ;
+import net.inconnection.charge.weixin.plugin.ActiveMQPlugin;
+import net.inconnection.charge.weixin.plugin.Destination;
+import net.inconnection.charge.weixin.plugin.JmsSender;
 import net.inconnection.charge.weixin.scheduler.task.SchedulerPlugin;
 import net.inconnection.charge.weixin.weixinCode.controller.OauthController;
 import net.inconnection.charge.weixin.weixinCode.controller.ScanCodeOauthController;
 import net.inconnection.charge.weixin.weixinCode.controller.WeiXinPayController;
 import net.inconnection.charge.weixin.weixinCode.controller.WeiXinScanCodeOauthController;
 
+import javax.jms.JMSException;
 import java.io.File;
 
 public class APPConfig extends JFinalConfig {
@@ -109,9 +114,20 @@ public class APPConfig extends JFinalConfig {
         DeviceControlService service = dubboClientPlugin.getService(reference);
         // 也可以在任何其他地方直接从容器中获取 DeviceControlService service = DubboServiceContrain.getInstance().getService(DeviceControlService.class);
         //注解未实现！！！
-
-
         me.add(dubboClientPlugin);
+
+
+        ActiveMQPlugin p = new ActiveMQPlugin(PropKit.get("mqaddress"));
+        p.start();
+        me.add(p);
+
+        try {
+            ActiveMQ.addSender(new JmsSender("sendtoWeixinPush", ActiveMQ.getConnection(), Destination.Queue, PropKit.get("mqsubject")));
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void configInterceptor(Interceptors me) {

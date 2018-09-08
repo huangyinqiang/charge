@@ -1,5 +1,6 @@
 package net.inconnection.charge.weixin.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
@@ -8,9 +9,17 @@ import net.inconnection.charge.service.dubboPlugin.DubboServiceContrain;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.ChargeBatteryInfo;
+import net.inconnection.charge.weixin.model.NewDevice;
+import net.inconnection.charge.weixin.model.WeiXin;
+import net.inconnection.charge.weixin.plugin.ActiveMQ;
+import net.inconnection.charge.weixin.plugin.JmsSender;
 import net.inconnection.charge.weixin.service.ChargeInfoBatteryService;
 import net.inconnection.charge.weixin.service.NewDeviceChargePriceService;
 import net.inconnection.charge.weixin.service.NewDeviceService;
+
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
+import java.util.Date;
 
 public class NewDeviceController extends Controller {
     private static DeviceControlService deviceControlService = DubboServiceContrain.getInstance().getService(DeviceControlService.class);
@@ -90,10 +99,62 @@ public class NewDeviceController extends Controller {
             }
 
             chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money, walletAccount, operType, realGiftRate, companyId ,autoUnitPrice);
+
+            sendActiveMqStartCharge(openId, deviceId, devicePort);
+
         }
 
 
         this.renderText(startChargeStatus.toString());
+    }
+
+    private void sendActiveMqStartCharge(String openId, String deviceId, String devicePort){
+        JmsSender jmsSender = ActiveMQ.getSender("sendtoWeixinPush");
+
+        String title;
+        String area;
+
+        NewDevice device = newDeviceService.queryDeviceInfo(deviceId);
+
+        if (device != null){
+            String province = device.get("province");
+            String city = device.get("city");
+            String detail_location = device.get("detail_location");
+            String name = device.get("name");
+
+            title = province + city + detail_location + name;
+            area =  name;
+
+        }else {
+            log.error("查询不到充电设备");
+
+            title = deviceId ;
+            area =  devicePort;
+        }
+
+
+        WeiXin weixin = new WeiXin();
+        weixin.setArea(area);
+        weixin.setChannelNum(devicePort);
+        weixin.setDeviceId(deviceId);
+        weixin.setMessage("开始充电");
+        weixin.setOpenId(openId);
+        weixin.setTitle(title );
+        weixin.setType("AUTO");
+        weixin.setMoney("");
+        weixin.setWalletAccount(500);
+        weixin.setChargeTime("200");
+        weixin.setOperStartTime(new Date());
+        String str = JSON.toJSONString(weixin);
+        System.out.println(str);
+        TextMessage msg = null;
+        try {
+            msg = jmsSender.getSession().createTextMessage(str);
+            jmsSender.sendMessage(msg);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void powerOff(){
