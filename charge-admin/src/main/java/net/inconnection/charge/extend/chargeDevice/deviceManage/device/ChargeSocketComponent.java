@@ -180,6 +180,18 @@ public class ChargeSocketComponent implements Device {
         Integer walletAccountForWeixinPush = 0;
 
         if (chargeHistory != null){
+
+            Date startTime = chargeHistory.getStartTime();
+            Date nowTime = new Date();
+
+            Long recordChargeTime = nowTime.getTime() - startTime.getTime();//单位ms
+            Long diffTime = recordChargeTime - chargeTime*1000;
+            if ( diffTime > 10*60*1000 || diffTime< -10*60*1000){
+                log.error("diviceId = " + chargePileId + " socketId = " + chargeSocketId + "没有找到正确的充电记录，请检查充电记录和充电开始调用结果");
+                return;
+            }
+
+
             chargeHistory.setFeeStatus("S");
             chargeHistory.setRealChargeTime(chargeTime.intValue()/60);
             chargeHistory.setEndTime(new Date());
