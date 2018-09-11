@@ -238,10 +238,10 @@ public class ChargePileDevice implements GateWay {
 
     private void displayAll(){
 
-        System.out.println("---------id: " + chargePileId + "   display-------------");
-        System.out.println("name: " + name + " ; voltage: " + voltage + "; power: " + power + "; online: " + isOnline + "; last update time:" + lastUpdataTime.toString());
-        System.out.println("status: " + alarmMap);
-        System.out.println("sockets: " + chargeSocketMap);
+        _log.info("---------id: " + chargePileId + "   display-------------");
+        _log.info("name: " + name + " ; voltage: " + voltage + "; power: " + power + "; online: " + isOnline + "; last update time:" + lastUpdataTime.toString());
+        _log.info("status: " + alarmMap);
+        _log.info("sockets: " + chargeSocketMap);
 
     }
 
@@ -368,8 +368,8 @@ public class ChargePileDevice implements GateWay {
                     isOnline = true;
                 }
                 updateOnLineToDb();
-                System.out.println("callBackQueueName : " + callBackQueueName);
-                System.out.println("message: " + messageJsonArr);
+                _log.info("callBackQueueName : " + callBackQueueName);
+                _log.info("message: " + messageJsonArr);
                 ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
                 break;
             case MSG_RESPONCE_CODE_SHUTDOWNALLSOCKETS:
@@ -386,8 +386,8 @@ public class ChargePileDevice implements GateWay {
 
                 ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
 
-                System.out.println("callBackQueueName : " + callBackQueueName);
-                System.out.println("message: " + messageJsonArr);
+                _log.info("callBackQueueName : " + callBackQueueName);
+                _log.info("message: " + messageJsonArr);
                 break;
             default:
                 break;
@@ -453,7 +453,7 @@ public class ChargePileDevice implements GateWay {
 
         String requestMsgStr = requestMsg.toString();
 
-        System.out.println("permissionOnLine: \n\r" + requestMsgStr);
+        _log.info("permissionOnLine: \n\r" + requestMsgStr);
 
         sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
         //将sn存储起来，等待接受response消息使用
@@ -477,7 +477,7 @@ public class ChargePileDevice implements GateWay {
 
         String requestMsgStr = requestMsg.toString();
 
-        System.out.println("shutDownAllSockets: \n\r" + requestMsgStr);
+        _log.info("shutDownAllSockets: \n\r" + requestMsgStr);
 
         sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
         //将sn存储起来，等待接受response消息使用
@@ -499,7 +499,7 @@ public class ChargePileDevice implements GateWay {
 
         String requestMsgStr = requestMsg.toString();
 
-        System.out.println("shutDownChargeSocket: \n\r" + requestMsgStr);
+        _log.info("shutDownChargeSocket: \n\r" + requestMsgStr);
 
         sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
         //将sn存储起来，等待接受response消息使用
@@ -520,7 +520,7 @@ public class ChargePileDevice implements GateWay {
 
         String requestMsgStr = requestMsg.toString();
 
-        System.out.println("requestTestPower: \n\r" + requestMsgStr);
+        _log.info("requestTestPower: \n\r" + requestMsgStr);
 
         sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
         //将sn存储起来，等待接受response消息使用
@@ -560,7 +560,7 @@ public class ChargePileDevice implements GateWay {
 
         String requestMsgStr = requestMsg.toString();
 
-        System.out.println("deleteImage: \n\r" + requestMsgStr);
+        _log.info("deleteImage: \n\r" + requestMsgStr);
 
         sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
         //将sn存储起来，等待接受response消息使用
@@ -579,7 +579,7 @@ public class ChargePileDevice implements GateWay {
 
         String requestMsgStr = requestMsg.toString();
 
-        System.out.println("set show image: \n\r" + requestMsgStr);
+        _log.info("set show image: \n\r" + requestMsgStr);
 
         sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
         //将sn存储起来，等待接受response消息使用

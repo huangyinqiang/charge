@@ -55,6 +55,13 @@ public class NewDeviceController extends Controller {
         String autoUnitPriceA7 = this.getPara("power_a7");
 
 
+        Integer startChargeStatus =9999;
+
+        if (deviceId == null || devicePort == null || time == null){
+            this.renderText(startChargeStatus.toString());
+            return;
+        }
+
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(devicePort);
         Integer chargeTime = Integer.parseInt(time);//分钟
@@ -68,7 +75,6 @@ public class NewDeviceController extends Controller {
             startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, 10*1000L);
         }
 
-        Integer startChargeStatus =9999;
         Integer startPower = 0;
         if (null != startChargeResltJson){
             startChargeStatus = startChargeResltJson.getInteger("RESULT");
@@ -102,8 +108,9 @@ public class NewDeviceController extends Controller {
 
             sendActiveMqStartCharge(openId, deviceId, devicePort);
 
+        }else {
+            log.error("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
         }
-
 
         this.renderText(startChargeStatus.toString());
     }

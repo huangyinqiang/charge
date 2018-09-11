@@ -307,7 +307,6 @@ public class ChargeSocketComponent implements Device {
         weixin.setChargeTime(chargeTime.toString());
         weixin.setOperStartTime(new Date());
         String str = JSON.toJSONString(weixin);
-        System.out.println(str);
         TextMessage msg = null;
         try {
             msg = jmsSender.getSession().createTextMessage(str);
