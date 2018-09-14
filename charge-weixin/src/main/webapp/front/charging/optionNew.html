@@ -191,7 +191,7 @@
     }
     // 会员充电提示
     function memCharge() {
-        layer.confirm('请确认' + devicePort + '插座，充电' + time + '分钟；充电费用' + money/100 + '元；点击"确认" 后开始充电', {
+        layer.confirm('请确认' + devicePort + '插座，充电' + time + '分钟；点击"确认" 后开始充电', {
             btn : [ '确定', '取消' ]
         }, function() {
             requestNewDeviceStartCharge();

@@ -16,23 +16,23 @@ public class TestSender {
     }
 
     public static void main(String[] args) throws Exception {
-        ActiveMQPlugin p = new ActiveMQPlugin("failover://(tcp://cloud.henankejue.com:61616)?initialReconnectDelay=1000");
+        ActiveMQPlugin p = new ActiveMQPlugin("failover://(tcp://charge.inconnection.net:61616)?initialReconnectDelay=1000");
         p.start();
-        String subject = "WeixinMessage";
+        String subject = "WeixinMessage_xa";
 
         try {
             ActiveMQ.addSender(new JmsSender("testSender1", ActiveMQ.getConnection(), Destination.Queue, subject));
             JmsSender sq1 = ActiveMQ.getSender("testSender1");
 
-            for(int i = 0; i < 10; ++i) {
+            for(int i = 0; i < 1; ++i) {
                 WeiXin weixin = new WeiXin();
-                weixin.setArea("aaa");
+                weixin.setArea("陕西西安会展三号设备ID 1233456，端口号 17");
                 weixin.setChannelNum("10");
-                weixin.setDeviceId("");
-                weixin.setMessage("测试");
-                weixin.setOpenId("omPt_1CLfrL1r-Lia_tI6UC8ZrXs");
-                weixin.setTitle("在哪？" + i);
-                weixin.setType("F");
+                weixin.setDeviceId("陕西西安会展三号设备ID 1233456");
+                weixin.setMessage("开始充电");
+                weixin.setOpenId("oNFzS1JvIjMozdyk7r7ZUlD0Mu0s");
+                weixin.setTitle("您选择临时充电，充电时间***分钟，充电费用**元；" );
+                weixin.setType("NC");
                 weixin.setMoney("100");
                 weixin.setWalletAccount(500);
                 weixin.setChargeTime("200");

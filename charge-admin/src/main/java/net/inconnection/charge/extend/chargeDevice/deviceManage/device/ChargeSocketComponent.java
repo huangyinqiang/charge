@@ -33,9 +33,10 @@ import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConst
 public class ChargeSocketComponent implements Device {
     public static final String DEVICEUSED = "1";
 
-    private static final Integer CHARGE_DONE = 0;
+    private static final Integer CHARGE_AUTO_DONE = 0;
     private static final Integer CHARGE_ING = 1;
     private static final Integer OVER_FLOW_PROTECT = 2;
+    private static final Integer CHARGE_TIME_DONE = 3;
 
     private static Logger log = LoggerFactory.getLogger(ChargeSocketComponent.class);
 
@@ -249,7 +250,32 @@ public class ChargeSocketComponent implements Device {
 
             chargeHistory.update();
 
-            sendActiveMqStartCharge(chargeHistory.getOpenId(), chargePileId, chargeSocketId, chargerMoney, walletAccountForWeixinPush, chargeTime.intValue()/60);
+            String message = "充电完成";
+            if (chargeState.equals(CHARGE_AUTO_DONE)){
+                message = "监测电池充满断电";
+            }else if (chargeState.equals(CHARGE_TIME_DONE)){
+                message = "预设时间充电完成";
+            }else if (chargeState.equals(OVER_FLOW_PROTECT)){
+                message = "监测功率超限断电";
+            }
+
+            String title;
+
+            if (chargeHistory.getOperType().equals("M")){
+                //临时充电
+                title = "您选择临时充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeTime/60 + "分钟";
+            }else {
+                if (chargeHistory.getChargeType().equals("auto")){
+                    //智能充电
+                    title = "您选择会员充满自停，实际充电时间" + chargeTime/60 + "分钟";
+
+                }else {
+                    //会员定时充电
+                    title = "您选择会员充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeTime/60 + "分钟";
+                }
+            }
+
+            sendActiveMqStartCharge(chargeHistory.getOpenId(), chargePileId, chargeSocketId, chargerMoney, walletAccountForWeixinPush, title, message);
 
         }
 
@@ -269,12 +295,11 @@ public class ChargeSocketComponent implements Device {
         }
     }
 
-    private void sendActiveMqStartCharge(String openId, Long deviceId, Long devicePort,Integer money, Integer walletAccount, Integer chargeTime){
+    private void sendActiveMqStartCharge(String openId, Long deviceId, Long devicePort,Integer money, Integer walletAccount, String title, String message){
         JmsSender jmsSender = ActiveMQ.getSender("sendtoWeixinPush");
 
         ChargePile chargePile = ChargePile.dao.findFirst("select * from yc_charge_pile where id = ? ",new Object[]{deviceId});
 
-        String title;
         String area;
 
         if (chargePile != null){
@@ -283,14 +308,12 @@ public class ChargeSocketComponent implements Device {
             String detail_location = chargePile.get("detail_location");
             String name = chargePile.get("name");
 
-            title = province + city + detail_location + name;
-            area =  name;
+            area =  province + city + detail_location + name;
 
         }else {
             log.error("查询不到充电设备");
 
-            title = deviceId.toString() ;
-            area =  devicePort.toString();
+            area =  "设备ID" + deviceId + "端口" + devicePort;
         }
 
 
@@ -298,13 +321,13 @@ public class ChargeSocketComponent implements Device {
         weixin.setArea(area);
         weixin.setChannelNum(devicePort.toString());
         weixin.setDeviceId(deviceId.toString());
-        weixin.setMessage("开始充电");
+        weixin.setMessage(message);
         weixin.setOpenId(openId);
         weixin.setTitle(title );
-        weixin.setType("D");
+        weixin.setType("NC");
         weixin.setMoney(money.toString());//单位 分
         weixin.setWalletAccount(walletAccount);//单位 分
-        weixin.setChargeTime(chargeTime.toString());
+        weixin.setChargeTime("");
         weixin.setOperStartTime(new Date());
         String str = JSON.toJSONString(weixin);
         TextMessage msg = null;

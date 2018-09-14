@@ -22,6 +22,7 @@ import javax.jms.TextMessage;
 import java.util.Date;
 
 public class NewDeviceController extends Controller {
+    public static final long TIMEOUT = 40 * 1000L;
     private static DeviceControlService deviceControlService = DubboServiceContrain.getInstance().getService(DeviceControlService.class);
 
     private static final NewDeviceService newDeviceService = new NewDeviceService();
@@ -70,9 +71,9 @@ public class NewDeviceController extends Controller {
 
         JSONObject startChargeResltJson;
         if(chargeType.equals("auto")){
-            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, 0, 10*1000L);
+            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, 0, TIMEOUT);
         }else {
-            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, 10*1000L);
+            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, TIMEOUT);
         }
 
         Integer startPower = 0;
@@ -88,25 +89,59 @@ public class NewDeviceController extends Controller {
         if (startChargeStatus.equals(1)){
             //充电成功
 
+            String powerSection;
+
             if (startPower < 200){
                 autoUnitPrice = autoUnitPriceA1;
+                powerSection = "A1";
             }else if (startPower < 300){
                 autoUnitPrice = autoUnitPriceA2;
+                powerSection = "A2";
             }else if (startPower < 350){
                 autoUnitPrice = autoUnitPriceA3;
+                powerSection = "A3";
             }else if (startPower < 500){
                 autoUnitPrice = autoUnitPriceA4;
+                powerSection = "A4";
             }else if (startPower < 700){
                 autoUnitPrice = autoUnitPriceA5;
+                powerSection = "A5";
             }else if (startPower < 1000){
                 autoUnitPrice = autoUnitPriceA6;
+                powerSection = "A6";
             }else {
                 autoUnitPrice = autoUnitPriceA7;
+                powerSection = "A7";
             }
 
             chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money, walletAccount, operType, realGiftRate, companyId ,autoUnitPrice);
 
-            sendActiveMqStartCharge(openId, deviceId, devicePort);
+            String title;
+
+            if (operType.equals("M")){
+                //微信充值,临时充电
+                Integer chargeMoney = Integer.parseInt(money);
+                title = "您选择临时充电，充电时间" + time + "分钟" + "充电费用" + chargeMoney/100D + "元";
+
+            }else {
+                //会员充电
+                if (chargeType.equals("auto")){
+                    //智能充电
+                    title = "您选择会员充电，电车功率段" + powerSection + "段，充满自停,充电完成自动结费";
+
+                }else {
+                    //会员定时充电
+
+                    Integer autoUnitPriceInt = Integer.parseInt(autoUnitPrice);
+                    Integer moneyInt = new Double(Double.parseDouble(time)/60.0D * autoUnitPriceInt).intValue();
+
+                    title = "您选择会员充电，电车功率段" + powerSection + "段，充电时间" +  time + "分钟" + "充电费用" + moneyInt/100D + "元";
+
+                }
+
+            }
+
+            sendActiveMqStartCharge(openId, deviceId, devicePort, title);
 
         }else {
             log.error("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
@@ -115,12 +150,10 @@ public class NewDeviceController extends Controller {
         this.renderText(startChargeStatus.toString());
     }
 
-    private void sendActiveMqStartCharge(String openId, String deviceId, String devicePort){
+    private void sendActiveMqStartCharge(String openId, String deviceId, String devicePort, String title){
         JmsSender jmsSender = ActiveMQ.getSender("sendtoWeixinPush");
 
-        String title;
         String area;
-
         NewDevice device = newDeviceService.queryDeviceInfo(deviceId);
 
         if (device != null){
@@ -129,14 +162,12 @@ public class NewDeviceController extends Controller {
             String detail_location = device.get("detail_location");
             String name = device.get("name");
 
-            title = province + city + detail_location + name;
-            area =  name;
+            area =  province + city + detail_location + name;
 
         }else {
             log.error("查询不到充电设备");
 
-            title = deviceId ;
-            area =  devicePort;
+            area =  "设备ID" + deviceId + "端口" + devicePort;
         }
 
 
@@ -172,7 +203,7 @@ public class NewDeviceController extends Controller {
         log.info("断电开始 openId=" + openId + ",id=" + id + ",channelNum=" + channeNum + ",deviceId=" + deviceId);
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(channeNum);
-        Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, 10*1000L);
+        Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, TIMEOUT);
 
         if (null == powerOffStatus){
             powerOffStatus = 9999;
@@ -223,7 +254,7 @@ public class NewDeviceController extends Controller {
             //重新设置
             permissionOnlineSuccess = true;
         }else {
-            permissionOnlineSuccess = deviceControlService.requestPermissionOnLine(chargePileId, 10*1000L);
+            permissionOnlineSuccess = deviceControlService.requestPermissionOnLine(chargePileId, TIMEOUT);
         }
 
         if (permissionOnlineSuccess){

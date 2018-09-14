@@ -29,6 +29,8 @@ public class WeiXinSender {
             reqJson = template.createSendDataToText(weixin.getOpenId(), weixin.getMessage(), weixin.getOperStartTime(), weixin.getTitle(), weixin.getChannelNum());
         } else if (weixin.getType().equalsIgnoreCase("ALARM")) {
             reqJson = template.alarmTemp(weixin.getOpenId(), weixin.getTitle(), weixin.getMessage());
+        }else if (weixin.getType().equalsIgnoreCase("NC")) {
+            reqJson = template.newDeviceComplete(weixin.getOpenId(), weixin.getArea(), weixin.getTitle(), weixin.getMessage(), weixin.getMoney(), weixin.getWalletAccount());
         }
 
         try {

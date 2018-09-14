@@ -592,11 +592,11 @@ public class ChargePileDevice implements GateWay {
     public static void main(String[] args){
 
 
-        ChargePileDevice chargePileDevice = new ChargePileDevice(10100000001L);
+        ChargePileDevice chargePileDevice = new ChargePileDevice(201808000020L);
 
         String testQueue = "testqueue";
 
-//        chargePileDevice.permissionOnLine(testQueue);
+        chargePileDevice.permissionOnLine(testQueue);
 
 
 //
@@ -611,16 +611,16 @@ public class ChargePileDevice implements GateWay {
 //        chargePileDevice.requestTestPower(sockets, testQueue);
 
 
-        Map<Long, Integer> socketIdChargeTimeMap = new ConcurrentHashMap<>();
-        socketIdChargeTimeMap.put(1L, 60);
-        socketIdChargeTimeMap.put(2L, 60);
-
-        chargePileDevice.startCharge(socketIdChargeTimeMap, testQueue);
-
-        chargePileDevice.deleteImage("123", testQueue);
-
-        chargePileDevice.showImage("123",60,null,null,null,null,null , testQueue);
-
+//        Map<Long, Integer> socketIdChargeTimeMap = new ConcurrentHashMap<>();
+//        socketIdChargeTimeMap.put(1L, 60);
+//        socketIdChargeTimeMap.put(2L, 60);
+//
+//        chargePileDevice.startCharge(socketIdChargeTimeMap, testQueue);
+//
+//        chargePileDevice.deleteImage("123", testQueue);
+//
+//        chargePileDevice.showImage("123",60,null,null,null,null,null , testQueue);
+//
 
 
     }
