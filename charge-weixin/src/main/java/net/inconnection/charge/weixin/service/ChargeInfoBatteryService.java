@@ -360,7 +360,7 @@ public class ChargeInfoBatteryService {
 
                 while(var4.hasNext()) {
                     ChargeBatteryInfo chargeBatteryInfo = (ChargeBatteryInfo)var4.next();
-                    String id = (String)chargeBatteryInfo.get("id");
+                    String id = chargeBatteryInfo.get("id").toString();
                     Date operStartTime = (Date)chargeBatteryInfo.get("operStartTime");
                     long time = operStartTime.getTime();
                     String chargeTime = (String)chargeBatteryInfo.get("chargeTime");
