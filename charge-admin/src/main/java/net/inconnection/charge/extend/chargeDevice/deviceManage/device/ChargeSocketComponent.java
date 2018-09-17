@@ -202,7 +202,17 @@ public class ChargeSocketComponent implements Device {
             if (chargeHistory.getChargeType().equals("auto")){
 
                 autoChargeUnitPrice = chargeHistory.getAutoUnitPrice();
-                autoChargeMoney = new Double(autoChargeUnitPrice * (double)chargeTime/3600.0D).intValue();
+
+                if (chargeTime < 10*60){
+                    //10分钟内不收费
+                    autoChargeMoney = 0;
+                }else {
+
+                    Double chargeHours = chargeTime/3600.0D;
+                    //向上取整计算费用
+                    autoChargeMoney = new Double(autoChargeUnitPrice * Math.ceil(chargeHours)).intValue();
+                }
+
                 chargerMoney = autoChargeMoney;
 
                 Double realRate = chargeHistory.getRealRate();
