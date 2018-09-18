@@ -129,7 +129,7 @@ public class MqttMsgReceiver {
 
     private void subscribe() {
 
-        String[] topic1 = new String[7];
+        String[] topic1 = new String[8];
         int count = 0;
         topic1[count] = "C/CHARGE/+/+/data";
         count++;
@@ -145,6 +145,8 @@ public class MqttMsgReceiver {
         topic1[count]="C/CHARGE/+/+/notify";
         count++;
         topic1[count]="C/CHARGE/+/+/confirm";
+        count++;
+        topic1[count]="C/CHARGE/+/+/will";
         try {
             if(topic1.length>0){
                 client.subscribe(topic1);
