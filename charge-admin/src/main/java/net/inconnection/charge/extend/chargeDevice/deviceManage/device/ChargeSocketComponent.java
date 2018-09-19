@@ -44,14 +44,14 @@ public class ChargeSocketComponent implements Device {
     private Long chargePileId;
 
     private boolean used;
-    private Long startPower;//初始充电功率，单位mW
+    private Long startPower;//初始充电功率，单位W
     private Long chargeIntensity = 0L;//电流，单位mA
     private Long chargeTime;//充电时长，单位s
     private Integer chargeState;//充电状态， 1：充电中  0：充电截止 2：过流保护
     private Integer lastChargeState = 0;//上次的充电状态
     private Date lastUpdateTime;
     private Long chargeVoltage = 0L;
-    private Long chargePower = 0L;
+    private Long chargePower = 0L;//充电功率，单位 W
 
 
 
@@ -149,7 +149,7 @@ public class ChargeSocketComponent implements Device {
                     log.error("device message is : " + deviceObj.toJSONString() + ", no " + MSG_CHARGESTATE);
                 }
 
-            chargePower = chargeIntensity * chargeVoltage;
+            chargePower = chargeIntensity * chargeVoltage/1000;
 
             updateDataToDb();
 //            log.info("pile id = " + chargePileId + ", socket Id  =  " + chargeSocketId);
