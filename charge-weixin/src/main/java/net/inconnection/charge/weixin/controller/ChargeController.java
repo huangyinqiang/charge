@@ -2,8 +2,6 @@ package net.inconnection.charge.weixin.controller;
 
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
-import net.inconnection.charge.service.DeviceControlService;
-import net.inconnection.charge.service.dubboPlugin.DubboServiceContrain;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.service.ChargeInfoBatteryService;
 
@@ -86,6 +84,31 @@ public class ChargeController extends Controller {
         this.setAttr("time", this.getPara("time"));
         log.info("跳转到正在充电页面deviceId=" + this.getPara("deviceId") + ",chargePort=" + this.getPara("chargePort"));
         this.render("charging/charging.html");
+    }
+
+    public void checkPower() {
+        log.error("跳转到功率检测页面");
+        this.setAttr("openId", this.getPara("openId"));
+        this.setAttr("companyId", this.getPara("companyId"));
+        this.setAttr("type", this.getPara("type"));
+        this.setAttr("deviceId", this.getPara("deviceId"));
+        this.setAttr("devicePort", this.getPara("devicePort"));
+        this.setAttr("time", this.getPara("time"));
+        this.setAttr("money", this.getPara("money"));
+        this.setAttr("walletAccount", this.getPara("walletAccount"));
+        this.setAttr("operType", this.getPara("operType"));
+        this.setAttr("realGiftRate", this.getPara("realGiftRate"));
+        this.setAttr("autoUnitPrice", this.getPara("autoUnitPrice"));
+        this.setAttr("power_a1", this.getPara("power_a1"));
+        this.setAttr("power_a2", this.getPara("power_a2"));
+        this.setAttr("power_a3", this.getPara("power_a3"));
+        this.setAttr("power_a4", this.getPara("power_a4"));
+        this.setAttr("power_a5", this.getPara("power_a5"));
+        this.setAttr("power_a6", this.getPara("power_a6"));
+        this.setAttr("power_a7", this.getPara("power_a7"));
+
+        log.info("跳转到功率检测页面");
+        this.render("charging/checkPower.html");
     }
 }
 

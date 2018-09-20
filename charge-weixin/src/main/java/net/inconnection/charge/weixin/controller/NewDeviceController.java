@@ -20,6 +20,8 @@ import net.inconnection.charge.weixin.service.NewDeviceService;
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NewDeviceController extends Controller {
     public static final long TIMEOUT = 40 * 1000L;
@@ -33,6 +35,164 @@ public class NewDeviceController extends Controller {
 
     private static final Log log = Log.getLog(NewDeviceController.class);
 
+    public void startCharge4CheckPower(){
+        log.info("开始充电，不写数据");
+        String openId = this.getPara("openId");
+        String deviceId = this.getPara("deviceId");
+        String devicePort = this.getPara("devicePort");
+        String time = this.getPara("time");
+        String chargeType = this.getPara("type");
+        String money = this.getPara("money");
+        String walletAccount = this.getPara("walletAccount");
+        String operType = this.getPara("operType");
+        String realGiftRate = this.getPara("realGiftRate");
+        String companyId = this.getPara("companyId");
+        String autoUnitPrice = this.getPara("autoUnitPrice");
+
+        String autoUnitPriceA1 = this.getPara("power_a1");
+        String autoUnitPriceA2 = this.getPara("power_a2");
+        String autoUnitPriceA3 = this.getPara("power_a3");
+        String autoUnitPriceA4 = this.getPara("power_a4");
+        String autoUnitPriceA5 = this.getPara("power_a5");
+        String autoUnitPriceA6 = this.getPara("power_a6");
+        String autoUnitPriceA7 = this.getPara("power_a7");
+
+
+        Integer startChargeStatus =9999;
+
+        if (deviceId == null || devicePort == null || time == null){
+            this.renderText(startChargeStatus.toString());
+            return;
+        }
+
+        Long deviceSN = Long.parseLong(deviceId);
+        Long socketSN = Long.parseLong(devicePort);
+        Integer chargeTime = Integer.parseInt(time);//分钟
+        Integer chargeTimeSenconds = chargeTime*60;
+        log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
+
+        JSONObject startChargeResltJson;
+        log.info("设备："+deviceSN+"插座："+socketSN+"时间："+chargeTimeSenconds);
+        if(chargeType.equals("auto")){
+            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, 0, TIMEOUT);
+        }else {
+            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, TIMEOUT);
+        }
+
+        Integer startPower = 0;
+
+        if (null != startChargeResltJson){
+            startChargeStatus = startChargeResltJson.getInteger("RESULT");
+            startPower = startChargeResltJson.getInteger("POW");
+
+        }
+
+
+        log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
+        String powerSection="";
+        if (startChargeStatus.equals(1)){
+            //充电成功
+            if (startPower < 200){
+                powerSection = "0-200";
+            }else if (startPower < 300){
+                powerSection = "201-300";
+            }else if (startPower < 350){
+                powerSection = "301-350";
+            }else if (startPower < 500){
+                powerSection = "351-500";
+            }else if (startPower < 700){
+                powerSection = "501-700";
+            }else if (startPower < 1000){
+                powerSection = "701-1000";
+            }else {
+                powerSection = "701-1000";
+            }
+
+
+
+        }else {
+            log.error("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
+        }
+        Map<String,String> map =new HashMap<>(5);
+        map.put("state",startChargeStatus.toString());
+        map.put("power",powerSection);
+        map.put("money",String.valueOf(Integer.parseInt(money)/100D));
+        log.info("充值金额："+money);
+
+        this.renderJson(new HnKejueResponse(map,RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue()));
+    }
+
+
+    public void powerOff4CheckPower(){
+        String deviceId = this.getPara("deviceId");
+        String channeNum = this.getPara("channeNum");
+        String openId = this.getPara("openId");
+        log.info("断电开始 openId=" + openId + "," + ",channelNum=" + channeNum + ",deviceId=" + deviceId);
+        Long deviceSN = Long.parseLong(deviceId);
+        Long socketSN = Long.parseLong(channeNum);
+        Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, TIMEOUT);
+
+    }
+
+
+    public void startCharge4WriteDate(){
+
+        log.info("开始充电，写数据");
+        String openId = this.getPara("openId");
+        String deviceId = this.getPara("deviceId");
+        String devicePort = this.getPara("devicePort");
+        String time = this.getPara("time");
+        String chargeType = this.getPara("type");
+        String money = this.getPara("money");
+        String walletAccount = this.getPara("walletAccount");
+        String operType = this.getPara("operType");
+        String realGiftRate = this.getPara("realGiftRate");
+        String companyId = this.getPara("companyId");
+        String autoUnitPrice = this.getPara("autoUnitPrice");
+
+        String autoUnitPriceA1 = this.getPara("power_a1");
+        String autoUnitPriceA2 = this.getPara("power_a2");
+        String autoUnitPriceA3 = this.getPara("power_a3");
+        String autoUnitPriceA4 = this.getPara("power_a4");
+        String autoUnitPriceA5 = this.getPara("power_a5");
+        String autoUnitPriceA6 = this.getPara("power_a6");
+        String autoUnitPriceA7 = this.getPara("power_a7");
+        String pow = this.getPara("pow");
+
+        if (deviceId == null || devicePort == null || time == null){
+            this.renderText("数据异常，请重试");
+            return;
+        }
+        log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
+
+        chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money, walletAccount, operType, realGiftRate, companyId ,autoUnitPrice);
+
+        String title;
+
+        if (operType.equals("M")){
+            //微信充值,临时充电
+            Integer chargeMoney = Integer.parseInt(money);
+            title = "您选择临时充电，充电时间" + time + "分钟" + "充电费用" + chargeMoney/100D + "元";
+
+        }else {
+            //会员充电
+            if (chargeType.equals("auto")){
+                //智能充电
+                title = "您选择会员充电，电动车功率：" + pow + "W，充满自停,充电完成自动结费";
+            }else {
+                //会员定时充电
+                Integer autoUnitPriceInt = Integer.parseInt(autoUnitPrice);
+                Integer moneyInt = new Double(Double.parseDouble(time)/60.0D * autoUnitPriceInt).intValue();
+                title = "您选择会员充电，电动车功率：" + pow + "W，充电时间" +  time
+                        + "分钟" + "充电费用" + moneyInt/100D + "元";
+            }
+
+        }
+
+        sendActiveMqStartCharge(openId, deviceId, devicePort, title);
+        this.renderJson(new HnKejueResponse(RespCode.SUCCESS.getKey(),RespCode.SUCCESS.getValue()));
+
+    }
 
     public void startCharge(){
         String openId = this.getPara("openId");
