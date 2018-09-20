@@ -320,7 +320,8 @@
                 });
 			},
             success : function(data) {
-                if (data == "1") {
+                if (data == "1"|| data== "0") {
+                    // todo 0是临时处理，后面硬件修改完成改回来
                     layer.msg("充电成功", {
                         shift : 5
                     });

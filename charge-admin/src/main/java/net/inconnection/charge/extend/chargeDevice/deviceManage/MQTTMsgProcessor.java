@@ -27,7 +27,7 @@ public class MQTTMsgProcessor {
             //待注册设备
             if (!chargePileManager.hasChargePile(gwId)){
                 chargePileManager.addChargePile(gwId);
-            }
+            }//TODO 有必要加入notify时间，在安装时根据时间再次判断是否联网到云端
 
         }else {
 

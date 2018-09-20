@@ -86,8 +86,8 @@ public class NewDeviceController extends Controller {
 
         log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
 
-        if (startChargeStatus.equals(1)){
-            //充电成功
+        if (startChargeStatus.equals(1) || startChargeStatus.equals(0)){
+            //充电成功 todo 0状态是暂时处理，以后硬件解决了问题会去掉
 
             String powerSection;
 
@@ -257,7 +257,7 @@ public class NewDeviceController extends Controller {
             permissionOnlineSuccess = deviceControlService.requestPermissionOnLine(chargePileId, TIMEOUT);
         }
 
-        if (permissionOnlineSuccess){
+        if (permissionOnlineSuccess != null && permissionOnlineSuccess){
             log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功");
 
             Boolean updateResult = newDeviceService.updateInstallInfo(chargePileId, chargePileName, province, city, location, latitudeDouble,
