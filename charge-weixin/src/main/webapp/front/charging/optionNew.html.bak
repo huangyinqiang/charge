@@ -184,7 +184,33 @@
             return;
         }
 
-        requestNewDeviceStartCharge();
+        // 会员(选择智能充电)
+        if (walletAccount >= autoPrice && time == 800) {
+            chargeType = "auto";// 智能充电
+            operType = "W";// 会员扣费
+            money = autoPrice;
+            memCharge();
+            return;
+        }
+        // 会员,但钱包余额不足智能充电单价(选择智能充电)
+        if (autoPrice > walletAccount && time == 800) {
+            rechargeMoneyToWallet();// 充值钱包
+            return;
+        }
+        // 会员(未选择智能充电)
+        if (walletAccount >= autoPrice) {
+            chargeType = "charge";// 按功率扣费
+            operType = "W";// 会员扣费
+            memCharge();
+            return;
+        }
+        // 钱包余额不够支付本次费用,认定为非会员 (未选择智能充电)
+        if (walletAccount < money) {
+            chargeOrPay();// 充值钱包或者单次支付
+            return;
+        }
+        // 会员,钱包余额小于智能充电单价，只能充电2小时(未选择智能充电)
+		chargeTwoHoursOrPay();
 
     }
     // 会员充电提示
@@ -284,28 +310,53 @@
 	
     // 打开设备开始充电
     function requestNewDeviceStartCharge() {
-        var param = "openId="+openId
-                    +"&companyId="+companyId
-                    +"&type="+chargeType
-            +"&deviceId="+deviceId
-            +"&devicePort="+devicePort
-            +"&time="+time
-            +"&money="+money
-            +"&walletAccount="+walletAccount
-            +"&operType="+operType
-            +"&realGiftRate="+userInfo.real_git_rate
-            +"&autoUnitPrice="+device.auto_unit_price
-            +"&power_a1="+device.power_a1
-            +"&power_a2="+device.power_a2
-            +"&power_a3="+device.power_a3
-            +"&power_a4="+device.power_a4
-            +"&power_a5="+device.power_a5
-            +"&power_a6="+device.power_a6
-            +"&power_a7="+device.power_a7
-            +"&autoPrice="+autoPrice;
+        $.ajax({
+            type : 'POST',
+            url : "../newDevice/startCharge",
+            dataType : "json",
+            data : {
+                openId : openId,
+                companyId : companyId,
+                type : chargeType,
+                deviceId : deviceId,
+                devicePort : devicePort,
+                time : time,
+                money : money,
+                walletAccount : walletAccount,
+                operType : operType,
+				realGiftRate : userInfo.real_git_rate,
+                autoUnitPrice : device.auto_unit_price,
+                power_a1 : device.power_a1,
+                power_a2 : device.power_a2,
+                power_a3 : device.power_a3,
+                power_a4 : device.power_a4,
+                power_a5 : device.power_a5,
+                power_a6 : device.power_a6,
+                power_a7 : device.power_a7
 
-        window.location = "checkPower?"+param;
-
+            },
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
+            // 从缓存里读取,为false只有ＧＥＴ请求时生效
+            async : false,// 设置同步方式，false为同步
+            beforeSend : function(XHR){
+                layer.msg("正在检测电流，请稍候", {
+                    shift : 5
+                });
+			},
+            success : function(data) {
+                if (data == "1") {
+                    layer.msg("充电成功", {
+                        shift : 5
+                    });
+                    window.location = "../charging/charging?deviceId=" + deviceId
+                        + "&chargePort=" + devicePort + "&time=" + time;
+                } else {
+                    layer.msg("充电失败", {
+                        shift : 5
+                    });
+                }
+            }
+        });
     }
     // 查询设备价格信息
     function getNewDeviceChargePrice(deviceId, companyId) {
@@ -387,8 +438,8 @@
                 if(i%2 == 0){
                     string+="<div class='flex1'>";
                 }
-                 string+="<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
-                    "onclick='selectChargeSocket(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" ;
+                 string+="<a id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
+                    "onclick='selectChargeSocket(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</a>" ;
 
                 if(i%2 == 1){
                     string+="</div>";
@@ -422,13 +473,6 @@
 
 
     function selectChargeSocket(value, ele) {
-
-        if($(ele).prop("disabled") == true){
-            layer.msg("插座已被使用", {
-                shift : 5
-            });
-            return;
-        }
         devicePort = value;// 获取选择的插座
         $('.rui-btn').removeClass('rui-btn-outlined');
         $(ele).addClass('rui-btn-outlined')

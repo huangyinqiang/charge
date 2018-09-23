@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!-- 条转到充电记录页面 -->
+<!-- <meta http-equiv="refresh" content="10;url=../charging/chargingInfo"> -->
+<title>功率检测</title>
+<link rel="stylesheet" href="../css/weui.css">
+<link rel="stylesheet" href="../css/wechat.css">
+    <link rel="stylesheet" href="../js/common/layer/theme/default/layer.css">
+<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+    <script src="../js/common/layer/layer.js"></script>
+
+<script type="text/javascript" src="../js/charging/checkPower.js"></script>
+</head>
+<body onload="shownum()">
+	<div class="container">
+		<div class="page__bd">
+			<div class="page home">
+				<div class="weui-flex">
+					<div class="weui-flex__item">
+						<div class="charge-cont text-center">
+							<img src="../images/testing.png" class="battery-pic" alt="">
+							<h3 class="charge-active">功率检测</h3>
+							<p>
+								<i class="common-color" id="showTimes"></i>
+							</p>
+							<!-- <a href="../poweroff" class="weui-btn weui-btn_default">
+								远程断电 </a> -->
+						</div>
+					</div>
+				</div>
+				<div class="show-control">
+					<p>
+						充电插座：<i id="devicePort"></i>
+					</p>
+					<p>
+						充电时长：<i id="time"></i>分钟
+					</p>
+                    <p>
+                        充电功率：<i id="power">0</i>W
+                    </p>
+                    <p>
+                        充电费用：<i id="money">0</i>元
+                    </p>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+	<div id="submitBtn" style="width: 96%;height: auto;position: fixed;bottom: 60px;left:0px;right:0px;margin: auto;">
+		<a href="javascript:void(0)" class="weui-btn weui-btn_default" onclick="submit()">确认充电 </a>
+	</div>
+
+</body>
+<script src="../js/common/zepto.min.js"></script>
+<script src="../js/common/weui.min.js"></script>
+<script>
+    var openId = GetQueryString("openId");
+    var companyId = GetQueryString("companyId");
+    var type = GetQueryString("type");
+    var deviceId = GetQueryString("deviceId");
+    var devicePort = GetQueryString("devicePort");
+    var time = GetQueryString("time");
+    var money = GetQueryString("money");
+    var walletAccount = GetQueryString("walletAccount");
+    var operType = GetQueryString("operType");
+    var realGiftRate = GetQueryString("realGiftRate");
+    var autoUnitPrice = GetQueryString("autoUnitPrice");
+    var power_a1 = GetQueryString("power_a1");
+    var power_a2 = GetQueryString("power_a2");
+    var power_a3 = GetQueryString("power_a3");
+    var power_a4 = GetQueryString("power_a4");
+    var power_a5 = GetQueryString("power_a5");
+    var power_a6 = GetQueryString("power_a6");
+    var power_a7 = GetQueryString("power_a7");
+    var autoPrice = GetQueryString("autoPrice");
+    $("#submitBtn").hide();
+
+    setTimeout(startCharge4CheckPower,1000)
+    function startCharge4CheckPower() {
+        console.log("kaishi")
+        $.ajax({
+            type : 'POST',
+            url : "../newDevice/startCharge4CheckPower",
+            dataType : "json",
+            data : {
+                openId : GetQueryString("openId"),
+                companyId : GetQueryString("companyId"),
+                type : GetQueryString("type"),
+                deviceId : GetQueryString("deviceId"),
+                devicePort : GetQueryString("devicePort"),
+                time : GetQueryString("time"),
+                money : GetQueryString("money"),
+                walletAccount : GetQueryString("walletAccount"),
+                operType : GetQueryString("operType"),
+                realGiftRate : GetQueryString("realGiftRate"),
+                autoUnitPrice : GetQueryString("autoUnitPrice"),
+                power_a1 : GetQueryString("power_a1"),
+                power_a2 : GetQueryString("power_a2"),
+                power_a3 : GetQueryString("power_a3"),
+                power_a4 : GetQueryString("power_a4"),
+                power_a5 : GetQueryString("power_a5"),
+                power_a6 : GetQueryString("power_a6"),
+                power_a7 : GetQueryString("power_a7")
+            },
+            cache : false,
+            async : true,// 设置同步方式，false为同步
+            success : function(res) {
+                if (res.respObj != null && res.respCode == "000000") {
+                    data = res.respObj;
+                    $('#power').text(data.power);
+                    $('#money').text(data.money);
+
+                    $("#submitBtn").show();
+                    $("#showTimes").hide()
+                }else{
+                    window.location="../charging"
+                }
+            },
+            error :function () {
+                layer.msg("功率检测失败...", {
+                    shift : 5
+                });
+                window.location="../charging"
+            }
+        });
+    }
+
+    function submit() {
+        // 会员(选择智能充电)
+        if (walletAccount >= autoPrice && time == 800) {
+            chargeType = "auto";// 智能充电
+            operType = "W";// 会员扣费
+            money = autoPrice;
+            memCharge();
+            return;
+        }
+
+        // 会员,但钱包余额不足智能充电单价(选择智能充电)
+        if (autoPrice > walletAccount && time == 800) {
+            rechargeMoneyToWallet();// 充值钱包
+            return;
+        }
+
+        // 会员(未选择智能充电)
+        if (walletAccount >= autoPrice) {
+            chargeType = "charge";// 按功率扣费
+            operType = "W";// 会员扣费
+            memCharge();
+            return;
+        }
+
+        // 钱包余额不够支付本次费用,认定为非会员 (未选择智能充电)
+        if (walletAccount < money) {
+            chargeOrPay();// 充值钱包或者单次支付
+            return;
+        }
+
+        // 会员,钱包余额小于智能充电单价，只能充电2小时(未选择智能充电)
+        chargeTwoHoursOrPay();
+
+
+    }//submit
+
+    // 会员充电提示
+    function memCharge() {
+        var msg="";
+        if(time == "800"){
+            msg="请确认"+devicePort+"插座，充满自停（预设800分钟），预扣费用"+money+"元" +
+                "点击“确定”后开始充电"
+        }else{
+            msg="请确认" + devicePort + "插座，会员充电" + time + "分钟；点击“确定”后开始充电"
+        }
+        layer.confirm(msg, {
+            btn : [ '确定', '取消' ]
+        }, function() {
+            startCharge4WriteDate();
+        }, function() {
+
+        });
+    }
+
+    // 充值钱包
+    function rechargeMoneyToWallet() {
+        layer.confirm('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
+            btn : [ '取消', '确认' ]
+        }, function() {
+        }, function() {
+            // 跳转到充值页面
+            location.href = "../recharge/rechargeNew?companyId=" + companyId
+        });
+    }
+
+    // 充值钱包或者单次支付
+    function chargeOrPay() {
+        layer.confirm('请确认' + devicePort + '插座，充电' + time
+            + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！', {
+            btn : [ '临时支付', '充值' ]
+        }, function() {
+            // 单次支付
+            temporaryRechargeMoney(money);
+        }, function() {
+            // 跳转到充值页面
+            location.href = "../recharge/rechargeNew?companyId=" + companyId
+        });
+    }
+
+
+    /* 微信支付 */
+    function temporaryRechargeMoney(money) {
+        $.post("../pay", {
+            openId : openId,
+            total_fee : LeadBase.encrypts(money.toString()),
+        }, function(res) {
+            if (res.code == 0) {
+                var data = $.parseJSON(res.data);
+                if (typeof WeixinJSBridge == "undefined") {
+                    if (document.addEventListener) {
+                        document.addEventListener('WeixinJSBridgeReady',
+                            onBridgeReady(data), false);
+                    } else if (document.attachEvent) {
+                        document.attachEvent('WeixinJSBridgeReady',
+                            onBridgeReady(data));
+                        document.attachEvent('onWeixinJSBridgeReady',
+                            onBridgeReady(data));
+                    }
+                } else {
+                    onBridgeReady(data);
+                }
+            } else {
+                if (res.code == 2) {
+                    layer.alert(res.message);
+                } else {
+                    layer.msg("参数错误：" + res.message, {
+                        shift : 6
+                    });
+                }
+            }
+        });
+    }
+    function onBridgeReady(json) {
+        WeixinJSBridge.invoke('getBrandWCPayRequest', json, function(res) {
+            // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回 ok，但并不保证它绝对可靠。
+            if (res.err_msg == "get_brand_wcpay_request:ok") {
+                chargeType = "temp";// 临时充电收费
+                operType = "M";// 微信单次支付
+                startCharge4WriteDate();
+            } else {
+                layer.msg("支付失败", {
+                    shift : 5
+                });
+            }
+        });
+    }
+
+
+    // 充值钱包或者扣1块充电两小时
+    function chargeTwoHoursOrPay() {
+        layer.confirm('余额不足，只能充电两小时。请确认' + devicePort + '插座充电' + time
+            + '分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！', {
+            btn : [ '充电', '充值' ]
+        }, function() {
+            chargeType = "charge";// 功率充电
+            operType = "W";// 会员扣费
+            money = parseInt(device.tow_hours_price);
+            time = 120;
+            startCharge4WriteDate();
+        }, function() {
+            location.href = "../recharge/rechargeNew?companyId=" + companyId
+        });
+    }
+    //开始充电，写数据，发消息
+    function startCharge4WriteDate() {
+        console.log("startCharge4WriteDate")
+        $.ajax({
+            type : 'POST',
+            url : "../newDevice/startCharge4WriteDate",
+            dataType : "json",
+            data : {
+                openId : openId,
+                companyId : companyId,
+                type : chargeType,
+                deviceId : deviceId,
+                devicePort : devicePort,
+                time : time,
+                money : money,
+                walletAccount : walletAccount,
+                operType : operType,
+                realGiftRate : realGiftRate,
+                autoUnitPrice : autoUnitPrice,
+                power_a1 : power_a1,
+                power_a2 : power_a2,
+                power_a3 : power_a3,
+                power_a4 : power_a4,
+                power_a5 : power_a5,
+                power_a6 : power_a6,
+                power_a7 : power_a7
+            },
+            cache : false,
+            async : true,// 设置同步方式，false为同步
+            success : function(res) {
+                if (res.respCode == "000000") {
+                    window.location="../charging/chargingInfo"
+                }
+            }
+        });
+    }
+
+    //断开插座
+    function stopCharge() {
+        console.log("stopCharge")
+        $.ajax({
+            type : 'POST',
+            url : "../newDevice/powerOff4CheckPower",
+            dataType : "json",
+            data : {
+                openId : openId,
+                deviceId : deviceId,
+                channeNum : devicePort
+            },
+            cache : false,
+            async : true,// 设置同步方式，false为同步
+            success : function(res) {
+                // if (res.respCode == "000000") {
+                //     window.location="../charging/chargingInfo"
+                // }
+            }
+        });
+    }
+</script>
+</html>
