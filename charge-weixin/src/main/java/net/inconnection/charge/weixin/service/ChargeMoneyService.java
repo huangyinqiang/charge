@@ -1,12 +1,10 @@
 package net.inconnection.charge.weixin.service;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.jfinal.kit.PropKit;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import net.inconnection.charge.weixin.bean.ChargeMoneyInfoBean;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.bean.resp.PageResponse;
@@ -15,7 +13,6 @@ import net.inconnection.charge.weixin.model.ChargeMoneyInfo;
 import net.inconnection.charge.weixin.model.RechargeHistory;
 import net.inconnection.charge.weixin.model.TUser;
 import net.inconnection.charge.weixin.utils.EncDecUtils;
-import net.inconnection.charge.weixin.utils.HttpUrlConnectionUtil;
 import org.apache.commons.lang.StringUtils;
 
 import java.sql.SQLException;
@@ -177,6 +174,24 @@ public class ChargeMoneyService {
                 return new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
             }
         }
+    }
+
+
+    public List<Record>  getSumByCompanyId(String companyIdStr, String startDate, String endDate) {
+        StringBuffer sql =new StringBuffer("SELECT ifnull(sum(real_money),0) as `sum` , COUNT(real_money) as " +
+                "`count` FROM" +
+                " " +
+                "yc_recharge_history  where");
+        sql.append(" company_id in (").append(companyIdStr).append(")");
+        if(startDate!= null && StringUtils.isNotEmpty(startDate)){
+            sql.append(" and recharge_time >='").append(startDate).append("'");
+        }
+        if(endDate!= null && StringUtils.isNotEmpty(endDate)){
+            sql.append(" and recharge_time <='").append(endDate).append("'");
+        }
+        List<Record> records = Db.find(sql.toString());
+//        List<ChargeMoneyInfo> chargeMoneyInfos = ChargeMoneyInfo.dao.find(sql.toString());
+        return records;
     }
 }
 

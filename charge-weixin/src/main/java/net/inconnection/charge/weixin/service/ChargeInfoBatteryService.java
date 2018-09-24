@@ -379,5 +379,20 @@ public class ChargeInfoBatteryService {
             return new HnKejueResponse(RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
         }
     }
+
+    public List<Record>  getSumByCompanyId(String companyIdStr,String operType, String startDate, String endDate) {
+        StringBuffer sql =new StringBuffer(" SELECT ifnull(sum(realMoney),0) as `sum` , COUNT(realMoney) as " +
+                "`count` FROM yc_charge_history  where ");
+        sql.append(" company_id in (").append(companyIdStr).append(")");
+        sql.append(" and operType ='").append(operType).append("'");
+        if(startDate!= null && StringUtils.isNotEmpty(startDate)){
+            sql.append(" and startTime >='").append(startDate).append("'");
+        }
+        if(endDate!= null && StringUtils.isNotEmpty(endDate)){
+            sql.append(" and startTime <='").append(endDate).append("'");
+        }
+        List<Record> records = Db.find(sql.toString());
+        return records;
+    }
 }
 

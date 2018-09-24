@@ -4,14 +4,14 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 	<title>个人中心</title>
-	<link rel="stylesheet" href="../css/personal.css" />
+	<link rel="stylesheet" href="css/personal.css" />
 	<link href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css" rel="stylesheet">
 
 
 	<!--<link rel="stylesheet" href="css/weui.css">-->
 	<!--<link rel="stylesheet" href="css/wechat.css">-->
 
-	<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript" src="js/common/jquery-2.1.1.min.js"></script>
 	<script type="text/javascript"
 			src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 
@@ -151,6 +151,10 @@
             location.href = "./agent/showAgentDevice"
         }
 
+        function agentData() {
+            location.href = "./agent/showAgentData"
+        }
+
 
 	</script>
 </head>
@@ -174,7 +178,7 @@
 <!-- 常用功能 -->
 <div class="function">
 	<div class="functionTitle">
-		<img src="../images/gongn.png">
+		<img src="images/gongn.png">
 	</div>
 
 	<div class="funContent">
@@ -201,7 +205,7 @@
 <!-- 其它功能 -->
 <div class="function">
 	<div class="functionTitle">
-		<img src="../images/qitagn.png">
+		<img src="images/qitagn.png">
 	</div>
 	<div class="funContent">
 		<ul>
@@ -229,7 +233,7 @@
     <!-- 运营商管理 -->
 <div id="agentManage" class="function">
     <div class="functionTitle">
-        <img src="../images/yunyings.png">
+        <img src="images/yunyings.png">
     </div>
     <div class="funContent">
         <ul>
@@ -241,7 +245,7 @@
                 <i class="iconfont icon-shujuji"></i>
                 <p>设备状态</p>
             </li>
-            <li onclick="">
+            <li onclick="agentData()">
                 <i class="iconfont icon-c-kongzhuangtai"></i>
                 <p>经营数据</p>
             </li>
@@ -259,13 +263,13 @@
 <div class="weui_tabbar ">
 	<a href="./charging" class="weui_tabbar_item">
 		<div class="weui_tabbar_icon">
-			<img src="../images/saoma.png" alt="">
+			<img src="images/saoma.png" alt="">
 		</div>
 		<p class="weui_tabbar_label">扫码充电</p>
 	</a>
 	<a href="./recharge" class="weui_tabbar_item">
 		<div class="weui_tabbar_icon">
-			<img src="../images/chongzhi.png" alt="">
+			<img src="images/chongzhi.png" alt="">
 		</div>
 		<p class="weui_tabbar_label">优惠活动</p>
 	</a>

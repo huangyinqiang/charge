@@ -30,6 +30,10 @@ public class AboutController extends Controller {
         log.info("跳转到版权声明页面");
         this.render("about/bqsm.html");
     }
+    public void warning() {
+        log.info("跳转到温馨提示页面");
+        this.render("about/warning.html");
+    }
 
     public void getCompanyInfo() {
         Company company = new Company();

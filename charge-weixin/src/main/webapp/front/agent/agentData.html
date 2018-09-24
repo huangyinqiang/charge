@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>经营数据</title>
+	<link href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css" rel="stylesheet">
+
+    <link href="../css/agent/agentData.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../js/agent/date.js" ></script>
+    <script type="text/javascript" src="../js/agent/iscroll.js" ></script>
+    <script src="../js/common/layer/layer.js"></script>
+    <link rel="stylesheet" href="../js/common/layer/theme/default/layer.css">
+</head>
+<style type="text/css">
+    .i_statistical{
+        width: 96%;
+        height: auto;
+        background: #03a9f417;
+        margin: 15px auto;
+        padding: 10px 0;
+        border-radius: 10px;
+
+    }
+    
+    .i_statistical h3{
+        font-size: 18px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+    }
+
+    /*时间控件*/
+    .demo{width:100%;text-indent: 10px;margin:20px auto 0 auto;  position: relative;font-size: 14px;}
+    .demo .lie{margin:0 0 20px 0;}
+    .demo button{
+        width: 50px;
+        height: 30px;
+        position: absolute;
+        top: 30%;
+        right: 10px;
+        background-color: white;
+        border-radius: 5px; 
+        border: 1px solid lightgray;    
+    }
+
+    /*查看*/
+    #state_content{
+        width: 100%;
+        height: auto;
+        margin-top: 15px;
+    }
+
+    #state_content1{
+        width: 100%;
+        height: auto;
+        margin-top: 15px;
+    }
+    table, th, td
+      {
+      border: 1px solid #d6cdcd;
+      font-size: 14px;
+      width: 25%;
+        height: 28px;
+        text-align: center;
+      }
+     table{
+        width:100%;
+       height: auto;
+       border-collapse:collapse;
+        }
+     
+</style>
+
+<div class="i_statistical">
+    <h3 id="name">运营商名称：</h3>
+
+   <div class="demo">
+        <div class="lie">开始日期:<input  id="beginTime" class="kbtn" /></div>
+        <div class="lie">截止日期:<input id="endTime" class="kbtn" /></div>
+         <button id="query">查询</button>
+    </div>
+    <div id="datePlugin"></div>
+   
+
+
+
+
+     <!-- 查看内容 -->
+    <div id="state_content">
+        <table>
+            <tr style="background: #03a9f47a;">
+                <td>充电站充值总金额/元</td>
+                <td>充值总笔数/笔</td>
+            </tr>
+            <tr>
+                <td id="rechargeSum">0</td>
+                <td id="rechargeCount">0</td>
+            </tr>  
+
+            <tr style="background: #03a9f47a;">
+                <td>消费总金额/元</td>
+                <td>消费总笔数/笔</td>
+            </tr>
+            <tr>
+                <td id="consumptionSum">0</td>
+                <td id="consumptionCount">0</td>
+            </tr>  
+
+
+            <tr style="background: #c4c8ca7a;">
+                <td>充电站钱包消费金额/元</td>
+                <td>消费笔数/笔</td>
+            </tr>
+            <tr>
+                <td id="walletConsumptionSum">0</td>
+                <td id="walletConsumptionCount">0</td>
+            </tr>  
+
+             <tr style="background: #c4c8ca7a;">
+                <td>平台钱包消费金额/元</td>
+                <td>消费笔数/笔</td>
+            </tr>
+            <tr>
+                <td id="systemMonySum">0</td>
+                <td>0</td>
+            </tr>  
+
+            <tr style="background: #c4c8ca7a;">
+                <td >平台临时消费金额/元</td>
+                <td>消费笔数/笔</td>
+            </tr>
+            <tr>
+                <td id="consumptionTempSum">0</td>
+                <td id="consumptionTempCount">0</td>
+            </tr>  
+        </table>
+
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    var openId;
+    var userId;
+    $(function(){
+        $('#beginTime').date();
+        $('#endTime').date();
+        // $('#endTime').date({theme:"datetime"});
+
+        $(function() {
+            openId = localStorage.getItem("openId");//获取名称为“key”的值
+            if (null == openId) {
+                getOpenId();
+            }
+            getUserInfo(openId);
+            var data = {
+                "userId" : userId
+            };
+            getAgentData(data);
+        });
+
+    });
+
+    //获取session中的openId
+    function getOpenId() {
+        $.ajax({
+            type : "POST",
+            url : "./getOpenId",
+            cache : false,
+            async : false,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(data) {
+                if (data.respObj != null && data.respCode == "000000") {
+                    openId = data.respObj;
+                    localStorage.setItem("openId", data.respObj);
+                } else {
+                    location.href = ".";
+                }
+            }
+        });
+    }
+
+
+    //获取用户信息
+    function getUserInfo(openId) {
+        $.ajax({
+            type : "POST",
+            url : "../user/findUserInfo",
+            data : {
+                "openId" : openId
+            },
+            cache : false,
+            async : false,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(data) {
+                if (data.respObj != null && data.respCode == "000000") {
+                    $('#name').text("运营商：" + data.respObj.nickName);
+
+                    userId = data.respObj.id;
+
+                } else {
+                    location.href = ".";
+                }
+            }
+        });
+    }
+
+
+    function getAgentData(data) {
+        $.ajax({
+            type : "POST",
+            url : "../agent/getAgentData",
+            data : data,
+            cache : false,
+            async : false,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(res) {
+                if (res.respObj != null && res.respCode == "000000") {
+                    var data = res.respObj;
+                    console.log(data)
+                    //充值
+                    $("#rechargeSum").text(data.rechargeSum);
+                    $("#rechargeCount").text(data.rechargeCount);
+                    //总消费
+                    $("#consumptionSum").text(data.consumptionSum);
+                    $("#consumptionCount").text(data.consumptionCount);
+                    //钱包消费
+                    $("#walletConsumptionSum").text(data.walletConsumptionSum);
+                    $("#walletConsumptionCount").text(data.walletConsumptionCount);
+                    //临时消费
+                    $("#consumptionTempSum").text(data.consumptionTempSum);
+                    $("#consumptionTempCount").text(data.consumptionTempCount);
+
+                    $("#systemMonySum").text(data.systemMonySum);
+
+                }else{
+                    layer.msg("用户未绑定公司，请联系客服...", {
+                        shift : 5
+                    });
+                }
+            }
+        });
+    }
+$("#query").on("click",function () {
+
+    var oDate1 = new Date($("#beginTime").val());
+    var oDate2 = new Date($("#endTime").val());
+    if(oDate1.getTime() > oDate2.getTime()){
+        layer.msg("开始时间大于结束时间", {
+            shift : 5
+        });
+        return;
+    }
+
+    var data = {
+        "userId" : userId,
+        "startDate":$("#beginTime").val()+" 00:00:00",
+        "endDate":$("#endTime").val()+" 23:59:59",
+
+    };
+    getAgentData(data);
+})
+</script>
+</html>
