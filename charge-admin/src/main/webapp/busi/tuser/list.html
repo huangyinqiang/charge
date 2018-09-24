@@ -15,6 +15,8 @@
             <a href="javascript:void(0)" class="easyui-linkbutton detailBtn" iconCls="glyphicon-map-marker" plain="true" onclick="detail()">详情</a>
             <a href="javascript:void(0)" class="easyui-linkbutton exportBtn" iconCls="glyphicon-export" plain="true" onclick="exportCsv()">导出</a>
             <a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="editRole()">编辑角色</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true"
+               onclick="editCompany()">关联公司</a>
             <div id="searchBtnWrap" style="float:right; padding-right:40px;">
                 <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
@@ -174,6 +176,21 @@ function exportCsv() {
 	param.sortName = option.sortName;
 	param.sortOrder = option.sortOrder;
 	window.location.href = "exportCsv?" + $.param(param);
+}
+
+function editCompany() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要修改的数据！");
+        return;
+    }
+    var role = rowsSel[0].role;
+    if(role == null || roel == "" || roel == undefined){
+        showWarnMsg("普通用户不允许关联公司！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    top.openWindow("在线用户-关联公司", getCurrUrl("editCompany") + "?id=" + id, {size: '600x400'});
 }
 
 //按钮事件
