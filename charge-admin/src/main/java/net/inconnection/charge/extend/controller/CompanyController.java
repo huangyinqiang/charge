@@ -114,13 +114,32 @@ public class CompanyController extends BaseController{
         renderSuccess();
     }
 
+    public void getCompanyByAgentId() {
+        String userId = this.getPara("userId");
+        List<Company> companyList = Company.dao.getCompanyByAgentId(Long.valueOf(userId));
+        this.renderJson("companyList",companyList);
+    }
+
 
     public void updateAdminId() {
+        String adminId = this.getPara("admin_id");
+        List<Company> companyList = Company.dao.getCompanyByAgentId(Long.valueOf(adminId));
+        for (int n=0;n < companyList.size();n++){
+            Company company = companyList.get(n);
+            Company model = Company.me.findById(company.getId());
+            model.set("admin_id","0");
+            model.set("update_time",new Date());
+            model.update();
+        }
+        String ids = this.getPara("id");
+        String[] split = ids.split(",");
+        for (int i =0 ;i < split.length;i++){
+            Company model = Company.me.findById(split[i]);
+            model.set("admin_id",adminId);
+            model.set("update_time",new Date());
+            model.update();
+        }
 
-        Company model = Company.me.findById(this.getPara("id"));
-        model.set("admin_id",this.getPara("admin_id"));
-        model.set("update_time",new Date());
-        model.update();
         this.renderSuccess();
     }
 
