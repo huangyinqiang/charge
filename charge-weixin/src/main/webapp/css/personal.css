@@ -352,3 +352,63 @@ body{
     color:#ff0000;
 }
 
+
+
+/*运营商管理*/
+
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1537499106521'); /* IE9*/
+  src: url('iconfont.eot?t=1537499106521#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff;charset=utf-8;base64,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') format('woff'),
+  url('iconfont.ttf?t=1537499106521') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1537499106521#iconfont') format('svg'); /* iOS 4.1- */
+}
+.icon-yewutubiaoruhuanzhuang:before { content: "\e627"; }
+
+.icon-shujuji:before { content: "\e6ff"; }
+
+.icon-navicon-srtj:before { content: "\e646"; }
+
+.icon-c-kongzhuangtai:before { content: "\e631"; }
+
+.icon-yewutubiaoruhuanzhuang{
+    position: absolute;
+    font-size: 0.8rem;
+    text-align: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: -0.25rem;
+    color:#03a9f4;
+}
+
+.icon-shujuji{
+    position: absolute;
+    font-size: 0.8rem;
+    text-align: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: -0.25rem;
+    color:#00bcd4;
+}
+.icon-navicon-srtj{
+    position: absolute;
+    font-size: 0.8rem;
+    text-align: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: -0.25rem;
+    color:#ff0000;;
+}
+.icon-c-kongzhuangtai{
+    position: absolute;
+    font-size: 0.8rem;
+    text-align: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: -0.25rem;
+    color:#4caf50;
+}

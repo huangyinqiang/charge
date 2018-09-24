@@ -379,7 +379,7 @@
         });
     }
     function showSocketStatus(data) {
-        if (data.respObj != null && data.respCode == "000000") {
+        if (data.respObj != null && data.respObj.length >0 && data.respCode == "000000") {
             socketStatus = data.respObj;
             var string="";
             for(var i=0; i<socketStatus.length; i++){
@@ -406,7 +406,10 @@
 
 
         } else {
-
+            layer.msg("充电桩暂时不可用，请尝试其他充电桩", {
+            shift : 5
+            });
+            location.href = "..";
         }
 
 	}

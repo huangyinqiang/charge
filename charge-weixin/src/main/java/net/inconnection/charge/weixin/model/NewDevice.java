@@ -3,6 +3,7 @@ package net.inconnection.charge.weixin.model;
 import com.jfinal.log.Log;
 import com.jfinal.plugin.activerecord.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NewDevice extends Model<NewDevice> {
@@ -56,6 +57,19 @@ public class NewDevice extends Model<NewDevice> {
         return update;
     }
 
+    public List<NewDevice> queryDeviceByCompanyIds(List<Long> companieIds) {
+        log.info("根据companieIds查询设备信息:" + companieIds);
+        List<NewDevice> newDeviceList = new ArrayList<>();
+        String companieIdsStr = "(";
+
+        for (Long companieId : companieIds ){
+            List<NewDevice> newDeviceList1 = this.find("select * from yc_charge_pile where company_id = ?", new Object[]{companieId});
+            newDeviceList.addAll(newDeviceList1);
+        }
+
+        log.info("根据设备编码companieIds查询设备信息结果:" + newDeviceList);
+        return newDeviceList;
+    }
 
 }
 

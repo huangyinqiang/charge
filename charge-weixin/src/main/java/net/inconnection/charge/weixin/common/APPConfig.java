@@ -28,6 +28,7 @@ import net.inconnection.charge.weixin.weixinCode.controller.WeiXinScanCodeOauthC
 
 import javax.jms.JMSException;
 import java.io.File;
+import java.util.List;
 
 public class APPConfig extends JFinalConfig {
     static Log log = Log.getLog(APPConfig.class);
@@ -73,6 +74,8 @@ public class APPConfig extends JFinalConfig {
 
         me.add("/newDevice", NewDeviceController.class, "/front");
         me.add("/install", NewDeviceInstallController.class, "/front");
+
+        me.add("/agent", AgentController.class, "/front");
     }
 
     public void configPlugin(Plugins me) {
@@ -126,6 +129,7 @@ public class APPConfig extends JFinalConfig {
         } catch (JMSException e) {
             e.printStackTrace();
         }
+
 
 
     }
