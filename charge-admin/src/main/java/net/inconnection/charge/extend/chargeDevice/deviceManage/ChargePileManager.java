@@ -31,7 +31,9 @@ public class ChargePileManager {
             chargePileDevice.setName(chargePile.getName());
 //            chargePileDevice.setBatVol(chargePile.getBatVol());
 //            chargePileDevice.setControllerVol(chargePile.getControllerVol());
-//            chargePileDevice.setOnline(chargePile.getIsOnline());
+            if (chargePile.getIsOnline() != null){
+                chargePileDevice.setOnline(chargePile.getIsOnline());
+            }
 //            chargePileDevice.setVoltage(chargePile.getTotalVoltage());
 //            chargePileDevice.setPower(chargePile.getPowerTotal());
 

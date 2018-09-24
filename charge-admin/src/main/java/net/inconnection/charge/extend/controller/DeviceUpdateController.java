@@ -45,6 +45,9 @@ public class DeviceUpdateController extends BaseController {
             orderBy = "update_time desc";
         }
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "yc_charge_pile", properties, symbols, values, orderBy, this.getPager());
+        for (Record record:list){
+            record.set("sn",record.get("id"));
+        }
         this.renderDatagrid(list, DBTool.countByMultPropertiesDbSource("zcurd_busi", "yc_charge_pile", properties, symbols, values));
     }
 

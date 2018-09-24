@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>状态信息</title>
+	<link rel="stylesheet" href="../css/personal.css" />
+	<link href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css" rel="stylesheet">
+
+	<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript"
+			src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+
+        var openId;
+
+        var userId;
+
+        $(function() {
+            openId = localStorage.getItem("openId");//获取名称为“key”的值
+            if (null == openId) {
+                getOpenId();
+            }
+            getUserInfo(openId);
+
+            getDeviceState(userId);
+        });
+        //获取session中的openId
+        function getOpenId() {
+            $.ajax({
+                type : "POST",
+                url : "./getOpenId",
+                cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+                async : false,// 设置同步方式，false为同步
+                dataType : "json",
+                success : function(data) {
+                    if (data.respObj != null && data.respCode == "000000") {
+                        openId = data.respObj;
+                        localStorage.setItem("openId", data.respObj);//以“key”为名称存储一个值“value”
+                    } else {
+                        location.href = ".";
+                    }
+                }
+            });
+        }
+
+        //获取用户信息
+        function getUserInfo(openId) {
+            $.ajax({
+                type : "POST",
+                url : "../user/findUserInfo",
+                data : {
+                    "openId" : openId
+                },
+                cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+                async : false,// 设置同步方式，false为同步
+                dataType : "json",
+                success : function(data) {
+                    if (data.respObj != null && data.respCode == "000000") {
+                        $('#name').text("运营商：" + data.respObj.nickName);
+
+                        userId = data.respObj.id;
+
+                    } else {
+                        location.href = ".";
+                    }
+                }
+            });
+        }
+
+        function getDeviceState(userId) {
+            $.ajax({
+                type : "POST",
+                url : "../agent/getDeviceState",
+                data : {
+                    "userId" : userId
+                },
+                cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+                async : false,// 设置同步方式，false为同步
+                dataType : "json",
+                success : function(data) {
+                    if (data.respObj != null && data.respCode == "000000") {
+
+
+                    } else {
+                        location.href = ".";
+                    }
+                }
+            });
+
+        }
+
+
+
+
+    </script>
+
+
+
+</head>
+<style type="text/css">
+    .i_equipment{
+        width: 96%;
+        height: auto;
+        background: #03a9f417;
+        margin: 15px auto;
+        padding: 10px 0;
+        border-radius: 10px;
+
+    }
+    .i_equipment ul{
+        width: 100%;
+        height: 100%;
+    }
+    .i_equipment ul li{
+        width: 100%;
+        height: 30px;
+        border-bottom: 1px solid #d4d4d4;
+        font-size: 14px;
+        line-height: 30px;
+        text-indent: 10px;
+    }
+    .i_equipment ul h3{
+        font-size: 18px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+    }
+    .i_equipment .real_time{
+        width: 100%;
+        height: auto;
+        background: #03a9f47a;
+    }
+    .real_check{
+        width: 100%;
+        height: 30px;
+    }
+    .check_state{
+        width: 60px;
+        height: 30px;
+        border: none;
+        font-size: 14px;
+        background: #03A9F4;
+        text-align: center;
+        margin: 15px auto;
+        border-radius: 5px;
+        color: white;
+        line-height: 30px;
+        cursor:pointer;
+    }
+
+    .check_state1{
+        width: 60px;
+        height: 30px;
+        border: none;
+        font-size: 14px;
+        background: #03A9F4;
+        text-align: center;
+        margin: 15px auto;
+        border-radius: 5px;
+        color: white;
+        line-height: 30px;
+        cursor:pointer;
+    }
+     
+    /*查看*/
+    #state_content{
+        width: 100%;
+        height: auto;
+        margin-top: 15px;
+    }
+
+    #state_content1{
+        width: 100%;
+        height: auto;
+        margin-top: 15px;
+    }
+    table, th, td
+      {
+      border: 1px solid #d6cdcd;
+      font-size: 14px;
+      width: 25%;
+        height: 28px;
+        text-align: center;
+      }
+     table{
+        width:100%;
+       height: auto;
+       border-collapse:collapse;
+        }
+     
+</style>
+
+<body>
+    <div class="i_equipment">
+        <ul>
+            <h3 id="name">运营商名称：</h3>
+            <li><p>设备数量：<span>1台</span></p></li>
+            <li><p>设备插座：<span>20个</span></p></li>
+            <li><p>充电插座：<span>4个</span></p></li>
+            <li><pS>空闲插座：<span>20个</span></p></li>
+        </ul>
+
+        <!-- 今日上线 -->
+        <ul class="real_time" >
+            <li><p>今日上线:<span>1台</span></p></li>
+            <li><p>设备插座:<span>24个</span></p></li>
+        </ul>
+
+         <div class="real_check">
+            <div class="check_state">查看</div>
+        </div>
+
+
+
+        <!-- 查看内容 -->
+        <div id="state_content">
+            <table>
+                <tr>
+                    <td>设备名称</td>
+                    <td>设备编号</td>
+                    <td>充电插座</td>
+                    <td>空闲插座</td>
+                </tr>
+                <tr>
+                    <td>111</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>3</td>
+                </tr>  
+                 <tr>
+                    <td>111</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>3</td>
+                </tr>   
+            </table>
+
+        </div>
+
+
+        <!-- 今日离线 -->
+        <ul class="real_time" style="margin-top: 15px;">
+            <li><p>今日离线:<span>1台</span></p></li>
+            <li><p>设备插座:<span>24个</span></p></li>
+        </ul>
+
+         <div class="real_check">
+            <div class="check_state1">查看</div>
+        </div>
+
+
+
+        <!-- 查看内容 -->
+        <div id="state_content1">
+            <table>
+                <tr>
+                    <td>设备名称</td>
+                    <td>设备编号</td>
+                    <td>离线时间</td>
+                </tr>
+                <tr>
+                    <td>111</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>  
+                 <tr>
+                    <td>111</td>
+                    <td>2</td>
+                    <td>3</td>
+                </tr>   
+            </table>
+
+        </div>
+
+
+
+    </div>
+
+</body>
+<script type="text/javascript">
+    $(function(){
+        $("#state_content").hide();
+    })
+    $(".check_state").on("click",function(){
+        if($("#state_content").css('display') == "none"){
+             $("#state_content").show();
+             $("#state_content1").hide();
+         }else{
+            $("#state_content").hide();
+         }
+       
+    })
+    $(function(){
+        $("#state_content1").hide();
+    })
+    $(".check_state1").on("click",function(){
+        if($("#state_content1").css('display') == "none"){
+             $("#state_content").hide();
+             $("#state_content1").show();
+         }else{
+            $("#state_content1").hide();
+         }
+       
+    })
+
+
+</script>
