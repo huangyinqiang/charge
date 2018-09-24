@@ -19,6 +19,11 @@ public class AgentController extends Controller {
     public AgentController() {
     }
 
+    public void index() {
+        log.info("跳转到代理商设备展示页面");
+        this.render("agent/deviceState.html");
+    }
+
     public void showAgentDevice(){
         log.info("跳转到代理商设备展示页面");
         this.render("agent/deviceState.html");

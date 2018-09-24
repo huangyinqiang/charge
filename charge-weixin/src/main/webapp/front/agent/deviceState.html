@@ -19,6 +19,8 @@
 
         var userId;
 
+        var agentDeviceList;
+
         $(function() {
             openId = localStorage.getItem("openId");//获取名称为“key”的值
             if (null == openId) {
@@ -82,14 +84,74 @@
                 async : false,// 设置同步方式，false为同步
                 dataType : "json",
                 success : function(data) {
-                    if (data.respObj != null && data.respCode == "000000") {
-
-
+                    if (data.respObj != null && data.respObj.length > 0 && data.respCode == "000000") {
+                        agentDeviceList = data.respObj;
+                        $('#deviceSum').text(agentDeviceList.length + " 台");
+                        showAgentDevice(agentDeviceList);
                     } else {
                         location.href = ".";
                     }
                 }
             });
+
+        }
+
+        function showAgentDevice(agentDeviceList){
+
+            var socketSum = 0;
+            var chargingSocketSum = 0;
+            var unchangingSocketSum = 0;
+
+
+            var onlineDeviceSum = 0;
+            var onlineSocketSum = 0;
+
+            var offLineDeviceSum = 0;
+            var offLineSocketSum = 0;
+            for (var i=0; i<agentDeviceList.length; i++) {
+                var agentDevice = agentDeviceList[i];
+                socketSum += agentDevice.sockeSum;
+                chargingSocketSum += agentDevice.usedSockeSum;
+                unchangingSocketSum += agentDevice.noUsedSockeSum;
+                
+                if (agentDevice.status == "1") {
+                    onlineDeviceSum ++;
+                    onlineSocketSum += agentDevice.sockeSum;
+
+                    var string = "<tr>" +
+                        "<td>" + agentDevice.name + "</td>" +
+                        "<td>" + agentDevice.id + "</td>" +
+                        "<td>" + agentDevice.usedSockeSum + "</td>" +
+                        "<td>" + agentDevice.noUsedSockeSum + "</td>" +
+                        "</tr>";
+
+                    $("#onlineDeviceTable").append(string);
+
+                }else if (agentDevice.status == "2") {
+                    offLineDeviceSum ++;
+                    offLineSocketSum += agentDevice.sockeSum;
+
+                    var string = "<tr>" +
+                        "<td>" + agentDevice.name + "</td>" +
+                        "<td>" + agentDevice.id + "</td>" +
+                        "<td>" + agentDevice.sockeSum + "</td>" +
+                        "<td>" + agentDevice.updateTime + "</td>" +
+                        "</tr>";
+
+                    $("#offlineDeviceTable").append(string);
+                }
+
+            }
+
+
+            $('#socketSum').text(socketSum + " 个");
+            $('#chargingSocket').text(chargingSocketSum + " 个");
+            $('#unChargingSocket').text(unchangingSocketSum + " 个");
+
+            $('#onLineDeviceSum').text(onlineDeviceSum + " 台");
+            $('#onlineSocketSum').text(onlineSocketSum + " 个");
+            $('#offLineDeviceSum').text(offLineDeviceSum + " 台");
+            $('#offLineSocketSum').text(offLineSocketSum + " 个");
 
         }
 
@@ -167,13 +229,13 @@
     }
      
     /*查看*/
-    #state_content{
+    #onlineDevice{
         width: 100%;
         height: auto;
         margin-top: 15px;
     }
 
-    #state_content1{
+    #offlineDevice{
         width: 100%;
         height: auto;
         margin-top: 15px;
@@ -198,16 +260,16 @@
     <div class="i_equipment">
         <ul>
             <h3 id="name">运营商名称：</h3>
-            <li><p>设备数量：<span>1台</span></p></li>
-            <li><p>设备插座：<span>20个</span></p></li>
-            <li><p>充电插座：<span>4个</span></p></li>
-            <li><pS>空闲插座：<span>20个</span></p></li>
+            <li><p>设备数量：<span id="deviceSum">-- 台</span></p></li>
+            <li><p>设备插座：<span id="socketSum">-- 个</span></p></li>
+            <li><p>充电插座：<span id="chargingSocket">-- 个</span></p></li>
+            <li><p>空闲插座：<span id="unChargingSocket">-- 个</span></p></li>
         </ul>
 
         <!-- 今日上线 -->
         <ul class="real_time" >
-            <li><p>今日上线:<span>1台</span></p></li>
-            <li><p>设备插座:<span>24个</span></p></li>
+            <li><p>当前上线：<span id="onLineDeviceSum">-- 台</span></p></li>
+            <li><p>上线插座：<span id="onlineSocketSum">-- 个</span></p></li>
         </ul>
 
          <div class="real_check">
@@ -217,26 +279,14 @@
 
 
         <!-- 查看内容 -->
-        <div id="state_content">
-            <table>
+        <div id="onlineDevice">
+            <table id="onlineDeviceTable">
                 <tr>
                     <td>设备名称</td>
                     <td>设备编号</td>
                     <td>充电插座</td>
                     <td>空闲插座</td>
                 </tr>
-                <tr>
-                    <td>111</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>3</td>
-                </tr>  
-                 <tr>
-                    <td>111</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>3</td>
-                </tr>   
             </table>
 
         </div>
@@ -244,8 +294,8 @@
 
         <!-- 今日离线 -->
         <ul class="real_time" style="margin-top: 15px;">
-            <li><p>今日离线:<span>1台</span></p></li>
-            <li><p>设备插座:<span>24个</span></p></li>
+            <li><p>当前离线：<span id="offLineDeviceSum">-- 台</span></p></li>
+            <li><p>离线插座：<span id="offLineSocketSum">-- 个</span></p></li>
         </ul>
 
          <div class="real_check">
@@ -255,23 +305,14 @@
 
 
         <!-- 查看内容 -->
-        <div id="state_content1">
-            <table>
+        <div id="offlineDevice">
+            <table id="offlineDeviceTable">
                 <tr>
                     <td>设备名称</td>
                     <td>设备编号</td>
+                    <td>插座总数</td>
                     <td>离线时间</td>
                 </tr>
-                <tr>
-                    <td>111</td>
-                    <td>2</td>
-                    <td>3</td>
-                </tr>  
-                 <tr>
-                    <td>111</td>
-                    <td>2</td>
-                    <td>3</td>
-                </tr>   
             </table>
 
         </div>
@@ -283,26 +324,26 @@
 </body>
 <script type="text/javascript">
     $(function(){
-        $("#state_content").hide();
+        $("#onlineDevice").hide();
     })
     $(".check_state").on("click",function(){
-        if($("#state_content").css('display') == "none"){
-             $("#state_content").show();
-             $("#state_content1").hide();
+        if($("#onlineDevice").css('display') == "none"){
+             $("#onlineDevice").show();
+             $("#offlineDevice").hide();
          }else{
-            $("#state_content").hide();
+            $("#onlineDevice").hide();
          }
        
     })
     $(function(){
-        $("#state_content1").hide();
+        $("#offlineDevice").hide();
     })
     $(".check_state1").on("click",function(){
-        if($("#state_content1").css('display') == "none"){
-             $("#state_content").hide();
-             $("#state_content1").show();
+        if($("#offlineDevice").css('display') == "none"){
+             $("#onlineDevice").hide();
+             $("#offlineDevice").show();
          }else{
-            $("#state_content1").hide();
+            $("#offlineDevice").hide();
          }
        
     })

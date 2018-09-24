@@ -7,6 +7,7 @@ public class AgentDevice extends SuperReq {
     private Long id;
     private String name;
     private String status;
+    private Integer sockeSum;
     private Integer usedSockeSum;
     private Integer noUsedSockeSum;
     private Date updateTime;
@@ -36,6 +37,14 @@ public class AgentDevice extends SuperReq {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getSockeSum() {
+        return sockeSum;
+    }
+
+    public void setSockeSum(Integer sockeSum) {
+        this.sockeSum = sockeSum;
     }
 
     public Integer getUsedSockeSum() {

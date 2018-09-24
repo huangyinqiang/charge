@@ -7,6 +7,7 @@ import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.Company;
 import net.inconnection.charge.weixin.model.Device;
 import net.inconnection.charge.weixin.model.NewDevice;
+import net.inconnection.charge.weixin.model.NewDeviceChargeSocket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +37,36 @@ public class AgentService {
             List<AgentDevice> agentDevices = new ArrayList<>();
             for (NewDevice newDevice : newDeviceList){
                 AgentDevice agentDevice = new AgentDevice();
-                agentDevice.setId(newDevice.getLong("id"));
+                Long deviceId = newDevice.getLong("id");
+                agentDevice.setId(deviceId);
                 agentDevice.setName(newDevice.getStr("name"));
-                agentDevice.setStatus(newDevice.getStr("status"));
+                agentDevice.setStatus(newDevice.getInt("status").toString());
+                agentDevice.setUpdateTime(newDevice.getDate("update_time"));
 
+                List<NewDeviceChargeSocket> chargeSockets = NewDeviceChargeSocket.dao.queryChargeSocket(deviceId);
+
+                Integer usedSocketSum = 0;
+                Integer unUsedSocketSum = 0;
+                Integer socketSum = 0;
+                for (NewDeviceChargeSocket socket : chargeSockets){
+                    socketSum ++;
+                    if (socket.getBoolean("is_used")){
+                        usedSocketSum ++;
+                    }else {
+                        unUsedSocketSum ++;
+                    }
+                }
+
+                agentDevice.setSockeSum(socketSum);
+                agentDevice.setUsedSockeSum(usedSocketSum);
+                agentDevice.setNoUsedSockeSum(unUsedSocketSum);
+
+                agentDevices.add(agentDevice);
             }
 
+            System.out.println(agentDevices);
 
-
-            return new HnKejueResponse(companies, RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
+            return new HnKejueResponse(agentDevices, RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
 
         } catch (Exception var3) {
             logger.error("根据userId查询运营商设备状态失败", var3);

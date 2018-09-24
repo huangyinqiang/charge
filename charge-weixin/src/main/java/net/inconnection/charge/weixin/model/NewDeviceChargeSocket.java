@@ -25,5 +25,12 @@ public class NewDeviceChargeSocket extends Model<NewDeviceChargeSocket> {
         return resp;
     }
 
+    public List<NewDeviceChargeSocket> queryChargeSocket(Long deviceId) {
+        log.info("根据充电桩ID查询充电插座信息:" + deviceId);
+        List<NewDeviceChargeSocket> resp = dao.find("select charge_socket_sn,is_used,charge_state from yc_charge_socket where charge_pile_id=? ", new Object[]{deviceId});
+        log.info("根据充电桩ID查询充电插座信息结果:" + resp);
+        return resp;
+    }
+
 }
 
