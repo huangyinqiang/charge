@@ -65,20 +65,33 @@
     var type = GetQueryString("type");
     var deviceId = GetQueryString("deviceId");
     var devicePort = GetQueryString("devicePort");
-    var time = GetQueryString("time");
-    var money = GetQueryString("money");
-    var walletAccount = GetQueryString("walletAccount");
+    var temp = GetQueryString("time");
+    var time = temp*1;
+    temp = GetQueryString("money");
+    var money = temp*1;
+    temp = GetQueryString("walletAccount");
+    var walletAccount = temp*1;
     var operType = GetQueryString("operType");
-    var realGiftRate = GetQueryString("realGiftRate");
-    var autoUnitPrice = GetQueryString("autoUnitPrice");
-    var power_a1 = GetQueryString("power_a1");
-    var power_a2 = GetQueryString("power_a2");
-    var power_a3 = GetQueryString("power_a3");
-    var power_a4 = GetQueryString("power_a4");
-    var power_a5 = GetQueryString("power_a5");
-    var power_a6 = GetQueryString("power_a6");
-    var power_a7 = GetQueryString("power_a7");
-    var autoPrice = GetQueryString("autoPrice");
+    temp = GetQueryString("realGiftRate");
+    var realGiftRate = temp*1.0;
+    temp = GetQueryString("autoUnitPrice");
+    var autoUnitPrice = temp*1;
+    temp = GetQueryString("power_a1");
+    var power_a1 = temp*1;
+    temp = GetQueryString("power_a2");
+    var power_a2 = temp*1;
+    temp = GetQueryString("power_a3");
+    var power_a3 = temp*1;
+    temp = GetQueryString("power_a4");
+    var power_a4 = temp*1;
+    temp = GetQueryString("power_a5");
+    var power_a5 = temp*1;
+    temp = GetQueryString("power_a6");
+    var power_a6 = temp*1;
+    temp = GetQueryString("power_a7");
+    var power_a7 = temp*1;
+    temp = GetQueryString("autoPrice");
+    var autoPrice = temp*1;
     $("#submitBtn").hide();
 
     setTimeout(startCharge4CheckPower,1000)
@@ -132,6 +145,14 @@
     }
 
     function submit() {
+
+        // console.log("walletAccount: " + walletAccount);
+        // console.log("autoPrice: " + autoPrice);
+        // console.log("money: " + money);
+        // console.log("time: " + time);
+        // console.log("realGiftRate: " + realGiftRate);
+        // console.log("power_a3: " + power_a3);
+
         // 会员(选择智能充电)
         if (walletAccount >= autoPrice && time == 800) {
             chargeType = "auto";// 智能充电

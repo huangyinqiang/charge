@@ -92,7 +92,9 @@ var dgOptions = {
                 ,{field:'role', title: '角色', width:120, sortable: true,formatter:function(value,row,index){
                         if(value=='1'){
                             return "安装人员";
-                        }else{
+                        }else if(value=='2'){
+                            return "运营商";
+                        } else{
                             return "普通用户";
                         }
                 }}
@@ -185,7 +187,7 @@ function editCompany() {
         return;
     }
     var role = rowsSel[0].role;
-    if(role == null || roel == "" || roel == undefined){
+    if(role == null || role == "" || role == undefined){
         showWarnMsg("普通用户不允许关联公司！");
         return;
     }
