@@ -110,26 +110,26 @@
             </tr>  
 
 
-            <tr style="background: #c4c8ca7a;">
-                <td>充电站钱包消费金额/元</td>
-                <td>消费笔数/笔</td>
-            </tr>
-            <tr>
-                <td id="walletConsumptionSum">0</td>
-                <td id="walletConsumptionCount">0</td>
-            </tr>  
+            <!--<tr style="background: #c4c8ca7a;">-->
+                <!--<td>充电站钱包消费金额/元</td>-->
+                <!--<td>消费笔数/笔</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td id="walletConsumptionSum">0</td>-->
+                <!--<td id="walletConsumptionCount">0</td>-->
+            <!--</tr>  -->
 
-             <tr style="background: #c4c8ca7a;">
-                <td>平台钱包消费金额/元</td>
-                <td>消费笔数/笔</td>
-            </tr>
-            <tr>
-                <td id="systemMonySum">0</td>
-                <td>0</td>
-            </tr>  
+             <!--<tr style="background: #c4c8ca7a;">-->
+                <!--<td>平台钱包消费金额/元</td>-->
+                <!--<td>消费笔数/笔</td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td id="systemMonySum">0</td>-->
+                <!--<td>0</td>-->
+            <!--</tr>  -->
 
             <tr style="background: #c4c8ca7a;">
-                <td >平台临时消费金额/元</td>
+                <td >临时消费金额/元</td>
                 <td>消费笔数/笔</td>
             </tr>
             <tr>
@@ -137,6 +137,7 @@
                 <td id="consumptionTempCount">0</td>
             </tr>  
         </table>
+        <p style="text-indent:10px;margin-top:10px;color:red;font-size: 16px;font-weight: 500;">本账期收益:<span id="incomingSum" style="color:red;">10000.00元</span></p>
 
     </div>
 </div>
@@ -234,6 +235,12 @@
                     $("#consumptionTempCount").text(data.consumptionTempCount);
 
                     $("#systemMonySum").text(data.systemMonySum);
+
+                    if(data.rechargeSum*1 > data.consumptionSum*1){
+                        $("#incomingSum").text(data.rechargeSum);
+                    }else {
+                        $("#incomingSum").text(data.consumptionSum);
+                    }
 
                 }else{
                     layer.msg("用户未绑定公司，请联系客服...", {

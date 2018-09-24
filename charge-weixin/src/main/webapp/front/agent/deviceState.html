@@ -67,6 +67,10 @@
                         userId = data.respObj.id;
 
                     } else {
+
+                        layer.msg("未查询到用户信息，请重试。。。", {
+                            shift : 5
+                        });
                         location.href = ".";
                     }
                 }
@@ -89,7 +93,9 @@
                         $('#deviceSum').text(agentDeviceList.length + " 台");
                         showAgentDevice(agentDeviceList);
                     } else {
-                        location.href = ".";
+                        layer.msg("未查询到您所属的充电设备，请联系客服。。。", {
+                            shift : 5
+                        });
                     }
                 }
             });
@@ -259,7 +265,7 @@
 <body>
     <div class="i_equipment">
         <ul>
-            <h3 id="name">运营商名称：</h3>
+            <h3 id="name">运营商：</h3>
             <li><p>设备数量：<span id="deviceSum">-- 台</span></p></li>
             <li><p>设备插座：<span id="socketSum">-- 个</span></p></li>
             <li><p>充电插座：<span id="chargingSocket">-- 个</span></p></li>
