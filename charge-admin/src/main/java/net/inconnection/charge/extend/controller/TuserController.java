@@ -53,6 +53,11 @@ public class TuserController extends BaseController {
         this.render("editRole.html");
     }
 
+    public void editCompany() {
+        this.setAttr("model", Tuser.me.findById(this.getPara("id")));
+        this.render("editCompany.html");
+    }
+
     public void update() {
         Tuser model = (Tuser)Tuser.me.findById(this.getPara("id"));
         int id = (Integer)model.get("id");

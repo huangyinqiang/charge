@@ -2,15 +2,16 @@ package net.inconnection.charge.extend.controller;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import net.inconnection.charge.admin.common.DBTool;
 import net.inconnection.charge.admin.common.ZcurdTool;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.util.StringUtil;
-import net.inconnection.charge.extend.model.*;
+import net.inconnection.charge.extend.model.ChargeBatteryInfo;
+import net.inconnection.charge.extend.model.Chargeprice;
+import net.inconnection.charge.extend.model.Company;
+import net.inconnection.charge.extend.model.CompanyActivity;
+import net.inconnection.charge.extend.model.Project;
 
-import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -113,6 +114,15 @@ public class CompanyController extends BaseController{
         renderSuccess();
     }
 
+
+    public void updateAdminId() {
+
+        Company model = Company.me.findById(this.getPara("id"));
+        model.set("admin_id",this.getPara("admin_id"));
+        model.set("update_time",new Date());
+        model.update();
+        this.renderSuccess();
+    }
 
     public void updatePrice() {
 
