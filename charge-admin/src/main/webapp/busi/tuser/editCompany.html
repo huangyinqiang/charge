@@ -37,7 +37,7 @@ function save() {
 	if($("#zcurdHeadTable").form('validate')) {
 		$.post("../company/updateAdminId", getParam(), function(data) {
 			top.window.closeWindow();
-			top.window.subPage.loadCurrDatagrid();
+			// top.window.subPage.loadCurrDatagrid();
 		});
 	}
 }
@@ -45,22 +45,43 @@ $(function () {
     $.ajax({
         url : "../company/listData",
         type : "POST",
+        async : true,// 设置同步方式，false为同步
         success : function(res) {
             $('#company').combobox({
                 data : res.rows,
+                multiple:true, //支持多选
                 valueField : 'id',
                 textField : 'company_name'
             });
-        },
-        error : function(error) {
-
         }
     })
+
+    $.ajax({
+        url : "../company/getCompanyByAgentId",
+        type : "POST",
+        data : {
+            "userId":${model.id}
+        },
+        success : function(res) {
+          var data = res.companyList;
+          var companyIds="";
+          for(var i=0;i<data.length;i++){
+              companyIds+=data[i].id+",";
+          }
+
+            $('#company').combobox('setValues',companyIds.substring(0,companyIds.length-1));
+        }
+    })
+
+
+
+
 })
 function getParam() {
 
+    var companyIds = $('#company').combobox('getValues');
 	var param = {
-	    "id": $('#company').combobox('getValue'),
+	    "id": companyIds.join(","),
         "admin_id": ${model.id}
 	}
 	for(key in param) {
