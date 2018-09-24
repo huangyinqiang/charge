@@ -56,22 +56,22 @@ $(function () {
         }
     })
 
-    $.ajax({
-        url : "../company/getCompanyByAgentId",
-        type : "POST",
-        data : {
-            "userId":${model.id}
-        },
-        success : function(res) {
-          var data = res.companyList;
-          var companyIds="";
-          for(var i=0;i<data.length;i++){
-              companyIds+=data[i].id+",";
-          }
-
-            $('#company').combobox('setValues',companyIds.substring(0,companyIds.length-1));
-        }
-    })
+    // $.ajax({
+    //     url : "../company/getCompanyByAgentId",
+    //     type : "POST",
+    //     data : {
+    //         "userId":${model.id}
+    //     },
+    //     success : function(res) {
+    //       var data = res.companyList;
+    //       var companyIds="0";
+    //       for(var i=0;i<data.length;i++){
+    //           companyIds += ","+data[i].id;
+    //       }
+    //
+    //         $('#company').combobox('setValues',companyIds.substring(2,companyIds.length));
+    //     }
+    // })
 
 
 

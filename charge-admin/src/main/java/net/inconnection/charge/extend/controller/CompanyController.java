@@ -132,13 +132,16 @@ public class CompanyController extends BaseController{
             model.update();
         }
         String ids = this.getPara("id");
-        String[] split = ids.split(",");
-        for (int i =0 ;i < split.length;i++){
-            Company model = Company.me.findById(split[i]);
-            model.set("admin_id",adminId);
-            model.set("update_time",new Date());
-            model.update();
+        if(ids!= null && StringUtil.isNotEmpty(ids)){
+            String[] split = ids.split(",");
+            for (int i =0 ;i < split.length;i++){
+                Company model = Company.me.findById(split[i]);
+                model.set("admin_id",adminId);
+                model.set("update_time",new Date());
+                model.update();
+            }
         }
+
 
         this.renderSuccess();
     }
