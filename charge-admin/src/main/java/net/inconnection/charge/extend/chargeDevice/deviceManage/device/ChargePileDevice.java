@@ -83,7 +83,7 @@ public class ChargePileDevice implements GateWay {
 
     void updateStatusToDb(Integer status){
         ChargePile chargePileDo = new ChargePile();
-        chargePileDo.setId(chargePileId).setSocketSum(status).setUpdateTime(lastUpdataTime).update();
+        chargePileDo.setId(chargePileId).setStatus(status).setUpdateTime(lastUpdataTime).update();
 
     }
 
@@ -187,7 +187,6 @@ public class ChargePileDevice implements GateWay {
 
         lastUpdataTime = dataTime;
 
-        status = STATUS_OK;
 
         updateAlarm(gwFacetObj, dataTime);
 
@@ -209,26 +208,33 @@ public class ChargePileDevice implements GateWay {
 
 
         intensity = 0L;
-        for (int i=1; i<msgJArray.size(); i++){
-            JSONObject chargeSocketObj = msgJArray.getJSONObject(i);
+        if (msgJArray.size() > 1) {
+            status = STATUS_OK;
+            for (int i = 1; i < msgJArray.size(); i++) {
+                JSONObject chargeSocketObj = msgJArray.getJSONObject(i);
 
-            Long socketSn = Long.parseLong(chargeSocketObj.getString(MSG_DEVICESN));
+                Long socketSn = Long.parseLong(chargeSocketObj.getString(MSG_DEVICESN));
 
-            if (!chargeSocketMap.containsKey(socketSn)){
-                ChargeSocketComponent chargeSocketComponent = new ChargeSocketComponent(chargePileId, socketSn);
-                chargeSocketMap.put(socketSn, chargeSocketComponent);
-                addNewDeviceToDb(chargePileId, socketSn);
+                if (!chargeSocketMap.containsKey(socketSn)) {
+                    ChargeSocketComponent chargeSocketComponent = new ChargeSocketComponent(chargePileId, socketSn);
+                    chargeSocketMap.put(socketSn, chargeSocketComponent);
+                    addNewDeviceToDb(chargePileId, socketSn);
+                }
+
+                ChargeSocketComponent chargeSocket = chargeSocketMap.get(socketSn);
+
+                chargeSocket.setChargeVoltage(voltage);
+
+                chargeSocket.updateData(dataTime, chargeSocketObj);
+
+                chargeSocket.updateStatus(dataTime, chargeSocketObj);
+
+                intensity += chargeSocket.getChargeIntensity();
             }
-
-            ChargeSocketComponent chargeSocket = chargeSocketMap.get(socketSn);
-
-            chargeSocket.setChargeVoltage(voltage);
-
-            chargeSocket.updateData(dataTime, chargeSocketObj);
-
-            chargeSocket.updateStatus(dataTime, chargeSocketObj);
-
-            intensity += chargeSocket.getChargeIntensity();
+        }else {
+            //只有gateway，没有强电板数据
+            _log.error("充电桩没有携带强电板数据，请检查，充电设备id为： " + chargePileId);
+            status = STATUS_ALARM;
         }
 
         updateDataToDb();
