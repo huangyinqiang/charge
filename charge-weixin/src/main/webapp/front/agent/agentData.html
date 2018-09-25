@@ -129,7 +129,7 @@
             <!--</tr>  -->
 
             <tr style="background: #c4c8ca7a;">
-                <td >临时消费金额/元</td>
+                <td >其中临时消费金额/元</td>
                 <td>消费笔数/笔</td>
             </tr>
             <tr>
@@ -237,9 +237,9 @@
                     $("#systemMonySum").text(data.systemMonySum);
 
                     if(data.rechargeSum*1 > data.consumptionSum*1){
-                        $("#incomingSum").text(data.rechargeSum);
+                        $("#incomingSum").text(data.rechargeSum*1 + data.consumptionTempSum*1 + " 元。");
                     }else {
-                        $("#incomingSum").text(data.consumptionSum);
+                        $("#incomingSum").text(data.consumptionSum + " 元。");
                     }
 
                 }else{
