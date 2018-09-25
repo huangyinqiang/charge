@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>充电选项</title>
+	<link rel="stylesheet" href="../css/weui.css">
+	<link rel="stylesheet" href="../css/wechat.css">
+	<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+	<script type="text/javascript"
+			src="https://res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+	<script src="../js/common/leadbase-encrypts.js"></script>
+	<script src="../js/common/layer/layer.js"></script>
+	<link rel="stylesheet" href="../js/common/layer/theme/default/layer.css">
+	<!--<script src="../js/charging/optionNew.js"></script>-->
+	<script type="text/javascript" >
+        var walletAccount;// 微信钱包
+        var autoPrice;// 智能充电钱包最小余额
+        var device;// 设备信息
+        var socketStatus;//插座状态
+        var deviceId;// 设备编号
+        var companyId;// 公司编号
+        var projectId;// 项目编号
+        var devicePort = 0;// 设备插座
+        var userInfo;// 设备插座
+        var time;// 充电时间
+        var money;// 本次充电金额
+        var chargeType;// 充电类型 auto 智能充电（先充电，后结算） charge 正常充电（直接结算）  temp 临时充电（微信付款）
+        var operType;// 支付类型 W: 会员扣费（钱包扣费） M：微信单次支付
+        var selectedHour;// 传值用
+        var openId;
+        $(function() {
+            var $iosDialog2 = $('#chargeTimeDialog');
+            $('.weui-dialog').on('click', '.weui-flex__item', function() {
+                $('.weui-flex__item').children().removeClass('active');
+                $(this).children().addClass('active').attr('chargeTimeMin');
+                selectedHour = $(this).children().html();// 充电几小时
+                $('#selectedTime').val($(this).children().attr('chargeTimeMin'));
+
+            })
+            $('#dialogs').on('click', '.weui-dialog__btn', function() {
+                $(this).parents('.js_dialog').fadeOut(200);
+            });
+            // 弹出层关闭按钮
+            $('.close-icon').click(function() {
+                $('.js_dialog').css('display', 'none')
+            })
+            // 选择充电时间
+            $('#showChargeTimeSelcetDialog').on('click', function() {
+                $iosDialog2.fadeIn(200);
+            });
+            // 选择充电插座
+            $('#showportDialog').on('click', function() {
+                // if($(".grid").css('display') =="none"){
+                // $('.grid').css('display', 'block');
+                // } else if ($(".grid").css('display') =="block"){
+                // $('.grid').css('display', 'none');
+                // }
+            });
+            openId = localStorage.getItem("openId");// 获取名称为“key”的值
+            // 获取URL中的设备编号，地址
+            var localUrl = window.location.href;
+            deviceId = GetQueryString('deviceId');
+            projectId = GetQueryString('projectId');
+            companyId = GetQueryString('companyId');
+            getDeviceStatus(deviceId);
+            getNewDeviceChargePrice(deviceId, companyId);
+            getUserInfo();
+
+            $('.icon-ditu1').text(decodeURI(GetQueryString('area')));
+        });
+        // 设置非会员价格
+        function selectCharge2Hours() {
+            if(walletAccount < autoPrice){
+                money = parseInt(device.tow_hours_price);// 非会员价格
+            }else {
+                money = parseInt(device.tow_hours_mem_price);// 会员价格
+            }
+        }
+        function selectCharge4Hours() {
+            if(walletAccount < autoPrice){
+                money = parseInt(device.four_hours_price);// 非会员价格
+            }else {
+                money = parseInt(device.four_hours_mem_price);// 会员价格
+            }
+        }
+        function selectCharge8Hours() {
+            if(walletAccount < autoPrice){
+                money = parseInt(device.eight_hours_price);// 非会员价格
+            }else {
+                money = parseInt(device.eight_hours_mem_price);// 会员价格
+            }
+        }
+        function selectCharge12Hours() {
+            if(walletAccount < autoPrice){
+                money = parseInt(device.twelve_hours_price);// 非会员价格
+            }else {
+                money = parseInt(device.twelve_hours_mem_price);// 会员价格
+            }
+        }
+        function selectChargeAuto() {
+            money = parseInt(device.auto_price);// 智能充电价格
+        }
+
+        // 确定充电时间和充电端口按钮
+        function chargeTimeConfirm() {
+            $("#showChargeTimeSelcetDialog").html(selectedHour);
+            time = $('#selectedTime').val();
+            if (time == "" || time == null) {
+                layer.msg("请选择充电时间!", {
+                    shift : 5
+                });
+            }
+            // 会员(选择智能充电)
+            if (walletAccount >= autoPrice && time == 800) {
+                $("#explain").text('会员专享智能充电，充满后自动断电计时扣费。');// 智能充电说明
+                return;
+            }
+            // 钱包小于价格,认定为非会员(选择智能充电)
+            if (walletAccount < money && time == 800) {
+                rechargeMoneyToWallet();// 直接提示充值钱包
+                return;
+            }
+            // 会员,但钱包小于5块(选择智能充电)
+            if (autoPrice > walletAccount && time == 800) {
+                rechargeMoneyToWallet();// 直接提示充值钱吧
+                return;
+            }
+            // 会员(未选择智能充电)
+            if (walletAccount >= autoPrice) {
+                $("#explain").text('会员充电' + time + '分钟，费用' + money/100 + '元。');// 充电说明
+                return;
+            }
+            // 认定为非会员 (未选择智能充电)
+            if (money > walletAccount) {
+                $("#explain").text('余额不足，请点击"开始充电"充值钱包或微信支付。');// 充电说明
+                return;
+            }
+            // 会员,但钱包小于5块(未选择智能充电)
+            $("#explain").text('亲，钱包余额较低，最多只能充电二小时');// 充电说明
+
+
+        }
+        // 开始充电按钮
+        function startCharging() {
+
+            if (time == null || time == "0" || time == "") {
+                layer.msg("请选择充电时间!", {
+                    shift : 5
+                });
+
+                $('#chargeTimeDialog').fadeIn(200);
+                return;
+            }
+            if (devicePort == null || devicePort == "0") {
+                layer.msg("请选择充电插座!", {
+                    shift : 5
+                });
+                return;
+            }
+
+            // 会员(选择智能充电)
+            if (walletAccount >= autoPrice && time == 800) {
+                chargeType = "auto";// 智能充电
+                operType = "W";// 会员扣费
+                money = autoPrice;
+                memCharge();
+                return;
+            }
+            // 会员,但钱包余额不足智能充电单价(选择智能充电)
+            if (autoPrice > walletAccount && time == 800) {
+                rechargeMoneyToWallet();// 充值钱包
+                return;
+            }
+            // 会员(未选择智能充电)
+            if (walletAccount >= autoPrice) {
+                chargeType = "charge";// 按功率扣费
+                operType = "W";// 会员扣费
+                memCharge();
+                return;
+            }
+            // 钱包余额不够支付本次费用,认定为非会员 (未选择智能充电)
+            if (walletAccount < money) {
+                chargeOrPay();// 充值钱包或者单次支付
+                return;
+            }
+            // 会员,钱包余额小于智能充电单价，只能充电2小时(未选择智能充电)
+            chargeTwoHoursOrPay();
+
+        }
+        // 会员充电提示
+        function memCharge() {
+            layer.confirm('请确认' + devicePort + '插座，充电' + time + '分钟；点击"确认" 后开始充电', {
+                btn : [ '确定', '取消' ]
+            }, function() {
+                requestNewDeviceStartCharge();
+            }, function() {
+
+            });
+        }
+        // 充值钱包或者单次支付
+        function chargeOrPay() {
+            layer.confirm('请确认' + devicePort + '插座，充电' + time
+                + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！', {
+                btn : [ '临时支付', '充值' ]
+            }, function() {
+                // 单次支付
+                temporaryRechargeMoney(money);
+            }, function() {
+                // 跳转到充值页面
+                location.href = "../recharge/rechargeNew?companyId=" + companyId
+            });
+        }
+        // 充值钱包或者扣1块充电两小时
+        function chargeTwoHoursOrPay() {
+            layer.confirm('余额不足，只能充电两小时。请确认' + devicePort + '插座充电' + time
+                + '分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！', {
+                btn : [ '充电', '充值' ]
+            }, function() {
+                chargeType = "charge";// 功率充电
+                operType = "W";// 会员扣费
+                money = parseInt(device.tow_hours_price);
+                time = 120;
+                requestNewDeviceStartCharge();
+            }, function() {
+                location.href = "../recharge/rechargeNew?companyId=" + companyId
+            });
+        }
+        // 充值钱包
+        function rechargeMoneyToWallet() {
+            layer.confirm('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
+                btn : [ '取消', '确认' ]
+            }, function() {
+            }, function() {
+                // 跳转到充值页面
+                location.href = "../recharge/rechargeNew?companyId=" + companyId
+            });
+        }
+        /* 微信支付 */
+        function temporaryRechargeMoney(money) {
+            $.post("../pay", {
+                openId : openId,
+                total_fee : LeadBase.encrypts(money.toString()),
+            }, function(res) {
+                if (res.code == 0) {
+                    var data = $.parseJSON(res.data);
+                    if (typeof WeixinJSBridge == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady',
+                                onBridgeReady(data), false);
+                        } else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady',
+                                onBridgeReady(data));
+                            document.attachEvent('onWeixinJSBridgeReady',
+                                onBridgeReady(data));
+                        }
+                    } else {
+                        onBridgeReady(data);
+                    }
+                } else {
+                    if (res.code == 2) {
+                        layer.alert(res.message);
+                    } else {
+                        layer.msg("参数错误：" + res.message, {
+                            shift : 6
+                        });
+                    }
+                }
+            });
+        }
+        function onBridgeReady(json) {
+            WeixinJSBridge.invoke('getBrandWCPayRequest', json, function(res) {
+                // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回 ok，但并不保证它绝对可靠。
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                    chargeType = "temp";// 临时充电收费
+                    operType = "M";// 微信单次支付
+                    requestNewDeviceStartCharge();
+                } else {
+                    layer.msg("支付失败", {
+                        shift : 5
+                    });
+                }
+            });
+        }
+
+        // 打开设备开始充电
+        function requestNewDeviceStartCharge() {
+            $.ajax({
+                type : 'POST',
+                url : "../newDevice/startCharge",
+                dataType : "json",
+                data : {
+                    openId : openId,
+                    companyId : companyId,
+                    type : chargeType,
+                    deviceId : deviceId,
+                    devicePort : devicePort,
+                    time : time,
+                    money : money,
+                    walletAccount : walletAccount,
+                    operType : operType,
+                    realGiftRate : userInfo.real_git_rate,
+                    autoUnitPrice : device.auto_unit_price,
+                    power_a1 : device.power_a1,
+                    power_a2 : device.power_a2,
+                    power_a3 : device.power_a3,
+                    power_a4 : device.power_a4,
+                    power_a5 : device.power_a5,
+                    power_a6 : device.power_a6,
+                    power_a7 : device.power_a7
+
+                },
+                cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
+                // 从缓存里读取,为false只有ＧＥＴ请求时生效
+                async : false,// 设置同步方式，false为同步
+                beforeSend : function(XHR){
+                    layer.msg("正在检测电流，请稍候", {
+                        shift : 5
+                    });
+                },
+                success : function(data) {
+                    if (data == "1"|| data== "0") {
+                        // todo 0是临时处理，后面硬件修改完成改回来
+                        layer.msg("充电成功", {
+                            shift : 5
+                        });
+                        window.location = "../charging/charging?deviceId=" + deviceId
+                            + "&chargePort=" + devicePort + "&time=" + time;
+                    } else {
+                        layer.msg("充电失败", {
+                            shift : 5
+                        });
+                    }
+                }
+            });
+        }
+        // 查询设备价格信息
+        function getNewDeviceChargePrice(deviceId, companyId) {
+            $.ajax({
+                type : 'GET',
+                url : "../newDevice/queryDeviceChargePrice",
+                dataType : "json",
+                data : {
+                    deviceId : deviceId,
+                    companyId : companyId,
+                    projectId : projectId
+                },
+                cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
+                // 从缓存里读取,为false只有ＧＥＴ请求时生效
+                async : false,// 设置同步方式，false为同步
+                success : function(data) {
+                    if (data.respObj != null && data.respCode == "000000") {
+                        device = data.respObj;
+                        autoPrice = device.auto_price;
+                    } else {
+                        layer.msg("未查询到充电价格，请联系客服...", {
+                            shift : 5
+                        });
+                    }
+                }
+            });
+        }
+        // 查询用户信息
+        function getUserInfo() {
+            $.ajax({
+                type : "GET",
+                url : "../user/findUserInfo",
+                cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
+                // 从缓存里读取,为false只有ＧＥＴ请求生效
+                async : false,// 设置同步方式，false为同步
+                data : {
+                    "openId" : openId
+                },
+                dataType : "json",
+                success : function(data) {
+                    if (data.respObj != null && data.respCode == "000000") {
+                        userInfo = data.respObj;
+                        walletAccount = userInfo.walletAccount;
+                    } else {
+                        // layer.msg("用户信息不存在", {
+                        // shift : 5
+                        // });
+                        location.href = "..";
+                    }
+                }
+            });
+        }
+
+
+        // 查询设备状态
+        function getDeviceStatus(deviceId) {
+            // 查询设备状态
+            $.ajax({
+                type : "GET",
+                url : "../newDevice/quereChargeSocketStatus",
+                data : {
+                    deviceId : deviceId
+                },
+                cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时
+                // 从缓存里读取,为false只有ＧＥＴ请求生效
+                async : false,// 设置同步方式，false为同步
+                dataType : "json",
+                success : function(data) {
+                    showSocketStatus(data);
+                }
+            });
+        }
+        function showSocketStatus(data) {
+            if (data.respObj != null && data.respObj.length >0  && data.respCode == "000000") {
+                socketStatus = data.respObj;
+
+
+                for(var i=0; i<=socketStatus.length; i++){
+                    var portStatus = socketStatus[i];
+                    var string="<button id='" + portStatus.charge_socket_sn + "'   class='rui-btn'" +
+                        "onclick='selectChargeSocket(" + portStatus.charge_socket_sn + ",this)';>" + portStatus.charge_socket_sn + "</button>" ;//+
+                    // var string="<input chargeType='button' id='" + portStatus.charge_socket_sn + "' class='rui-btn'" +
+                    //     "onclick='selectChargeSocket(" + portStatus.charge_socket_sn + ",this)'; value='" + portStatus.charge_socket_sn + "'>" ;//+
+                    $("#chargeSocketStatus").append(string);
+
+                    if (portStatus.is_used == true ) {
+                        $("#" + socketStatus[i].charge_socket_sn).text("插座" + socketStatus[i].charge_socket_sn + "充电中");
+                        $("#" + socketStatus[i].charge_socket_sn).attr("disabled","disabled");
+                    }
+
+                }
+
+            } else {
+                layer.msg("充电桩暂时不可用，请尝试其他充电桩", {
+                    shift : 5
+                });
+                location.href = "..";
+            }
+
+        }
+
+        // 获取URL中的参数值
+        function GetQueryString(url) {
+            var reg = new RegExp("(^|&)" + url + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null)
+                return unescape(r[2]);
+            return null;
+        }
+
+
+        function selectChargeSocket(value, ele) {
+            devicePort = value;// 获取选择的插座
+            $('.rui-btn').removeClass('rui-btn-outlined');
+            $(ele).addClass('rui-btn-outlined')
+            $("#showportDialog").html('插座' + value);
+        }
+
+	</script>
+	<style>
+		.flex-row {
+			display: -webkit-box;
+			display: -webkit-flex;
+			display: flex;
+			-webkit-box-orient: horizontal;
+			-webkit-flex-flow: column nowrap;
+			flex-flow: column nowrap;
+		}
+
+		.flex1 {
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+		}
+
+		.rui-btn {
+			display: block;
+			width: 120px;
+			height: 40px;
+			background: #ffffff;
+			border: 1px solid #00a1e9;
+			border-radius: 10px;
+			text-align: center;
+			line-height: 40px;
+			font-size: 16px;
+			color: #00a1e9;
+			margin:5px auto;
+			flex: 1;
+
+		}
+
+		.rui-btn-outlined {
+			color: #ffffff;
+			background: #00a1e9;
+		}
+
+		.grid {
+			display:block;
+			margin-top:30px;
+		}
+		.close-box{
+			width:100%;
+			height:15px;
+			position:relative;
+			margin:10px 0px;
+		}
+		.close-icon{
+			width:15px;
+			height:15px;
+			background: url(../images/close.png) center center;
+			background-size:cover;
+			position:absolute;
+			right:10px;
+		}
+	</style>
+</head>
+<body ontouchstart>
+<input type="hidden" id="selectedTime">
+<div class="container">
+	<div class="page__bd">
+		<div class="weui-cells__title">
+			<div class="pull-left">
+				<i class="iconfont icon-ditu1"></i>
+			</div>
+			<div class="pull-right">
+				<span class="curz normal"></span>
+			</div>
+		</div>
+		<div class="weui-cells">
+			<a class="weui-cell weui-cell_access" href="javascript:;">
+				<div class="weui-cell__bd">
+					<p>充电时间</p>
+				</div>
+				<div class="weui-cell__ft" id="showChargeTimeSelcetDialog">请选择充电时间</div>
+			</a>
+			<a class="weui-cell weui-cell_access" href="javascript:;">
+				<div class="weui-cell__bd">
+					<p>充电插座</p>
+				</div>
+				<div class="weui-cell__port" id="showportDialog"></div>
+			</a>
+		</div>
+		<div class="weui-cells__tips">
+			<span >温馨提示：</span><span id="explain">会员充满自动断电，保护电瓶不受损！</span>
+		</div>
+
+		<div class="flex-row" id="chargeSocketStatus">
+			<!--<div class="flex-row">-->
+			<!--<div class="flex1 ">-->
+			<!--<a id="1" href="javascript:;" class="rui-btn"-->
+			<!--onclick="selectChargeSocket(1,this);">1</a>-->
+			<!--</div>-->
+			<!--<div class="flex1 ">-->
+			<!--<a id="7" href="javascript:;" class="rui-btn"-->
+			<!--onclick="selectChargeSocket(7,this);">7</a>-->
+			<!--</div>-->
+			<!--</div>-->
+			<!---->
+			<!--<div class="flex-row">-->
+			<!--<div class="flex1 ">-->
+			<!--<a id="2" href="javascript:;" class="rui-btn"-->
+			<!--onclick="selectChargeSocket(2,this);">2</a>-->
+			<!--</div>-->
+			<!--<div class="flex1 ">-->
+			<!--<a id="8" href="javascript:;" class="rui-btn"-->
+			<!--onclick="selectChargeSocket(8,this);">8</a>-->
+			<!--</div>-->
+			<!--</div>-->
+
+		</div>
+		<div class="page__bd page__bd_spacing">
+			<a href="javascript:;" onclick="startCharging()"
+			   class="weui-btn weui-btn_default btn-control">开始充电</a>
+		</div>
+
+	</div>
+</div>
+<div id="dialogs">
+	<div class="js_dialog" id="chargeTimeDialog" style="display: none;">
+		<div class="weui-mask"></div>
+		<div class="weui-dialog">
+			<div class="weui-flex close-box">
+				<div class="close-icon"></div>
+			</div>
+			<div class="weui-dialog__bd">
+				<div class="weui-flex inline-btn">
+					<div class="weui-flex__item text-left">
+						<a href="javascript:;" onclick="selectCharge2Hours()" chargeTimeMin='120'
+						   class="weui-btn weui-btn_plain-primary">2小时</a>
+					</div>
+					<div class="weui-flex__item text-right">
+						<a href="javascript:;" onclick="selectCharge4Hours()" chargeTimeMin='240'
+						   class="weui-btn weui-btn_plain-primary">4小时</a>
+					</div>
+				</div>
+				<div class="weui-flex inline-btn">
+					<div class="weui-flex__item text-left">
+						<a href="javascript:;" onclick="selectCharge8Hours()" chargeTimeMin='480'
+						   class="weui-btn weui-btn_plain-primary">8小时</a>
+					</div>
+					<div class="weui-flex__item text-right">
+						<a href="javascript:;" onclick="selectCharge12Hours()" chargeTimeMin='720'
+						   class="weui-btn weui-btn_plain-primary">12小时</a>
+					</div>
+				</div>
+				<div class="weui-flex">
+					<div class="weui-flex__item">
+						<a href="javascript:;" onclick="selectChargeAuto()"
+						   chargeTimeMin='800' class="weui-btn weui-btn_plain-primary">智能充电</a>
+					</div>
+
+				</div>
+				<div class="weui-flex">
+					<div class="weui-flex__item2">
+						<a href="javascript:;" onclick='chargeTimeConfirm()'
+						   class="weui-btn weui-btn_plain-primary weui-dialog__btn">确定</a>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+</body>
+<script src="../js/common/zepto.min.js"></script>
+<script src="../js
