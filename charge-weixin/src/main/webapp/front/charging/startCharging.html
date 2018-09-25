@@ -2,8 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport"
-	content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
 <meta name="format-detection" content="telphone=no,email=no" />
 <meta name="keywords" content="">
 <meta name="description" content="">
@@ -13,8 +12,7 @@
 <script type="text/javascript" src="js/charging/startCharging.js"></script>
 <script src="js/common/layer/layer.js"></script>
 <link rel="stylesheet" href="js/common/layer/theme/default/layer.css">
-<script type="text/javascript"
-	src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <style>
         body,h1,h2,h3,h4,h5,h6{
             margin: 0;
@@ -49,7 +47,8 @@
         .chargeBox{
             width:100%;
             height: 7rem;
-            background: #00bcd4;
+            /*background: #00bcd4;*/
+            background-color: rgb(21, 175, 201);
             position: relative;
         }
         .chargeImg{
@@ -70,9 +69,10 @@
         .argeeBOX{
             position: absolute;
             width: 3rem;
-            left:0;right: 0;margin:auto;
+            left:0;right: 0;
+            margin:auto;
             height: 0.5rem;
-            top: calc(100% - 3.2rem);
+            top: calc(100% - 2.2rem);
         }
         .tick{
             position: absolute;
@@ -133,7 +133,7 @@
         .bom_conntent ul>li p{
             width: 100%;
             height: auto;
-            font-size: 18px;
+            font-size: 14px;
             text-align: center;
             color: #00bcd4;
             margin-top: 0.2rem;
@@ -264,7 +264,7 @@
             cache : false,
             async : false,
             success : function(data) {
-                if (data.respCode != '000000' | null == data.respObj) {
+                if (data.respCode != '000000' | null == data.respObj |data.respObj.status != 1) {
                     layer.msg("设备暂时离线，请稍后再试...", {
                         shift : 5
                     });
@@ -326,7 +326,7 @@
     <!-- 我要充电 -->
     <div class="chargeBox">
         <div class="chargeImg" onclick="scanQR()">
-            <img src="images/charge.png">
+            <img src="images/charge.gif">
         </div>
 
         <div class="argeeBOX">
@@ -344,36 +344,36 @@
         <div class="bom_conntent">
             <ul>
                 <li>
-                    <a href="./about/mzsm">
+                    <div onclick="window.location='./about/mzsm'">
                         <div class="conntent_list">
                             <img src="images/suoming.png" style="width:0.9rem;height: 0.9rem;">
                         </div>
                         <p>充电说明</p>
-                    </a>
+                    </div>
                 </li>
                 <li>
-                    <a href="./about/warning">
+                    <div onclick="window.location='./about/warning'">
                         <div class="conntent_list">
                             <img src="images/tishi.png">
                         </div>
                         <p>温馨提示</p>
-                    </a>
+                    </div>
                 </li>
                 <li>
-                    <a href="./recharge">
+                    <div onclick="window.location='./recharge'">
                         <div class="conntent_list">
-                            <img src="images/saoma.png">
+                            <img src="images/chongzhi.png">
                         </div>
                         <p>扫码优惠</p>
-                    </a>
+                    </div>
                 </li>
                 <li>
-                    <a href="./">
+                    <div onclick="window.location='./'">
                         <div class="conntent_list">
                             <img src="images/geren.png">
                         </div>
                         <p>个人中心</p>
-                    </a>
+                    </div>
                 </li>
             </ul>
         </div>
