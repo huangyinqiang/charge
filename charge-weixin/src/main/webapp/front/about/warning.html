@@ -1,48 +1,113 @@
-<head lang="zh-cn">
-<meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>温馨提示</title>
-<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="../js/about/about.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../js/about/about.js"></script>
 
-    <style>
-.content {
-	padding: 13px;
-}
-
-h4 {
-	color: #2B9A41;
-	margin-top: 8px;
-	margin-bottom: 8px;
-}
-
-p {
-	font-size: 16px;
-	color: #222222;
-}
-</style>
+	<title>温馨提示</title>
+	
 </head>
-<body class="flex-col">
-	<div class="rui-content ">
-        <p>温馨提示</p>
-		<p>
-			1、首次使用请进入公众号“个人中心”绑定身份，享受更优质的服务；
-		</p>
-		<p>
-			2、<a class=wechat></a>定期优惠活动，请点击“个人中心-优惠活动查看”
+<style type="text/css">
+    body{
+    padding: 0px;
+    margin: 0;
+   }
+   ul,ol,dl,li,dt,dd{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+   .tishibox{
+    width:96%;
+    height: 40px;
+    margin: 10px auto;
+    background: #00BCD4;
+   }
 
-        </p>
-		<p>
-			3、 充电时请确保您的充电器插头与充电插座已经连接；
+   .tishibox .tishiimg{
+    float: left;
+    width: 40px;
+    height: 40px;
+   }
+    .tishibox .tishiimg img{
+    width:36px;
+    height: 36px;
+    margin-top: 2px;
+    }
 
-        </p>
-		<p>
-			4、 点击扫码充电按钮，扫描充电器已连接的插座二维码或控制器屏幕二维码。
-		</p>
-        <p>
-            5、 充电过程中充电器被拔下或脱落，充电插座会自动断电。
-        </p>
-	</div>
+   .tishibox span{
+    float: left;
+    width: 100px;
+    height: 40px;
+    color: white;
+    font-size: 16px;
+    line-height: 40px;
+    margin-left: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+   }
+   .tishi_content{
+        width: 96%;
+      height:auto;
+        margin: 0 auto;
+        overflow: hidden;
+   }
+   
+    .tishi_cbox{
+        width: 100%;
+        height:auto!important;
+        display:inline-block;
+        margin-top: 10px;
+    }
+    .tishi_cleft{
+        float: left;
+        width: 32px;
+        height:auto!important;
+        display:inline-block;
+    }
+
+    .content_w{
+        float: right;
+        width: calc(100% - 42px);
+        font-size: 14px;
+        line-height: 20px;
+    }
+</style>
+
+<body style="width: 100%;height: 100%;">
+ <div class="tishibox">
+    <div class="tishiimg"><img src="../images/icon-tishi.png"></div>
+    <span>温馨提示</span>
+ </div>
+ <div class="tishi_content">
+        <div class="tishi_cbox">
+            <div class="tishi_cleft"><img src="../images/1.png"></div>
+           <div class="content_w">首次使用请进入公众号<span style="color: red;font-weight: 600;">“个人中心”</span> 绑定身份，享受更优质的服务;</div>
+        </div>
+
+        <div class="tishi_cbox" sty>
+            <div class="tishi_cleft"><img src="../images/1.png"></div>
+           <div class="content_w" ><a class=wechat></a>定期优惠活动,<span style="color: red;font-weight: 600;">“个人中心-优惠活动”</span> 查看;</div>
+        </div>
+
+
+        <div class="tishi_cbox">
+            <div class="tishi_cleft"><img src="../images/1.png"></div>
+           <div class="content_w" >充电时请确保您的充电器插头与充电插座已经连接;</div>
+        </div>
+
+         <div class="tishi_cbox">
+            <div class="tishi_cleft"><img src="../images/1.png"></div>
+           <div class="content_w">点击扫码充电按钮，扫描充电器已连接的插座二维码或控制器屏幕二维码。</div>
+        </div>
+
+        <div class="tishi_cbox">
+            <div class="tishi_cleft"><img src="../images/1.png"></div>
+           <div class="content_w">充电过程中充电器被拔下或脱落，充电插座会自动断电。</div>
+        </div>
+ </div>
 </body>
-</html>
+
+

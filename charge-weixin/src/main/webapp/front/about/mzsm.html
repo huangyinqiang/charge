@@ -1,44 +1,106 @@
-<head lang="zh-cn">
-<meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>免责申明</title>
-<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="../js/about/about.js"></script>
-<style>
-.content {
-	padding: 13px;
-}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../js/about/about.js"></script>
 
-h4 {
-	color: #2B9A41;
-	margin-top: 8px;
-	margin-bottom: 8px;
-}
-
-p {
-	font-size: 16px;
-	color: #222222;
-}
-</style>
+	<title>充电说明</title>
+	
 </head>
-<body class="flex-col">
-	<div class="rui-content ">
-		<p>
-			1、<a class=wechat></a>充电站每个插口只允许一台电动车充电，请不要接其他负载，以免断电保护；如果使用者操作不当引发的一切损失及后果由使用者自行承
-			担，并且赔偿云联充充电站的相应损失。
-		</p>
-		<p>
-			2、<a class=wechat></a>仅为使用者提供电动车充电便利，不承担保管任及任何安全故障，请离开时锁好电动车；如出现损失、遗失、被盗等情况，<a
-				class=wechat></a>充电站均不承担经济和法律责任。
-		</p>
-		<p>
-			3、 请严格按照<a class=wechat></a>操作指南进行充电，如因使用者操作不当引发的一切损失及后果由使用者自行承担并赔偿<a
-				class=wechat></a>充电站相应损失。
-		</p>
-		<p>
-			4、 解释权由<a class=company></a>拥有，电话：<a class=tel></a>
-		</p>
-	</div>
+<style type="text/css">
+    body{
+    padding: 0px;
+    margin: 0;
+   }
+   ul,ol,dl,li,dt,dd{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+   .tishibox{
+    width:96%;
+    height: 40px;
+    margin: 10px auto;
+    background: #00BCD4;
+   }
+
+   .tishibox .tishiimg{
+    float: left;
+    width: 38px;
+    height: 38px;
+   }
+    .tishibox .tishiimg img{
+    width:40px;
+    height: 40px;
+    margin-top: 2px;
+    }
+
+   .tishibox span{
+    float: left;
+    width: 100px;
+    height: 40px;
+    color: white;
+    font-size: 16px;
+    line-height: 40px;
+    margin-left: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+   }
+   .tishi_content{
+        width: 96%;
+       height:auto;
+        margin: 0 auto;
+        overflow: hidden;
+   }
+   
+    .tishi_cbox{
+        width: 100%;
+        height:auto!important;
+        display:inline-block;
+        margin-top: 10px;
+    }
+    .tishi_cleft{
+        float: left;
+        width: 32px;
+        height:auto!important;
+        display:inline-block;
+    }
+    .content_w{
+        float: right;
+        width: calc(100% - 42px);
+        font-size: 14px;
+        line-height: 20px;
+    }
+</style>
+
+<body style="width: 100%;height: 100%;">
+ <div class="tishibox">
+    <div class="tishiimg"><img src="../images/mianze.png"></div>
+    <span>免责说明</span>
+ </div>
+ <div class="tishi_content">
+        <div class="tishi_cbox">
+            <div class="tishi_cleft"><img src="../images/1.png"></div>
+           <div class="content_w"><a class=wechat></a>充电站每个插口只允许一台电动车充电，请不要接其他负载，以免断电保护；如果使用者操作不当引发的一切损失及后果由使用者<span style="color:red;font-weight: 600;">自行承担</span>，并且赔偿<a class=wechat></a>充电站的相应损失。</div>
+        </div>
+
+         <div class="tishi_cbox" >
+            <div class="tishi_cleft"><img src="../images/1.png"></div>
+           <div class="content_w"><a class=wechat></a>仅为使用者提供电动车充电便利，不承担保管任及任何安全故障，请离开时锁好电动车；如出现损失、遗失、被盗等情况，<span style="color:red;font-weight: 600;"><a class=wechat></a>充电站均不承担经济和法律责任。</span></div>
+        </div>
+         <div class="tishi_cbox">
+            <div class="tishi_cleft"><img src="../images/1.png"></div>
+           <div class="content_w">i请严格按照<a class=wechat></a>操作指南进行充电，如因使用者操作不当引发的一切损失及后果由使用者自行承担并赔偿<a class=wechat></a>充电站相应损失。</div>
+        </div>
+        <div class="tishi_cbox">
+            <div class="tishi_cleft"><img src="../images/1.png"></div>
+           <div class="content_w">解释权由<a class=company></a>拥有，<span style="color:red;font-weight: 600;">  电话：<a class=tel></a></span></div>
+        </div>
+
+       
+ </div>
 </body>
-</html>
+
+
