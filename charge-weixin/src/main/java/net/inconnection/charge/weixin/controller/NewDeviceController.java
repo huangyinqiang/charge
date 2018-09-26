@@ -81,14 +81,18 @@ public class NewDeviceController extends Controller {
 
         Integer startPower = 0;
 
+
         if (null != startChargeResltJson){
             startChargeStatus = startChargeResltJson.getInteger("RESULT");
             startPower = startChargeResltJson.getInteger("POW");
-
+            log.info("充电返回结果："+startChargeResltJson.toJSONString());
+        }else{
+            log.info("充电返回结果：null");
         }
 
 
-        log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
+        log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + "," +
+                "startChargeStatus=" + startChargeStatus+",startPower:"+startPower);
         String powerSection="";
         if (startChargeStatus.equals(1)){
             //充电成功
@@ -117,7 +121,6 @@ public class NewDeviceController extends Controller {
         map.put("state",startChargeStatus.toString());
         map.put("power",powerSection);
         map.put("money",String.valueOf(Integer.parseInt(money)/100D));
-        log.info("充值金额："+money);
 
         this.renderJson(new HnKejueResponse(map,RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue()));
     }
@@ -131,6 +134,7 @@ public class NewDeviceController extends Controller {
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(channeNum);
         Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, TIMEOUT);
+        log.info("断电结束:"+"powerOffStatus="+powerOffStatus);
 
     }
 
@@ -157,7 +161,7 @@ public class NewDeviceController extends Controller {
         String autoUnitPriceA5 = this.getPara("power_a5");
         String autoUnitPriceA6 = this.getPara("power_a6");
         String autoUnitPriceA7 = this.getPara("power_a7");
-        String pow = this.getPara("pow");
+        String pow = this.getPara("power");
 
         if (deviceId == null || devicePort == null || time == null){
             this.renderText("数据异常，请重试");
@@ -165,7 +169,8 @@ public class NewDeviceController extends Controller {
         }
         log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
 
-        chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money, walletAccount, operType, realGiftRate, companyId ,autoUnitPrice);
+        chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money,
+                walletAccount, operType, realGiftRate, companyId ,autoUnitPrice,pow);
 
         String title;
 
@@ -274,7 +279,8 @@ public class NewDeviceController extends Controller {
                 powerSection = "A7";
             }
 
-            chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money, walletAccount, operType, realGiftRate, companyId ,autoUnitPrice);
+            chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money,
+                    walletAccount, operType, realGiftRate, companyId ,autoUnitPrice,null);
 
             String title;
 

@@ -68,6 +68,15 @@ public class ChargeBatteryInfo extends Model<ChargeBatteryInfo> {
         log.info("查询14小时内可以远程断电的端口结果" + resp);
         return resp;
     }
+    public List<Record> queryPowerOffByOpenId(String openId) {
+        List<Record> records = Db.find("SELECT a.id,a.charge,a.feeStatus,a.deviceId,a.operType," +
+                "a.devicePort,a.startTime,a.chargeTime,a.operStartTime," +
+                "a.realChargeTime,a.endTime,q.area ',',ycp.name ,a.status,a.serverResultDesc FROM " +
+                "charge_battery_info a LEFT JOIN qr_match_device " +
+                "q ON a.deviceId = q.match_num  LEFT JOIN yc_charge_pile ycp " +
+                "on a.deviceId = ycp.id WHERE a.openId = '"+openId+"'  ORDER BY id DESC");
+        return records;
+    }
 
     public ChargeBatteryInfo queryLastBatteryInfo(String openId, Date operStartTime, String deviceId, String devicePort) {
         log.info("查询远程断电端口是否被别人占用，根据，openid= " + openId + ",operStartTime=" + operStartTime + ",deviceId=" + deviceId + ",devicePort=" + devicePort);

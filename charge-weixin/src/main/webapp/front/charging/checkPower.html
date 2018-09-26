@@ -52,9 +52,9 @@
 		
 	</div>
 
-	<div id="submitBtn" style="width: 96%;height: auto;position: fixed;bottom: 60px;left:0px;right:0px;margin: auto;">
-		<a href="javascript:void(0)" class="weui-btn weui-btn_default" onclick="submit()">确认充电 </a>
-	</div>
+	<!--<div id="submitBtn" style="width: 96%;height: auto;position: fixed;bottom: 60px;left:0px;right:0px;margin: auto;">-->
+		<!--<a href="javascript:void(0)" class="weui-btn weui-btn_default" onclick="submit()">确认充电 </a>-->
+	<!--</div>-->
 
 </body>
 <script src="../js/common/zepto.min.js"></script>
@@ -92,7 +92,8 @@
     var power_a7 = temp*1;
     temp = GetQueryString("autoPrice");
     var autoPrice = temp*1;
-    $("#submitBtn").hide();
+    var power;
+    // $("#submitBtn").hide();
 
     setTimeout(startCharge4CheckPower,1000)
     function startCharge4CheckPower() {
@@ -128,9 +129,10 @@
                     data = res.respObj;
                     $('#power').text(data.power);
                     $('#money').text(data.money);
-
-                    $("#submitBtn").show();
+                    power=data.power;
+                    // $("#submitBtn").show();
                     $("#showTimes").hide()
+                    submit()
                 }else{
                     window.location="../charging"
                 }
@@ -139,6 +141,7 @@
                 layer.msg("功率检测失败...", {
                     shift : 5
                 });
+                stopCharge();
                 window.location="../charging"
             }
         });
@@ -202,7 +205,8 @@
         }, function() {
             startCharge4WriteDate();
         }, function() {
-
+            stopCharge();
+            window.location="../charging";
         });
     }
 
@@ -211,6 +215,8 @@
         layer.confirm('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
             btn : [ '取消', '确认' ]
         }, function() {
+            stopCharge();
+            window.location="../charging";
         }, function() {
             // 跳转到充值页面
             location.href = "../recharge/rechargeNew?companyId=" + companyId
@@ -226,6 +232,7 @@
             // 单次支付
             temporaryRechargeMoney(money);
         }, function() {
+            stopCharge();
             // 跳转到充值页面
             location.href = "../recharge/rechargeNew?companyId=" + companyId
         });
@@ -275,6 +282,9 @@
                 layer.msg("支付失败", {
                     shift : 5
                 });
+                stopCharge();
+                window.location="../charging";
+
             }
         });
     }
@@ -292,6 +302,7 @@
             time = 120;
             startCharge4WriteDate();
         }, function() {
+            stopCharge();
             location.href = "../recharge/rechargeNew?companyId=" + companyId
         });
     }
@@ -320,13 +331,14 @@
                 power_a4 : power_a4,
                 power_a5 : power_a5,
                 power_a6 : power_a6,
-                power_a7 : power_a7
+                power_a7 : power_a7,
+                power : power
             },
             cache : false,
             async : true,// 设置同步方式，false为同步
             success : function(res) {
                 if (res.respCode == "000000") {
-                    window.location="../charging/chargingInfo"
+                    location.href="../poweroff";
                 }
             }
         });
@@ -347,6 +359,7 @@
             cache : false,
             async : true,// 设置同步方式，false为同步
             success : function(res) {
+                window.location="../charging";
                 // if (res.respCode == "000000") {
                 //     window.location="../charging/chargingInfo"
                 // }

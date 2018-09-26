@@ -21,7 +21,11 @@ import org.apache.commons.lang.StringUtils;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 public class ChargeInfoBatteryService {
     private static Log log = Log.getLog(ChargeInfoBatteryService.class);
@@ -126,7 +130,8 @@ public class ChargeInfoBatteryService {
     }
 
     public Boolean saveNewDeviceChargeHistory(String openId, String deviceId, String devicePort, String time, String type,
-                                              String money, String walletAccount, String operType, String realGiftRate, String companyId, String autoUnitPrice) {
+                                              String money, String walletAccount, String operType, String
+                                                      realGiftRate, String companyId, String autoUnitPrice,String pow) {
         log.info("新增新设备充电记录 openId=" + openId + ",deviceId=" + devicePort + ",time=" + time + ",type=" + type + ",money=" + money
                 + ",walletAccount=" + walletAccount + ",operType=" + operType + ",realGiftRate=" + realGiftRate);
 
@@ -197,6 +202,9 @@ public class ChargeInfoBatteryService {
             chargeBatteryInfoBean.setOperstarttime(new Date());
             chargeBatteryInfoBean.setChargetime(time);
             chargeBatteryInfoBean.setOpertype(operType);
+            if(pow != null && StringUtils.isNotEmpty(pow)){
+                chargeBatteryInfoBean.setServerresultdesc(pow);
+            }
             int walletAccountInt = Integer.parseInt(walletAccount);
             Integer moneyInt = Integer.parseInt(money);
             if (operType.equals("W") && type.equals("charge")){

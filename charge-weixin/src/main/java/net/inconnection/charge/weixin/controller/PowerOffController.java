@@ -35,6 +35,14 @@ public class PowerOffController extends Controller {
         this.renderJson(resp);
     }
 
+    public void queryPowerOffByOpenId() {
+        String openId = this.getPara("openId");
+        log.info("查看远程断电开始" + openId);
+        HnKejueResponse resp = poweroffService.queryPoweroffByOpenId(openId);
+        log.info("查看远程断电结束" + resp);
+        this.renderJson(resp);
+    }
+
 
 
 }
