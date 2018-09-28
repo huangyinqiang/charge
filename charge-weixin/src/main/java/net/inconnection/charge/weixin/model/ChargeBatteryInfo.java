@@ -71,10 +71,11 @@ public class ChargeBatteryInfo extends Model<ChargeBatteryInfo> {
     public List<Record> queryPowerOffByOpenId(String openId) {
         List<Record> records = Db.find("SELECT a.id,a.charge,a.feeStatus,a.deviceId,a.operType," +
                 "a.devicePort,a.startTime,a.chargeTime,a.operStartTime," +
-                "a.realChargeTime,a.endTime,q.area ',',ycp.name ,a.status,a.serverResultDesc FROM " +
+                "a.realChargeTime,a.endTime,q.area ,ycp.name ,a.status,a.serverResultDesc FROM " +
                 "charge_battery_info a LEFT JOIN qr_match_device " +
                 "q ON a.deviceId = q.match_num  LEFT JOIN yc_charge_pile ycp " +
-                "on a.deviceId = ycp.id WHERE a.openId = '"+openId+"'  ORDER BY id DESC");
+                "on a.deviceId = ycp.id WHERE a.status in('S','U') and a.status <> 'F' and  a.openId = '"+openId+"'  " +
+                "ORDER BY id DESC");
         return records;
     }
 

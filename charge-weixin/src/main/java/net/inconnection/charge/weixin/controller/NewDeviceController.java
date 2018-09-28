@@ -16,6 +16,7 @@ import net.inconnection.charge.weixin.plugin.JmsSender;
 import net.inconnection.charge.weixin.service.ChargeInfoBatteryService;
 import net.inconnection.charge.weixin.service.NewDeviceChargePriceService;
 import net.inconnection.charge.weixin.service.NewDeviceService;
+import org.apache.commons.lang.StringUtils;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
@@ -72,7 +73,6 @@ public class NewDeviceController extends Controller {
         log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
 
         JSONObject startChargeResltJson;
-        log.info("设备："+deviceSN+"插座："+socketSN+"时间："+chargeTimeSenconds);
         if(chargeType.equals("auto")){
             startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, 0, TIMEOUT);
         }else {
@@ -93,34 +93,54 @@ public class NewDeviceController extends Controller {
 
         log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + "," +
                 "startChargeStatus=" + startChargeStatus+",startPower:"+startPower);
-        String powerSection="";
+        String powerSection="0-200";
         if (startChargeStatus.equals(1)){
+
             //充电成功
             if (startPower < 200){
                 powerSection = "0-200";
+                autoUnitPrice = autoUnitPriceA1;
             }else if (startPower < 300){
                 powerSection = "201-300";
+                autoUnitPrice = autoUnitPriceA2;
             }else if (startPower < 350){
                 powerSection = "301-350";
+                autoUnitPrice = autoUnitPriceA3;
             }else if (startPower < 500){
                 powerSection = "351-500";
+                autoUnitPrice = autoUnitPriceA4;
             }else if (startPower < 700){
                 powerSection = "501-700";
+                autoUnitPrice = autoUnitPriceA5;
             }else if (startPower < 1000){
                 powerSection = "701-1000";
+                autoUnitPrice = autoUnitPriceA6;
             }else {
-                powerSection = "701-1000";
+                powerSection = "1001-1200";
+                autoUnitPrice = autoUnitPriceA7;
             }
 
+            if (StringUtils.isBlank(autoUnitPrice)) {
+                //如果没有，就默认50分
+                autoUnitPrice = "50";
+            }
 
 
         }else {
             log.error("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
         }
+
+//        Integer moneyInt = Integer.parseInt(money);
+//        if (operType.equals("W") && chargeType.equals("charge")){
+//            Integer autoUnitPriceInt = Integer.parseInt(autoUnitPrice);
+//            //按照时间计算总价
+//            moneyInt = new Double(Double.parseDouble(time)/60.0 * autoUnitPriceInt).intValue();
+//        }
         Map<String,String> map =new HashMap<>(5);
         map.put("state",startChargeStatus.toString());
         map.put("power",powerSection);
-        map.put("money",String.valueOf(Integer.parseInt(money)/100D));
+        map.put("money",String.valueOf(Integer.valueOf(money)/100D));
+        map.put("serverResultDesc",String.valueOf(startPower));
 
         this.renderJson(new HnKejueResponse(map,RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue()));
     }
@@ -162,15 +182,30 @@ public class NewDeviceController extends Controller {
         String autoUnitPriceA6 = this.getPara("power_a6");
         String autoUnitPriceA7 = this.getPara("power_a7");
         String pow = this.getPara("power");
+        String serverResultDesc = this.getPara("serverResultDesc");
 
         if (deviceId == null || devicePort == null || time == null){
             this.renderText("数据异常，请重试");
             return;
         }
-        log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
+        log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId+"," +
+                "autoUnitPrice="+autoUnitPrice+",money="+money );
+        Integer power = Integer.parseInt(pow.split("-")[1]);
+        //功率判断，过小或过大，断电，发消息 FAIL
+
+        if(power > 1000){
+            Long deviceSN = Long.parseLong(deviceId);
+            Long socketSN = Long.parseLong(devicePort);
+            deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, TIMEOUT);
+            String title = "检测到充电电流过大，本次充电失败，如需继续充电请确认您的充电设备正常后重试！";
+            sendActiveMqStartChargeFail(openId, deviceId, devicePort, title);
+            log.info("充电失败 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
+            return;
+        }
+
 
         chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money,
-                walletAccount, operType, realGiftRate, companyId ,autoUnitPrice,pow);
+                walletAccount, operType, realGiftRate, companyId ,autoUnitPrice,serverResultDesc);
 
         String title;
 
@@ -521,6 +556,51 @@ public class NewDeviceController extends Controller {
         HnKejueResponse json = newDeviceService.getProjectByCompanyId(companyId);
         log.info("查询运营商公司下面所有的项目结束：" + json);
         this.renderJson(json);
+
+    }
+
+    private void sendActiveMqStartChargeFail(String openId, String deviceId, String devicePort, String title){
+        JmsSender jmsSender = ActiveMQ.getSender("sendtoWeixinPush");
+
+        String area;
+        NewDevice device = newDeviceService.queryDeviceInfo(deviceId);
+
+        if (device != null){
+            String province = device.get("province");
+            String city = device.get("city");
+            String detail_location = device.get("detail_location");
+            String name = device.get("name");
+
+            area =  name;
+
+        }else {
+            log.error("查询不到充电设备");
+
+            area =  deviceId;
+        }
+
+
+        WeiXin weixin = new WeiXin();
+        weixin.setArea(area);
+        weixin.setChannelNum(devicePort);
+        weixin.setDeviceId(deviceId);
+        weixin.setMessage("充电失败");
+        weixin.setOpenId(openId);
+        weixin.setTitle(title );
+        weixin.setType("FAIL");
+        weixin.setMoney("");
+        weixin.setWalletAccount(500);
+        weixin.setChargeTime("200");
+        weixin.setOperStartTime(new Date());
+        String str = JSON.toJSONString(weixin);
+        System.out.println(str);
+        TextMessage msg = null;
+        try {
+            msg = jmsSender.getSession().createTextMessage(str);
+            jmsSender.sendMessage(msg);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
 
     }
 

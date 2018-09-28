@@ -133,7 +133,8 @@ public class ChargeInfoBatteryService {
                                               String money, String walletAccount, String operType, String
                                                       realGiftRate, String companyId, String autoUnitPrice,String pow) {
         log.info("新增新设备充电记录 openId=" + openId + ",deviceId=" + devicePort + ",time=" + time + ",type=" + type + ",money=" + money
-                + ",walletAccount=" + walletAccount + ",operType=" + operType + ",realGiftRate=" + realGiftRate);
+                + ",walletAccount=" + walletAccount + ",operType=" + operType + ",realGiftRate=" + realGiftRate+"," +
+                "pow="+pow);
 
         try {
             if (StringUtils.isBlank(openId)) {

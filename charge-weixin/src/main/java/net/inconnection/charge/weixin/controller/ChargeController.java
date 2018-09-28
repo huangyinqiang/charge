@@ -107,7 +107,6 @@ public class ChargeController extends Controller {
         this.setAttr("power_a6", this.getPara("power_a6"));
         this.setAttr("power_a7", this.getPara("power_a7"));
 
-        log.info("跳转到功率检测页面");
         this.render("charging/checkPower.html");
     }
 }

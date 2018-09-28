@@ -93,7 +93,7 @@ public class PoweroffService {
 
 
 
-    public HnKejueResponse queryPoweroffByOpenId(String openId) {
+    public HnKejueResponse  queryPoweroffByOpenId(String openId) {
         if (StringUtils.isBlank(openId)) {
             return new HnKejueResponse("openId不能为空", RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
         } else {
@@ -144,7 +144,7 @@ public class PoweroffService {
                                     }else if (power < 1000){
                                         powerSection = "701-1000";
                                     }else {
-                                        powerSection = "701-1000";
+                                        powerSection = "1001-1200";
                                     }
                                     chargeBatteryInfo.set("power",powerSection);
                                 }else{

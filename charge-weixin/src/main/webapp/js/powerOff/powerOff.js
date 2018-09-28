@@ -26,8 +26,7 @@ $(function() {
     // 监听后退事件 ，点击返回关闭页面
     pushHistory();
     window.addEventListener("popstate", function(e) {
-        window.location="../"
-        // WeixinJSBridge.call('closeWindow');//点击返回关闭窗口
+         WeixinJSBridge.call('closeWindow');//点击返回关闭窗口
         // location.href="../index";//或者根据自己的需求跳转
     }, false);
     function pushHistory() {
@@ -37,11 +36,11 @@ $(function() {
         };
         window.history.pushState(state, "title", "#");
     }
-    getChargingInfo();
+
     shownum();
 });
 
-
+setTimeout( getChargingInfo(),2000);
 
 
 // 自动跳转
@@ -68,19 +67,27 @@ function getChargingInfo() {
         data : {openId : localStorage.getItem("openId")},
         url : "./poweroff/queryPowerOffByOpenId",
         dataType : "json",
-        async : false,
+        async : true,// 设置同步方式，false为同步
         success : function(data) {
-            console.log(data.respObj)
             if (data.respObj.length != 0 && data.respCode == "000000") {
                 $("#showTimes").hide();
                 $(".codePay-inner").template7($('#dataListTpl'), data);
-                remainingTime(timeAddMin(data.operStartTime,data.chargeTime));
-                userTime(data.operStartTime)
+                var chargeTime = data.respObj[0].chargeTime
+                if( chargeTime== "充满自停"){
+                    chargeTime = "800";
+                }else {
+                    chargeTime = chargeTime.substring(0,chargeTime.length-2)
+                }
+
+                remainingTime(timeAddMin(data.respObj[0].operStartTime,chargeTime));
+                userTime(data.respObj[0].operStartTime)
+
+
             } else {
                 // layer.msg("未查询到可远程断电的设备...", {
                 // 	shift : 15
                 // });
-                setTimeout(getChargingInfo(), 1000);
+                setTimeout(getChargingInfo(), 10000);
             }
         }
     });
@@ -100,7 +107,7 @@ function confirm() {
         }else {
             poweroff();
         }
-        getChargingInfo()
+
     });
 }
 
@@ -118,7 +125,7 @@ function poweroffNewDevice() {
             deviceId : deviceId,
             channeNum : devicePort
         },
-        async : false,
+        async : true,
         success : function(data) {
             if (data == "1") {
                 layer.msg("远程断电成功...", {
@@ -131,6 +138,7 @@ function poweroffNewDevice() {
                     shift : 5
                 });
             }
+            window.location = "./poweroff";
         }
     });
 }
@@ -138,7 +146,7 @@ function poweroffNewDevice() {
 function poweroff() {
     var id = $("#id").val();
     var deviceId = $("#deviceId").val();
-    var devicePort = $("#devicePort").text();
+    var devicePort = $("#devicePort").val();
     $.ajax({
         type : 'POST',
         url : "./poweroff/poweroff",
@@ -149,7 +157,7 @@ function poweroff() {
             deviceId : deviceId,
             channeNum : devicePort
         },
-        async : false,
+        async : true,
         success : function(data) {
             if (data.respCode == "000000") {
                 layer.msg("远程断电成功...", {
@@ -160,6 +168,7 @@ function poweroff() {
                     shift : 5
                 });
             }
+            window.location = "./poweroff";
         }
     });
 }
@@ -168,6 +177,10 @@ function poweroff() {
 
 
 function timeAddMin(timeStr,chargeTime){
+    var userTime = $("#userTime");
+    var userTimeVal = userTime.parents(".bootom-inner").find("#chargeTime").val();
+    userTimeVal = userTimeVal.substring(0,userTimeVal.length-2);
+
     var nowDate = new Date(timeStr);
     var endDate=nowDate.getTime()+chargeTime*1000*60;
     return endDate;
@@ -211,6 +224,7 @@ function remainingTime(timeStr,item){
             hours = checkTime(hours);
             document.getElementById("remainingTime").innerHTML = hours + "小时" + minutes + "分" + seconds + "秒";
         }
+
     },1000);
 }
 

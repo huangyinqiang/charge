@@ -93,6 +93,7 @@
     temp = GetQueryString("autoPrice");
     var autoPrice = temp*1;
     var power;
+    var serverResultDesc;
     // $("#submitBtn").hide();
 
     setTimeout(startCharge4CheckPower,1000)
@@ -128,12 +129,15 @@
                 if (res.respObj != null && res.respCode == "000000") {
                     data = res.respObj;
                     $('#power').text(data.power);
-                    $('#money').text(data.money);
+                    $('#money').text(data.money/100);
                     power=data.power;
-                    // $("#submitBtn").show();
+                    serverResultDesc = serverResultDesc;
                     $("#showTimes").hide()
                     submit()
                 }else{
+                    layer.msg("功率检测失败...", {
+                        shift : 5
+                    });
                     window.location="../charging"
                 }
             },
@@ -191,14 +195,15 @@
 
     }//submit
 
+
     // 会员充电提示
     function memCharge() {
         var msg="";
         if(time == "800"){
-            msg="请确认"+devicePort+"插座，充满自停（预设800分钟），预扣费用"+money+"元" +
+            msg="请确认"+devicePort+"插座，充满自停（预设800分钟），预扣费用"+money/100+"元" +
                 "点击“确定”后开始充电"
         }else{
-            msg="请确认" + devicePort + "插座，会员充电" + time + "分钟；点击“确定”后开始充电"
+            msg="请确认" + devicePort + "插座，会员充电" + time + "分钟；充电费用" + money/100 + "元,点击“确定”后开始充电"
         }
         layer.confirm(msg, {
             btn : [ '确定', '取消' ]
@@ -229,6 +234,13 @@
             + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！', {
             btn : [ '临时支付', '充值' ]
         }, function() {
+            var pow = power.split("-")[1];
+            if(pow*1 > 500){
+                layer.msg("临时充电功率超限，请选择会员充电！", {
+                    shift : 5
+                });
+                return;
+            }
             // 单次支付
             temporaryRechargeMoney(money);
         }, function() {
@@ -308,11 +320,11 @@
     }
     //开始充电，写数据，发消息
     function startCharge4WriteDate() {
-        console.log("startCharge4WriteDate")
         $.ajax({
             type : 'POST',
             url : "../newDevice/startCharge4WriteDate",
             dataType : "json",
+            async : false,
             data : {
                 openId : openId,
                 companyId : companyId,
@@ -332,21 +344,21 @@
                 power_a5 : power_a5,
                 power_a6 : power_a6,
                 power_a7 : power_a7,
-                power : power
+                power : power,
+                serverResultDesc : serverResultDesc
             },
             cache : false,
             async : true,// 设置同步方式，false为同步
             success : function(res) {
-                if (res.respCode == "000000") {
-                    location.href="../poweroff";
-                }
+
             }
         });
+
+        location.href="../poweroff";
     }
 
     //断开插座
     function stopCharge() {
-        console.log("stopCharge")
         $.ajax({
             type : 'POST',
             url : "../newDevice/powerOff4CheckPower",
