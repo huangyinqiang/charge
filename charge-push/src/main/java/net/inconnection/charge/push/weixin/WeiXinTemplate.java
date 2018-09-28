@@ -191,5 +191,33 @@ public class WeiXinTemplate {
         gjson.put("data", data2);
         return gjson.toString();
     }
+
+    public String chargingFail(String openId, String deviceName, String title) {
+        JSONObject first = new JSONObject();
+        first.put("value", title);
+        first.put("color", "#0084cc");
+        JSONObject keynote1 = new JSONObject();
+        keynote1.put("value", deviceName);
+        keynote1.put("color", "#0084cc");
+        JSONObject keynote2 = new JSONObject();
+        keynote2.put("value", "您本次充电费用将退回您的钱包");
+        keynote2.put("color", "#0084cc");
+
+        JSONObject remark = new JSONObject();
+        remark.put("value", "感谢您的使用");
+        remark.put("color", "#0084cc");
+        JSONObject data2 = new JSONObject();
+        data2.put("first", first);
+        data2.put("keynote1", keynote1);
+        data2.put("keynote2", keynote2);
+
+        data2.put("remark", remark);
+        JSONObject gjson = new JSONObject();
+        gjson.put("touser", openId);
+        gjson.put("template_id", PropKit.get("chargingFail"));
+        gjson.put("url", "");
+        gjson.put("data", data2);
+        return gjson.toString();
+    }
 }
 
