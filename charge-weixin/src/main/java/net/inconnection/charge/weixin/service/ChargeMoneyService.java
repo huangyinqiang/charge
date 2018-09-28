@@ -190,6 +190,12 @@ public class ChargeMoneyService {
             sql.append(" and recharge_time <='").append(endDate).append("'");
         }
         List<Record> records = Db.find(sql.toString());
+        if(startDate == null || StringUtils.isEmpty(startDate)){
+            List<Record> records2 = Db.find("select recharge_time as rechargeTime from yc_recharge_history  ORDER BY"
+                    + " `recharge_time` ASC LIMIT 1");
+            records.addAll(records2);
+        }
+
 //        List<ChargeMoneyInfo> chargeMoneyInfos = ChargeMoneyInfo.dao.find(sql.toString());
         return records;
     }

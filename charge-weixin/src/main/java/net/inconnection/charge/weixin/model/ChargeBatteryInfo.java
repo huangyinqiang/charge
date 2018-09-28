@@ -43,6 +43,7 @@ public class ChargeBatteryInfo extends Model<ChargeBatteryInfo> {
         info.set("startTime", chargeBatteryInfoBean.getStarttime());
         info.set("MD5", chargeBatteryInfoBean.getMd5());
         info.set("auto_charge", chargeBatteryInfoBean.getAutoCharge());
+        info.set("serverResultDesc", chargeBatteryInfoBean.getServerresultdesc());
         boolean save = info.save();
         log.info("增加充电记录结果:" + save);
         return save;

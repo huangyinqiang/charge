@@ -150,17 +150,15 @@
         $('#endTime').date();
         // $('#endTime').date({theme:"datetime"});
 
-        $(function() {
-            openId = localStorage.getItem("openId");//获取名称为“key”的值
-            if (null == openId) {
-                getOpenId();
-            }
-            getUserInfo(openId);
-            var data = {
-                "userId" : userId
-            };
-            getAgentData(data);
-        });
+        openId = localStorage.getItem("openId");//获取名称为“key”的值
+        if (null == openId) {
+            getOpenId();
+        }
+        getUserInfo(openId);
+        var data = {
+            "userId" : userId
+        };
+        getAgentData(data);
 
     });
 
@@ -220,7 +218,21 @@
             success : function(res) {
                 if (res.respObj != null && res.respCode == "000000") {
                     var data = res.respObj;
-                    console.log(data)
+                    var rechargeTime =data.rechargeTime;
+                    if(rechargeTime != null && rechargeTime != "" && rechargeTime != undefined){
+                        $("#beginTime").val(rechargeTime.split(" ")[0]);
+                        var date = new Date();
+                        var year = date.getFullYear();
+                        var month = date.getMonth() + 1;
+                        var day = date.getDate();
+                        if (month < 10) {
+                            month = "0" + month;
+                        }
+                        if (day < 10) {
+                            day = "0" + day;
+                        }
+                        $("#endTime").val(year + "-" + month + "-" + day);
+                    }
                     //充值
                     $("#rechargeSum").text(data.rechargeSum);
                     $("#rechargeCount").text(data.rechargeCount);
@@ -252,19 +264,26 @@
     }
 $("#query").on("click",function () {
 
-    var oDate1 = new Date($("#beginTime").val());
-    var oDate2 = new Date($("#endTime").val());
-    if(oDate1.getTime() > oDate2.getTime()){
+    var beginTime = $("#beginTime").val();
+    var endTime = $("#endTime").val();
+    if(beginTime != null && beginTime != "" && beginTime != undefined){
+        beginTime = beginTime + " 00:00:00"
+    }
+    if(endTime != null && endTime != "" && endTime != undefined){
+        endTime = endTime + " 23:59:59"
+    }
+    if(new Date(beginTime).getTime() > new Date(endTime).getTime()){
         layer.msg("开始时间大于结束时间", {
             shift : 5
         });
         return;
     }
 
+
     var data = {
         "userId" : userId,
-        "startDate":$("#beginTime").val()+" 00:00:00",
-        "endDate":$("#endTime").val()+" 23:59:59",
+        "startDate":beginTime,
+        "endDate":endTime,
 
     };
     getAgentData(data);

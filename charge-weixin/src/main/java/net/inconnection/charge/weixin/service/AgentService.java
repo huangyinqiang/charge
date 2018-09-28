@@ -9,6 +9,7 @@ import net.inconnection.charge.weixin.model.Company;
 import net.inconnection.charge.weixin.model.Device;
 import net.inconnection.charge.weixin.model.NewDevice;
 import net.inconnection.charge.weixin.model.NewDeviceChargeSocket;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,6 +98,11 @@ public class AgentService {
             Record record = chargeMoneyList.get(0);
             map.put("rechargeSum",Float.parseFloat(record.get("sum").toString())/100F);
             map.put("rechargeCount",record.get("count"));
+            if(startDate == null || StringUtils.isEmpty(startDate)){
+                Record record2 = chargeMoneyList.get(1);
+                map.put("rechargeTime",record2.get("rechargeTime"));
+            }
+
         }
         //钱包消费
         List<Record> chargeInfoBatteryList = chargeInfoBatteryService.getSumByCompanyId(companyIdStr,"W",
