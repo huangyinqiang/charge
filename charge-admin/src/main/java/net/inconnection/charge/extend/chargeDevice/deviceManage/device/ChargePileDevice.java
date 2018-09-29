@@ -330,6 +330,7 @@ public class ChargePileDevice implements GateWay {
             _log.error("the message is empty!");
             return;
         }
+        _log.info("request msg :" + message);
     }
 
     public void responseMsgHandle(String message){

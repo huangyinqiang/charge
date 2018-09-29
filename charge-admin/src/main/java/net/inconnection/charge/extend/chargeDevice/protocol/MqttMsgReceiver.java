@@ -133,7 +133,7 @@ public class MqttMsgReceiver {
         int count = 0;
         topic1[count] = "C/CHARGE/+/+/data";
         count++;
-        topic1[count] = "C/CHARGE/+/+/request";
+        topic1[count] = "P/CHARGE/+/+/request";
         count++;
         topic1[count] = "C/CHARGE/+/+/response";
         count++;
