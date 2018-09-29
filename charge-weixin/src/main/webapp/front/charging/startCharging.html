@@ -264,16 +264,27 @@
             cache : false,
             async : false,
             success : function(data) {
-                if (data.respCode != '000000' | null == data.respObj |data.respObj.status != 1) {
-                    layer.msg("设备暂时离线，请稍后再试...", {
+                if (data.respObj != null && data.respCode == "000000"){
+                    if (data.respObj.status == 1) {
+                        //设备状态正常
+                        location.href = "./charging/chooseNewDevicePortAndTime?deviceId="
+                            + data.respObj.id + "&area="
+                            + encodeURI(encodeURI(data.respObj.province + data.respObj.city + data.respObj.detail_location)) + "&projectId="
+                            + data.respObj.projectId + "&companyId=" + data.respObj.company_id
+
+                    }else {
+                        layer.msg("设备暂时不可用，请稍后再试...", {
+                            shift : 5
+                        });
+                        return;
+                    }
+
+                }else {
+                    layer.msg("设备不存在，请联系客服", {
                         shift : 5
                     });
                     return;
                 }
-                location.href = "./charging/chooseNewDevicePortAndTime?deviceId="
-                    + data.respObj.id + "&area="
-                    + encodeURI(encodeURI(data.respObj.province + data.respObj.city + data.respObj.detail_location)) + "&projectId="
-                    + data.respObj.projectId + "&companyId=" + data.respObj.company_id
 
             },
             error : function() {
@@ -295,7 +306,7 @@
             cache : false,
             async : false,
             success : function(data) {
-                if (data.respCode != '000000' | null == data.respObj) {
+                if (data.respCode != '000000' || null == data.respObj) {
                     layer.msg("设备暂时离线，请稍后再试...", {
                         shift : 5
                     });
@@ -326,6 +337,7 @@
     <!-- 我要充电 -->
     <div class="chargeBox">
         <div class="chargeImg" onclick="scanQR()">
+        <!--<div class="chargeImg" onclick="queryNewDevice('10100000001');">-->
             <img src="images/charge.gif">
         </div>
 

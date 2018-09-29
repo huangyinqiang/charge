@@ -90,11 +90,14 @@ public class NewDeviceController extends Controller {
             log.info("充电返回结果：null");
         }
 
+//        startChargeStatus = 1;
+//        startPower = 300;
+
 
         log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + "," +
                 "startChargeStatus=" + startChargeStatus+",startPower:"+startPower);
         String powerSection="0-200";
-        if (startChargeStatus.equals(1)){
+        if (startChargeStatus.equals(1) || (startChargeStatus.equals(0) && startPower > 0)){
 
             //充电成功
             if (startPower < 200){
@@ -128,18 +131,21 @@ public class NewDeviceController extends Controller {
 
         }else {
             log.error("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
+
+            this.renderJson(new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue()));
+            return;
         }
 
-//        Integer moneyInt = Integer.parseInt(money);
-//        if (operType.equals("W") && chargeType.equals("charge")){
-//            Integer autoUnitPriceInt = Integer.parseInt(autoUnitPrice);
-//            //按照时间计算总价
-//            moneyInt = new Double(Double.parseDouble(time)/60.0 * autoUnitPriceInt).intValue();
-//        }
+        Integer moneyInt = Integer.parseInt(money);
+        if (operType.equals("W") && chargeType.equals("charge")){
+            Integer autoUnitPriceInt = Integer.parseInt(autoUnitPrice);
+            //按照时间计算总价
+            moneyInt = new Double(Double.parseDouble(time)/60.0 * autoUnitPriceInt).intValue();
+        }
         Map<String,String> map =new HashMap<>(5);
         map.put("state",startChargeStatus.toString());
         map.put("power",powerSection);
-        map.put("money",String.valueOf(Integer.valueOf(money)/100D));
+        map.put("money",String.valueOf(moneyInt/100D));
         map.put("serverResultDesc",String.valueOf(startPower));
 
         this.renderJson(new HnKejueResponse(map,RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue()));
