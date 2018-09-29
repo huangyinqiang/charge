@@ -359,7 +359,7 @@ public class CompanyController extends BaseController{
     //充值历史记录数据
     public void chargelistData() {
         Long company_id = getParaToLong("company_id");
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+company_id);
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+company_id +" order by recharge_time desc ");
         for (Record record:list){
             record.set("company_name",getPara("company_name"));
 
@@ -379,7 +379,7 @@ public class CompanyController extends BaseController{
     //充电记录页面
     public void chargeElectricityHistoryPage() {
         Long company_id = getParaToLong("id");
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_charge_history where company_id="+company_id);
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_charge_history where company_id="+company_id +" order by operStartTime desc ");
         Integer money_total=0;//总金额和
         Integer gift_total=0;//总赠送金额和
         for (Record record:list){
@@ -406,7 +406,7 @@ public class CompanyController extends BaseController{
     //充电记录页面数据
     public void chargeElectricityHistoryData() {
         Long company_id = getParaToLong("company_id");
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_charge_history where company_id="+company_id);
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_charge_history where company_id="+company_id +" order by operStartTime desc ");
         for (Record record:list){
             record.set("company_name",getPara("company_name"));
 
