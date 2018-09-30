@@ -324,7 +324,6 @@
             type : 'POST',
             url : "../newDevice/startCharge4WriteDate",
             dataType : "json",
-            async : false,
             data : {
                 openId : openId,
                 companyId : companyId,
@@ -351,10 +350,10 @@
             async : true,// 设置同步方式，false为同步
             success : function(res) {
 
+                location.href="../poweroff";
             }
         });
 
-        location.href="../poweroff";
     }
 
     //断开插座

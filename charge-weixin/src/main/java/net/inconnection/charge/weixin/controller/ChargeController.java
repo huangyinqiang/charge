@@ -87,7 +87,7 @@ public class ChargeController extends Controller {
     }
 
     public void checkPower() {
-        log.error("跳转到功率检测页面");
+        log.info("跳转到功率检测页面");
         this.setAttr("openId", this.getPara("openId"));
         this.setAttr("companyId", this.getPara("companyId"));
         this.setAttr("type", this.getPara("type"));

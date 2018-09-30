@@ -70,7 +70,7 @@ public class NewDeviceController extends Controller {
         Long socketSN = Long.parseLong(devicePort);
         Integer chargeTime = Integer.parseInt(time);//分钟
         Integer chargeTimeSenconds = chargeTime*60;
-        log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
+        log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + " ,chargeTime= " + chargeTime );
 
         JSONObject startChargeResltJson;
         if(chargeType.equals("auto")){
@@ -147,6 +147,8 @@ public class NewDeviceController extends Controller {
         map.put("power",powerSection);
         map.put("money",String.valueOf(moneyInt/100D));
         map.put("serverResultDesc",String.valueOf(startPower));
+
+        log.info("开始充电返回结果 return result :" + map);
 
         this.renderJson(new HnKejueResponse(map,RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue()));
     }
