@@ -91,7 +91,7 @@ public class NewDeviceController extends Controller {
         }
 
 //        startChargeStatus = 1;
-//        startPower = 300;
+//        startPower = 800;
 
 
         log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + "," +
@@ -137,15 +137,14 @@ public class NewDeviceController extends Controller {
         }
 
         Integer moneyInt = Integer.parseInt(money);
-        if (operType.equals("W") && chargeType.equals("charge")){
-            Integer autoUnitPriceInt = Integer.parseInt(autoUnitPrice);
+        Integer autoUnitPriceInt = Integer.parseInt(autoUnitPrice);
             //按照时间计算总价
-            moneyInt = new Double(Double.parseDouble(time)/60.0 * autoUnitPriceInt).intValue();
-        }
+        moneyInt = new Double(Double.parseDouble(time)/60.0 * autoUnitPriceInt).intValue();
+
         Map<String,String> map =new HashMap<>(5);
         map.put("state",startChargeStatus.toString());
         map.put("power",powerSection);
-        map.put("money",String.valueOf(moneyInt/100D));
+        map.put("money",String.valueOf(moneyInt));
         map.put("serverResultDesc",String.valueOf(startPower));
 
         log.info("开始充电返回结果 return result :" + map);
@@ -196,8 +195,6 @@ public class NewDeviceController extends Controller {
             this.renderText("数据异常，请重试");
             return;
         }
-        log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId+"," +
-                "autoUnitPrice="+autoUnitPrice+",money="+money );
         Integer power = Integer.parseInt(pow.split("-")[1]);
         //功率判断，过小或过大，断电，发消息 FAIL
 
@@ -211,17 +208,19 @@ public class NewDeviceController extends Controller {
             return;
         }
 
-        if (power < 200){
+        Integer startPower = Integer.parseInt(pow.split("-")[0]);
+
+        if (startPower < 200){
             autoUnitPrice = autoUnitPriceA1;
-        }else if (power < 300){
+        }else if (startPower < 300){
             autoUnitPrice = autoUnitPriceA2;
-        }else if (power < 350){
+        }else if (startPower < 350){
             autoUnitPrice = autoUnitPriceA3;
-        }else if (power < 500){
+        }else if (startPower < 500){
             autoUnitPrice = autoUnitPriceA4;
-        }else if (power < 700){
+        }else if (startPower < 700){
             autoUnitPrice = autoUnitPriceA5;
-        }else if (power < 1000){
+        }else if (startPower < 1000){
             autoUnitPrice = autoUnitPriceA6;
         }else {
             autoUnitPrice = autoUnitPriceA7;
@@ -233,6 +232,8 @@ public class NewDeviceController extends Controller {
         }
 
 
+        log.info("记录充电数据 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId+"," +
+                "autoUnitPrice="+autoUnitPrice+",money="+money );
         chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money,
                 walletAccount, operType, realGiftRate, companyId ,autoUnitPrice,serverResultDesc);
 
