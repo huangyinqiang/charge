@@ -211,6 +211,27 @@ public class NewDeviceController extends Controller {
             return;
         }
 
+        if (power < 200){
+            autoUnitPrice = autoUnitPriceA1;
+        }else if (power < 300){
+            autoUnitPrice = autoUnitPriceA2;
+        }else if (power < 350){
+            autoUnitPrice = autoUnitPriceA3;
+        }else if (power < 500){
+            autoUnitPrice = autoUnitPriceA4;
+        }else if (power < 700){
+            autoUnitPrice = autoUnitPriceA5;
+        }else if (power < 1000){
+            autoUnitPrice = autoUnitPriceA6;
+        }else {
+            autoUnitPrice = autoUnitPriceA7;
+        }
+
+        if (StringUtils.isBlank(autoUnitPrice)) {
+            //如果没有，就默认50分
+            autoUnitPrice = "50";
+        }
+
 
         chargeBatteryService.saveNewDeviceChargeHistory(openId, deviceId, devicePort, time, chargeType, money,
                 walletAccount, operType, realGiftRate, companyId ,autoUnitPrice,serverResultDesc);
@@ -223,6 +244,8 @@ public class NewDeviceController extends Controller {
             title = "您选择临时充电，充电时间" + time + "分钟" + "充电费用" + chargeMoney/100D + "元";
 
         }else {
+
+
             //会员充电
             if (chargeType.equals("auto")){
                 //智能充电
