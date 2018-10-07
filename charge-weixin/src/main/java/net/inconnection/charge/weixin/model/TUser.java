@@ -60,6 +60,9 @@ public class TUser extends Model<TUser> {
     public TUser queryUserByOpenId(String openId) {
         log.info("根据openid查询用户：" + openId);
         TUser findFirst = (TUser)this.findFirst("select * from tuser where openId = ?", new Object[]{openId});
+        if (findFirst.get("real_git_rate") == null){
+            findFirst.set("real_git_rate", 1.0D);
+        }
         log.info("根据openid查询用户结果：" + findFirst);
         return findFirst;
     }

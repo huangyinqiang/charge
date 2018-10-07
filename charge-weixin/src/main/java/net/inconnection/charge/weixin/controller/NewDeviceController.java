@@ -63,6 +63,7 @@ public class NewDeviceController extends Controller {
 
         if (deviceId == null || devicePort == null || time == null){
             this.renderText(startChargeStatus.toString());
+            log.error("数据异常，deviceId = " + deviceId +  "，devicePort = " + devicePort + "，time = " + time);
             return;
         }
 
@@ -102,7 +103,7 @@ public class NewDeviceController extends Controller {
         log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + "," +
                 "startChargeStatus=" + startChargeStatus+",startPower:"+startPower);
         String powerSection="0-200";
-        if (startChargeStatus.equals(1) || (startChargeStatus.equals(0) && startPower > 0)){
+        if (startChargeStatus.equals(1) || (startChargeStatus.equals(0))){
 
             //充电成功
             if (startPower < 200){
@@ -130,6 +131,7 @@ public class NewDeviceController extends Controller {
 
             if (StringUtils.isBlank(autoUnitPrice)) {
                 //如果没有，就默认50分
+                log.error("单价异常，autoUnitPrice = " + autoUnitPrice );
                 autoUnitPrice = "50";
             }
 
@@ -198,6 +200,7 @@ public class NewDeviceController extends Controller {
 
         if (deviceId == null || devicePort == null || time == null){
             this.renderText("数据异常，请重试");
+            log.error("数据异常，deviceId = " + deviceId +  "，devicePort = " + devicePort + "，time = " + time);
             return;
         }
 
@@ -240,6 +243,7 @@ public class NewDeviceController extends Controller {
 
         if (StringUtils.isBlank(autoUnitPrice)) {
             //如果没有，就默认50分
+            log.error("单价异常，autoUnitPrice = " + autoUnitPrice );
             autoUnitPrice = "50";
         }
 
