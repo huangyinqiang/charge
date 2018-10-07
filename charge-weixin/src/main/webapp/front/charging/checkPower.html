@@ -96,6 +96,9 @@
     var serverResultDesc;
     // $("#submitBtn").hide();
 
+	var socketIsOpen = false;
+	var userIsConfirmed = false;
+
     setTimeout(startCharge4CheckPower,1000)
     function startCharge4CheckPower() {
         console.log("kaishi")
@@ -127,14 +130,15 @@
             async : true,// 设置同步方式，false为同步
             success : function(res) {
                 if (res.respObj != null && res.respCode == "000000") {
+                    socketIsOpen = true;
                     data = res.respObj;
                     $('#power').text(data.power);
                     $('#money').text(data.money/100);
                     power=data.power;
                     serverResultDesc = data.serverResultDesc;
                     money = data.money;
-                    $("#showTimes").hide()
-                    submit()
+                    $("#showTimes").hide();
+                    submit();
                 }else{
                     layer.msg("功率检测失败...", {
                         shift : 5
@@ -146,6 +150,7 @@
                 layer.msg("功率检测失败...", {
                     shift : 5
                 });
+                userIsConfirmed = true;
                 stopCharge();
                 window.location="../charging"
             }
@@ -207,10 +212,13 @@
             msg="请确认" + devicePort + "插座，会员充电" + time + "分钟；充电费用" + money/100 + "元,点击“确定”后开始充电"
         }
         layer.confirm(msg, {
+            closeBtn : 0,
             btn : [ '确定', '取消' ]
         }, function() {
+            userIsConfirmed = true;
             startCharge4WriteDate();
         }, function() {
+            userIsConfirmed = true;
             stopCharge();
             window.location="../charging";
         });
@@ -219,8 +227,10 @@
     // 充值钱包
     function rechargeMoneyToWallet() {
         layer.confirm('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
+            closeBtn : 0,
             btn : [ '取消', '确认' ]
         }, function() {
+            userIsConfirmed = true;
             stopCharge();
             window.location="../charging";
         }, function() {
@@ -245,6 +255,7 @@
             // 单次支付
             temporaryRechargeMoney(money);
         }, function() {
+            userIsConfirmed = true;
             stopCharge();
             // 跳转到充值页面
             location.href = "../recharge/rechargeNew?companyId=" + companyId
@@ -290,11 +301,13 @@
             if (res.err_msg == "get_brand_wcpay_request:ok") {
                 chargeType = "temp";// 临时充电收费
                 operType = "M";// 微信单次支付
+                userIsConfirmed = true;
                 startCharge4WriteDate();
             } else {
                 layer.msg("支付失败", {
                     shift : 5
                 });
+                userIsConfirmed = true;
                 stopCharge();
                 window.location="../charging";
 
@@ -307,14 +320,17 @@
     function chargeTwoHoursOrPay() {
         layer.confirm('余额不足，只能充电两小时。请确认' + devicePort + '插座充电' + time
             + '分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！', {
+            closeBtn : 0,
             btn : [ '充电', '充值' ]
         }, function() {
             chargeType = "charge";// 功率充电
             operType = "W";// 会员扣费
             money = parseInt(device.tow_hours_price);
             time = 120;
+            userIsConfirmed = true;
             startCharge4WriteDate();
         }, function() {
+            userIsConfirmed = true;
             stopCharge();
             location.href = "../recharge/rechargeNew?companyId=" + companyId
         });
@@ -350,6 +366,7 @@
             cache : false,
             async : true,// 设置同步方式，false为同步
             success : function(res) {
+                userIsConfirmed = true;
 
                 location.href="../poweroff";
             }
@@ -371,6 +388,7 @@
             cache : false,
             async : true,// 设置同步方式，false为同步
             success : function(res) {
+                socketIsOpen = false;
                 window.location="../charging";
                 // if (res.respCode == "000000") {
                 //     window.location="../charging/chargingInfo"

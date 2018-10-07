@@ -4,11 +4,27 @@ $(function() {
 	var time = GetQueryString('time');
 	$('#time').text(time);
 
+    window.addEventListener("beforeunload", function(e) {
+    	if (socketIsOpen && !userIsConfirmed ) {
+    		//插座打开，但是用户未确认，需要关闭插座
+            stopCharge();
+            socketIsOpen = false;
+		}
+    }, false);
+
+    window.addEventListener("unload", function(e) {
+        if (socketIsOpen && !userIsConfirmed ) {
+            //插座打开，但是用户未确认，需要关闭插座
+            stopCharge();
+            socketIsOpen = false;
+        }
+    }, false);
+
 
 	// 监听后退事件 ，点击返回关闭页面
 	pushHistory();
 	window.addEventListener("popstate", function(e) {
-        stopCharge()
+        stopCharge();
         WeixinJSBridge.call('closeWindow');//点击返回关闭窗口
 		// location.href="../index";//或者根据自己的需求跳转
 	}, false);

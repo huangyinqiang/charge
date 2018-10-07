@@ -18,8 +18,8 @@ public class NewDeviceChargeSocket extends Model<NewDeviceChargeSocket> {
         log.info("根据充电桩ID查询充电插座信息:" + deviceId);
         Date newTime = new Date();
         newTime.setTime(newTime.getTime() - 10*60*1000);
-        List<NewDeviceChargeSocket> resp = dao.find("select charge_socket_sn,is_used,charge_state from yc_charge_socket where charge_pile_id=? and update_time>?", new Object[]{deviceId, newTime});
-//        List<NewDeviceChargeSocket> resp = dao.find("select charge_socket_sn,is_used,charge_state from yc_charge_socket where charge_pile_id=? ", new Object[]{deviceId});
+//        List<NewDeviceChargeSocket> resp = dao.find("select charge_socket_sn,is_used,charge_state from yc_charge_socket where charge_pile_id=? and update_time>?", new Object[]{deviceId, newTime});
+        List<NewDeviceChargeSocket> resp = dao.find("select charge_socket_sn,is_used,charge_state from yc_charge_socket where charge_pile_id=? ", new Object[]{deviceId});
 
         log.info("根据充电桩ID查询充电插座信息结果:" + resp);
         return resp;
