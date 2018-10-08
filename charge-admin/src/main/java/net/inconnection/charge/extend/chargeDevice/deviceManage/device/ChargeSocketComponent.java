@@ -152,6 +152,11 @@ public class ChargeSocketComponent implements Device {
             chargePower = chargeIntensity * chargeVoltage/1000;
 
             updateDataToDb();
+
+            if (chargePower > startPower*3/2){
+                //充电功率大于 1.5倍初始功率，断电
+                shutDownChargeSocket();
+            }
 //            log.info("pile id = " + chargePileId + ", socket Id  =  " + chargeSocketId);
             if (lastChargeState.equals(CHARGE_ING) && (!chargeState.equals(CHARGE_ING)) && chargeTime>0){
                 //充电结束,结算费用
