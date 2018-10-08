@@ -1,6 +1,19 @@
 var localUrl = window.location.href;
 var openId;
 $(function() {
+    // 监听后退事件 ，点击返回关闭页面
+    pushHistory();
+    window.addEventListener("popstate", function(e) {
+        WeixinJSBridge.call('closeWindow');//点击返回关闭窗口
+    }, false);
+    function pushHistory() {
+        var state = {
+            title : "title",
+            url : "#"
+        };
+        window.history.pushState(state, "title", "#");
+    }
+
 	openId = localStorage.getItem("openId");// 获取名称为“key”的值
 	if (null == openId) {
 		getOpenId();
