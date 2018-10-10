@@ -1,0 +1,107 @@
+
+<#include "/common/head.html"/>
+    
+    <table id="dg"></table>
+    <div id="tb" style="padding:2px 5px;">
+        <div class="wrap_search">
+
+				            <span class="search_item search_between">
+				                <span class="item_text">充值时间: </span>
+				                <span class="item_obj">
+				                    <input class="easyui-datetimebox" style="width:150px;" name="_start_createTime"
+                                           id="startTime" /> ：<input class="easyui-datetimebox" style="width:150px;" name="_end_createTime" id="endTime" />
+				                </span>
+				            </span>
+        </div>
+        <div style="text-align: left; margin:6px;">
+            <a href="javascript:void(0)" class="easyui-linkbutton exportBtn" iconCls="glyphicon-export" plain="true" onclick="exportCsv()">导出</a>
+            <div id="searchBtnWrap" style="float:right; padding-right:40px;">
+                <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+var datagrid = $("#dg");
+var dgOptions = {
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'chargeListDate',
+    	method:'post',
+    	toolbar:'#tb',
+    	singleSelect: true,
+    	pageSize: 50,
+    	pagination:true,
+    	multiSort:true,
+        queryParams: getInitParam(),
+        
+        columns: [[
+		         {field:'id', checkbox:true},
+                 {field:'deviceId', title: '设备编码', width:120, sortable: false},
+	           	 {field:'deviceName', title: '用户名称', width:120, sortable: false},
+	           	 {field:'amount', title: '消费金额(元)', width:120, sortable: true}
+	           ]]
+	};
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+});
+
+function zcurdSearch() {
+    var startTime = $("#startTime").datetimebox("getValue");
+    var endTime =  $("#endTime").datetimebox("getValue");
+    var startDateTime;
+    var endDateTime;
+    if(startTime != null && startTime != "" && startTime != undefined){
+        startDateTime = new Date(startTime)
+    }
+    if(endTime != null && endTime != "" && endTime != undefined){
+        endDateTime = new Date(endTime)
+    }
+
+    if(startDateTime.getTime() > endDateTime.getTime()){
+        showWarnMsg("开始时间大于结束时间！");
+        return;
+    }
+
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param[$(item).attr("name")] = $(item).val();
+		}
+	});
+	return param;
+}
+
+function getInitParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+	});
+	return param;
+}
+
+function exportCsv() {
+	var option = datagrid.datagrid("options");
+	var param = option.queryParams;
+	param.sortName = option.sortName;
+	param.sortOrder = option.sortOrder;
+	window.location.href = "chargeExportCsv?" + $.param(param);
+}
+
+//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/>
+<#include "/common/foot.html"/>

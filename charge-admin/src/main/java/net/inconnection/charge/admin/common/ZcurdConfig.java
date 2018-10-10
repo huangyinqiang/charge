@@ -78,8 +78,10 @@ public class ZcurdConfig extends JFinalConfig {
 
 		//原来的用户管理是根据框架生成页面，现在需要自己重新编写页面
 		me.add("/mySysuser", MySysUserController.class, "/busi/mySysUser");
+        me.add("/analysis", AnalysisController.class, "/busi/analysis");
 
-	}
+
+    }
 	
 	/**
 	 * 配置插件
