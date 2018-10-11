@@ -41,6 +41,8 @@
 			iconCls="glyphicon-map-marker" plain="true" onclick="status()">端口状态</a>
 		<a href="javascript:void(0)" class="easyui-linkbutton updateBtn"
 			iconCls="glyphicon-map-marker" plain="true" onclick="map()">全城地图</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton updateBtn"
+           iconCls="glyphicon-map-marker" plain="true" onclick="bindProject()">绑定项目</a>
 		<span> 【小功率:A1段:1-200W A2段:201-300W A3段:301-350W A4段:351-500W
 			A5段:501-700W 大功率:A1段:1-300w A2段:301-500W A3段:501-700 A4段:701-1000W
 			A5段:1001-1500W A6段:1501-2000w A7段:2001-2500W 】</span>
@@ -353,6 +355,22 @@
 		param.sortOrder = option.sortOrder;
 		window.location.href = "exportCsv?" + $.param(param);
 	}
+    function bindProject() {
+        var rowsSel = datagrid.datagrid("getSelections");
+        if (rowsSel.length != 1) {
+            showWarnMsg("请选择要编辑的数据！");
+            return;
+        }
+        var id = rowsSel[0].id;
+        top.window.subPage.loadCurrDatagrid = function() {
+            showMsg("关联项目成功");
+            datagrid.datagrid("reload");
+        }
+        top.openWindow("关联项目", getCurrUrl("bindProject") + "?id=" + id,
+            {
+                size : '500x550'
+            });
+    }
 
 	//按钮事件
 

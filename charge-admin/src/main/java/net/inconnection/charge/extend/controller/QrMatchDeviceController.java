@@ -11,13 +11,18 @@ import net.inconnection.charge.admin.common.DBTool;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.csv.CsvRender;
 import net.inconnection.charge.admin.common.util.StringUtil;
+import net.inconnection.charge.extend.model.DeviceProject;
+import net.inconnection.charge.extend.model.Project;
 import net.inconnection.charge.extend.model.QrMatchDevice;
+import net.inconnection.charge.extend.service.DeviceProjectService;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class QrMatchDeviceController extends BaseController {
+    private static DeviceProjectService deviceProjectService = new DeviceProjectService();
+
     public QrMatchDeviceController() {
     }
 
@@ -266,4 +271,45 @@ public class QrMatchDeviceController extends BaseController {
         this.addOpLog("[设备记录] 导出cvs");
         this.render(csvRender);
     }
+
+    public void bindProject() {
+        this.setAttr("model", QrMatchDevice.me.findById(this.getPara("id")));
+        this.render("bindProject.html");
+    }
+
+    public void getBindProjectByDeviceId() {
+        List<Object> list = deviceProjectService.getProjectByDeviceId(this.getPara("id"));
+        if(list.size() > 0){
+            this.renderSuccess(null,list);
+        }else{
+            this.renderSuccess();
+        }
+    }
+    public void saveProject() {
+        String projectId = this.getPara("projectId");
+        String deviceId = this.getPara("deviceId");
+        List<DeviceProject> deviceProjectList = DeviceProject.me.findByDeviceId(deviceId);
+        if (deviceProjectList.size() > 0) {
+            DeviceProject deviceProject = deviceProjectList.get(0);
+            deviceProject.set("project_id",projectId);
+            this.addOpLog("[绑定项目成功] 修改成功");
+            deviceProject.update();
+            this.renderSuccess();
+        } else {
+            DeviceProject deviceProject = new DeviceProject();
+            deviceProject.set("project_id",projectId);
+            deviceProject.set("device_id",deviceId);
+            this.addOpLog("[绑定项目成功] 增加成功");
+            deviceProject.save();
+            this.renderSuccess();
+        }
+    }
+
+
+    public void queryProjectList() {
+        List<Project> projectList = Project.me.findAll();
+        this.renderJson(projectList);
+    }
+
+
 }
