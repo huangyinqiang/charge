@@ -116,7 +116,11 @@ function zcurdGetParam() {
 	var param = {};
 	$("#tb :input[name]").each(function(i, item) {
 		if($(item).val()) {
-			param[$(item).attr("name")] = $(item).val();	
+		    if($(item).attr("name") == "nickName"){
+                param[$(item).attr("name")] = "*" + $(item).val() + "*";
+            }else{
+                param[$(item).attr("name")] = $(item).val();
+            }
 		}
 	});
 	return param;
