@@ -1,0 +1,109 @@
+
+<#include "/common/head.html"/>
+    
+    <table id="dg"></table>
+    <div id="tb" style="padding:2px 5px;display: flex;">
+        <div class="wrap_search" style="width: 50%;float: left">
+
+            <span class="search_item">
+                <span class="item_text">OPENID </span>
+                <span class="item_obj">
+                    <input class="easyui-textbox" name="openId" id="openId" value=""/>
+                </span>
+            </span>
+
+        </div>
+        <div class="dg_btns_wrap" style="width: 50%;float: right">
+
+            <div id="searchBtnWrap" style="float:right; padding-right:40px;">
+                <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
+            </div>
+        </div>
+    </div>
+    
+
+<script type="text/javascript">
+var datagrid = $("#dg");
+
+var dgOptions = {
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'listData',
+    	method:'post',
+    	toolbar:'#tb',
+    	pageSize: 20,
+    	pagination:true,
+    	multiSort:true,
+		sortName: getInitParam().sort,
+    	sortOrder: getInitParam().order,
+        queryParams: getInitParam(),
+        
+        columns: [[
+		         {field:'id', checkbox:true}
+	           	 ,{field:'out_trade_no', title: '商户单号', width:110, sortable: true }
+	           	 ,{field:'openId', title: '用户标识', width:240, sortable: true }
+	           	 ,{field:'total_fee', title: '总金额', width:60, sortable: true }
+	           	 ,{field:'fee_type', title: '货币种类', width:60, sortable: true }
+	           	 ,{field:'result_code', title: '业务结果', width:90, sortable: true }
+	           	 ,{field:'err_code', title: '错误代码', width:60, sortable: true }
+	           	 ,{field:'trade_type', title: '交易类型', width:60, sortable: true }
+	           	 ,{field:'bank_type', title: '付款银行', width:70, sortable: true }
+	           	 ,{field:'transaction_id', title: '微信支付订单号', width:230, sortable: true }
+	           	 ,{field:'attach', title: '商家数据包', width:120, sortable: true }
+	           	 ,{field:'time_end', title: '支付完成时间', width:120, sortable: true }
+
+	           ]],
+	           loadFilter: function(data) {
+	        	   if(data.result && data.result == 'fail') {	//失败时，错误消息提示
+	        		   showWarnMsg(data.msg);
+	        		   return {};
+	        	   }else {
+	        		   return data;
+	        	   }
+	           }           
+	};
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+});
+
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param[$(item).attr("name")] = $(item).val();	
+		}
+	});
+	return param;
+}
+
+function getInitParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+	});
+	if("") {
+		param.sort = "";
+		param.order = "asc";
+	}
+	return param;
+}
+
+var initPara = zcurdGetParam();
+//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/>
+<#include "/common/foot.html"/>
