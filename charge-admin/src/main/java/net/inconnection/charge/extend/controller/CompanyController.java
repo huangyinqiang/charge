@@ -328,14 +328,21 @@ public class CompanyController extends BaseController{
 
 
     //充值历史记录
-    public void chargeListPage() {
-        Long company_id = getParaToLong("id");
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+company_id);
+    public void rechargeListPage() {
+        SysUser sysUser = (SysUser)getSessionAttr("sysUser");
+        Integer id = sysUser.getId();
+        List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi"))
+                                         .find("select * from sysuser_company where sysuser_id="+id);
+        Integer companyId = 1;
+        if(userCompanyList.size() > 0){
+            companyId = userCompanyList.get(0).get("company_id");
+        }
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+companyId);
         Integer money_total=0;
         Integer real_total = 0;
         Integer gift_total = 0;
         for (Record record:list){
-            record.set("company_name",getPara("company_name"));
+//            record.set("company_name",getPara("company_name"));
             Integer money_sum = record.get("money_sum");
             if (money_sum!=null){
                 money_total+=money_sum;
@@ -354,17 +361,49 @@ public class CompanyController extends BaseController{
         setAttr("money_total",money_total/100.00);
         setAttr("real_total",real_total/100.00);
         setAttr("gift_total",gift_total/100.00);
-        setAttr("company_id",company_id);
-        setAttr("company_name",getPara("company_name"));
-        render("chargeList.html");
+        setAttr("companyId",companyId);
+//        setAttr("company_name",getPara("company_name"));
+        render("rechargeList.html");
     }
 
     //充值历史记录数据
-    public void chargelistData() {
-        Long company_id = getParaToLong("company_id");
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+company_id +" order by recharge_time desc ");
+    public void rechargeListData() {
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+
+        Long companyId = getParaToLong("companyId");
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT" +
+                "	yrh.*," +
+                "	yc.company_name AS `companyName`," +
+                "	u.nickName ," +
+                "   u.headimgurl "+
+                "FROM" +
+                "	yc_recharge_history yrh" +
+                "	LEFT JOIN yc_company yc ON yrh.company_id = yc.id" +
+                "	LEFT JOIN tuser u ON yrh.openId = u.openId " +
+                "where 1=1 ");
+        if(companyId != 1L){
+            sql.append(" and company_id=").append(companyId);
+        }
+        List<Object> params = new ArrayList<>();
+        for (int i = 0; i < properties.length; i++) {
+            sql.append(" and " + properties[i] + " " + symbols[i] + " ?");
+            params.add(values[i]);
+
+        }
+        sql.append(" order by recharge_time desc");
+        int size = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString(),params.toArray()).size();
+        Pager pager = this.getPager();
+        if(pager != null) {
+            sql.append(" limit " + pager.getStartRow() + ", " + pager.getRows());
+        }
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString(),params.toArray());
+
         for (Record record:list){
-            record.set("company_name",getPara("company_name"));
+//            record.set("company_name",getPara("company_name"));
 
             Integer money_sum=record.get("money_sum");
             record.set("money_sum",money_sum/100.00);
@@ -376,7 +415,7 @@ public class CompanyController extends BaseController{
             record.set("coupon",coupon/100.00);
 
         }
-        this.renderDatagrid(list, list.size());
+        this.renderDatagrid(list, size);
     }
 
     //充电记录页面

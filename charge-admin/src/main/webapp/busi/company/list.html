@@ -65,7 +65,7 @@
             <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="project()">项目</a>
 
             <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="updateCoupon()">活动</a>
-            <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="chargeList()">充值历史</a>
+            <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="rechargeList()">充值历史</a>
 
             <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="chargeElectricityHistory()">充电记录</a>
 
@@ -238,7 +238,7 @@ function project() {
 
 
 
-function chargeList() {
+function rechargeList() {
     var rowsSel = datagrid.datagrid("getSelections");
     if(rowsSel.length != 1) {
         showWarnMsg("请选择要所属运营商！");
@@ -250,7 +250,7 @@ function chargeList() {
             showMsg("更新成功");
             datagrid.datagrid("reload");
         }*/
-    top.openWindow("充值记录", getCurrUrl("chargeListPage") + "?id=" + id+ "&company_name=" + company_name, {size: '600x400'});
+    top.openWindow("充值记录", getCurrUrl("rechargeListPage") + "?id=" + id+ "&company_name=" + company_name, {size: '600x400'});
 }
 
 //充电记录
