@@ -153,3 +153,83 @@ update yc_company set pid=1  where company_name='云创';
 update yc_company set pid=100000  where company_name='昊方';
 update yc_company set pid=100000  where company_name='旺座';
 update yc_company set pid=100000  where company_name='测试公司';
+
+
+/*新增项目活动*/
+-- auto-generated definition
+create table yc_project_activity
+(
+  id          int auto_increment
+    primary key,
+  project_id  bigint       null,
+  name        varchar(200) null,
+  type        varchar(8)   not null
+  comment '类型(CH:充电)',
+  money       int(8)       not null
+  comment '充值金额',
+  chargeNum   int(8)       null,
+  coupon      int(4)       null
+  comment '送优惠金额',
+  status      char         not null
+  comment '状态(有效:Y 无效N)',
+  remark      varchar(128) null,
+  start_time  datetime     null,
+  expiry_time datetime     null,
+  sum         int(5)       null,
+  province    varchar(32)  null,
+  city        varchar(32)  null,
+  location    varchar(100) null,
+  actNum      int          null
+);
+
+/* 新增对运营商付款的数据记录  */
+-- auto-generated definition
+create table yc_pay_agent_history
+(
+  id                  int auto_increment
+    primary key,
+  openId              varchar(64) charset utf8mb4 not null
+  comment '微信用户的唯一识别',
+  nickName            varchar(32) charset utf8mb4 not null
+  comment '昵称',
+  tel                 varchar(15)                 null
+  comment '手机号码',
+  company_id          bigint                      null,
+  start_time          datetime                    null,
+  end_time            datetime                    null,
+  recharge_money      int(8)                      not null
+  comment '本期充值金额',
+  recharge_money_real int(8)                      not null
+  comment '本期充值实际金额',
+  charge_money        int(8)                      not null
+  comment '本期充电消费金额',
+  charge_money_real   int(8)                      not null
+  comment '本期充电消费实际金额',
+  temp_money          int(8)                      not null
+  comment '本期临时充电消费金额',
+  balance_rate        double                      null
+  comment '代理公司和总公司的结算比例',
+  pay_sum             int(8)                      not null
+  comment '结算给运营商的总金额',
+  pay_time            datetime                    null,
+  last_surplus        int(8)                      not null
+  comment '上期结余',
+  surplus             int(8)                      not null
+  comment '本期结余',
+  pay_type            int(2)                      null
+  comment '付款方式 1：微信 2：银行卡 3：现金',
+  weixin_account      varchar(200)                null
+  comment '微信账号',
+  bank_account        varchar(200)                null
+  comment '银行账号',
+  bank_name           varchar(200)                null
+  comment '开户行',
+  operator_name       varchar(50)                 null
+  comment '操作员姓名',
+  operator_time       datetime                    null
+  comment '操作员时间'
+);
+
+
+
+
