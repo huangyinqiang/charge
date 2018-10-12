@@ -24,7 +24,7 @@
         border-radius: 10px;
 
     }
-    
+
     .i_statistical h3{
         font-size: 18px;
         width: 100%;
@@ -42,8 +42,8 @@
         top: 30%;
         right: 10px;
         background-color: white;
-        border-radius: 5px; 
-        border: 1px solid lightgray;    
+        border-radius: 5px;
+        border: 1px solid lightgray;
     }
 
     /*查看*/
@@ -71,7 +71,30 @@
        height: auto;
        border-collapse:collapse;
         }
-     
+    .btn-group {
+        width: 100%;text-indent: 10px;margin: 20px auto 0 auto;position: relative;font-size: 14px;
+    }
+
+    .btn-group-btn {
+        background-color: #ffffff;border: 1px solid #c7c7c7;border-radius: 5px; width: 50px; height: 28px;
+    }
+    #query:hover{
+        outline: none;
+        background-color:#03a9f4a3;
+        outline: none;
+        color: white;
+    }
+    .btn-group-btn:hover {
+        background-color:#03a9f4a3;
+        outline: none;
+        color: white;
+
+    }
+    .btn-group-btn:active {
+        position:relative;
+        top:1px;
+    }
+
 </style>
 
 <div class="i_statistical">
@@ -83,7 +106,16 @@
          <button id="query">查询</button>
     </div>
     <div id="datePlugin"></div>
-   
+    <div  class="btn-group">
+        <div style=" width: 98%;text-align: center;">
+            <button class="btn-group-btn" onclick="btnQuery(1)">昨天</button>
+            <button class="btn-group-btn" onclick="btnQuery(3)">3天</button>
+            <button class="btn-group-btn" onclick="btnQuery(7)">7天</button>
+            <button class="btn-group-btn" onclick="btnQuery(15)">15天</button>
+            <button class="btn-group-btn" onclick="btnQuery(30)">1个月</button>
+        </div>
+    </div>
+
 
 
 
@@ -98,7 +130,7 @@
             <tr>
                 <td id="rechargeSum">0</td>
                 <td id="rechargeCount">0</td>
-            </tr>  
+            </tr>
 
             <tr style="background: #03a9f47a;">
                 <td>消费总金额/元</td>
@@ -107,7 +139,7 @@
             <tr>
                 <td id="consumptionSum">0</td>
                 <td id="consumptionCount">0</td>
-            </tr>  
+            </tr>
 
 
             <!--<tr style="background: #c4c8ca7a;">-->
@@ -135,7 +167,7 @@
             <tr>
                 <td id="consumptionTempSum">0</td>
                 <td id="consumptionTempCount">0</td>
-            </tr>  
+            </tr>
         </table>
         <p style="text-indent:10px;margin-top:10px;color:red;font-size: 16px;font-weight: 500;">本账期收益:<span id="incomingSum" style="color:red;">10000.00元</span></p>
 
@@ -288,5 +320,66 @@ $("#query").on("click",function () {
     };
     getAgentData(data);
 })
+    function btnQuery(val) {
+        var data = {};
+        var date = getDateStr(1);
+        switch (val){
+            case 1 :
+                data ={
+                    "userId" : userId,
+                    "startDate":date+" 00:00:00",
+                    "endDate":date+" 23:59:59",
+                }
+                break;
+            case 3:
+                var startDate = getDateStr(3);
+                data ={
+                    "userId" : userId,
+                    "startDate":startDate+" 00:00:00",
+                    "endDate":date+" 23:59:59",
+                }
+                break;
+            case 7:
+                var startDate = getDateStr(7);
+                data ={
+                    "userId" : userId,
+                    "startDate":startDate+" 00:00:00",
+                    "endDate":date+" 23:59:59",
+                }
+                break;
+            case 15:
+                var startDate = getDateStr(15);
+                data ={
+                    "userId" : userId,
+                    "startDate":startDate+" 00:00:00",
+                    "endDate":date+" 23:59:59",
+                }
+                break;
+            case 30:
+                var startDate = getDateStr(30);
+                data ={
+                    "userId" : userId,
+                    "startDate":startDate+" 00:00:00",
+                    "endDate":date+" 23:59:59",
+                }
+                break;
+            default:
+                data ={
+                    "userId" : userId
+                }
+
+        }
+
+        getAgentData(data);
+    }
+
+    function getDateStr(day) {
+        var dd = new Date();
+        dd.setDate(dd.getDate()-day);//获取AddDayCount天后的日期
+        var y = dd.getFullYear();
+        var m = dd.getMonth()+1;//获取当前月份的日期
+        var d = dd.getDate();
+        return y+"-"+m+"-"+d;
+    }
 </script>
 </html>
