@@ -156,6 +156,7 @@ public class ChargeSocketComponent implements Device {
             if (chargePower > startPower*3/2){
                 //充电功率大于 1.5倍初始功率，断电
                 shutDownChargeSocket();
+                log.error("设备充电功率严重超过初始功率，平台断电， deviceID：" + chargePileId + ", socketid: " + chargeSocketId);
             }
 //            log.info("pile id = " + chargePileId + ", socket Id  =  " + chargeSocketId);
             if (lastChargeState.equals(CHARGE_ING) && (!chargeState.equals(CHARGE_ING)) && chargeTime>0){
@@ -163,6 +164,7 @@ public class ChargeSocketComponent implements Device {
 
                 //向设备发送关闭消息
                 shutDownChargeSocket();
+                log.error("设备充电完成，平台关掉插座， deviceID：" + chargePileId + ", socketid: " + chargeSocketId);
 
                 calculateFeeAndUpdata(chargePileId, chargeSocketId);
             }
