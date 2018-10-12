@@ -2,9 +2,11 @@ package net.inconnection.charge.extend.controller;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import net.inconnection.charge.admin.account.model.SysUser;
 import net.inconnection.charge.admin.common.DBTool;
 import net.inconnection.charge.admin.common.ZcurdTool;
 import net.inconnection.charge.admin.common.base.BaseController;
+import net.inconnection.charge.admin.common.util.Pager;
 import net.inconnection.charge.admin.common.util.StringUtil;
 import net.inconnection.charge.extend.model.ChargeBatteryInfo;
 import net.inconnection.charge.extend.model.Chargeprice;
@@ -12,6 +14,7 @@ import net.inconnection.charge.extend.model.Company;
 import net.inconnection.charge.extend.model.CompanyActivity;
 import net.inconnection.charge.extend.model.Project;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -378,8 +381,25 @@ public class CompanyController extends BaseController{
 
     //充电记录页面
     public void chargeElectricityHistoryPage() {
-        Long company_id = getParaToLong("id");
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_charge_history where company_id="+company_id +" order by operStartTime desc ");
+        SysUser sysUser = (SysUser)getSessionAttr("sysUser");
+        Integer id = sysUser.getId();
+        List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from " +
+                "sysuser_company where sysuser_id="+id);
+//        Long company_id = getParaToLong("id");
+        Integer company_id = 1;
+        if(userCompanyList.size() > 0){
+            company_id = userCompanyList.get(0).get("company_id");
+        }
+
+        StringBuffer sql = new StringBuffer("select * from yc_charge_history");
+        if(id == 1){
+            sql.append(" order by operStartTime desc ");
+        }else{
+            sql.append(" where company_id=");
+            sql.append(company_id);
+            sql.append(" order by operStartTime desc ");
+        }
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString());
         Integer money_total=0;//总金额和
         Integer gift_total=0;//总赠送金额和
         for (Record record:list){
@@ -393,7 +413,7 @@ public class CompanyController extends BaseController{
                 gift_total+=gift_sum;
             }
         }
-        setAttr("money_total",money_total/100.00);
+            setAttr("money_total",money_total/100.00);
         setAttr("gift_total",gift_total/100.00);
         setAttr("company_id",company_id);
         setAttr("company_name",getPara("company_name"));
@@ -405,11 +425,52 @@ public class CompanyController extends BaseController{
 
     //充电记录页面数据
     public void chargeElectricityHistoryData() {
-        Long company_id = getParaToLong("company_id");
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_charge_history where company_id="+company_id +" order by operStartTime desc ");
-        for (Record record:list){
-            record.set("company_name",getPara("company_name"));
+        Pager pager = this.getPager();
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+//        Long company_id = getParaToLong("company_id");
+        SysUser sysUser = (SysUser)getSessionAttr("sysUser");
+        Integer id = sysUser.getId();
+        List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from " +
+                "sysuser_company where sysuser_id="+id);
+//        Long company_id = getParaToLong("id");
+        Integer company_id = 1;
+        if(userCompanyList.size() > 0){
+            company_id = userCompanyList.get(0).get("company_id");
+        }
+        StringBuffer sql = new StringBuffer("SELECT" +
+                "	ych.*," +
+                "	ycp.NAME as `deviceName`," +
+                "	yc.company_name AS `companyName`," +
+                "	u.nickName " +
+                "FROM" +
+                "	yc_charge_history ych" +
+                "	LEFT JOIN yc_charge_pile ycp ON ych.deviceId = ycp.id" +
+                "	LEFT JOIN yc_company yc ON ych.company_id = yc.id" +
+                "	LEFT JOIN tuser u ON ych.openId = u.openId " );
 
+        if(id != 1){
+            sql.append(" where ych.company_id=");
+            sql.append(company_id);
+        }else {
+            sql.append(" where 1=1 ");
+        }
+        List<Object> params = new ArrayList<>();
+        for (int i = 0; i < properties.length; i++) {
+            sql.append(" and " + properties[i] + " " + symbols[i] + " ?");
+            params.add(values[i]);
+
+        }
+        sql.append(" order by ych.operStartTime desc ");
+        int size = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString(),params.toArray()).size();
+        if(pager != null) {
+            sql.append(" limit " + pager.getStartRow() + ", " + pager.getRows());
+        }
+
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString(),params.toArray());
+        for (Record record:list){
             Integer chargeMoney=record.get("chargeMoney");
             record.set("chargeMoney",chargeMoney/100.00);
 
@@ -423,7 +484,7 @@ public class CompanyController extends BaseController{
             record.set("autoUnitPrice",autoUnitPrice/100.00);
 
         }
-        this.renderDatagrid(list, list.size());
+        this.renderDatagrid(list, size);
     }
 
 }

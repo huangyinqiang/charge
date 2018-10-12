@@ -5,12 +5,33 @@
 
 <div id="tb" style="padding:2px 5px;">
     <div style="text-align: left; margin:6px;">
-
-
        <span>金额总数： </span><span id="money_total"></span>
         <span>赠送总数： </span><span id="gift_total"></span>
        <!-- <a href="#" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="updateActivity()">编辑</a>-->
     </div>
+
+        <div class="wrap_search">
+            <span class="search_item">
+                <span class="item_text">用户昵称: </span>
+                <span class="item_obj">
+                    <input class="easyui-textbox" type="text" name="nickName" id="nickName" value=""/>
+                </span>
+            </span>
+            <span class="search_item">
+                <span class="item_text">充电站编码: </span>
+                <span class="item_obj">
+                    <input class="easyui-textbox" type="text" name="deviceId" id="deviceId" value=""/>
+                </span>
+            </span>
+        </div>
+        <div style="text-align: left; margin:6px;">
+            <a href="javascript:void(0)" class="easyui-linkbutton exportBtn" iconCls="glyphicon-export" plain="true" onclick="exportCsv()">导出</a>
+            <div id="searchBtnWrap" style="float:right; padding-right:40px;">
+                <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
+            </div>
+        </div>
+
 </div>
 
 
@@ -42,7 +63,7 @@ var dgOptions = {
 		        {field:'id', checkbox:true},
 
             {
-                field : 'company_name',
+                field : 'companyName',
                 title : '公司名称',
                 width : 120
             },
@@ -53,14 +74,24 @@ var dgOptions = {
                 width : 120
             },
             {
+                field : 'nickName',
+                title : '用户昵称',
+                width : 120
+            },
+            {
                 field : 'deviceId',
                 title : '充电桩编号',
+                width : 110
+            },
+            {
+                field : 'deviceName',
+                title : '充电桩名称',
                 width : 120
             },
             {
                 field : 'socketSn',
-                title : '插座编号',
-                width : 60
+                title : '插座',
+                width : 40
             },
 
             {
@@ -84,11 +115,11 @@ var dgOptions = {
                 width : 60,
                 formatter : function(value, row, index) {
                     if (value == 'S') {
-                        return "<span style='color:green;font-size:20px;'>扣费成功</span>";
+                        return "<span style='color:green;font-size:16px;'>已扣费</span>";
                     } else  if (value == 'U') {
-                        return "<span style='color:yellow;font-size:20px;'>未扣费</span>";
+                        return "<span style='color:red;font-size:16px;'>未扣费</span>";
                     } else  {
-                        return "<span style='color:red;font-size:20px;'>其他</span>";
+                        return "<span style='color:red;font-size:16px;'>其他</span>";
                     }
                 }
             },
@@ -99,11 +130,11 @@ var dgOptions = {
                 width : 60,
                 formatter : function(value, row, index) {
                     if (value == 'M') {
-                        return "<span style='color:green;font-size:20px;'>单次临时</span>";
+                        return "<span style='color:green;font-size:16px;'>临时</span>";
                     } else  if (value == 'W') {
-                        return "<span style='color:green;font-size:20px;'>微信钱包扣费</span>";
+                        return "<span style='color:green;font-size:16px;'>钱包</span>";
                     } else  {
-                        return "<span style='color:red;font-size:20px;'>其他</span>";
+                        return "<span style='color:red;font-size:16px;'>其他</span>";
                     }
                 }
             },
@@ -114,13 +145,13 @@ var dgOptions = {
                 width : 60,
                 formatter : function(value, row, index) {
                     if (value == 'auto') {
-                        return "<span style='color:green;font-size:20px;'>智能充电</span>";
+                        return "<span style='color:green;font-size:16px;'>智能</span>";
                     } else  if (value == 'charge') {
-                        return "<span style='color:green;font-size:20px;'>正常充电</span>";
+                        return "<span style='color:green;font-size:16px;'>正常</span>";
                     } else  if (value == 'temp') {
-                        return "<span style='color:green;font-size:20px;'>临时充电</span>";
+                        return "<span style='color:green;font-size:16px;'>临时</span>";
                     } else  {
-                        return "<span style='color:red;font-size:20px;'>其他</span>";
+                        return "<span style='color:red;font-size:16px;'>其他</span>";
                     }
                 }
             },
@@ -169,12 +200,12 @@ var dgOptions = {
             },
             {
                 field : 'chargeTime',
-                title : '充电时长',
+                title : '预设时长',
                 width : 60
             },
             {
                 field : 'realChargeTime',
-                title : '真实充电时长',
+                title : '充电时长',
                 width : 60
             },
             {
@@ -234,7 +265,7 @@ function zcurdGetParam() {
 	var param = {};
 	$("#tb :input[name]").each(function(i, item) {
 		if($(item).val()) {
-			param[$(item).attr("name")] = $(item).val();	
+			param[$(item).attr("name")] = "*"+$(item).val() +"*";
 		}
 	});
 	return param;
@@ -242,7 +273,7 @@ function zcurdGetParam() {
 
 function getInitParam() {
 	var param = {};
-    param["pile_id "] = "${pile_id!''}";
+  //  param["pile_id "] = "${pile_id!''}";
 /*	$("#tb :input[name]").each(function(i, item) {
 		if($(item).val()) {
 			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
