@@ -162,9 +162,9 @@ public class ChargeSocketComponent implements Device {
             if (lastChargeState.equals(CHARGE_ING) && (!chargeState.equals(CHARGE_ING)) && chargeTime>0){
                 //充电结束,结算费用
 
-                //向设备发送关闭消息
-                shutDownChargeSocket();
-                log.error("设备充电完成，平台关掉插座， deviceID：" + chargePileId + ", socketid: " + chargeSocketId);
+//                //向设备发送关闭消息
+//                shutDownChargeSocket();
+//                log.error("设备充电完成，平台关掉插座， deviceID：" + chargePileId + ", socketid: " + chargeSocketId);
 
                 calculateFeeAndUpdata(chargePileId, chargeSocketId);
             }
