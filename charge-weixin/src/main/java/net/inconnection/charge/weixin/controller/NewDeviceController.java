@@ -70,7 +70,7 @@ public class NewDeviceController extends Controller {
         Long deviceSN = Long.parseLong(deviceId);
         Long socketSN = Long.parseLong(devicePort);
         Integer chargeTime = Integer.parseInt(time);//分钟
-        Integer chargeTimeSenconds = chargeTime*60;
+        Integer chargeTimeSenconds = 60;//监测功率，设置为60s断电
         log.info("开始检测功率 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + " ,chargeTime= " + chargeTime );
         log.info("开始检测功率 chargeType=" + chargeType + ",money=" + money + ",walletAccount=" + walletAccount + " ,operType= " + operType );
         log.info("开始检测功率 realGiftRate=" + realGiftRate + ",companyId=" + companyId + ",autoUnitPrice=" + autoUnitPrice + " ,autoUnitPriceA1= " + autoUnitPriceA1
@@ -78,29 +78,24 @@ public class NewDeviceController extends Controller {
                 + autoUnitPriceA4 + " ,autoUnitPriceA5= " + autoUnitPriceA5 + " ,autoUnitPriceA6= " + autoUnitPriceA6 + " ,autoUnitPriceA7= " + autoUnitPriceA7);
 
         JSONObject startChargeResltJson;
-        if(chargeTime == 800){
-            //充满自停
-            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, 0, TIMEOUT);
-        }else {
-            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, TIMEOUT);
-        }
+
+        startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, TIMEOUT);
 
         Integer startPower = 0;
-
 
         if (null != startChargeResltJson){
             startChargeStatus = startChargeResltJson.getInteger("RESULT");
             startPower = startChargeResltJson.getInteger("POW");
-            log.info("开始充电设备返回结果："+startChargeResltJson.toJSONString());
+            log.info("开始检测功率返回结果："+startChargeResltJson.toJSONString());
         }else{
-            log.error("开始充电设备返回结果：null");
+            log.error("开始检测功率返回结果：null");
         }
 
 //        startChargeStatus = 1;
 //        startPower = 800;
 
 
-        log.info("开始充电结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + "," +
+        log.info("开始检测功率返回结果 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + "," +
                 "startChargeStatus=" + startChargeStatus+",startPower:"+startPower);
         String powerSection="0-200";
         if (startChargeStatus.equals(1) || (startChargeStatus.equals(0))){
@@ -137,7 +132,7 @@ public class NewDeviceController extends Controller {
 
 
         }else {
-            log.error("开始充电结果错误 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
+            log.error("开始检测功率结果错误 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
 
             this.renderJson(new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue()));
             return;
@@ -154,7 +149,7 @@ public class NewDeviceController extends Controller {
         map.put("money",String.valueOf(moneyInt));
         map.put("serverResultDesc",String.valueOf(startPower));
 
-        log.info("开始充电返回结果 return result :" + map);
+        log.info("开始检测功率返回结果 return result :" + map);
 
         this.renderJson(new HnKejueResponse(map,RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue()));
     }
@@ -204,6 +199,54 @@ public class NewDeviceController extends Controller {
             return;
         }
 
+
+        Integer power = Integer.parseInt(pow.split("-")[1]);
+        //功率判断，过小或过大，断电，发消息 FAIL
+        if(power > 1000){
+            Long deviceSN = Long.parseLong(deviceId);
+            Long socketSN = Long.parseLong(devicePort);
+//            deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, TIMEOUT);
+            String title = "检测到充电电流过大，本次充电失败，如需继续充电请确认您的充电设备正常后重试！";
+            sendActiveMqStartChargeFail(openId, deviceId, devicePort, title);
+            log.info("充电失败,检测到充电电流过大(大于1000W), openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
+            return;
+        }
+
+        Long deviceSN = Long.parseLong(deviceId);
+        Long socketSN = Long.parseLong(devicePort);
+        Integer chargeTime = Integer.parseInt(time);//分钟
+        Integer chargeTimeSenconds = chargeTime*60;
+
+        JSONObject startChargeResltJson;
+        if(chargeTime == 800){
+            //充满自停
+            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, 0, TIMEOUT);
+        }else {
+            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, TIMEOUT);
+        }
+
+//        Integer startPower = 0;
+
+        Integer startChargeStatus =9999;
+        if (null != startChargeResltJson){
+            startChargeStatus = startChargeResltJson.getInteger("RESULT");
+//            startPower = startChargeResltJson.getInteger("POW");
+            log.info("开始充电设备返回结果："+startChargeResltJson.toJSONString());
+        }else{
+            log.error("开始充电设备返回结果：null");
+        }
+
+
+        if (startChargeStatus.equals(1) || (startChargeStatus.equals(0))){
+
+        }else {
+            log.error("开始充电结果错误 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + ",startChargeStatus=" + startChargeStatus);
+
+            this.renderJson(new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue()));
+            return;
+        }
+
+
         log.info("开始充电，写数据 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId + " ,time= " + time );
         log.info("开始充电，写数据 chargeType=" + chargeType + ",money=" + money + ",walletAccount=" + walletAccount + " ,operType= " + operType );
         log.info("开始充电，写数据 realGiftRate=" + realGiftRate + ",companyId=" + companyId + ",autoUnitPrice=" + autoUnitPrice + " ,autoUnitPriceA1= " + autoUnitPriceA1
@@ -211,17 +254,6 @@ public class NewDeviceController extends Controller {
                 + autoUnitPriceA4 + " ,autoUnitPriceA5= " + autoUnitPriceA5 + " ,autoUnitPriceA6= " + autoUnitPriceA6 + " ,autoUnitPriceA7= " + autoUnitPriceA7);
 
 
-        Integer power = Integer.parseInt(pow.split("-")[1]);
-        //功率判断，过小或过大，断电，发消息 FAIL
-        if(power > 1000){
-            Long deviceSN = Long.parseLong(deviceId);
-            Long socketSN = Long.parseLong(devicePort);
-            deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, TIMEOUT);
-            String title = "检测到充电电流过大，本次充电失败，如需继续充电请确认您的充电设备正常后重试！";
-            sendActiveMqStartChargeFail(openId, deviceId, devicePort, title);
-            log.info("充电失败,检测到充电电流过大(大于1000W), openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
-            return;
-        }
 
         Integer startPower = Integer.parseInt(pow.split("-")[0]);
 
