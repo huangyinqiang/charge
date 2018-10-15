@@ -235,7 +235,7 @@
             window.location="../charging";
         }, function() {
             // 跳转到充值页面
-            location.href = "../recharge/rechargeNew?companyId=" + companyId
+            location.href = "../recharge/rechargeNew?companyId=" + companyId;
         });
     }
 
@@ -250,6 +250,7 @@
                 layer.msg("临时充电功率超限，请选择会员充电！", {
                     shift : 5
                 });
+                location.href = "../recharge/rechargeNew?companyId=" + companyId;
                 return;
             }
             // 单次支付
@@ -258,7 +259,7 @@
             userIsConfirmed = true;
             stopCharge();
             // 跳转到充值页面
-            location.href = "../recharge/rechargeNew?companyId=" + companyId
+            location.href = "../recharge/rechargeNew?companyId=" + companyId;
         });
     }
 
@@ -332,7 +333,7 @@
         }, function() {
             userIsConfirmed = true;
             stopCharge();
-            location.href = "../recharge/rechargeNew?companyId=" + companyId
+            location.href = "../recharge/rechargeNew?companyId=" + companyId;
         });
     }
     //开始充电，写数据，发消息

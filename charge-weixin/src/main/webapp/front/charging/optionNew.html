@@ -52,11 +52,7 @@
         });
         // 选择充电插座
         $('#showportDialog').on('click', function() {
-            // if($(".grid").css('display') =="none"){
-            // $('.grid').css('display', 'block');
-            // } else if ($(".grid").css('display') =="block"){
-            // $('.grid').css('display', 'none');
-            // }
+
         });
         openId = localStorage.getItem("openId");// 获取名称为“key”的值
         // 获取URL中的设备编号，地址
@@ -141,14 +137,9 @@
             $("#explain").text('会员专享智能充电，充满后自动断电计时扣费。');// 智能充电说明
             return;
         }
-        // 钱包小于价格,认定为非会员(选择智能充电)
-        if (walletAccount < money && time == 800) {
+        // 钱包小于价格,或者小于最低会员标准,认定为非会员(选择智能充电)
+        if (( walletAccount < autoPrice  || walletAccount < money) && time == 800) {
             rechargeMoneyToWallet();// 直接提示充值钱包
-            return;
-        }
-        // 会员,但钱包小于5块(选择智能充电)
-        if (autoPrice > walletAccount && time == 800) {
-            rechargeMoneyToWallet();// 直接提示充值钱吧
             return;
         }
         // 会员(未选择智能充电)
@@ -184,47 +175,10 @@
             return;
         }
 
-        requestNewDeviceStartCharge();
+        requestNewDeviceStartCheckPower();
 
     }
-    // 会员充电提示
-    function memCharge() {
-        layer.confirm('请确认' + devicePort + '插座，充电' + time + '分钟；点击"确认" 后开始充电', {
-            btn : [ '确定', '取消' ]
-        }, function() {
-            requestNewDeviceStartCharge();
-        }, function() {
 
-        });
-    }
-    // 充值钱包或者单次支付
-    function chargeOrPay() {
-        layer.confirm('请确认' + devicePort + '插座，充电' + time
-            + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！', {
-            btn : [ '临时支付', '充值' ]
-        }, function() {
-            // 单次支付
-            temporaryRechargeMoney(money);
-        }, function() {
-            // 跳转到充值页面
-            location.href = "../recharge/rechargeNew?companyId=" + companyId
-        });
-    }
-    // 充值钱包或者扣1块充电两小时
-    function chargeTwoHoursOrPay() {
-        layer.confirm('余额不足，只能充电两小时。请确认' + devicePort + '插座充电' + time
-            + '分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！', {
-            btn : [ '充电', '充值' ]
-        }, function() {
-            chargeType = "charge";// 功率充电
-            operType = "W";// 会员扣费
-            money = parseInt(device.tow_hours_price);
-            time = 120;
-            requestNewDeviceStartCharge();
-        }, function() {
-            location.href = "../recharge/rechargeNew?companyId=" + companyId
-        });
-    }
     // 充值钱包
     function rechargeMoneyToWallet() {
         layer.confirm('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
@@ -235,55 +189,10 @@
             location.href = "../recharge/rechargeNew?companyId=" + companyId
         });
     }
-    /* 微信支付 */
-    function temporaryRechargeMoney(money) {
-        $.post("../pay", {
-            openId : openId,
-            total_fee : LeadBase.encrypts(money.toString()),
-        }, function(res) {
-            if (res.code == 0) {
-                var data = $.parseJSON(res.data);
-                if (typeof WeixinJSBridge == "undefined") {
-                    if (document.addEventListener) {
-                        document.addEventListener('WeixinJSBridgeReady',
-                            onBridgeReady(data), false);
-                    } else if (document.attachEvent) {
-                        document.attachEvent('WeixinJSBridgeReady',
-                            onBridgeReady(data));
-                        document.attachEvent('onWeixinJSBridgeReady',
-                            onBridgeReady(data));
-                    }
-                } else {
-                    onBridgeReady(data);
-                }
-            } else {
-                if (res.code == 2) {
-                    layer.alert(res.message);
-                } else {
-                    layer.msg("参数错误：" + res.message, {
-                        shift : 6
-                    });
-                }
-            }
-        });
-    }
-    function onBridgeReady(json) {
-        WeixinJSBridge.invoke('getBrandWCPayRequest', json, function(res) {
-            // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回 ok，但并不保证它绝对可靠。
-            if (res.err_msg == "get_brand_wcpay_request:ok") {
-                chargeType = "temp";// 临时充电收费
-                operType = "M";// 微信单次支付
-                requestNewDeviceStartCharge();
-            } else {
-                layer.msg("支付失败", {
-                    shift : 5
-                });
-            }
-        });
-    }
+
 	
     // 打开设备开始充电
-    function requestNewDeviceStartCharge() {
+    function requestNewDeviceStartCheckPower() {
         var param = "openId="+openId
                     +"&companyId="+companyId
                     +"&type="+chargeType
@@ -350,9 +259,6 @@
                     userInfo = data.respObj;
                     walletAccount = userInfo.walletAccount;
                 } else {
-                    // layer.msg("用户信息不存在", {
-                    // shift : 5
-                    // });
                     location.href = "..";
                 }
             }
@@ -404,7 +310,6 @@
                 }
             }
 
-
         } else {
             layer.msg("充电桩暂时不可用，请尝试其他充电桩", {
             shift : 5
@@ -434,42 +339,12 @@
         }
         devicePort = value;// 获取选择的插座
         $('.rui-btn').removeClass('rui-btn-outlined');
-        $(ele).addClass('rui-btn-outlined')
+        $(ele).addClass('rui-btn-outlined');
         $("#showportDialog").html('插座' + value);
     }
 
 </script>
 <style>
-/*.flex-row {*/
-	/*display: -webkit-box;*/
-	/*display: -webkit-flex;*/
-	/*display: flex;*/
-	/*-webkit-box-orient: horizontal;*/
-	/*-webkit-flex-flow: column nowrap;*/
-	/*flex-flow: column nowrap;*/
-/*}*/
-
-/*.flex1 {*/
-	/*-webkit-box-flex: 1;*/
-	/*-webkit-flex: 1;*/
-	/*flex: 1;*/
-/*}*/
-
-/*.rui-btn {*/
-	/*display: block;*/
-	/*width: 120px;*/
-	/*height: 40px;*/
-	/*background: #ffffff;*/
-	/*border: 1px solid #00a1e9;*/
-	/*border-radius: 10px;*/
-	/*text-align: center;*/
-	/*line-height: 40px;*/
-	/*font-size: 16px;*/
-	/*color: #00a1e9;*/
-	/*margin:5px auto;*/
-    /*flex: 1;*/
-
-/*}*/
 
 
 .flex-row{
@@ -502,10 +377,6 @@
 	background: #00a1e9;
 }
 
-.grid {
-	display:block;
-	margin-top:30px;
-}
 .close-box{
 	width:100%;
 	height:15px;
@@ -553,27 +424,6 @@
 			</div>
 
 			<div class="flex-row" id="chargeSocketStatus">
-                    <!--<a id="1" href="javascript:;" class="rui-btn"-->
-                        <!--onclick="selectChargeSocket(1,this);">1</a>-->
-                    <!--<a id="7" href="javascript:;" class="rui-btn"-->
-                       <!--onclick="selectChargeSocket(7,this);">7</a>-->
-                <!--<a id="1" href="javascript:;" class="rui-btn"-->
-                   <!--onclick="selectChargeSocket(1,this);">1</a>-->
-                <!--<a id="7" href="javascript:;" class="rui-btn"-->
-                   <!--onclick="selectChargeSocket(7,this);">7</a>-->
-
-
-	<!---->
-					<!--<div class="flex-row">-->
-						<!--<div class="flex1 ">-->
-							<!--<a id="2" href="javascript:;" class="rui-btn"-->
-								<!--onclick="selectChargeSocket(2,this);">2</a>-->
-						<!--</div>-->
-						<!--<div class="flex1 ">-->
-							<!--<a id="8" href="javascript:;" class="rui-btn"-->
-								<!--onclick="selectChargeSocket(8,this);">8</a>-->
-						<!--</div>-->
-					<!--</div>-->
 
 			</div>
 			<div class="page__bd page__bd_spacing">
@@ -618,13 +468,7 @@
 						</div>
 
 					</div>
-					<!--<div class="weui-flex">-->
-						<!--<div class="weui-flex__item2">-->
-							<!--<a href="javascript:;" onclick='chargeTimeConfirm()'-->
-								<!--class="weui-btn weui-btn_plain-primary weui-dialog__btn">确定</a>-->
-						<!--</div>-->
 
-					<!--</div>-->
 				</div>
 
 			</div>
