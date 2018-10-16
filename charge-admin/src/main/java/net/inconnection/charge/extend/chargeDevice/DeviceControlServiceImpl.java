@@ -14,10 +14,6 @@ import java.util.Vector;
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.*;
 
 public class DeviceControlServiceImpl implements DeviceControlService {
-    public String sayHello(String name) {
-        return "ceshi demo service          " +name;
-    }
-
 
     @Override
     public Boolean requestPermissionOnLine(Long gwId, Long timeout) {
@@ -28,7 +24,6 @@ public class DeviceControlServiceImpl implements DeviceControlService {
             return false;
         }
 
-//        return true;
         Boolean result = getResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
         return result;
     }
@@ -41,7 +36,6 @@ public class DeviceControlServiceImpl implements DeviceControlService {
         if (!sendSuccess){
             return false;
         }
-//        return  true;
         return getResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
     }
 
@@ -67,7 +61,6 @@ public class DeviceControlServiceImpl implements DeviceControlService {
             return null;
         }
 
-//        return 1;
         return getSingleResult(callBackQueueName, timeout, MSG_RESPONCE_RESULT);
     }
 
@@ -92,7 +85,6 @@ public class DeviceControlServiceImpl implements DeviceControlService {
             return null;
         }
 
-//        return 1;
         return getJsonObjResult(timeout, callBackQueueName);
     }
 
