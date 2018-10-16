@@ -1,7 +1,12 @@
 package net.inconnection.charge.weixin.common;
 
 import com.alibaba.dubbo.config.ReferenceConfig;
-import com.jfinal.config.*;
+import com.jfinal.config.Constants;
+import com.jfinal.config.Handlers;
+import com.jfinal.config.Interceptors;
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.config.Plugins;
+import com.jfinal.config.Routes;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
@@ -12,8 +17,8 @@ import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.weixin.sdk.api.ApiConfigKit;
 import net.inconnection.charge.service.DeviceControlService;
-import net.inconnection.charge.service.dubboPlugin.DubboClientPlugin;
 import net.inconnection.charge.service.dubboPlugin.ChargeReferenceConfig;
+import net.inconnection.charge.service.dubboPlugin.DubboClientPlugin;
 import net.inconnection.charge.weixin.controller.*;
 import net.inconnection.charge.weixin.model.*;
 import net.inconnection.charge.weixin.plugin.ActiveMQ;
@@ -28,7 +33,6 @@ import net.inconnection.charge.weixin.weixinCode.controller.WeiXinScanCodeOauthC
 
 import javax.jms.JMSException;
 import java.io.File;
-import java.util.List;
 
 public class APPConfig extends JFinalConfig {
     static Log log = Log.getLog(APPConfig.class);
@@ -100,6 +104,8 @@ public class APPConfig extends JFinalConfig {
         arp.addMapping("yc_charge_history", NewDeviceChargeHistory.class);
         arp.addMapping("yc_company", Company.class);
         arp.addMapping("yc_project", NewDeviceProject.class);
+        arp.addMapping("yc_device_project", DeviceProject.class);
+        arp.addMapping("yc_project_activity", ProjectActivity.class);
 
         arp.setShowSql(true);
         me.add(arp);

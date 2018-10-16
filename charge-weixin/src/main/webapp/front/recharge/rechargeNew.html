@@ -103,6 +103,7 @@
         // 获取URL中的设备编号，地址
         var localUrl = window.location.href;
         companyId = GetQueryString('companyId');
+        projectId = GetQueryString('projectId');
         type = 'WA';//充值类型
 
         deviceId=10100000001;
@@ -116,7 +117,8 @@
             selectedRechargeMoney = '请选择充值金额！'// 选择事件变化，重新赋值
             money = null;// 选择事件变化，重新赋值
         });
-        getActivityInfo();// 查询活动信息
+      //  getActivityInfo();// 查询活动信息
+        getActivityInfoByProject()
         rechargeAmount();//判断充值选项
         // 选择充值金额
         // 选择金额
@@ -139,7 +141,28 @@
 		})
     });
 
-
+    function getActivityInfoByProject() {
+        $.ajax({
+            type: 'POST',
+            url: "../recharge/queryActivityInfoByProjectId",
+            dataType: "json",
+            data: {
+                projectId: projectId,
+                companyId: companyId
+            },
+            cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
+            async: false,// 设置同步方式，false为同步
+            success: function (data) {
+                if (data.respObj != null && data.respCode == "000000") {
+                    activityInfo = data.respObj;
+                } else {
+                    layer.msg("活动信息不存在，请联系客服...", {
+                        shift: 5
+                    });
+                }
+            }
+        });
+    }
     // 查询优惠信息
     function getActivityInfo() {
         $.ajax({

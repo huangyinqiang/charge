@@ -3,12 +3,16 @@ package net.inconnection.charge.weixin.controller;
 import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
+import net.inconnection.charge.weixin.code.RespCode;
+import net.inconnection.charge.weixin.model.ProjectActivity;
 import net.inconnection.charge.weixin.service.ChargeMoneyService;
 import net.inconnection.charge.weixin.service.CompanyActivityService;
 import net.inconnection.charge.weixin.service.MoneyMatchActivityService;
+import net.inconnection.charge.weixin.service.ProjectActivityService;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 
 public class RechargeController extends Controller {
     private static Log log = Log.getLog(RechargeController.class);
@@ -16,6 +20,7 @@ public class RechargeController extends Controller {
     private static ChargeMoneyService chargeMoneyService = new ChargeMoneyService();
 
     private static CompanyActivityService companyActivityService = new CompanyActivityService();
+    private static ProjectActivityService projectActivityService = new ProjectActivityService();
 
     public RechargeController() {
     }
@@ -51,8 +56,9 @@ public class RechargeController extends Controller {
 
     public void rechargeNew(){
         this.setAttr("companyId", this.getPara("companyId"));
+        this.setAttr("projectId", this.getPara("projectId"));
 
-        log.info("跳转到新充值界面,companyId=" + this.getPara("companyId") );
+        log.info("跳转到新充值界面,companyId=" + this.getPara("companyId")+",projectId="+ this.getPara("projectId"));
         this.render("recharge/rechargeNew.html");
 
     }
@@ -103,6 +109,22 @@ public class RechargeController extends Controller {
         HnKejueResponse resp = chargeMoneyService.queryAllByOpenId(openId, pageNumber, pageSize);
         log.info("分页查询充值记录结束" + resp);
         this.renderJson(resp);
+    }
+
+    public void queryActivityInfoByProjectId() {
+        log.info("queryActivityInfoByProjectId projectId=" +  this.getPara("projectId") + ",companyId=" + this.getPara("companyId") );
+        String projectId = this.getPara("projectId");
+        List<ProjectActivity> projectActivityList = projectActivityService.queryActivityByProjectId(projectId);
+        log.info("根据项目查询优惠信息结束：" + projectActivityList);
+        String companyId = this.getPara("companyId");
+        if(projectActivityList == null || projectActivityList.size() == 0){
+            HnKejueResponse response = companyActivityService.queryActivityByCompanyId(companyId);
+            log.info("根据公司查询优惠信息结束：" + response);
+            this.renderJson(response);
+        }else{
+            this.renderJson(new HnKejueResponse(projectActivityList,RespCode.FAILD.getKey(), RespCode.FAILD.getValue()));
+        }
+
     }
 }
 
