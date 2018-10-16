@@ -26,14 +26,14 @@ public class AnalysisController extends BaseController{
         this.render("chargeTempList.html");
     }
 
-    public void rechargeListDate() {
+    public void rechargeListData() {
         Object[] queryParams = this.getQueryParams();
         String[] properties = (String[])queryParams[0];
         String[] symbols = (String[])queryParams[1];
         Object[] values = (Object[])queryParams[2];
         String orderBy = this.getOrderBy();
 
-        List<Object> list = analysisService.getRechargeDate(null,properties, symbols, values);
+        List<Object> list = analysisService.getRechargeData(null,properties, symbols, values);
        logger.info(list.toString());
         List<Record> result = new ArrayList();
         for(int i = 0; i < list.size(); ++i) {
@@ -76,7 +76,7 @@ public class AnalysisController extends BaseController{
         Object[] values = (Object[])queryParams[2];
         String orderBy = this.getOrderBy();
 
-        List<Object> list = analysisService.getRechargeDate(null,properties, symbols, values);
+        List<Object> list = analysisService.getRechargeData(null,properties, symbols, values);
         logger.info(list.toString());
         List<Record> result = new ArrayList();
         for(int i = 0; i < list.size(); ++i) {
@@ -126,7 +126,7 @@ public class AnalysisController extends BaseController{
         this.render(csvRender);
     }
 
-    public void chargeListDate() {
+    public void chargeListData() {
         Object[] queryParams = this.getQueryParams();
         String[] properties = (String[])queryParams[0];
         String[] symbols = (String[])queryParams[1];
@@ -134,7 +134,7 @@ public class AnalysisController extends BaseController{
 
         List<Record> result = getChargeByOperType(null,properties, symbols, values,this.getPager(),this
                 .getOrderBy(),"W");
-        this.renderDatagrid(result,analysisService.getChargeDate(null,properties, symbols, values,null,null,"W").size
+        this.renderDatagrid(result,analysisService.getChargeData(null,properties, symbols, values,null,null,"W").size
                 ());
     }
 
@@ -166,7 +166,7 @@ public class AnalysisController extends BaseController{
     }
 
 
-    public void chargeTempListDate() {
+    public void chargeTempListData() {
         Object[] queryParams = this.getQueryParams();
         String[] properties = (String[])queryParams[0];
         String[] symbols = (String[])queryParams[1];
@@ -174,7 +174,7 @@ public class AnalysisController extends BaseController{
 
         List<Record> result = getChargeByOperType(null,properties, symbols, values,this.getPager(),this
                 .getOrderBy(),"M");
-        this.renderDatagrid(result,analysisService.getChargeDate(null,properties, symbols, values,null,null,"M").size());
+        this.renderDatagrid(result,analysisService.getChargeData(null,properties, symbols, values,null,null,"M").size());
     }
 
     public void chargeTempExportCsv() {
@@ -206,7 +206,7 @@ public class AnalysisController extends BaseController{
 
     private List<Record> getChargeByOperType(String companyId, String[] properties, String[] symbols, Object[] values,
                                              Pager pager, String order, String operType){
-        List<Object> list = analysisService.getChargeDate(null,properties, symbols, values,pager,order,operType);
+        List<Object> list = analysisService.getChargeData(null,properties, symbols, values,pager,order,operType);
         List<Record> result = new ArrayList();
         for(int i = 0; i < list.size(); ++i) {
             Record r = new Record();
