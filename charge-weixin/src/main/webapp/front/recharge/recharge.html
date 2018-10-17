@@ -100,14 +100,15 @@
     var coupon = null;// 活动赠送金额（分）或者次
     var selectedHour;// 传值用
     var companyId = 1;
+    var id;
 
     $(function() {
         // 获取URL中的设备编号，地址
         var localUrl = window.location.href;
         deviceId = GetQueryString('deviceId');
         activityId = GetQueryString('activityId');
+        id = GetQueryString('id');
         type = 'WA';//充值类型
-
         // 查询设备信息
         getDeviceInfo(deviceId);
         $('.icon-ditu1').text(decodeURI(device.area));
@@ -121,7 +122,8 @@
             selectedHour = '请选择充值金额！'// 选择事件变化，重新赋值
             money = null;// 选择事件变化，重新赋值
         });
-        getActivityInfo();// 查询活动信息
+        //getActivityInfo();// 查询活动信息
+        getActivityInfoByDeviceId();// 查询活动信息
         rechargeAmount();//判断充值选项
         // 选择金额
 		$('.elecard-wallte').on('click', '.weui-flex__item', function () {
@@ -279,6 +281,27 @@
                 }
             });
         }
+
+    function getActivityInfoByDeviceId() {
+
+        $.ajax({
+            type: 'POST',
+            url: "../recharge/queryActivityInfoByDeviceId",
+            dataType: "json",
+            data: {
+                id: id
+            },
+            cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
+            async: false,// 设置同步方式，false为同步
+            success: function (data) {
+                if (data.respObj != null && data.respCode == "000000") {
+                    activityInfo = data.respObj;
+                } else {
+                    getActivityInfo();
+                }
+            }
+        });
+    }
 
 // 查询优惠信息
         function getActivityInfo() {

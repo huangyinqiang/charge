@@ -96,7 +96,7 @@
                 location.href = "./recharge/recharge?deviceId="
                     + data.respObj.match_num + "&area="
                     + encodeURI(encodeURI(data.respObj.area)) + "&activityId="
-                    + data.respObj.activity_id + "&type=WA"
+                    + data.respObj.activity_id + "&type=WA&id="+data.respObj.id;
             },
             error : function() {
 
