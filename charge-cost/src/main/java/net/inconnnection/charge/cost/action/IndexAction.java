@@ -2,8 +2,6 @@ package net.inconnnection.charge.cost.action;
 
 import com.jfinal.core.Controller;
 import com.jfinal.kit.PropKit;
-import net.inconnection.charge.service.DeviceControlService;
-import net.inconnection.charge.service.dubboPlugin.DubboServiceContrain;
 import net.inconnnection.charge.cost.model.Result;
 import net.inconnnection.charge.cost.plugin.ActiveMQ;
 import net.inconnnection.charge.cost.plugin.Destination;
@@ -19,9 +17,6 @@ public class IndexAction  extends Controller {
     }
 
     public void index() {
-
-        DeviceControlService service = DubboServiceContrain.getInstance().getService(DeviceControlService.class);
-        System.out.println(service.sayHello("woshihuangyinqiang"));
 
         this.setAttr("flag", flag);
         this.renderJsp("index.jsp");

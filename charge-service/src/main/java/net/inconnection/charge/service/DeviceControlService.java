@@ -6,8 +6,6 @@ import java.util.Vector;
 
 public interface DeviceControlService {
 
-   String sayHello(String name);
-
    Boolean requestPermissionOnLine(Long gwId, Long timeout);
 
    Boolean requestShutDownAllSockets(Long gwId, Long timeout);
@@ -19,6 +17,8 @@ public interface DeviceControlService {
    Map requestStartCharge(Long gwId, Map<Long, Integer> socketIdChargeTimeMap, Long timeout);
 
    JSONObject requestStartCharge(Long gwId, Long socketId, Integer chargeTime, Long timeout);
+
+
 
 
 

@@ -19,12 +19,9 @@ public class dubboConsume {
         ReferenceConfig<DeviceControlService> reference = new ReferenceConfig<DeviceControlService>();
         reference.setInterface(DeviceControlService.class);
 
-        DeviceControlService service = getService(reference);
 
 
 
-        System.out.println("eeeeeeeeeeeeeeeeegggggggggggggggggggggg");
-        System.out.println(service.sayHello("22222"));
 
     }
 
