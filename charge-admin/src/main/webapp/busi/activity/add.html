@@ -1,0 +1,95 @@
+<#include "/common/head.html"/>
+<div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false,novalidate:true">
+    <div style="padding:0px">
+        <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
+            <input type="hidden" value="${projectId}">
+            <table cellpadding="5" width="100%">
+                <tr>
+                    <th><span>项目名称</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="name"
+                                   id="name" value="${projectName!''}"
+                                   style="width: 200px;" readonly></input>
+                        </div>
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <th><span>充值金额(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="money"
+                                   id="money" onkeyup="value=value.replace(/[^\d]/g,'')"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><span>赠送金额(分)</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <input class="easyui-textbox" type="text" name="coupon"
+                                   id="coupon" onkeyup="value=value.replace(/[^\d]/g,'')"
+                                   style="width: 200px;"></input>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><span>ActNum</span></th>
+                    <td>
+                        <div class="wrap_input">
+                            <select  class="form-control" id="actNum" name="actNum"
+                                     placeholder="请选择编码">
+                                <option  value='2001'>2001</option>
+                                <option  value='2002'>2002</option>
+                                <option  value='2003'>2003</option>
+                                <option  value='2005'>2005</option>
+                                <option  value='2006'>2006</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script>
+    //var openId = GetQueryString("openId");
+    top.window.subPage.save = save;
+    function save(successFunc) {
+        $.post("add", getParam(), function(data) {
+            if(successFunc) {
+                successFunc();
+            }
+            top.window.closeWindow();
+            top.window.subPage.loadCurrDatagrid();
+        });
+
+    }
+    function getParam() {
+        if($(":input[name='money']").val() <= 0){
+            showMsg("请输入正确的金额");
+            return;
+        }
+        var param = {
+            "model.name": $(":input[name='name']").val(),
+            "model.project_id": ${projectId},
+            "model.money": $(":input[name='money']").val(),
+            "model.coupon": $(":input[name='coupon']").val(),
+            "model.actNum": $(":input[name='actNum']").val()
+        };
+        for(key in param) {
+            if(!param[key]) {
+                delete param[key];
+            }
+        }
+        return param;
+    }
+
+</script>
+<#include "/common/foot.html"/>

@@ -1,0 +1,90 @@
+ <#include "/common/head.html"/>
+
+ <div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false,novalidate:true">
+     <div style="padding:0px">
+         <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
+             <table cellpadding="5" width="100%">
+                 <tr>
+                     <th><span>项目名称</span></th>
+                     <td>
+                         <div class="wrap_input">
+                             <input class="easyui-textbox" type="text" name="name"
+                                    id="name" value="${model.name!''}"
+                                    style="width: 200px;"></input>
+                         </div>
+                     </td>
+
+                 </tr>
+
+
+                 <tr>
+                     <th><span>充值金额(分)</span></th>
+                     <td>
+                         <div class="wrap_input">
+                             <input class="easyui-textbox" type="text" name="money"
+                                    id="money" value="${model.money}"
+                                    style="width: 200px;"></input>
+                         </div>
+                     </td>
+                 </tr>
+
+                 <tr>
+                     <th><span>赠送金额(分)</span></th>
+                     <td>
+                         <div class="wrap_input">
+                             <input class="easyui-textbox" type="text" name="coupon"
+                                    id="coupon"  value="${model.coupon}"
+                                    style="width: 200px;"></input>
+                         </div>
+                     </td>
+                 </tr>
+                 <tr>
+                     <th><span>是否生效</span></th>
+                     <td>
+                         <div class="wrap_input">
+                             <select  class="form-control" id="status" name="status">
+                                 <option  value='Y'>是</option>
+                                 <option  value='N'>否</option>
+                             </select>
+                         </div>
+                     </td>
+                 </tr>
+
+             </table>
+         </form>
+     </div>
+ </div>
+<script>
+top.window.subPage.save = save;
+$(function () {
+    $("#status").find("option[value = '+${model.status}+']").attr("selected","selected");
+})
+function save() {
+	if($("#zcurdHeadTable").form('validate')) {
+		$.post("update", getParam(), function(data) {
+			top.window.closeWindow();
+			top.window.subPage.loadCurrDatagrid();
+		});
+	}
+}
+function getParam() {
+
+	var param = {
+        "id": ${model.id},
+        "model.name": $(":input[name='name']").val(),
+        "model.money": $(":input[name='money']").val(),
+        "model.coupon": $(":input[name='coupon']").val(),
+        "model.actNum": $(":input[name='actNum']").val(),
+        "model.status": $(":input[name='status']").val()
+    }
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>
