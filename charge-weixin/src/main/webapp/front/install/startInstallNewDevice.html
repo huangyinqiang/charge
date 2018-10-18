@@ -126,8 +126,6 @@
 
     function queryNewDevice(deviceId, type) {
 
-        console.log("type = " + type);
-
         $.ajax({
             type : 'POST',
             url : "./newDevice/getNotifyDeviceInfo",
@@ -149,10 +147,6 @@
                     layer.msg("设备已经上线，将会被重新配置数据", {
                         shift : 3
                     });
-
-                    location.href = "./install/editInstallInfo?deviceId="
-                        + data.respObj.id + "&latitude=" + latitude + "&longitude=" + longitude  + "&installed=1"
-				}else {
 
                     location.href = "./install/editInstallInfo?deviceId="
                         + data.respObj.id + "&latitude=" + latitude + "&longitude=" + longitude  + "&installed=" + type
