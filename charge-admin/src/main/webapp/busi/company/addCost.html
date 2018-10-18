@@ -1,0 +1,165 @@
+<#include "/common/head.html"/>
+<div id="zcurdHeadTable" class="easyui-panel" data-options="fit:true,border:false,novalidate:true">
+    <div style="padding:0px">
+        <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
+            <table cellpadding="5" width="100%">
+                <tr>
+                    <th><span>公司名称：</span></th>
+                    <td>
+                        <input id="companyId" name="companyId" data-options="panelHeight:'auto'"
+                               class="easyui-combobox">
+                    </td>
+                <tr>
+                    <th><span>openId：</span></th>
+                    <td>
+                        <input class="easyui-textbox" type="text" id="openId" name="openId" required="true"  style="width: 130px;"></input>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <th><span>昵称：</span></th>
+                    <td>
+                        <input class="easyui-textbox" type="text" id="nickName" name="nickName" required="true" data-options="" style="width: 130px;"></input>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <th><span>联系方式：</span></th>
+                    <td>
+                        <input class="easyui-textbox" type="text" id="tel" name="tel" value="" data-options="" style="width: 130px;"></input>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <th><span>结算比例：</span></th>
+                    <td>
+                        <input class="easyui-textbox" type="text" id="balanceRate" name="balance_rate" value="" data-options="" style="width: 130px;"></input>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <th><span>付款方式：</span></th>
+                    <td>
+                        <select  class="form-control" id="payType" name="pay_type"
+                                 placeholder="请选择角色">
+                            <option  value='1'> 微信</option>
+                            <option  value='2'> 银行卡</option>
+                            <option  value='3'> 现金</option>
+                        </select>
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <th><span>微信收款账号：</span></th>
+                    <td>
+                        <input class="easyui-textbox" type="text" id="weixinAccount" name="weixin_account" value="" data-options="" style="width: 130px;"></input>
+                    </td>
+
+                </tr>
+                <tr>
+                    <th><span>银行账号：</span></th>
+                    <td>
+                        <input class="easyui-textbox" type="text" id="bankAccount" name="bank_account" value="" data-options="" style="width: 130px;"></input>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>开始时间：</span></th>
+                    <td>
+                        <input class="easyui-datetimebox" style="width:150px;"  name="start_time" id="startTime"
+                               data-options="required:true,
+                               onShowPanel:function(){
+                                    $(this).datetimebox('spinner').timespinner('setValue','00:00:00');}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th><span>结束时间：</span></th>
+                    <td>
+                        <input class="easyui-datetimebox" style="width:150px;" required name="end_time" id="endTime"
+                               data-options="onShowPanel:function(){
+                                    $(this).datetimebox('spinner').timespinner('setValue','23:59:59');}"/>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script>
+    var companyList;
+    $(function(){
+        $.ajax({
+            url : "../company/listData",
+            type : "POST",
+            async : true,// 设置同步方式，false为同步
+            success : function(res) {
+                companyList =  res.rows
+                $('#companyId').combobox({
+                    data : companyList,
+                    multiple:false, //支持多选
+                    valueField : 'id',
+                    textField : 'company_name'
+                });
+                var data =  companyList[0];
+                $('#companyId').combobox('setValue',data.id);
+            }
+        })
+    })
+
+    $('#companyId').combobox({
+        onChange: function (n,o) {
+            var companyId = $('#companyId').combobox('getValue');
+            companyList.forEach(function(data){
+                if(companyId == data.id){
+                    setVal(data)
+                }
+            })
+        }
+    });
+
+    function setVal(data){
+        $('#openId').textbox('setValue',data.weixin_account);
+        $('#tel').textbox('setValue',data.contact_phone);
+        $('#balanceRate').textbox('setValue',data.balance_rate);
+        $('#nickName').textbox('setValue',data.legal_person);
+    }
+    top.window.subPage.save = save;
+    function save(successFunc) {
+        if($("#ff").form('enableValidation').form('validate')) {
+            showProgress("运营商费用","计算中...")
+            $.post("addCost", getParam(), function(data) {
+                if(successFunc) {
+                    successFunc();
+                }
+                closeProgress();
+                top.window.closeWindow();
+                top.window.subPage.loadCurrDatagrid();
+            });
+        }
+    }
+    function getParam() {
+        var param = {
+            "model.company_id": $(":input[name='companyId']").val(),
+            "model.openId": $(":input[name='openId']").val(),
+            "model.tel": $(":input[name='tel']").val(),
+            "model.nickName": $(":input[name='nickName']").val(),
+            "model.balance_rate": $(":input[name='balance_rate']").val(),
+            "model.pay_type": $(":input[name='pay_type']").val(),
+            "model.weixin_account": $(":input[name='weixin_account']").val(),
+            "model.bank_account": $(":input[name='bank_account']").val(),
+            "model.start_time": $(":input[name='start_time']").val(),
+            "model.end_time": $(":input[name='end_time']").val()
+        }
+        for(key in param) {
+            if(!param[key]) {
+                delete param[key];
+            }
+        }
+        return param;
+    }
+
+</script>
+<#include "/common/foot.html"/>

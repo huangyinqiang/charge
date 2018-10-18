@@ -1,6 +1,7 @@
 package net.inconnection.charge.extend.controller;
 
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Record;
 import net.inconnection.charge.admin.account.model.SysUser;
 import net.inconnection.charge.admin.common.DBTool;
@@ -9,17 +10,26 @@ import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.util.Pager;
 import net.inconnection.charge.admin.common.util.StringUtil;
 import net.inconnection.charge.extend.model.ChargeBatteryInfo;
+import net.inconnection.charge.extend.model.ChargeHistory;
 import net.inconnection.charge.extend.model.Chargeprice;
 import net.inconnection.charge.extend.model.Company;
 import net.inconnection.charge.extend.model.CompanyActivity;
+import net.inconnection.charge.extend.model.PayAgentHistory;
 import net.inconnection.charge.extend.model.Project;
+import net.inconnection.charge.extend.model.RechargeHistory;
+import net.inconnection.charge.extend.service.CompanyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class CompanyController extends BaseController{
-
+    private static Logger log = LoggerFactory.getLogger(CompanyController.class);
+    private static CompanyService companyService = new CompanyService();
 
 
     public void listPage() {
@@ -474,10 +484,10 @@ public class CompanyController extends BaseController{
         Integer id = sysUser.getId();
         List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from " +
                 "sysuser_company where sysuser_id="+id);
-//        Long company_id = getParaToLong("id");
-        Integer company_id = 1;
+        String companyIdPara = getPara("company_id");
+        Integer companyId = 1;
         if(userCompanyList.size() > 0){
-            company_id = userCompanyList.get(0).get("company_id");
+            companyId = userCompanyList.get(0).get("company_id");
         }
         StringBuffer sql = new StringBuffer("SELECT" +
                 "	ych.*," +
@@ -488,19 +498,19 @@ public class CompanyController extends BaseController{
                 "	yc_charge_history ych" +
                 "	LEFT JOIN yc_charge_pile ycp ON ych.deviceId = ycp.id" +
                 "	LEFT JOIN yc_company yc ON ych.company_id = yc.id" +
-                "	LEFT JOIN tuser u ON ych.openId = u.openId " );
+                "	LEFT JOIN tuser u ON ych.openId = u.openId "+
+                " where 1=1 ");
 
-        if(id != 1){
-            sql.append(" where ych.company_id=");
-            sql.append(company_id);
-        }else {
-            sql.append(" where 1=1 ");
-        }
+//        if(companyId != 1 && companyIdPara != null){
+//            sql.append(" where ych.company_id=");
+//            sql.append(companyId);
+//        }else {
+//            sql.append(" where 1=1 ");
+//        }
         List<Object> params = new ArrayList<>();
         for (int i = 0; i < properties.length; i++) {
-            sql.append(" and " + properties[i] + " " + symbols[i] + " ?");
-            params.add(values[i]);
-
+                sql.append(" and " + properties[i] + " " + symbols[i] + " ?");
+                params.add(values[i]);
         }
         sql.append(" order by ych.operStartTime desc ");
         int size = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString(),params.toArray()).size();
@@ -524,6 +534,113 @@ public class CompanyController extends BaseController{
 
         }
         this.renderDatagrid(list, size);
+    }
+
+    public void costListPage() {
+        this.render("cost.html");
+    }
+    public void addCostPage() {
+        this.render("addCost.html");
+    }
+    public void costListData() {
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+        String orderBy = this.getOrderBy();
+        if (StringUtil.isEmpty(orderBy)) {
+            orderBy = "id desc";
+        }
+
+        List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "yc_pay_agent_history", properties, symbols, values, orderBy, this.getPager());
+        this.renderDatagrid(list, DBTool.countByMultPropertiesDbSource("zcurd_busi", "yc_pay_agent_history", properties, symbols, values));
+    }
+
+    public void addCost() {
+        PayAgentHistory model = getModel(PayAgentHistory.class, "model");
+        Long companyId = model.getCompanyId();
+        Date startTime = model.getStartTime();
+        Date endTime = model.getEndTime();
+        //充值
+        List<Record> rechargeSumList = companyService.getRechargeSum(companyId, startTime, endTime);
+        if(rechargeSumList!= null && rechargeSumList.size() > 0) {
+            Record record = rechargeSumList.get(0);
+            model.setRechargeMoney(((BigDecimal)record.get("moneySum")).intValue());
+            model.setRechargeMoneyReal(((BigDecimal)record.get("realMoneySum")).intValue());
+        }
+        //消费
+        List<Record> chargeSumList = companyService.getChargeSum(companyId, "W", startTime, endTime);
+        if(chargeSumList!= null && chargeSumList.size() > 0) {
+            Record record = chargeSumList.get(0);
+            model.setChargeMoney(((BigDecimal)record.get("moneySum")).intValue());
+            model.setChargeMoneyReal(((BigDecimal)record.get("realMoneySum")).intValue());
+        }
+        //临时消费
+        List<Record> TempSumList = companyService.getChargeSum(companyId, "M", startTime, endTime);
+        if(TempSumList!= null && TempSumList.size() > 0) {
+            Record record = TempSumList.get(0);
+           model.setTempMoney(((BigDecimal)record.get("realMoneySum")).intValue());
+
+        }
+
+        Integer chargeMoneyReal = model.getChargeMoneyReal();
+        Integer rechargeMoneyReal = model.getRechargeMoneyReal();
+        Double balanceRate = model.getBalanceRate();
+        double paySum = 0;
+        double surplus = 0;
+        Date date = new Date();
+        Integer lastSurplus = 0;
+        PayAgentHistory payAgentHistory = PayAgentHistory.dao.queryPayAgentHistory(companyId);
+        if(payAgentHistory != null){
+            lastSurplus = payAgentHistory.getSurplus()+payAgentHistory.getLastSurplus();
+        }
+
+        if (rechargeMoneyReal > chargeMoneyReal){
+            //充值金额大于消费金额
+            paySum = rechargeMoneyReal*balanceRate;
+            surplus = rechargeMoneyReal - chargeMoneyReal;
+        }else{
+            //消费金额大于充值金额
+            paySum = chargeMoneyReal * balanceRate;
+
+        }
+        model.setPaySum(Integer.parseInt(String.format("%.0f", paySum)));
+        model.setSurplus(Integer.parseInt(String.format("%.0f",surplus)));
+        model.setOperatorTime(date);
+        model.setPayTime(date);
+        model.setLastSurplus(lastSurplus);
+
+
+        boolean flag = Db.tx(new IAtom() {
+            public boolean run() throws SQLException {
+               try {
+                   model.save();
+                   List<ChargeHistory> chargeList = ChargeHistory.dao.queryChargeHistory(companyId, startTime, endTime);
+                   chargeList.forEach(chargeHistory -> {
+                       chargeHistory.setPayToAgentStatus("1");
+                       chargeHistory.setPayToAgentTime(date);
+                       chargeHistory.update();
+                   });
+                   List<RechargeHistory> rechargeList = RechargeHistory.dao.queryRechargeHistory(companyId, startTime, endTime);
+                   rechargeList.forEach(rechargeHistory -> {
+                       rechargeHistory.setPayAgentStatus(1);
+                       rechargeHistory.setPayAgentTime(date);
+                       rechargeHistory.update();
+                   });
+                   return  true;
+               }catch (Exception e){
+                   log.error("更新失败：" + e);
+                   return  false;
+               }
+
+            }
+        });
+        if(flag){
+            renderSuccess();
+        }else{
+            renderFailed();
+        }
+
     }
 
 }

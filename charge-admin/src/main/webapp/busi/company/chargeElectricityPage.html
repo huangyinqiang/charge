@@ -11,6 +11,14 @@
     </div>
 
         <div class="wrap_search">
+             <span class="search_item">
+                    <span class="item_text">公司名称: </span>
+                    <span class="item_obj">
+                        <input id="companyId" name="ych.company_id" data-options="panelHeight:'auto'"
+                               class="easyui-combobox">
+                    </span>
+             </span>
+
             <span class="search_item">
                 <span class="item_text">用户昵称: </span>
                 <span class="item_obj">
@@ -50,7 +58,7 @@ var dgOptions = {
     	fit:true,
     	border:false,
         rownumbers:true,
-    	url:'chargeElectricityHistoryData?company_id=${company_id!}&company_name=${company_name!}',
+    	url:'chargeElectricityHistoryData',
     	method:'post',
     	toolbar:'#tb',
     	singleSelect: true,
@@ -252,6 +260,22 @@ $(function() {
 	datagrid.datagrid(dgOptions);
     $("#money_total").text("${money_total ! }"+" 元");
     $("#gift_total").text("${gift_total ! }"+" 元");
+
+    $.ajax({
+        url : "../company/listData",
+        type : "POST",
+        async : true,// 设置同步方式，false为同步
+        success : function(res) {
+            $('#companyId').combobox({
+                data : res.rows,
+                multiple:false, //支持多选
+                valueField : 'id',
+                textField : 'company_name'
+            });
+            var id =  res.rows.id;
+            $('#companyId').combobox('setValue',id);
+        }
+    })
 });
 
 function zcurdSearch() {
@@ -265,7 +289,12 @@ function zcurdGetParam() {
 	var param = {};
 	$("#tb :input[name]").each(function(i, item) {
 		if($(item).val()) {
-			param[$(item).attr("name")] = "*"+$(item).val() +"*";
+		    if("ych.company_id" == $(item).attr("name")){
+                param[$(item).attr("name")] = $(item).val();
+            }else{
+                param[$(item).attr("name")] = "*"+$(item).val() +"*";
+            }
+
 		}
 	});
 	return param;
