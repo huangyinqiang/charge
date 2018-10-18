@@ -12,7 +12,7 @@ import java.util.List;
 public class AnalysisService {
     private static Log logger = Log.getLog(AnalysisService.class);
 
-    public List<Object>  getRechargeDate(String companyId,String[] properties,String[] symbols,Object[] values) {
+    public List<Object>  getRechargeData(String companyId,String[] properties,String[] symbols,Object[] values) {
 
         StringBuffer rechargeSql =new StringBuffer();
         StringBuffer companySql =new StringBuffer();
@@ -60,7 +60,7 @@ public class AnalysisService {
         return companyRechargeList;
     }
 
-    public List<Object>  getChargeDate(String companyId, String[] properties, String[] symbols, Object[] values,
+    public List<Object>  getChargeData(String companyId, String[] properties, String[] symbols, Object[] values,
                                        Pager pager,String order,String operType) {
 
         StringBuffer sql =new StringBuffer();

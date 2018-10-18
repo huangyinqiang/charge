@@ -1,0 +1,284 @@
+
+<#include "/common/head.html"/>
+    
+    <table id="dg"></table>
+    <div id="tb" style="padding:2px 5px;">
+
+        <div class="wrap_search">
+                <span class="search_item">
+                    <span class="item_text">公司名称: </span>
+                    <span class="item_obj">
+                        <input id="companyId" name="companyId" data-options="panelHeight:'auto'"
+                               class="easyui-combobox">
+                    </span>
+                </span>
+
+                <span class="search_item">
+                    <span class="item_text">项目名称: </span>
+                    <span class="item_obj">
+                        <input id="projectId" name="project_id" data-options="panelHeight:'auto'"
+                               class="easyui-combobox">
+                    </span>
+                </span>
+        </div>
+
+
+        <div style="text-align: left; margin:6px;">
+            <a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="update()">编辑</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton delBtn" iconCls="glyphicon-remove" plain="true" onclick="del()">删除</a>
+            <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-plus" plain="true" onclick="add()">增加</a>
+            <div id="searchBtnWrap" style="float:right; padding-right:40px;">
+                <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript">
+var companyList;
+var datagrid = $("#dg");
+var dgOptions = {
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'listData',
+    	method:'post',
+    	toolbar:'#tb',
+    	singleSelect: true,
+    	pageSize: 50,
+    	pagination:true,
+    	multiSort:true,
+        queryParams: getInitParam(),
+
+    columns: [[
+        {field:'id', checkbox:true},
+
+        // {
+        //     field : 'company_name',
+        //     title : '公司名称',
+        //     width : 120
+        // },
+
+        {
+            field : 'name',
+            title : '名称',
+            width : 120
+        },
+
+        {
+            field : 'status',
+            title : '状态',
+            width : 60,
+            formatter : function(value, row, index) {
+                if (value == 'Y') {
+                    return "<span style='color:green;font-size:20px;'>有效</span>";
+                } else  if (value == 'N') {
+                    return "<span style='color:red;font-size:20px;'>无效</span>";
+                } else  {
+                    return "<span style='color:red;font-size:20px;'>其他</span>";
+                }
+            }
+        },
+
+        {
+            field : 'type',
+            title : '类型',
+            width : 60,
+            formatter : function(value, row, index) {
+                if (value == 'CH') {
+                    return "<span style='color:green;font-size:20px;'>充电</span>";
+                } else  {
+                    return "<span style='color:red;font-size:20px;'>其他</span>";
+                }
+            }
+        },
+        {
+            field : 'money',
+            title : '充值金额',
+            width : 60,
+            formatter : function(value, row, index) {
+                return value/100+" 元";
+            }
+        },
+        {
+            field : 'chargeNum',
+            title : '发行数量',
+            width : 60,
+            formatter : function(value, row, index) {
+                return value+" 个";
+            }
+        },
+        {
+            field : 'coupon',
+            title : '赠送金额',
+            width : 60,
+            formatter : function(value, row, index) {
+                return value/100+" 元";
+            }
+        },
+        {
+            field : 'remark',
+            title : '补充信息',
+            width : 120
+        },
+        {
+            field : 'start_time',
+            title : '开始时间',
+            width : 120
+        },
+        {
+            field : 'expiry_time',
+            title : '结束时间',
+            width : 120
+        },
+        {
+            field : 'sum',
+            title : '总数',
+            width : 30
+        },
+        {
+            field : 'province',
+            title : '省',
+            width : 60
+        },
+        {
+            field : 'city',
+            title : '市',
+            width : 60
+        },
+        {
+            field : 'location',
+            title : '详细位置信息',
+            width : 60
+        },
+        {
+            field : 'actNum',
+            title : 'actNum',
+            width : 60
+        },
+    ]]
+	};
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+    $.ajax({
+        url : "../company/listData",
+        type : "POST",
+        async : true,// 设置同步方式，false为同步
+        success : function(res) {
+            companyList = res.rows;
+            $('#companyId').combobox({
+                data : companyList,
+                multiple:false, //支持多选
+                valueField : 'id',
+                textField : 'company_name'
+            });
+            var id = companyList[0].id;
+           $('#companyId').combobox('setValue',id);
+           getProjectByCompanyId(id)
+        }
+    })
+});
+
+$('#companyId').combobox({
+    onChange: function (n,o) {
+        var companyId = $('#companyId').combobox('getValue');
+        getProjectByCompanyId(companyId)
+
+    }
+});
+
+function getProjectByCompanyId(val) {
+    $.ajax({
+        url : "../company/ProjectListData",
+        type : "POST",
+        data:{company_id:val},
+        async : true,// 设置同步方式，false为同步
+        success : function(res) {
+            $('#projectId').combobox({
+                data : res.rows,
+                multiple:false, //支持多选
+                valueField : 'id',
+                textField : 'name'
+            });
+
+        }
+    })
+}
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val() && "companyId" != $(item).attr("name")) {
+			param[$(item).attr("name")] = $(item).val();
+		}
+	});
+	return param;
+}
+
+function getInitParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+	});
+	return param;
+}
+function add() {
+    top.window.subPage.loadCurrDatagrid = function() {
+        showMsg("增加成功");
+        datagrid.datagrid("load");
+    }
+    var companyId = $('#companyId').combobox('getValue');
+    var projectId = $('#projectId').combobox('getValue');
+    var projectName = $('#projectId').combobox('getText');
+    if(projectId == null || projectId == ""){
+        showMsg("请选择项目");
+        return;
+    }
+    top.openWindow("项目活动-增加", getCurrUrl("addPage")+"?projectId="+projectId+"&projectName="+encodeURI(projectName), {size: '600x400'});
+}
+
+function update() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要编辑数据！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    top.window.subPage.loadCurrDatagrid = function() {
+        showMsg("更新成功");
+        datagrid.datagrid("reload");
+    }
+    top.openWindow("项目活动-编辑", getCurrUrl("updatePage") + "?id=" + id, {size: '600x400'});
+}
+
+function del() {
+    var ids = [];
+    $.each(datagrid.datagrid("getSelections"), function(i, item) {
+        ids.push(item.id);
+    });
+    if(ids.length < 1) {
+        showWarnMsg("请选择要删除的数据");
+        return;
+    }
+    confirmMsg("确认删除", function() {
+        $.post("delete", {id: ids}, function(data) {
+            showMsg("删除成功");
+            datagrid.datagrid("reload");
+        });
+    });
+}
+
+//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/>
+<#include "/common/foot.html"/>

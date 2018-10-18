@@ -4,6 +4,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.code.RespCode;
+import net.inconnection.charge.weixin.model.DeviceProject;
 import net.inconnection.charge.weixin.model.ProjectActivity;
 import net.inconnection.charge.weixin.service.ChargeMoneyService;
 import net.inconnection.charge.weixin.service.CompanyActivityService;
@@ -122,9 +123,29 @@ public class RechargeController extends Controller {
             log.info("根据公司查询优惠信息结束：" + response);
             this.renderJson(response);
         }else{
-            this.renderJson(new HnKejueResponse(projectActivityList,RespCode.FAILD.getKey(), RespCode.FAILD.getValue()));
+            this.renderJson(new HnKejueResponse(projectActivityList,RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue()));
         }
 
     }
+
+
+    public void queryActivityInfoByDeviceId() {
+        String deviceId = this.getPara("id");
+        log.info("根据设备查询优惠信息 id=" +  deviceId );
+        DeviceProject deviceProject = DeviceProject.me.queryProjectIdByDeviceId(this.getPara("id"));
+        List<ProjectActivity> projectActivityList = null;
+        if(deviceProject != null){
+            projectActivityList = projectActivityService.queryActivityByProjectId(deviceProject.get("project_id").toString());
+        }
+
+        if(projectActivityList == null || projectActivityList.size() == 0){
+            this.renderJson(new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue()));
+        }else{
+            this.renderJson(new HnKejueResponse(projectActivityList,RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue()));
+        }
+
+    }
+
+
 }
 

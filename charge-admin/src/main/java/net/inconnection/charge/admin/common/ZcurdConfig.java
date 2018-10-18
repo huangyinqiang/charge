@@ -80,6 +80,7 @@ public class ZcurdConfig extends JFinalConfig {
 		me.add("/mySysuser", MySysUserController.class, "/busi/mySysUser");
         me.add("/analysis", AnalysisController.class, "/busi/analysis");
         me.add("/order", OrdersController.class, "/busi/order");
+        me.add("/activity", ActivityController.class, "/busi/activity");
 
 
     }

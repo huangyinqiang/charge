@@ -1,0 +1,245 @@
+
+<#include "/common/head.html"/>
+    
+    <table id="dg"></table>
+
+<div id="tb" style="padding:2px 5px;">
+    <div style="text-align: left; margin:6px;">
+        <a href="#" class="easyui-linkbutton updateBtn" iconCls="glyphicon-plus" plain="true" onclick="addProject()">新增</a>
+    </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+var datagrid = $("#dg");
+var dgOptions = {
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'costListData',
+    	method:'post',
+    	toolbar:'#tb',
+    	singleSelect: true,
+    	pageSize: 50,
+    	pagination:true,
+    	multiSort:true,
+        queryParams: getInitParam(),
+        
+        columns: [[
+            {field:'id', checkbox:true},
+            {
+                field : 'openId',
+                title : 'openId',
+                width : 120
+            },
+
+            {
+                field : 'nickName',
+                title : '用户昵称',
+                width : 80
+            },
+            {
+                field : 'tel',
+                title : '手机号码',
+                width : 90
+            },
+            {
+                field : 'company_id',
+                title : '公司',
+                width : 120
+            },
+            {
+                field : 'start_time',
+                title : '开始时间',
+                width : 120
+            },
+            {
+                field : 'end_time',
+                title : '结束时间',
+                width : 120
+            },
+
+            {
+                field : 'recharge_money',
+                title : '本期充值金额',
+                width : 100,
+                formatter : function(value, row, index) {
+                 return value/100 ;
+                }
+            },
+            {
+                field : 'recharge_money_real',
+                title : '本期充值实际金额',
+                width : 120,
+                formatter : function(value, row, index) {
+                    return value/100 ;
+                }
+            },
+            {
+                field : 'charge_money',
+                title : '本期充电消费金额',
+                width : 120,
+                formatter : function(value, row, index) {
+                    return value/100 ;
+                }
+            },
+
+            {
+                field : 'charge_money_real',
+                title : '本期充电消费实际金额',
+                width : 120,
+                formatter : function(value, row, index) {
+                    return value/100 ;
+                }
+            },
+            {
+                field : 'temp_money',
+                title : '本期临时充电消费金额',
+                width : 120,
+                formatter : function(value, row, index) {
+                    return value/100 ;
+                }
+            },
+            {
+                field : 'balance_rate',
+                title : '结算比例',
+                width : 60
+            },
+            {
+                field : 'pay_sum',
+                title : '结算总金额',
+                width : 90,
+                formatter : function(value, row, index) {
+                    return value/100 ;
+                }
+            },
+            {
+                field : 'pay_time',
+                title : '支付时间',
+                width : 100
+            },
+            {
+                field : 'last_surplus',
+                title : '上期结余',
+                width : 80,
+                formatter : function(value, row, index) {
+                    return value/100 ;
+                }
+            },
+            {
+                field : 'surplus',
+                title : '本期结余',
+                width : 80,
+                formatter : function(value, row, index) {
+                    return value/100 ;
+                }
+            },
+            {
+                field : 'pay_type',
+                title : '付款方式',
+                width : 70,
+                formatter : function(value, row, index) {
+                    if (value == '1') {
+                        return "<span style='color:green;font-size:16px;'>微信</span>";
+                    } else  if (value == '2') {
+                        return "<span style='color:red;font-size:16px;'>银行卡</span>";
+                    }else if(value =='3'){
+                        return "<span style='color:red;font-size:16px;'>现金</span>";
+                    }
+                }
+            },
+            {
+                field : 'weixin_account',
+                title : '微信账号',
+                width : 120
+            },
+            {
+                field : 'bank_account',
+                title : '银行账号',
+                width : 80
+            },
+            {
+                field : 'bank_name',
+                title : '开户行',
+                width : 80
+            },
+            {
+                field : 'operator_name',
+                title : '操作员姓名',
+                width : 80
+            },
+            {
+                field : 'operator_time',
+                title : '操作员时间',
+                width : 80
+            }
+	           ]]
+	};
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+});
+
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param[$(item).attr("name")] = $(item).val();	
+		}
+	});
+	return param;
+}
+
+function getInitParam() {
+	var param = {};
+	return param;
+}
+
+var initPara = zcurdGetParam();
+top.window.subPage.save = save;
+function save(successFunc) {
+    top.window.closeWindow();
+    top.window.subPage.loadCurrDatagrid();
+}
+
+
+function addProject() {
+    top.window.subPage.loadCurrDatagrid = function() {
+        showMsg("计算成功");
+        datagrid.datagrid("reload");
+    }
+    top.openWindow("运营商结算-新增", getCurrUrl("addCostPage"), {size: '600x600'});
+}
+
+/**
+ * 打开子页
+ */
+var _openSubPageFlag = false;
+function _openSubPage(pageUrl) {
+    if(!_openSubPageFlag) {
+        $("#subLayout").layout("expand", "east");
+        setTimeout(function() {
+            $("#subIframe").attr("src", pageUrl);
+        }, 600);
+        _openSubPageFlag = true;
+    }else {
+        $("#subIframe").attr("src", pageUrl);
+    }
+}
+
+//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/>
+<#include "/common/foot.html"/>

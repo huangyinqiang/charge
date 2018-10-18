@@ -42,6 +42,21 @@ function showMsg(msg) {
 }
 
 /**
+ * 进度条消息
+ * @param msg
+ */ 
+function showProgress(msg,text) {
+    top.window.$.messager.progress({
+        title:'提示',
+        msg:msg,
+        text:text,
+        interval:'600'
+    });
+}
+function closeProgress() {
+    top.window.$.messager.progress("close");
+}
+/**
  * 显示警告消息
  */
 function showWarnMsg(msg) {
