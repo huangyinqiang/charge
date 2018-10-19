@@ -367,6 +367,8 @@ public class ChargePileDevice implements GateWay {
 
         String callBackQueueName = requestSNAndCallBackQueueNameMap.get(responseSequenceNum);
 
+        requestSNAndCallBackQueueNameMap.remove(responseSequenceNum);
+
         String responseType = responseObj.getString(MSG_RESPONSE);
 
         switch (responseType){
@@ -389,7 +391,19 @@ public class ChargePileDevice implements GateWay {
 
             case MSG_RESPONCE_CODE_DELETEIMAGE:
 
-            case MSG_RESPONCE_CODE_SHOWIMAGE:
+            case MSG_RESPONCE_CODE_SET_TICK:
+
+            case MSG_RESPONCE_CODE_CONFIRM_ONLINE:
+
+            case MSG_RESPONCE_CODE_POSITION:
+
+            case MSG_RESPONCE_CODE_SET_MAXPOW:
+
+            case MSG_RESPONCE_CODE_SET_BORAD_MAXPOW:
+
+            case MSG_RESPONCE_CODE_SET_FINISHI:
+
+            case MSG_RESPONCE_CODE_SET_LITTLE_ITIME:
 
                 ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
 
@@ -446,7 +460,7 @@ public class ChargePileDevice implements GateWay {
     }
 
 
-    //请求允许上线
+    //1:请求允许上线
     public void permissionOnLine(String callBackQueueName){
 
         RequestMsg requestMsg = new RequestMsg();
@@ -473,7 +487,7 @@ public class ChargePileDevice implements GateWay {
         return String.format("%012d",chargePileId);
     }
 
-    //请求关闭所有插座
+    //2:请求关闭所有插座
     public void shutDownAllSockets(String callBackQueueName){
         RequestMsg requestMsg = new RequestMsg();
 
@@ -492,7 +506,7 @@ public class ChargePileDevice implements GateWay {
 
     }
 
-    //请求关闭插座
+    //3:请求关闭插座
     public void shutDownChargeSocket(Vector<Long> socketIds, String callBackQueueName){
         RequestMsg requestMsg = new RequestMsg();
 
@@ -514,7 +528,8 @@ public class ChargePileDevice implements GateWay {
 
     }
 
-    //请求测试充电功率
+    //4:请求测试充电功率  已废弃不用，使用请求开始充电来获得开始功率
+    @Deprecated
     public void requestTestPower(Vector<Long> socketIds, String callBackQueueName){
         RequestMsg requestMsg = new RequestMsg();
 
@@ -535,7 +550,7 @@ public class ChargePileDevice implements GateWay {
 
     }
 
-    //请求插座开始充电
+    //5:请求插座开始充电   充电时间为60s，检测功率，为其他值  开始充电
     public void startCharge(Map<Long, Integer> socketIdChargeTimeMap, String callBackQueueName){
         RequestMsg requestMsg = new RequestMsg();
 
@@ -556,7 +571,7 @@ public class ChargePileDevice implements GateWay {
 
     }
 
-    //请求删除某广告图片
+    //6：请求删除某广告图片
     public void deleteImage(String imageName, String callBackQueueName){
         RequestMsg requestMsg = new RequestMsg();
 
@@ -575,7 +590,7 @@ public class ChargePileDevice implements GateWay {
 
     }
 
-    //请求设置某广告图片显示效果
+    //7：请求设置某广告图片显示效果
     public void showImage(String imageName, Integer timeLast, Integer xPoint, Integer yPoint, String startTime, String endTime, Integer dayLast, String callBackQueueName){
         RequestMsg requestMsg = new RequestMsg();
 
@@ -595,11 +610,149 @@ public class ChargePileDevice implements GateWay {
     }
 
 
+    //8：设置传输间隔
+    public void setTick(Integer tickTime, String callBackQueueName){
+        RequestMsg requestMsg = new RequestMsg();
+
+        Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
+        Date utc = new Date();
+        requestMsg.setGatewayFacet(new GatewayFacet(sequenceNum, utc, getGatewayIdStr()));
+        requestMsg.addRequestFacet(new RequestSetTickFacet(MSG_REQUEST_CODE_SET_TICK, tickTime));
+
+        String requestMsgStr = requestMsg.toString();
+
+        _log.info("set tick time: \n\r" + requestMsgStr);
+
+        sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
+        //将sn存储起来，等待接受response消息使用
+        requestSNAndCallBackQueueNameMap.put(sequenceNum, callBackQueueName);
+
+    }
+
+    //9：请求在线确认
+    public void checkOnline(String callBackQueueName){
+        RequestMsg requestMsg = new RequestMsg();
+
+        Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
+        Date utc = new Date();
+        GatewayFacet gatewayFacet = new GatewayFacet(sequenceNum, utc, getGatewayIdStr());
+        requestMsg.setGatewayFacet(gatewayFacet);
+        RequestChargePlieFacet requestFacet = new RequestChargePlieFacet(MSG_REQUEST_CODE_CONFIRM_ONLINE);
+        requestMsg.addRequestFacet(requestFacet);
+
+        String requestMsgStr = requestMsg.toString();
+
+        _log.info("check online: \n\r" + requestMsgStr);
+
+        sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
+        //将sn存储起来，等待接受response消息使用
+        requestSNAndCallBackQueueNameMap.put(gatewayFacet.getSequenceNum(), callBackQueueName);
+    }
+
+    //10：请求传输基站位置
+    public void getLocation(String callBackQueueName){
+        RequestMsg requestMsg = new RequestMsg();
+
+        Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
+        Date utc = new Date();
+        GatewayFacet gatewayFacet = new GatewayFacet(sequenceNum, utc, getGatewayIdStr());
+        requestMsg.setGatewayFacet(gatewayFacet);
+        RequestChargePlieFacet requestFacet = new RequestChargePlieFacet(MSG_REQUEST_CODE_POSITION);
+        requestMsg.addRequestFacet(requestFacet);
+
+        String requestMsgStr = requestMsg.toString();
+
+        _log.info("get location: \n\r" + requestMsgStr);
+
+        sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
+        //将sn存储起来，等待接受response消息使用
+        requestSNAndCallBackQueueNameMap.put(gatewayFacet.getSequenceNum(), callBackQueueName);
+    }
+
+    //12：请求设置端口最大支持功率
+    public void setPortMaxPow(Integer portMaxPow, String callBackQueueName){
+        RequestMsg requestMsg = new RequestMsg();
+
+        Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
+        Date utc = new Date();
+        GatewayFacet gatewayFacet = new GatewayFacet(sequenceNum, utc, getGatewayIdStr());
+        requestMsg.setGatewayFacet(gatewayFacet);
+        requestMsg.addRequestFacet(new RequestSetPortPowFacet(MSG_REQUEST_CODE_SET_MAXPOW, portMaxPow));
+
+        String requestMsgStr = requestMsg.toString();
+
+        _log.info("set port max pow: \n\r" + requestMsgStr);
+
+        sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
+        //将sn存储起来，等待接受response消息使用
+        requestSNAndCallBackQueueNameMap.put(gatewayFacet.getSequenceNum(), callBackQueueName);
+
+    }
+
+    //13：请求设置强电板最大支持功率
+    public void setBoardMaxPow(Integer boardMaxPow, String callBackQueueName){
+        RequestMsg requestMsg = new RequestMsg();
+
+        Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
+        Date utc = new Date();
+        GatewayFacet gatewayFacet = new GatewayFacet(sequenceNum, utc, getGatewayIdStr());
+        requestMsg.setGatewayFacet(gatewayFacet);
+        requestMsg.addRequestFacet(new RequestSetBoardPowFacet(MSG_REQUEST_CODE_SET_BORAD_MAXPOW, boardMaxPow));
+
+        String requestMsgStr = requestMsg.toString();
+
+        _log.info("set board max pow: \n\r" + requestMsgStr);
+
+        sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
+        //将sn存储起来，等待接受response消息使用
+        requestSNAndCallBackQueueNameMap.put(gatewayFacet.getSequenceNum(), callBackQueueName);
+
+    }
+
+    //15：设置充电截止判断电流
+    public void setFinishI(Integer finishI, String callBackQueueName){
+        RequestMsg requestMsg = new RequestMsg();
+
+        Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
+        Date utc = new Date();
+        GatewayFacet gatewayFacet = new GatewayFacet(sequenceNum, utc, getGatewayIdStr());
+        requestMsg.setGatewayFacet(gatewayFacet);
+        requestMsg.addRequestFacet(new RequestSetFinishIFacet(MSG_REQUEST_CODE_SET_FINISHI, finishI));
+
+        String requestMsgStr = requestMsg.toString();
+
+        _log.info("set finish I: \n\r" + requestMsgStr);
+
+        sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
+        //将sn存储起来，等待接受response消息使用
+        requestSNAndCallBackQueueNameMap.put(gatewayFacet.getSequenceNum(), callBackQueueName);
+    }
+
+    //16：请求设置涓流充电时间
+    public void setJlTime(Integer jlTime, String callBackQueueName){
+        RequestMsg requestMsg = new RequestMsg();
+
+        Integer sequenceNum = SEQGeneration.getInstance().getSEQ();
+        Date utc = new Date();
+        GatewayFacet gatewayFacet = new GatewayFacet(sequenceNum, utc, getGatewayIdStr());
+        requestMsg.setGatewayFacet(gatewayFacet);
+        requestMsg.addRequestFacet(new RequestSetJlTimeFacet(MSG_REQUEST_CODE_SET_LITTLEI_TIME, jlTime));
+
+        String requestMsgStr = requestMsg.toString();
+
+        _log.info("set jlTime: \n\r" + requestMsgStr);
+
+        sendMqttMsg(TOPIC_REQUEST, requestMsgStr);
+        //将sn存储起来，等待接受response消息使用
+        requestSNAndCallBackQueueNameMap.put(gatewayFacet.getSequenceNum(), callBackQueueName);
+    }
+
+
 
     public static void main(String[] args){
 
 
-        ChargePileDevice chargePileDevice = new ChargePileDevice(201808000020L);
+        ChargePileDevice chargePileDevice = new ChargePileDevice(201808000003L);
 
         String testQueue = "testqueue";
 
@@ -625,9 +778,19 @@ public class ChargePileDevice implements GateWay {
 //        chargePileDevice.startCharge(socketIdChargeTimeMap, testQueue);
 //
 //        chargePileDevice.deleteImage("123", testQueue);
-//
+
 //        chargePileDevice.showImage("123",60,null,null,null,null,null , testQueue);
-//
+
+//        chargePileDevice.setTick(60, testQueue);
+
+//        chargePileDevice.setBoardMaxPow(2000,testQueue);
+
+//        chargePileDevice.setPortMaxPow(700,testQueue);
+
+
+//        chargePileDevice.setFinishI(150, testQueue);
+
+//        chargePileDevice.setJlTime(3600, testQueue);
 
 
     }

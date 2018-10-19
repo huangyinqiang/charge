@@ -93,6 +93,15 @@ public class ProtocolConstant {
     public static final String MSG_REQUEST_CODE_SOCKETSTARTCHARGE =   "5";        //5:插座开始充电
     public static final String MSG_REQUEST_CODE_DELETEIMAGE =   "6";        //6:删除照片
     public static final String MSG_REQUEST_CODE_SHOWIMAGE =   "7";        //7:展示照片
+    public static final String MSG_REQUEST_CODE_SET_TICK =   "8";        //8:设置传输间隔
+    public static final String MSG_REQUEST_CODE_CONFIRM_ONLINE =   "9";        //9:在线确认
+    public static final String MSG_REQUEST_CODE_POSITION =   "10";        //10:传输基站位置
+    public static final String MSG_REQUEST_CODE_TRANS_FILE =   "11";        //11:传输文件
+    public static final String MSG_REQUEST_CODE_SET_MAXPOW =   "12";        //12:设置最大功率
+    public static final String MSG_REQUEST_CODE_SET_BORAD_MAXPOW =   "13";        //13:设置强电板总共最大功率
+    public static final String MSG_REQUEST_CODE_SET_TIME =   "14";        //14:请求对时
+    public static final String MSG_REQUEST_CODE_SET_FINISHI =   "15";        //15:设置充电截止判断电流
+    public static final String MSG_REQUEST_CODE_SET_LITTLEI_TIME =   "16";        //16:设置涓流时间
 
 
     public static final String MSG_RESPONCE_CODE_REVERSE                    =   "0";        //0:保留
@@ -103,12 +112,20 @@ public class ProtocolConstant {
     public static final String MSG_RESPONCE_CODE_SOCKETSTARTCHARGE         =   "5";        //5:响应插座开始充电
     public static final String MSG_RESPONCE_CODE_DELETEIMAGE         =   "6";        //6:响应删除照片
     public static final String MSG_RESPONCE_CODE_SHOWIMAGE        =   "7";        //7:响应展示照片
+    public static final String MSG_RESPONCE_CODE_SET_TICK =   "8";        //8:响应设置传输间隔
+    public static final String MSG_RESPONCE_CODE_CONFIRM_ONLINE =   "9";        //9:响应在线确认
+    public static final String MSG_RESPONCE_CODE_POSITION =   "10";        //10:响应传输基站位置
+    public static final String MSG_RESPONCE_CODE_TRANS_FILE =   "11";        //11:响应传输文件
+    public static final String MSG_RESPONCE_CODE_SET_MAXPOW =   "12";        //12:响应设置最大功率
+    public static final String MSG_RESPONCE_CODE_SET_BORAD_MAXPOW =   "13";        //13:响应设置强电板总共最大功率
+    public static final String MSG_RESPONCE_CODE_SET_TIME =   "14";        //14:响应请求对时
+    public static final String MSG_RESPONCE_CODE_SET_FINISHI =   "15";        //15:响应设置充电截止判断电流
+    public static final String MSG_RESPONCE_CODE_SET_LITTLE_ITIME =   "16";        //16:响应设置涓流时间
 
     public static final String MSG_RESPONCE_RESULT = "RESULT";
 
 
 
-    //2017.11.14况发志新增
     public static final String MSG_UPDATE_UPDATE                           =   "UPDATE";   //升级文件的版本号
     public static final String MSG_UPDATE_OFFSET                           =   "OFFSET";   //本次发送的数据在总的升级文件中的偏移量,单位为字节
     public static final String MSG_UPDATE_LEN                              =   "LEN";      //本次发送的数据长度,单位为字节
@@ -124,6 +141,13 @@ public class ProtocolConstant {
     public static final String MSG_IMAGE_STARTTIME                           =   "START";   //图片的显示时间段的开始时间
     public static final String MSG_IMAGE_ENDTIME                           =   "END";   //图片的显示时间段的结束时间
     public static final String MSG_IMAGE_DAYLAST                           =   "DAYLAST";   //图片的显示时间段的持续天数
+
+    public static final String MSG_REQUEST_TICK = "TICK";
+    public static final String MSG_REQUEST_MAX_PORTPOW = "PORTPOW";
+    public static final String MSG_REQUEST_MAX_BOARDPOW = "BOARDPOW";
+    public static final String MSG_REQUEST_FINISH_I = "FINISHI";
+    public static final String MSG_REQUEST_JLTIME = "JLTIME";
+
 
 }
 
