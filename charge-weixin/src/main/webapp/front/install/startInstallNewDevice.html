@@ -145,12 +145,13 @@
 
                 if (data.respObj.is_online == 1) {
                     layer.msg("设备已经上线，将会被重新配置数据", {
-                        shift : 3
+                        shift: 3
                     });
+                }
 
-                    location.href = "./install/editInstallInfo?deviceId="
+                location.href = "./install/editInstallInfo?deviceId="
                         + data.respObj.id + "&latitude=" + latitude + "&longitude=" + longitude  + "&installed=" + type
-				}
+
 
 
             },
