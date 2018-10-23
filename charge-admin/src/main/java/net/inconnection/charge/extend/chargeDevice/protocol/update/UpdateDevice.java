@@ -39,8 +39,8 @@ public class UpdateDevice {
 
     public void analysisFile(int start){
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-//        int tem = start+3072;
-        int tem = start+15360;
+        int tem = start+3072;
+//        int tem = start+15360;
         if(tem>lengthAll){
             tem = lengthAll;
         }
