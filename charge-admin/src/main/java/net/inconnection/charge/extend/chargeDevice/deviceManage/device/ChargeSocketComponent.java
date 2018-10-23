@@ -153,18 +153,15 @@ public class ChargeSocketComponent implements Device {
 
             updateDataToDb();
 
-            if (chargePower > startPower*3/2){
+            if (startPower > 150 && chargePower > startPower*3/2){
+                //初始功率不为0 且功率突然增大
                 //充电功率大于 1.5倍初始功率，断电
                 shutDownChargeSocket();
-                log.error("设备充电功率严重超过初始功率，平台断电， deviceID：" + chargePileId + ", socketid: " + chargeSocketId);
+                log.error("设备充电功率严重超过初始功率，平台断电， deviceID：" + chargePileId + ", socketid: " + chargeSocketId + ", startPow=" + startPower + ", chargePow=" + chargePower);
             }
 //            log.info("pile id = " + chargePileId + ", socket Id  =  " + chargeSocketId);
             if (lastChargeState.equals(CHARGE_ING) && (!chargeState.equals(CHARGE_ING)) && chargeTime>0){
                 //充电结束,结算费用
-
-//                //向设备发送关闭消息
-//                shutDownChargeSocket();
-//                log.error("设备充电完成，平台关掉插座， deviceID：" + chargePileId + ", socketid: " + chargeSocketId);
 
                 calculateFeeAndUpdata(chargePileId, chargeSocketId);
             }
