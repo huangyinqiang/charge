@@ -1,17 +1,15 @@
 package net.inconnection.charge.extend.controller;
 
-import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import net.inconnection.charge.admin.common.DBTool;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.util.StringUtil;
-import net.inconnection.charge.admin.common.util.XBeanUtils;
-import net.inconnection.charge.extend.model.ChargePile;
 import net.inconnection.charge.extend.model.ChargeSocket;
-import net.inconnection.charge.extend.model.Chargeprice;
+import net.inconnection.charge.extend.model.ChargeSocketHistory;
 import net.inconnection.charge.extend.model.Company;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,6 +58,31 @@ public class NewDeviceController extends BaseController {
         this.renderDatagrid(chargeSockets, chargeSockets.size());
     }
 
+    public void socketPowerPage() {
+        this.render("socketPower.html");
+    }
+
+    public void socketPowerDate() {
+        String id = this.getPara("id");
+        String socket = this.getPara("socket");
+        String startDate = this.getPara("startDate");
+        String endDate = this.getPara("endDate");
+
+        Map map = new HashMap<String,List>();
+        List socketList = new ArrayList();
+        List electricityList = new ArrayList();
+        List<ChargeSocketHistory> chargeSocketHistories = ChargeSocketHistory.dao.find("SELECT substring(charge_socket_id,13) as `charge_socket_id`, group_concat(charge_intensity) AS `charge_intensity`, group_concat(update_time) as `update_time`"+
+                " FROM yc_charge_socket_history WHERE charge_pile_id="+id+" and update_time > '"+startDate+"' and update_time < '"+endDate+"' group by charge_socket_id");
+       chargeSocketHistories.forEach(chargeSocketHistory -> {
+           socketList.add(chargeSocketHistory.get("charge_socket_id"));
+           electricityList.add(Arrays.asList(chargeSocketHistory.get("charge_intensity").toString().split(",")));
+           map.put("dateList",Arrays.asList(chargeSocketHistory.get("update_time").toString().split(",")));
+       });
+        map.put("socketList",socketList);
+        map.put("electricityList",electricityList);
+
+        this.renderJson(map);
+    }
 
 
 }

@@ -34,6 +34,7 @@
         </div>
         <div style="text-align: left; margin:6px;">
             <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="socketList()">查看插座</a>
+            <a href="#" class="easyui-linkbutton addBtn" iconCls="glyphicon-folder-open" plain="true" onclick="socketPower()">电流查看</a>
             <div id="searchBtnWrap" style="float:right; padding-right:40px;">
                 <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
                 <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
@@ -310,6 +311,22 @@ function exportCsv() {
 	param.sortName = option.sortName;
 	param.sortOrder = option.sortOrder;
 	window.location.href = "exportCsv?" + $.param(param);
+}
+
+
+function socketPower() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    if(rowsSel.length != 1) {
+        showWarnMsg("请选择要所属充电桩！");
+        return;
+    }
+    var id = rowsSel[0].id;
+    var name = rowsSel[0].name;
+    /*    top.window.subPage.loadCurrDatagrid = function() {
+            showMsg("更新成功");
+            datagrid.datagrid("reload");
+        }*/
+    top.openWindow("查看充电电流", getCurrUrl("socketPowerPage") + "?id=" + id, {size: '1100x650'});
 }
 
 //按钮事件
