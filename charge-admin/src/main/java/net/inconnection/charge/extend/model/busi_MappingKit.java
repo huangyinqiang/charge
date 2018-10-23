@@ -63,6 +63,7 @@ public class busi_MappingKit {
         arp.addMapping("yc_device_project", "id", DeviceProject.class);
         arp.addMapping("yc_pay_agent_history", "id", PayAgentHistory.class);
         arp.addMapping("yc_recharge_history", "id", RechargeHistory.class);
+        arp.addMapping("yc_project_activity", "id", ProjectActivity.class);
 
 
     }
