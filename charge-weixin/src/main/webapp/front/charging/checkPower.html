@@ -94,7 +94,6 @@
     var autoPrice = temp*1;
     var power;
     var serverResultDesc;
-    // $("#submitBtn").hide();
 
 	var socketIsOpen = false;
 	var userIsConfirmed = false;
@@ -151,7 +150,6 @@
                     shift : 5
                 });
                 userIsConfirmed = true;
-                stopCharge();
                 window.location="../charging"
             }
         });
@@ -213,14 +211,10 @@
         }
         layer.confirm(msg, {
             closeBtn : 0,
-            btn : [ '确定', '取消' ]
+            btn : [ '确定']
         }, function() {
             userIsConfirmed = true;
             startCharge4WriteDate();
-        }, function() {
-            userIsConfirmed = true;
-            stopCharge();
-            window.location="../charging";
         });
     }
 
@@ -228,11 +222,7 @@
     function rechargeMoneyToWallet() {
         layer.confirm('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
             closeBtn : 0,
-            btn : [ '取消', '确认' ]
-        }, function() {
-            userIsConfirmed = true;
-            stopCharge();
-            window.location="../charging";
+            btn : [ '确认' ]
         }, function() {
             // 跳转到充值页面
             location.href = "../recharge/rechargeNew?companyId=" + companyId;
@@ -257,7 +247,6 @@
             temporaryRechargeMoney(money);
         }, function() {
             userIsConfirmed = true;
-            stopCharge();
             // 跳转到充值页面
             location.href = "../recharge/rechargeNew?companyId=" + companyId;
         });
@@ -309,7 +298,6 @@
                     shift : 5
                 });
                 userIsConfirmed = true;
-                stopCharge();
                 window.location="../charging";
 
             }
@@ -332,7 +320,6 @@
             startCharge4WriteDate();
         }, function() {
             userIsConfirmed = true;
-            stopCharge();
             location.href = "../recharge/rechargeNew?companyId=" + companyId;
         });
     }
@@ -375,27 +362,5 @@
 
     }
 
-    //断开插座
-    function stopCharge() {
-        $.ajax({
-            type : 'POST',
-            url : "../newDevice/powerOff4CheckPower",
-            dataType : "json",
-            data : {
-                openId : openId,
-                deviceId : deviceId,
-                channeNum : devicePort
-            },
-            cache : false,
-            async : true,// 设置同步方式，false为同步
-            success : function(res) {
-                socketIsOpen = false;
-                window.location="../charging";
-                // if (res.respCode == "000000") {
-                //     window.location="../charging/chargingInfo"
-                // }
-            }
-        });
-    }
 </script>
 </html>

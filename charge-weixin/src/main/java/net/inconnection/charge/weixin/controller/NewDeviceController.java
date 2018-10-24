@@ -155,19 +155,6 @@ public class NewDeviceController extends Controller {
     }
 
 
-    public void powerOff4CheckPower(){
-        String deviceId = this.getPara("deviceId");
-        String channeNum = this.getPara("channeNum");
-        String openId = this.getPara("openId");
-        log.info("断电开始 openId=" + openId + "," + ",channelNum=" + channeNum + ",deviceId=" + deviceId);
-        Long deviceSN = Long.parseLong(deviceId);
-        Long socketSN = Long.parseLong(channeNum);
-        Integer powerOffStatus = deviceControlService.requestShutDownChargeSocket(deviceSN, socketSN, TIMEOUT);
-        log.info("断电结束:"+"powerOffStatus="+powerOffStatus);
-
-    }
-
-
     public void startCharge4WriteDate(){
 
         log.info("开始充电，写数据");
