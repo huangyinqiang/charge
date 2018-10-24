@@ -7,7 +7,7 @@ public class RequestSetJlTimeFacet extends RequestChargePlieFacet {
 
     public RequestSetJlTimeFacet(String requestType, Integer tickTime) {
         super(requestType);
-        this.jlTime = jlTime;
+        this.jlTime = tickTime;
     }
 
     public String toString(){

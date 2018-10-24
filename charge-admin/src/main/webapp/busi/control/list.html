@@ -1,0 +1,442 @@
+<#include "/common/head.html"/>
+<style>
+.row-div {
+    height: 30px;
+}
+.row-div .word{
+    float: left;
+    width: 110px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 12px;
+}
+.row-div .input{
+    float: left;
+    width: 320px;
+}
+
+.btnCodeDisabled {
+    background-color: #c7c7c7 !important;
+    border: 0 !important;
+    height: 25px !important;
+    width: 45px !important;
+}
+
+</style>
+<div class="easyui-panel container" data-options="fit:true,border:false"  style="padding: 2% 40% 0 20%">
+
+    <fieldset>
+            <legend>设备控制</legend>
+        <div class="row-div">
+            <div class="word">设备：</div>
+            <div class="input">
+                <input id="device" name="device" class="easyui-combobox" required="true">
+            </div>
+        </div>
+        <hr/>
+
+        <div class="row-div">
+            <div class="word">允许上线：</div>
+            <div class="input">
+            </div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="permissionOnLine">发送</button>
+        </div>
+
+
+        <div class="row-div">
+            <div class="word">关闭所有插座：</div>
+            <div class="input"></div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="shutDownAllSockets">发送</button>
+        </div>
+
+        <div class="row-div">
+            <div class="word">关闭插座：</div>
+            <div class="input">
+                <input id="closeSocket" name="closeSocket" class="easyui-combobox" style="width: 50%">
+            </div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="shutDownSockets">发送</button>
+        </div>
+
+        <div style="height: 60px" class="row-div">
+            <div class="word">打开插座：</div>
+            <div class="input">
+                <input id="openSocket" name="openSocket" class="easyui-combobox" style="width: 50%">
+                <input  class="easyui-numberbox" style="width:50%" id="chargeTime" >
+                <span>单位：分</span>
+            </div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="startCharge">发送</button>
+        </div>
+
+        <div class="row-div">
+            <div class="word">设置传输间隔：</div>
+            <div class="input">
+                <input  class="easyui-numberbox" style="width:50%" id="tickTime">
+                <span>单位：秒</span>
+            </div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="setTick">发送</button>
+        </div>
+
+        <div class="row-div">
+            <div class="word">查看是否在线：</div>
+            <div class="input"><span id="content"></span></div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="checkOnline">发送</button>
+        </div>
+
+        <div  class="row-div">
+            <div class="word">端口最大功率：</div>
+            <div class="input" >
+                <input  class="easyui-numberbox" style="width:50%"  id="portMaxPow">
+                <span>单位：瓦特(300-1100)</span>
+            </div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="setPortMaxPow">发送</button>
+        </div>
+
+        <div class="row-div">
+            <div class="word">强电板最大功率：</div>
+            <div class="input">
+                <input  class="easyui-numberbox" style="width:50%" id="boardMaxPow">
+                <span>单位：瓦特(1500-4000)</span>
+            </div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="setBoardMaxPow">发送</button>
+        </div>
+
+        <div class="row-div">
+            <div class="word">充电截止电流：</div>
+            <div class="input">
+                <input  class="easyui-numberbox" style="width:50%" id="finishI">
+                <span>单位：毫安(100-500)</span>
+            </div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="setFinishI">发送</button>
+        </div>
+
+        <div class="row-div">
+            <div class="word">设置涓流时间：</div>
+            <div class="input">
+                <input  class="easyui-numberbox" style="width:50%" id="jlTime">
+                <span>单位：秒(600-3600)</span>
+            </div>
+            <button style="float: right;width:55px;" class="easyui-linkbutton color1" id="setJlTime">发送</button>
+        </div>
+
+        <div style="padding: 0px 10px 5px 10px;margin-top: 10px;border: 1px solid #bebebe;">
+            <p style="color: red;font-weight: 600;font-size: 16px">注意：</p>
+            <p>1.操作会对设备进行设置，请谨慎操作</p>
+        </div>
+    </fieldset>
+</div>
+<script>
+	var socketList;
+	$(function () {
+        //自动搜索
+        $('#device').combobox({
+            mode:'remote' ,
+            url:'./listData',
+            method: 'post',
+            valueField:'id' ,
+            textField:'name',
+            prompt:'输入设备编码',
+            required:true,
+            delay:100,
+            hasDownArrow:false,
+            panelHeight: '180px',
+            icons:[{
+                iconCls:'icon-clear',
+                handler: function(e){
+                    $(e.data.target).combobox('clear');
+                }
+            }],
+            formatter: formatItem,
+            onBeforeLoad: function(param){
+                if(param == null || param.q == null || param.q.replace(/ /g, '') == ''){
+                    var value = $(this).combobox('getValue');
+                    if(value){// 修改的时候才会出现q为空而value不为空
+                        param.id = value;
+                        return true;
+                    }
+                    return false;
+
+                }
+            },
+            filter: function(q, row){
+                var opts = $(this).combobox('options');
+                return row[opts.textField].indexOf(q) == 0;
+            }
+        });
+
+
+
+        $('#device').combobox({
+            onChange: function (n,o) {
+                var deviceId = $('#device').combobox('getValue');
+                if(deviceId.length == 12){
+                    getSocketList(deviceId)
+                }
+
+
+            }
+        });
+    })
+
+function getSocketList(deviceId) {
+    $.ajax({
+        url : "../newDevice/socketList",
+        type : "POST",
+        data:{
+            deviceId:deviceId
+        },
+        async : true,// 设置同步方式，false为同步
+        success : function(res) {
+            socketList = res;
+            $('#closeSocket').combobox({
+                data : socketList,
+                multiple:false, //支持多选
+                valueField : 'charge_socket_sn',
+                textField : 'charge_socket_sn'
+            });
+            $('#openSocket').combobox({
+                data : socketList,
+                multiple:false, //支持多选
+                valueField : 'charge_socket_sn',
+                textField : 'charge_socket_sn'
+            });
+        }
+    })
+}
+
+    function formatItem(data){
+        var s = '<span style="font-weight:bold">' + data.name + '</span><br/>' +
+            '<span style="color:#888">' + data.id + '</span>';
+        return s;
+    }
+    $("#permissionOnLine").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        var data = {
+            deviceId:deviceId
+        };
+        $(this).attr("disabled",true);
+        $(this).addClass("btnCodeDisabled");
+        countDown( $(this),10)
+        send("permissionOnLine",data);
+    })
+    $("#shutDownAllSockets").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        var data = {
+            deviceId:deviceId
+        };
+        $(this).attr("disabled",true);
+        $(this).addClass("btnCodeDisabled");
+        countDown( $(this),10)
+        send("shutDownAllSockets",data);
+    })
+    $("#shutDownSockets").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        var socketId = $('#closeSocket').combobox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        if(socketId == null || socketId == ""){
+            showMsg("请选择设备插座");
+            return;
+        }
+        var data = {
+            deviceId:deviceId,
+            socketId:socketId
+
+        };
+        $(this).attr("disabled",true);
+        $(this).addClass("btnCodeDisabled");
+        countDown( $(this),5)
+        send("shutDownSockets",data);
+    })
+    $("#startCharge").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        var socketId = $('#openSocket').combobox('getValue');
+        var chargeTime = $('#chargeTime').textbox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        if(socketId == null || socketId == ""){
+            showMsg("请选择设备插座");
+            return;
+        }
+        if(chargeTime == null || chargeTime == ""){
+            showMsg("请选择时间");
+            return;
+        }
+        var data = {
+            deviceId:deviceId,
+            socketId:socketId,
+            chargeTime:chargeTime
+
+        };
+        $(this).attr("disabled",true);
+        $(this).addClass("btnCodeDisabled");
+        countDown( $(this),10)
+        send("startCharge",data);
+    })
+    $("#setTick").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        var tickTime = $('#tickTime').textbox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        if(tickTime == null || tickTime == ""){
+            showMsg("请填写时间");
+            return;
+        }
+        var data = {
+            deviceId:deviceId,
+            tickTime:tickTime
+        };
+        send("setTick",data);
+    })
+    $("#checkOnline").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        var data = {
+            deviceId:deviceId,
+        };
+        $(this).attr("disabled",true);
+        $(this).addClass("btnCodeDisabled");
+        countDown( $(this),10)
+        send("checkOnline",data);
+    })
+
+    $("#setPortMaxPow").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        var portMaxPow = $('#portMaxPow').textbox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        if(portMaxPow == null || portMaxPow == ""){
+            showMsg("请填写最大功率");
+            return;
+        }
+        var data = {
+            deviceId:deviceId,
+            portMaxPow:portMaxPow
+        };
+        $(this).attr("disabled",true);
+        $(this).addClass("btnCodeDisabled");
+        countDown( $(this),10)
+        send("setPortMaxPow",data);
+    })
+
+    $("#setBoardMaxPow").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        var boardMaxPow = $('#boardMaxPow').textbox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        if(boardMaxPow == null || boardMaxPow == ""){
+            showMsg("请填写功率");
+            return;
+        }
+        var data = {
+            deviceId:deviceId,
+            boardMaxPow:boardMaxPow
+        };
+        $(this).attr("disabled",true);
+        $(this).addClass("btnCodeDisabled");
+        countDown( $(this),10)
+        send("setBoardMaxPow",data);
+    })
+    $("#setFinishI").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        var finishI = $('#finishI').textbox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        if(finishI == null || finishI == ""){
+            showMsg("请填写截止电流");
+            return;
+        }
+
+        var data = {
+            deviceId:deviceId,
+            finishI:finishI
+        };
+        $(this).attr("disabled",true);
+        $(this).addClass("btnCodeDisabled");
+        countDown( $(this),10)
+        send("setFinishI",data);
+    })
+    $("#setJlTime").click(function () {
+        var deviceId = $('#device').combobox('getValue');
+        var jlTime = $('#jlTime').textbox('getValue');
+        if(deviceId == null || deviceId == ""){
+            showMsg("请选择设备");
+            return;
+        }
+        if(jlTime == null || jlTime == ""){
+            showMsg("请填写涓流时间");
+            return;
+        }
+        var data = {
+            deviceId:deviceId,
+            jlTime:jlTime
+        };
+        $(this).attr("disabled",true);
+        $(this).addClass("btnCodeDisabled");
+        countDown( $(this),10)
+        send("setJlTime",data);
+    })
+
+    function send(url,data) {
+        $.ajax({
+            url : url,
+            type : "POST",
+            data : data,
+            async : true,// 设置同步方式，false为同步
+            success : function(res) {
+                if("checkOnline" == url){
+                    showMsg("成功")
+                    if(res.result == "success"){
+                        $("#content").html("<font color='#00bbee'>在线</font>")
+                    }else{
+                        $("#content").html("<font color='red'>离线</font>")
+                    }
+                }else{
+                    if(res.result == "success"){
+                        showMsg("设置成功")
+                    }
+                }
+
+            }
+        })
+    }
+
+    function countDown(e,time){
+        var timer=  setInterval(function () {
+            time = time -1
+            if(time > 0){
+                e.linkbutton({text:time});
+                countDown(e,time);
+            }else{
+                e.linkbutton({text:"发送"});
+                e.attr("disabled",false);
+                e.removeClass("btnCodeDisabled");
+                clearInterval(timer)
+            }
+        },1000)
+    }
+
+</script>
+<#include "/common/foot.html"/>

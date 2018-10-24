@@ -84,5 +84,10 @@ public class NewDeviceController extends BaseController {
         this.renderJson(map);
     }
 
+    public void socketList() {
+        Long deviceId = getParaToLong("deviceId");
+        List<ChargeSocket> chargeSockets= ChargeSocket.dao.find("select charge_socket_sn from yc_charge_socket where charge_pile_id=" + deviceId);
+        this.renderJson(chargeSockets);
+    }
 
 }
