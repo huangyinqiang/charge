@@ -16,6 +16,7 @@ import net.inconnection.charge.extend.model.Company;
 import net.inconnection.charge.extend.model.CompanyActivity;
 import net.inconnection.charge.extend.model.PayAgentHistory;
 import net.inconnection.charge.extend.model.Project;
+import net.inconnection.charge.extend.model.ProjectActivity;
 import net.inconnection.charge.extend.model.RechargeHistory;
 import net.inconnection.charge.extend.service.CompanyService;
 import org.slf4j.Logger;
@@ -324,10 +325,45 @@ public class CompanyController extends BaseController{
     }
 
     public void addProjectData() {
-
         Project model = getModel(Project.class, "model");
         model.setCreatetime(new Date());
-        model.save();
+
+        Db.tx(new IAtom() {
+            @Override
+            public boolean run() throws SQLException {
+                try{
+                    model.save();
+
+                    Long id = model.getId();
+                    String name = model.getName();
+                    new ProjectActivity().setProjectId(id).setName(name+"活动").setType("CH").setMoney(2000)
+                            .setChargeNum(2000).setRemark("无赠费").setStatus("Y").setStartTime(new Date())
+                            .setExpiryTime(new Date()).setActNum(2001).setCoupon(0)
+                            .save();
+                    new ProjectActivity().setProjectId(id).setName(name+"活动").setType("CH").setMoney(3000)
+                            .setChargeNum(2000).setRemark("无赠费").setStatus("Y").setStartTime(new Date())
+                            .setExpiryTime(new Date()).setActNum(2002).setCoupon(0)
+                            .save();
+                    new ProjectActivity().setProjectId(id).setName(name+"活动").setType("CH").setMoney(5000)
+                            .setChargeNum(2000).setRemark("无赠费").setStatus("Y").setStartTime(new Date())
+                            .setExpiryTime(new Date()).setActNum(2005).setCoupon(0)
+                            .save();
+                    new ProjectActivity().setProjectId(id).setName(name+"活动").setType("CH").setMoney(10000)
+                            .setChargeNum(2000).setRemark("无赠费").setStatus("Y").setStartTime(new Date())
+                            .setExpiryTime(new Date()).setActNum(2005).setCoupon(0)
+                            .save();
+                    new ProjectActivity().setProjectId(id).setName(name+"活动").setType("CH").setMoney(20000)
+                            .setChargeNum(2000).setRemark("无赠费").setStatus("Y").setStartTime(new Date())
+                            .setExpiryTime(new Date()).setActNum(2006).setCoupon(0)
+                            .save();
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                    return false;
+                }
+               return  true;
+            }
+        });
         renderSuccess();
     }
 
