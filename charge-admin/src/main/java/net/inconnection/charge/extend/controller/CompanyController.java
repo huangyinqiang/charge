@@ -136,6 +136,7 @@ public class CompanyController extends BaseController{
 
     public void updateAdminId() {
         String adminId = this.getPara("admin_id");
+        String openId = this.getPara("openId");
         List<Company> companyList = Company.dao.getCompanyByAgentId(Long.valueOf(adminId));
         for (int n=0;n < companyList.size();n++){
             Company company = companyList.get(n);
@@ -149,6 +150,7 @@ public class CompanyController extends BaseController{
             String[] split = ids.split(",");
             for (int i =0 ;i < split.length;i++){
                 Company model = Company.me.findById(split[i]);
+                model.setWeixinAccount(openId);
                 model.set("admin_id",adminId);
                 model.set("update_time",new Date());
                 model.update();
