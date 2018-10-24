@@ -50,6 +50,7 @@ public class DubboClientPlugin implements IPlugin{
     public <T>T getService(ReferenceConfig<T> reference){
         reference.setTimeout(60000);
         reference.setCheck(false);
+        reference.setRetries(0);//不进行尝试
         reference.setApplication(application);
         reference.setVersion(VERSION);
         reference.setUrl(DUBBOLOCALHOST+":"+port);
