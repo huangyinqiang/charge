@@ -9,13 +9,14 @@
                         <input id="companyId" name="companyId" data-options="panelHeight:'auto'"
                                class="easyui-combobox">
                     </td>
-                <tr>
-                    <th><span>openId：</span></th>
-                    <td>
-                        <input class="easyui-textbox" type="text" id="openId" name="openId" required="true"  style="width: 130px;"></input>
-                    </td>
-
                 </tr>
+                <!--<tr>-->
+                    <!--<th><span>openId：</span></th>-->
+                    <!--<td>-->
+                        <!--<input class="easyui-textbox" type="text" id="openId" name="openId" required="true"  style="width: 130px;"></input>-->
+                    <!--</td>-->
+
+                <!--</tr>-->
 
                 <tr>
                     <th><span>昵称：</span></th>
@@ -121,7 +122,7 @@
     });
 
     function setVal(data){
-        $('#openId').textbox('setValue',data.weixin_account);
+        $('#weixinAccount').textbox('setValue',data.weixin_account);
         $('#tel').textbox('setValue',data.contact_phone);
         $('#balanceRate').textbox('setValue',data.balance_rate);
         $('#nickName').textbox('setValue',data.legal_person);
@@ -143,7 +144,7 @@
     function getParam() {
         var param = {
             "model.company_id": $(":input[name='companyId']").val(),
-            "model.openId": $(":input[name='openId']").val(),
+            // "model.openId": $(":input[name='openId']").val(),
             "model.tel": $(":input[name='tel']").val(),
             "model.nickName": $(":input[name='nickName']").val(),
             "model.balance_rate": $(":input[name='balance_rate']").val(),

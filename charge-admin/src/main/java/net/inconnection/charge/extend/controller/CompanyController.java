@@ -558,6 +558,7 @@ public class CompanyController extends BaseController{
 
     public void addCost() {
         PayAgentHistory model = getModel(PayAgentHistory.class, "model");
+        model.setOpenId(model.getWeixinAccount());
         Long companyId = model.getCompanyId();
         Date startTime = model.getStartTime();
         Date endTime = model.getEndTime();
