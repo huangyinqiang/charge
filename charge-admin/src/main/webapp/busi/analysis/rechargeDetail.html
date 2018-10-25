@@ -13,7 +13,6 @@
 				            </span>
         </div>
         <div style="text-align: left; margin:6px;">
-            <a href="javascript:void(0)" class="easyui-linkbutton exportBtn" iconCls="glyphicon-export" plain="true" onclick="detail()">详情</a>
             <a href="javascript:void(0)" class="easyui-linkbutton exportBtn" iconCls="glyphicon-export" plain="true" onclick="exportCsv()">导出</a>
             <div id="searchBtnWrap" style="float:right; padding-right:40px;">
                 <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
@@ -23,40 +22,40 @@
     </div>
 <script type="text/javascript">
 var datagrid = $("#dg");
-var date = new Date();
-var firstDay = date.getFullYear()+"-"+ (date.getMonth()+1)+"-01  00:00:00";
+var startTime = GetQueryString("startTime");
+var endTime = GetQueryString("endTime");
 $('#startTime').datetimebox({
-    value:firstDay
+    value:startTime
 })
 $('#endTime').datetimebox({
-    value:formatDate(new Date())
+    value:endTime
 })
 var dgOptions = {
         rownumbers:true,
     	fit:true,
     	border:false,
         rownumbers:true,
-    	url:'rechargeListData',
+    	url:'rechargeDetailData?id=${id}',
     	method:'post',
     	toolbar:'#tb',
     	singleSelect: true,
     	pageSize: 50,
-    	pagination:false,
+    	pagination:true,
     	multiSort:true,
         queryParams: getInitParam(),
         
         columns: [[
-		         {field:'id', checkbox:true},
+                 {field:'openId', title: '用户', width:120, sortable: false},
                  {field:'deviceId', title: '设备编码', width:120, sortable: false},
-	           	 {field:'deviceName', title: '用户名称', width:120, sortable: false},
-	           	 {field:'realMoney', title: '充值金额(元)', width:120, sortable: true},
-	           	 {field:'moneySum', title: '实到金额(元)', width:120, sortable: true}
+	           	 {field:'deviceName', title: '设备名称', width:120, sortable: false},
+	           	 {field:'realMoney', title: '充值金额(元)', width:80, sortable: false},
+	           	 {field:'moneySum', title: '实到金额(元)', width:80, sortable: false},
+                 {field:'createDate', title: '充值时间', width:120, sortable: false}
 	           ]]
 	};
 $(function() {
 	handleAuthDataRule();
-    datagrid.datagrid(dgOptions);
-
+	datagrid.datagrid(dgOptions);
 });
 
 function zcurdSearch() {
@@ -101,37 +100,22 @@ function getInitParam() {
 	});
 	return param;
 }
-function detail() {
-    var rowsSel = datagrid.datagrid("getSelections");
-    if(rowsSel.length != 1) {
-        showWarnMsg("请选择要修改的数据！");
-        return;
-    }
-    var startTime = $("#startTime").datetimebox("getValue");
-    var endTime =  $("#endTime").datetimebox("getValue");
-    var id = rowsSel[0].deviceId;
-    top.openWindow("充值统计-详情", getCurrUrl("rechargeDetailPage") + "?id=" + id+"&startTime="+startTime+"&endTime="+endTime, {size: '800x600'});
-}
+
 function exportCsv() {
 	var option = datagrid.datagrid("options");
 	var param = option.queryParams;
 	param.sortName = option.sortName;
 	param.sortOrder = option.sortOrder;
-	window.location.href = "rechargeExportCsv?" + $.param(param);
+	window.location.href = "rechargeDetailExportCsv?id="+${id}
 }
-function formatDate (date) {
-    var y = date.getFullYear();
-    var m = date.getMonth() + 1;
-    m = m < 10 ? ('0' + m) : m;
-    var d = date.getDate();
-    d = d < 10 ? ('0' + d) : d;
-    var h = date.getHours();
-    var minute = date.getMinutes();
-    minute = minute < 10 ? ('0' + minute) : minute;
-    var second= date.getSeconds();
-    second = minute < 10 ? ('0' + second) : second;
-    return y + '-' + m + '-' + d+' '+h+':'+minute+':'+ second;
-};
+// 获取URL中的参数值
+function GetQueryString(url) {
+    var reg = new RegExp("(^|&)" + url + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null)
+        return unescape(r[2]);
+    return null;
+}
 //扩展js
 </script>
 

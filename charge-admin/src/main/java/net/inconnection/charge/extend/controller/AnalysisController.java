@@ -19,6 +19,10 @@ public class AnalysisController extends BaseController{
     public void rechargeListPage() {
         this.render("rechargeList.html");
     }
+    public void rechargeDetailPage() {
+        setAttr("id",this.getPara("id"));
+        this.render("rechargeDetail.html");
+    }
     public void chargeListPage() {
         this.render("chargeList.html");
     }
@@ -34,7 +38,6 @@ public class AnalysisController extends BaseController{
         String orderBy = this.getOrderBy();
 
         List<Object> list = analysisService.getRechargeData(null,properties, symbols, values);
-       logger.info(list.toString());
         List<Record> result = new ArrayList();
         for(int i = 0; i < list.size(); ++i) {
             Record r = new Record();
@@ -67,7 +70,78 @@ public class AnalysisController extends BaseController{
         this.renderDatagrid(result,result.size());
     }
 
+    public void rechargeDetailData() {
+        String id = this.getPara("id");
 
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+        String orderBy = this.getOrderBy();
+        int size = analysisService.getRechargeDetailData(id, properties, symbols, values,null).size();
+        List<Object> list = analysisService.getRechargeDetailData(id, properties, symbols, values, this
+                .getPager());
+
+        List<Record> result = new ArrayList();
+        for(int i = 0; i < list.size(); ++i) {
+            Record r = new Record();
+            Object[] a = (Object[])list.get(i);
+            r.set("openId", a[0]);
+            r.set("deviceId", a[1]);
+            r.set("deviceName", a[2]);
+            r.set("realMoney", Integer.valueOf(a[3].toString())/100);
+            r.set("moneySum",  Integer.valueOf(a[4].toString())/100);
+            r.set("createDate",  a[5]);
+            result.add(r);
+        }
+
+        this.renderDatagrid(result,size);
+    }
+
+    public void rechargeDetailExportCsv() {
+        String id = this.getPara("id");
+
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+        List<Object> list = analysisService.getRechargeDetailData(id, properties, symbols, values,null);
+
+        List<Record> result = new ArrayList();
+        for(int i = 0; i < list.size(); ++i) {
+            Record r = new Record();
+            Object[] a = (Object[])list.get(i);
+            r.set("openId", a[0]);
+            r.set("deviceId", a[1]);
+            r.set("deviceName", a[2]);
+            r.set("realMoney", Integer.valueOf(a[3].toString())/100);
+            r.set("moneySum",  Integer.valueOf(a[4].toString())/100);
+            r.set("createDate",  a[5]);
+            result.add(r);
+        }
+
+        List<String> headers = new ArrayList();
+        List<String> clomuns = new ArrayList();
+
+        headers.add("用户");
+        clomuns.add("openId");
+        headers.add("设备编号");
+        clomuns.add("deviceId");
+        headers.add("设备名称");
+        clomuns.add("deviceName");
+        headers.add("充值金额(元)");
+        clomuns.add("realMoney");
+        headers.add("实到金额(元)");
+        clomuns.add("moneySum");
+        headers.add("充值时间");
+        clomuns.add("createDate");
+
+        CsvRender csvRender = new CsvRender(headers, result);
+        csvRender.clomuns(clomuns);
+        csvRender.fileName("充值明细");
+        this.addOpLog("[充值明细] 导出cvs");
+        this.render(csvRender);
+    }
     public void rechargeExportCsv() {
 
         Object[] queryParams = this.getQueryParams();
@@ -145,7 +219,7 @@ public class AnalysisController extends BaseController{
         String[] symbols = (String[])queryParams[1];
         Object[] values = (Object[])queryParams[2];
 
-        List<Record> result = getChargeByOperType(null,properties, symbols, values,this.getPager(),this.getOrderBy(),"W");
+        List<Record> result = getChargeByOperType(null,properties, symbols, values,null,this.getOrderBy(),"W");
 
         List<String> headers = new ArrayList();
         List<String> clomuns = new ArrayList();
@@ -184,7 +258,7 @@ public class AnalysisController extends BaseController{
         String[] symbols = (String[])queryParams[1];
         Object[] values = (Object[])queryParams[2];
 
-        List<Record> result = getChargeByOperType(null,properties, symbols, values,this.getPager(),this.getOrderBy(),"M");
+        List<Record> result = getChargeByOperType(null,properties, symbols, values,null,this.getOrderBy(),"M");
 
         List<String> headers = new ArrayList();
         List<String> clomuns = new ArrayList();

@@ -19,14 +19,14 @@ public class AnalysisService {
         List<Object> params = new ArrayList<>();
 
         rechargeSql.append("SELECT " +
-                "	ifnull( qmd.match_num, '10100000001' ) AS 'deviceId'," +
-                "	ifnull( qmd.remark, '公司' ) AS 'deviceName'," +
+                "	qmd.match_num AS 'deviceId'," +
+                "	ifnull( qmd.remark, qmd.match_num ) AS 'deviceName'," +
                 "	sum( cmi.money )  AS realMoney," +
                 "	sum( cmi.amount )  AS moneySum " +
                 "FROM" +
                 "	charge_money_info cmi " +
                 "	LEFT JOIN qr_match_device qmd ON cmi.deviceId = qmd.match_num " +
-                "	WHERE 1=1 " );
+                "	WHERE  deviceId <> '10100000001' " );
         for (int i = 0; i < properties.length; i++) {
             rechargeSql.append(" and cmi.createTime " + symbols[i] + " ?");
             params.add(values[i]);
@@ -46,8 +46,7 @@ public class AnalysisService {
                 "FROM " +
                 "	yc_recharge_history yrh " +
                 "	LEFT JOIN yc_company yc ON yrh.company_id = yc.id " +
-                "WHERE  " +
-                "	yrh.company_id <> 1 ");
+                "WHERE  1=1 ");
 
         for (int i = 0; i < properties.length; i++) {
             companySql.append(" and yrh.recharge_time " + symbols[i] + " ?");
@@ -97,6 +96,72 @@ public class AnalysisService {
                 params.toArray());
 
         return list;
+    }
+
+
+    public List<Object>  getRechargeDetailData(String companyId,String[] properties,String[] symbols,Object[] values,Pager pager) {
+
+        StringBuffer rechargeSql =new StringBuffer();
+        StringBuffer companySql =new StringBuffer();
+        List<Object> params = new ArrayList<>();
+        List<Object> result = new ArrayList<>();
+
+
+        if(companyId != null && StringUtil.isNotEmpty(companyId) && companyId.length() > 10){
+            rechargeSql.append("SELECT " +
+                        " cmi.openId as `openId`, "+
+                    "	qmd.match_num AS 'deviceId'," +
+                    "	ifnull( qmd.remark, qmd.match_num ) AS 'deviceName'," +
+                    "   cmi.money   AS realMoney," +
+                    "	cmi.amount   AS moneySum ," +
+                    "   cmi.createTime as `createDate` "+
+                    "FROM" +
+                    "	charge_money_info cmi " +
+                    "	LEFT JOIN qr_match_device qmd ON cmi.deviceId = qmd.match_num " +
+                    "	WHERE 1=1  " );
+            rechargeSql.append(" and cmi.deviceId = ").append(companyId);
+            for (int i = 0; i < properties.length; i++) {
+                rechargeSql.append(" and cmi.createTime " + symbols[i] + " ?");
+                params.add(values[i]);
+
+            }
+            if(pager != null) {
+                rechargeSql.append(" limit " + pager.getStartRow() + ", " + pager.getRows());
+            }
+
+            List<Object> deviceRechargeList = Db.use(ZcurdTool.getDbSource("zcurd_busi")).query(rechargeSql.toString(),
+                    params.toArray());
+            result.addAll(deviceRechargeList);
+        }
+
+
+        if(companyId != null && StringUtil.isNotEmpty(companyId) && companyId.length() < 10){
+            companySql.append("SELECT " +
+                    "   yrh.openId as `openId` ,"+
+                    "	yrh.company_id as 'deviceId'," +
+                    "	yc.company_name as 'deviceName'," +
+                    "	real_money  AS realMoney," +
+                    "	money_sum   AS moneySum ," +
+                    "   yrh.recharge_time as `createDate` "+
+                    "FROM " +
+                    "	yc_recharge_history yrh " +
+                    "	LEFT JOIN yc_company yc ON yrh.company_id = yc.id " +
+                    "WHERE  1=1 ");
+            companySql.append(" and yrh.company_id = ").append(companyId);
+            for (int i = 0; i < properties.length; i++) {
+                companySql.append(" and yrh.recharge_time " + symbols[i] + " ?");
+                params.add(values[i]);
+            }
+            if(pager != null) {
+                companySql.append(" limit " + pager.getStartRow() + ", " + pager.getRows());
+            }
+            List<Object> companyRechargeList = Db.use(ZcurdTool.getDbSource("zcurd_busi")).query(companySql.toString(),
+                    params.toArray());
+            result.addAll(companyRechargeList);
+        }
+
+
+        return result;
     }
 }
 
