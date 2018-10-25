@@ -227,6 +227,8 @@ public class ChargeSocketComponent implements Device {
                 chargeHistory.setRealMoney(realMoney);
                 chargeHistory.setGiftMoney(giftMoney);
 
+                chargeHistory.setChargeStatus(chargeState.toString());
+
                 if (tuser != null) {
 
                     int walletAccount = tuser.getWalletAccount() - autoChargeMoney;
