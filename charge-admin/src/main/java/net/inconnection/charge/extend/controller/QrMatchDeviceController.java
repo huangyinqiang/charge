@@ -41,6 +41,17 @@ public class QrMatchDeviceController extends BaseController {
         }
 
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "qr_match_device", properties, symbols, values, orderBy, this.getPager());
+        for (Record record:list){
+            DeviceProject deviceProject = DeviceProject.me.findFirst("select * from yc_device_project where device_id="
+                    + record .get("id"));
+            if (deviceProject != null){
+                Long projectId = deviceProject.get("project_id");
+                Project project=Project.me.findById(projectId);
+                if(project != null){
+                    record.set("projectName",project.getName());
+                }
+            }
+        }
         this.renderDatagrid(list, DBTool.countByMultPropertiesDbSource("zcurd_busi", "qr_match_device", properties, symbols, values));
     }
 
