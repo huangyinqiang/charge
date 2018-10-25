@@ -26,7 +26,7 @@ public class DeviceUpdateController extends BaseController {
 
     private static Logger _log = LoggerFactory.getLogger(DeviceUpdateController.class);
 
-    private static int TIME_OUT = 10*30*1000;
+    private static int TIME_OUT = 10*60*1000;
 
     public void listPage() {
 
