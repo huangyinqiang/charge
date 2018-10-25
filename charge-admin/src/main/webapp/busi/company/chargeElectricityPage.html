@@ -155,7 +155,7 @@ var dgOptions = {
                     if (value == 'auto') {
                         return "<span style='color:green;font-size:16px;'>智能</span>";
                     } else  if (value == 'charge') {
-                        return "<span style='color:green;font-size:16px;'>正常</span>";
+                        return "<span style='color:green;font-size:16px;'>会员</span>";
                     } else  if (value == 'temp') {
                         return "<span style='color:green;font-size:16px;'>临时</span>";
                     } else  {
@@ -167,7 +167,22 @@ var dgOptions = {
             {
                 field : 'chargeStatus',
                 title : '充电状态',
-                width : 60
+                width : 60,
+                formatter : function(value, row, index) {
+                    if (value == '0') {
+                        return "<span style='color:green;font-size:16px;'>智能充电完成</span>";
+                    } else  if (value == '1') {
+                        return "<span style='color:green;font-size:16px;'>充电中</span>";
+                    } else  if (value == '2') {
+                        return "<span style='color:green;font-size:16px;'>过流断电</span>";
+                    } else  if (value == '3') {
+                        return "<span style='color:green;font-size:16px;'>计时结束</span>";
+                    }else  if (value == '4') {
+                        return "<span style='color:green;font-size:16px;'>平台断电</span>";
+                    }else  {
+                        return value;
+                    }
+                }
             },
             {
                 field : 'chargeMoney',

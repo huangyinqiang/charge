@@ -37,6 +37,7 @@ public class NewDeviceChargeHistory extends Model<NewDeviceChargeHistory> {
         info.set("operType", chargeBatteryInfoBean.getOpertype());
         info.set("chargeType", type);
         info.set("chargeMoney", chargeBatteryInfoBean.getCharge());
+        info.set("chargeStatus", "1");//正在充电
         info.set("realMoney", realMoney);
         info.set("giftMoney", giftMoney);
         info.set("realRate", raelRate);
