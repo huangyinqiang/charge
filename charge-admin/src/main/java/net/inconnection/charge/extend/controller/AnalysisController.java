@@ -26,8 +26,17 @@ public class AnalysisController extends BaseController{
     public void chargeListPage() {
         this.render("chargeList.html");
     }
+    public void chargeDetailPage() {
+        setAttr("id",this.getPara("id"));
+        this.render("chargeDetail.html");
+    }
+
     public void chargeTempListPage() {
         this.render("chargeTempList.html");
+    }
+    public void chargeTempDetailPage() {
+        setAttr("id",this.getPara("id"));
+        this.render("chargeTempDetail.html");
     }
 
     public void rechargeListData() {
@@ -212,6 +221,20 @@ public class AnalysisController extends BaseController{
                 ());
     }
 
+    public void chargeDetailData() {
+        String deviceId = this.getPara("id");
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+
+        List<Record> result = getChargeDetailByOperType(deviceId,properties, symbols, values,this.getPager(),this
+                .getOrderBy(),"W");
+        this.renderDatagrid(result,getChargeDetailByOperType(deviceId,properties, symbols, values,null,null,"W").size());
+    }
+
+
+
     public void chargeExportCsv() {
 
         Object[] queryParams = this.getQueryParams();
@@ -239,6 +262,38 @@ public class AnalysisController extends BaseController{
         this.render(csvRender);
     }
 
+    public void chargeDetailExportCsv() {
+        String deviceId = this.getPara("id");
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+
+        List<Record> result = getChargeDetailByOperType(deviceId,properties, symbols, values,null,null,"W");
+
+        List<String> headers = new ArrayList();
+        List<String> clomuns = new ArrayList();
+
+        headers.add("用户");
+        clomuns.add("openId");
+        headers.add("设备编号");
+        clomuns.add("deviceId");
+        headers.add("设备名称");
+        clomuns.add("deviceName");
+        headers.add("消费金额(元)");
+        clomuns.add("amount");
+        headers.add("预设时长(分)");
+        clomuns.add("chargeTime");
+        headers.add("充电时长(分)");
+        clomuns.add("realChargeTime");
+
+
+        CsvRender csvRender = new CsvRender(headers, result);
+        csvRender.clomuns(clomuns);
+        csvRender.fileName("消费明细");
+        this.addOpLog("[消费明细] 导出cvs");
+        this.render(csvRender);
+    }
 
     public void chargeTempListData() {
         Object[] queryParams = this.getQueryParams();
@@ -250,6 +305,18 @@ public class AnalysisController extends BaseController{
                 .getOrderBy(),"M");
         this.renderDatagrid(result,analysisService.getChargeData(null,properties, symbols, values,null,null,"M").size());
     }
+    public void chargeTempDetailData() {
+        String deviceId = this.getPara("id");
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+
+        List<Record> result = getChargeDetailByOperType(deviceId,properties, symbols, values,this.getPager(),this
+                .getOrderBy(),"M");
+        this.renderDatagrid(result,getChargeDetailByOperType(deviceId,properties, symbols, values,null,null,"M").size());
+    }
+
 
     public void chargeTempExportCsv() {
 
@@ -278,6 +345,39 @@ public class AnalysisController extends BaseController{
         this.render(csvRender);
     }
 
+    public void chargeTempDetailExportCsv() {
+        String deviceId = this.getPara("id");
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+
+        List<Record> result = getChargeDetailByOperType(deviceId,properties, symbols, values,null,null,"M");
+
+        List<String> headers = new ArrayList();
+        List<String> clomuns = new ArrayList();
+
+        headers.add("用户");
+        clomuns.add("openId");
+        headers.add("设备编号");
+        clomuns.add("deviceId");
+        headers.add("设备名称");
+        clomuns.add("deviceName");
+        headers.add("消费金额(元)");
+        clomuns.add("amount");
+        headers.add("预设时长(分)");
+        clomuns.add("chargeTime");
+        headers.add("充电时长(分)");
+        clomuns.add("realChargeTime");
+
+
+        CsvRender csvRender = new CsvRender(headers, result);
+        csvRender.clomuns(clomuns);
+        csvRender.fileName("临时消费明细");
+        this.addOpLog("[消费明细] 导出cvs");
+        this.render(csvRender);
+    }
+
     private List<Record> getChargeByOperType(String companyId, String[] properties, String[] symbols, Object[] values,
                                              Pager pager, String order, String operType){
         List<Object> list = analysisService.getChargeData(null,properties, symbols, values,pager,order,operType);
@@ -289,6 +389,24 @@ public class AnalysisController extends BaseController{
             r.set("deviceId", a[0]);
             r.set("deviceName", a[1]);
             r.set("amount", a[2]);
+            result.add(r);
+        }
+        return  result;
+    }
+
+    private List<Record> getChargeDetailByOperType(String deviceId, String[] properties, String[] symbols, Object[] values,
+                                             Pager pager, String order, String operType){
+        List<Object> list = analysisService.getChargeDetailData(deviceId,properties, symbols, values,pager,order,operType);
+        List<Record> result = new ArrayList();
+        for(int i = 0; i < list.size(); ++i) {
+            Record r = new Record();
+            Object[] a = (Object[])list.get(i);
+            r.set("openId", a[0]);
+            r.set("deviceId", a[1]);
+            r.set("deviceName", a[2]);
+            r.set("amount", a[3]);
+            r.set("chargeTime", a[4]);
+            r.set("realChargeTime", a[5]);
             result.add(r);
         }
         return  result;

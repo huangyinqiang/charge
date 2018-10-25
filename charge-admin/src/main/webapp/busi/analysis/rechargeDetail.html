@@ -106,7 +106,7 @@ function exportCsv() {
 	var param = option.queryParams;
 	param.sortName = option.sortName;
 	param.sortOrder = option.sortOrder;
-	window.location.href = "rechargeDetailExportCsv?id="+${id}
+	window.location.href = "rechargeDetailExportCsv?id="+${id}+"&"+ $.param(param);
 }
 // 获取URL中的参数值
 function GetQueryString(url) {
