@@ -224,9 +224,11 @@
 				<th><span>是否免费</span></th>
 				<td>
 					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="free"
-							   id="free" value="${model.free!''}"
-							   style="width: 200px;"></input>
+                        <select  class="form-control" id="free" name="free">
+                            <option  value='N'> 否</option>
+                            <option  value='Y'> 是</option>
+                        </select>
+
 					</div>
 				</td>
 			</tr>
@@ -236,6 +238,9 @@
 	</form>
 </div>
 <script>
+$(function () {
+    $("#free").val("${model.free}")
+})
 top.window.subPage.save = save;
 function save() {
 	if($("#zcurdHeadTable").form('validate')) {
