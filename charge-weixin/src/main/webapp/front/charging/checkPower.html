@@ -10,10 +10,9 @@
 <title>功率检测</title>
 <link rel="stylesheet" href="../css/weui.css">
 <link rel="stylesheet" href="../css/wechat.css">
-    <link rel="stylesheet" href="../js/common/layer/theme/default/layer.css">
+<link rel="stylesheet" href="../js/common/layer/mobile/need/layer.css">
 <script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
-    <script src="../js/common/layer/layer.js"></script>
-
+<script src="../js/common/layer/mobile/layer.js"></script>
 <script type="text/javascript" src="../js/charging/checkPower.js"></script>
 </head>
 <body onload="shownum()">
@@ -100,7 +99,6 @@
 
     setTimeout(startCharge4CheckPower,1000)
     function startCharge4CheckPower() {
-        console.log("kaishi")
         $.ajax({
             type : 'POST',
             url : "../newDevice/startCharge4CheckPower",
@@ -139,15 +137,19 @@
                     $("#showTimes").hide();
                     submit();
                 }else{
-                    layer.msg("功率检测失败...", {
-                        shift : 5
+                    layer.open({
+                        content: "功率检测失败..."
+                        ,skin: 'msg'
+                        ,time: 3 //3秒后自动关闭
                     });
                     window.location="../charging"
                 }
             },
             error :function () {
-                layer.msg("功率检测失败...", {
-                    shift : 5
+                layer.open({
+                    content: "功率检测失败..."
+                    ,skin: 'msg'
+                    ,time: 3 //3秒后自动关闭
                 });
                 userIsConfirmed = true;
                 window.location="../charging"
@@ -209,47 +211,101 @@
         }else{
             msg="请确认" + devicePort + "插座，会员充电" + time + "分钟；充电费用" + money/100 + "元,点击“确定”后开始充电"
         }
-        layer.confirm(msg, {
-            closeBtn : 0,
-            btn : [ '确定']
-        }, function() {
-            userIsConfirmed = true;
-            startCharge4WriteDate();
-        });
+
+        layer.open({
+            content: msg
+            ,btn : [ '确定']
+            ,yes: function (index) {
+                layer.close(index)
+                userIsConfirmed = true;
+                startCharge4WriteDate();
+
+            }
+        })
+        // layer.confirm(msg, {
+        //     closeBtn : 0,
+        //     btn : [ '确定']
+        // }, function() {
+        //     userIsConfirmed = true;
+        //     startCharge4WriteDate();
+        // });
     }
 
     // 充值钱包
     function rechargeMoneyToWallet() {
-        layer.confirm('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
-            closeBtn : 0,
-            btn : [ '确认' ]
-        }, function() {
-            // 跳转到充值页面
-            location.href = "../recharge/rechargeNew?companyId=" + companyId;
-        });
+
+        layer.open({
+            content: '亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...'
+            ,btn: [ '确定' ] //[yes no]
+            ,yes: function (index) {
+                // 跳转到充值页面
+                layer.close(index)
+                location.href = "../recharge/rechargeNew?companyId=" + companyId;
+
+            }
+        })
+
+        // layer.open('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
+        //     closeBtn : 0,
+        //     btn : [ '确认' ]
+        // }, function() {
+        //     // 跳转到充值页面
+        //     location.href = "../recharge/rechargeNew?companyId=" + companyId;
+        // });
     }
 
     // 充值钱包或者单次支付
     function chargeOrPay() {
-        layer.confirm('请确认' + devicePort + '插座，充电' + time
-            + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！', {
-            btn : [ '临时支付', '充值' ]
-        }, function() {
-            var pow = power.split("-")[1];
-            if(pow*1 > 500){
-                layer.msg("临时充电功率超限，请选择会员充电！", {
-                    shift : 5
-                });
-                location.href = "../recharge/rechargeNew?companyId=" + companyId;
-                return;
+
+        layer.open({
+            content: '请确认' + devicePort + '插座，充电' + time
+            + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！'
+            ,btn: [ '临时支付', '充值' ] //[yes no]
+            ,yes: function (index) {
+                var pow = power.split("-")[1];
+                if(pow*1 > 500){
+                    layer.open({
+                        content: "临时充电功率超限，请选择会员充电！"
+                        ,skin: 'msg'
+                        ,time: 3 //3秒后自动关闭
+                    });
+
+                    location.href = "../recharge/rechargeNew?companyId=" + companyId;
+                    return;
+                }
+                // 单次支付
+                temporaryRechargeMoney(money);
+                layer.close(index)
             }
-            // 单次支付
-            temporaryRechargeMoney(money);
-        }, function() {
-            userIsConfirmed = true;
-            // 跳转到充值页面
-            location.href = "../recharge/rechargeNew?companyId=" + companyId;
-        });
+            ,no: function () {
+                layer.close(index)
+                userIsConfirmed = true;
+                // 跳转到充值页面
+                location.href = "../recharge/rechargeNew?companyId=" + companyId;
+            }
+        })
+
+
+
+        // layer.confirm('请确认' + devicePort + '插座，充电' + time
+        //     + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！', {
+        //     btn : [ '临时支付', '充值' ]
+        // }, function() {
+        //     var pow = power.split("-")[1];
+        //     if(pow*1 > 500){
+        //         layer.msg("临时充电功率超限，请选择会员充电！", {
+        //             shift : 5
+        //         });
+        //         location.href = "../recharge/rechargeNew?companyId=" + companyId;
+        //         return;
+        //     }
+        //     // 单次支付
+        //     temporaryRechargeMoney(money);
+        // }, function() {
+        //     userIsConfirmed = true;
+        //     // 跳转到充值页面
+        //     location.href = "../recharge/rechargeNew?companyId=" + companyId;
+        // });
     }
 
 
@@ -278,8 +334,10 @@
                 if (res.code == 2) {
                     layer.alert(res.message);
                 } else {
-                    layer.msg("参数错误：" + res.message, {
-                        shift : 6
+                    layer.open({
+                        content: "参数错误：" + res.message
+                        ,skin: 'msg'
+                        ,time: 3 //3秒后自动关闭
                     });
                 }
             }
@@ -294,8 +352,10 @@
                 userIsConfirmed = true;
                 startCharge4WriteDate();
             } else {
-                layer.msg("支付失败", {
-                    shift : 5
+                layer.open({
+                    content: "支付失败"
+                    ,skin: 'msg'
+                    ,time: 3 //3秒后自动关闭
                 });
                 userIsConfirmed = true;
                 window.location="../charging";
@@ -307,21 +367,42 @@
 
     // 充值钱包或者扣1块充电两小时
     function chargeTwoHoursOrPay() {
-        layer.confirm('余额不足，只能充电两小时。请确认' + devicePort + '插座充电' + time
-            + '分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！', {
-            closeBtn : 0,
-            btn : [ '充电', '充值' ]
-        }, function() {
-            chargeType = "charge";// 功率充电
-            operType = "W";// 会员扣费
-            money = parseInt(device.tow_hours_price);
-            time = 120;
-            userIsConfirmed = true;
-            startCharge4WriteDate();
-        }, function() {
-            userIsConfirmed = true;
-            location.href = "../recharge/rechargeNew?companyId=" + companyId;
-        });
+
+        layer.open({
+            content: '余额不足，只能充电两小时。请确认' + devicePort + '插座充电' + time
+                    +'分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！'
+            ,btn: ["充电","充值"] //[yes no]
+            ,yes: function (index) {
+                layer.close(index)
+                chargeType = "charge";// 功率充电
+                operType = "W";// 会员扣费
+                money = parseInt(device.tow_hours_price);
+                time = 120;
+                userIsConfirmed = true;
+                startCharge4WriteDate();
+            }
+            ,no: function () {
+                layer.close(index)
+                userIsConfirmed = true;
+                location.href = "../recharge/rechargeNew?companyId=" + companyId;
+            }
+        })
+        
+        // layer.confirm('余额不足，只能充电两小时。请确认' + devicePort + '插座充电' + time
+        //     + '分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！', {
+        //     closeBtn : 0,
+        //     btn : [ '充电', '充值' ]
+        // }, function() {
+        //     chargeType = "charge";// 功率充电
+        //     operType = "W";// 会员扣费
+        //     money = parseInt(device.tow_hours_price);
+        //     time = 120;
+        //     userIsConfirmed = true;
+        //     startCharge4WriteDate();
+        // }, function() {
+        //     userIsConfirmed = true;
+        //     location.href = "../recharge/rechargeNew?companyId=" + companyId;
+        // });
     }
     //开始充电，写数据，发消息
     function startCharge4WriteDate() {
