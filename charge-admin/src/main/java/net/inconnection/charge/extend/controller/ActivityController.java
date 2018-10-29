@@ -71,6 +71,11 @@ public class ActivityController extends BaseController{
         model.set("money",this.getPara("model.money"));
         model.set("coupon",this.getPara("model.coupon"));
         model.set("status",this.getPara("model.status"));
+        if(model.getCoupon() >0){
+            model.setRemark("优惠详情：充值"+model.getMoney()/100+"元送"+model.getCoupon()/100+"元");
+        }else{
+            model.setRemark("无赠费");
+        }
         model.update();
         this.renderSuccess();
     }

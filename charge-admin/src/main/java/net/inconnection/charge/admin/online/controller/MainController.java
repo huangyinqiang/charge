@@ -9,7 +9,7 @@ import java.util.List;
 
 @ClearAuth
 public class MainController extends Controller {
-	
+
 	public void index() {
 		render("main.html");
 	}
