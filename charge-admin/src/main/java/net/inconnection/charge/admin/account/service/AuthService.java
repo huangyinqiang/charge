@@ -124,6 +124,13 @@ public class AuthService {
 				extraList.add(url.replace("/listPage", "/listData"));
 				extraList.add(url.replace("/listPage", "/detailPage"));
 			}
+            if(url.endsWith("ListPage")) {
+                extraList.add(url.replace("ListPage", "ListData"));
+                extraList.add(url.replace("ListPage", "detailPage"));
+            }
+            if(url.endsWith("Page")) {
+                extraList.add(url.replace("Page", "Data"));
+            }
 		}
 		extraList.addAll(urlList);
 		// 去重

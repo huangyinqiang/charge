@@ -3,7 +3,7 @@ package net.inconnection.charge.extend.controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Record;
-import net.inconnection.charge.admin.account.model.SysUser;
+import net.inconnection.charge.admin.account.common.annotation.ClearAuth;
 import net.inconnection.charge.admin.common.DBTool;
 import net.inconnection.charge.admin.common.ZcurdTool;
 import net.inconnection.charge.admin.common.base.BaseController;
@@ -377,15 +377,12 @@ public class CompanyController extends BaseController{
 
     //充值历史记录
     public void rechargeListPage() {
-        SysUser sysUser = (SysUser)getSessionAttr("sysUser");
-        Integer id = sysUser.getId();
-        List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi"))
-                                         .find("select * from sysuser_company where sysuser_id="+id);
-        Integer companyId = 1;
-        if(userCompanyList.size() > 0){
-            companyId = userCompanyList.get(0).get("company_id");
+        StringBuffer sql = new StringBuffer("select * from yc_recharge_history ");
+        Company company =  Company.dao.getCompanyByLoginUser();
+        if(1 != company.getId()){
+            sql.append(" where company_id in (").append(company.getId()).append(")");
         }
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+companyId);
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString());
         Integer money_total=0;
         Integer real_total = 0;
         Integer gift_total = 0;
@@ -409,8 +406,6 @@ public class CompanyController extends BaseController{
         setAttr("money_total",money_total/100.00);
         setAttr("real_total",real_total/100.00);
         setAttr("gift_total",gift_total/100.00);
-        setAttr("companyId",companyId);
-//        setAttr("company_name",getPara("company_name"));
         render("rechargeList.html");
     }
 
@@ -420,8 +415,8 @@ public class CompanyController extends BaseController{
         String[] properties = (String[])queryParams[0];
         String[] symbols = (String[])queryParams[1];
         Object[] values = (Object[])queryParams[2];
+        Company company = Company.dao.getCompanyByLoginUser();
 
-        Long companyId = getParaToLong("companyId");
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT" +
                 "	yrh.*," +
@@ -433,8 +428,8 @@ public class CompanyController extends BaseController{
                 "	LEFT JOIN yc_company yc ON yrh.company_id = yc.id" +
                 "	LEFT JOIN tuser u ON yrh.openId = u.openId " +
                 "where 1=1 ");
-        if(companyId != 1L){
-            sql.append(" and company_id=").append(companyId);
+        if(1 != company.getId()){
+            sql.append(" and company_id in (").append(company.getId()).append(")");
         }
         List<Object> params = new ArrayList<>();
         for (int i = 0; i < properties.length; i++) {
@@ -467,25 +462,14 @@ public class CompanyController extends BaseController{
     }
 
     //充电记录页面
-    public void chargeElectricityHistoryPage() {
-        SysUser sysUser = (SysUser)getSessionAttr("sysUser");
-        Integer id = sysUser.getId();
-        List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from " +
-                "sysuser_company where sysuser_id="+id);
-//        Long company_id = getParaToLong("id");
-        Integer company_id = 1;
-        if(userCompanyList.size() > 0){
-            company_id = userCompanyList.get(0).get("company_id");
+    public void chargeElectricityHistoryListPage() {
+        StringBuffer sql = new StringBuffer("select * from yc_charge_history");
+        Company company =  Company.dao.getCompanyByLoginUser();
+        if(1 != company.getId()){
+            sql.append(" where company_id in (").append(company.getId()).append(")");
         }
 
-        StringBuffer sql = new StringBuffer("select * from yc_charge_history");
-        if(id == 1){
-            sql.append(" order by operStartTime desc ");
-        }else{
-            sql.append(" where company_id=");
-            sql.append(company_id);
-            sql.append(" order by operStartTime desc ");
-        }
+        sql.append(" order by operStartTime desc ");
         List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString());
         Integer money_total=0;//总金额和
         Integer gift_total=0;//总赠送金额和
@@ -502,8 +486,6 @@ public class CompanyController extends BaseController{
         }
             setAttr("money_total",money_total/100.00);
         setAttr("gift_total",gift_total/100.00);
-        setAttr("company_id",company_id);
-        setAttr("company_name",getPara("company_name"));
         render("chargeElectricityPage.html");
     }
 
@@ -511,22 +493,14 @@ public class CompanyController extends BaseController{
 
 
     //充电记录页面数据
-    public void chargeElectricityHistoryData() {
+    public void chargeElectricityHistoryListData() {
         Pager pager = this.getPager();
         Object[] queryParams = this.getQueryParams();
         String[] properties = (String[])queryParams[0];
         String[] symbols = (String[])queryParams[1];
         Object[] values = (Object[])queryParams[2];
-//        Long company_id = getParaToLong("company_id");
-        SysUser sysUser = (SysUser)getSessionAttr("sysUser");
-        Integer id = sysUser.getId();
-        List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from " +
-                "sysuser_company where sysuser_id="+id);
-        String companyIdPara = getPara("company_id");
-        Integer companyId = 1;
-        if(userCompanyList.size() > 0){
-            companyId = userCompanyList.get(0).get("company_id");
-        }
+        Company company =  Company.dao.getCompanyByLoginUser();
+
         StringBuffer sql = new StringBuffer("SELECT" +
                 "	ych.*," +
                 "	ycp.NAME as `deviceName`," +
@@ -539,12 +513,10 @@ public class CompanyController extends BaseController{
                 "	LEFT JOIN tuser u ON ych.openId = u.openId "+
                 " where 1=1 ");
 
-//        if(companyId != 1 && companyIdPara != null){
-//            sql.append(" where ych.company_id=");
-//            sql.append(companyId);
-//        }else {
-//            sql.append(" where 1=1 ");
-//        }
+        if(1 != company.getId()){
+            sql.append(" where company_id in (").append(company.getId()).append(")");
+        }
+
         List<Object> params = new ArrayList<>();
         for (int i = 0; i < properties.length; i++) {
                 sql.append(" and " + properties[i] + " " + symbols[i] + " ?");
@@ -681,5 +653,13 @@ public class CompanyController extends BaseController{
         }
 
     }
+
+    @ClearAuth
+    public void getCompanyListByLoginUser(){
+        List<Company> company = Company.dao.getCompanyListByLoginUser();
+        this.renderJson(company);
+    }
+
+
 
 }

@@ -30,6 +30,21 @@ public class NewDeviceController extends BaseController {
         if (StringUtil.isEmpty(orderBy)) {
             orderBy = "update_time desc";
         }
+
+        List<String> properties1 = new ArrayList(Arrays.asList(properties));
+        List<String> symbols1 = new ArrayList(Arrays.asList(symbols));
+        List<Object> values1 = new ArrayList(Arrays.asList(values));
+        Company param = Company.dao.getCompanyByLoginUser();
+        if(1 != param.getId()){
+            properties1.add("company_id");
+            symbols1.add("=");
+            values1.add(param.getId());
+            properties =  properties1.toArray(new String[properties1.size()]);
+            symbols =  symbols1.toArray(new String[symbols1.size()]);
+            values =  values1.toArray();
+        }
+
+
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "yc_charge_pile", properties, symbols, values, orderBy, this.getPager());
         for (Record record:list){
             record.set("sn",record.get("id"));
@@ -52,7 +67,7 @@ public class NewDeviceController extends BaseController {
     }
 
 
-    public void socketlistData() {
+    public void socketListData() {
         Long pile_id = getParaToLong("pile_id");
         List<ChargeSocket> chargeSockets= ChargeSocket.dao.find("select * from yc_charge_socket where charge_pile_id=" + pile_id);
         this.renderDatagrid(chargeSockets, chargeSockets.size());
@@ -61,6 +76,7 @@ public class NewDeviceController extends BaseController {
     public void socketPowerPage() {
         this.render("socketPower.html");
     }
+
 
     public void socketPowerDate() {
         String id = this.getPara("id");
