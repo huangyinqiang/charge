@@ -131,6 +131,28 @@ public class AuthService {
             if(url.endsWith("Page")) {
                 extraList.add(url.replace("Page", "Data"));
             }
+            if(url.endsWith("MicroPage")){
+//                projectMicroPage
+//                projectMicroPageListData
+//                addProjectMicroPage
+//                addProjectMicroPageData
+//                updateProjectMicroPage
+//                updateProjectMicroPageData
+//                deleteProjectMicroPage
+//                deleteProjectMicroPageData
+                extraList.add(url.concat("ListData"));
+                String[] arrays = url.split("/");
+                String startUrl =  "/"+arrays[1]+"/";
+                String first = arrays[2].substring(0,1).toUpperCase();
+                url = first + arrays[2].substring(1,arrays[2].length());
+                extraList.add(startUrl+"add"+url);
+                extraList.add(startUrl+"add"+url.concat("Data"));
+                extraList.add(startUrl+"update"+url);
+                extraList.add(startUrl+"update"+url.concat("Data"));
+                extraList.add(startUrl+"delete"+url);
+                extraList.add(startUrl+"delete"+url.concat("Data"));
+
+            }
 		}
 		extraList.addAll(urlList);
 		// 去重
