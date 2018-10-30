@@ -68,10 +68,11 @@ public class ActivityController extends BaseController{
     public void update() {
         ProjectActivity model = ProjectActivity.me.findById(this.getPara("id"));
         model.set("name",this.getPara("model.name"));
-        model.set("money",this.getPara("model.money"));
-        model.set("coupon",this.getPara("model.coupon"));
+        model.set("money",this.getParaToInt("model.money"));
+        model.set("coupon",this.getParaToInt("model.coupon"));
         model.set("status",this.getPara("model.status"));
-        if(model.getCoupon() >0){
+        Integer coupon = model.getCoupon();
+        if(coupon >0){
             model.setRemark("优惠详情：充值"+model.getMoney()/100+"元送"+model.getCoupon()/100+"元");
         }else{
             model.setRemark("无赠费");
