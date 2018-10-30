@@ -440,6 +440,7 @@ public class ChargePileDevice implements GateWay {
         }
 
         if (responseObj.getString(MSG_RESPONCE_RESULT).equals("1")){
+            //开始充电成功就设置充电状态为 充电中
             ChargeSocketComponent chargeSocket = chargeSocketMap.get(socketSn);
             chargeSocket.setChargeState(ChargeSocketComponent.CHARGE_ING);
             chargeSocket.setChargeState(ChargeSocketComponent.CHARGE_ING);
