@@ -39,7 +39,6 @@ var dgOptions = {
         rownumbers:true,
     	fit:true,
     	border:false,
-        rownumbers:true,
     	url:'listData',
     	method:'post',
     	toolbar:'#tb',
@@ -161,11 +160,11 @@ $(function() {
 	handleAuthDataRule();
 	datagrid.datagrid(dgOptions);
     $.ajax({
-        url : "../company/listData",
+        url : "../company/getCompanyListByLoginUser",
         type : "POST",
         async : true,// 设置同步方式，false为同步
-        success : function(res) {
-            companyList = res.rows;
+        success : function(data) {
+            companyList = data;
             $('#companyId').combobox({
                 data : companyList,
                 multiple:false, //支持多选
@@ -189,7 +188,7 @@ $('#companyId').combobox({
 
 function getProjectByCompanyId(val) {
     $.ajax({
-        url : "../company/ProjectListData",
+        url : "../company/projectMicroPageListData",
         type : "POST",
         data:{company_id:val},
         async : true,// 设置同步方式，false为同步
