@@ -6,13 +6,17 @@
 package net.inconnection.charge.extend.controller;
 
 import com.jfinal.plugin.activerecord.Record;
+import net.inconnection.charge.admin.account.model.SysUser;
 import net.inconnection.charge.admin.common.DBTool;
+import net.inconnection.charge.admin.common.ZcurdConst;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.csv.CsvRender;
 import net.inconnection.charge.admin.common.util.StringUtil;
 import net.inconnection.charge.extend.model.ChargeBatteryInfo;
+import net.inconnection.charge.extend.model.QrMatchDevice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChargeBatteryInfoController extends BaseController {
@@ -35,6 +39,25 @@ public class ChargeBatteryInfoController extends BaseController {
         String orderBy = this.getOrderBy();
         if (StringUtil.isEmpty(orderBy)) {
             orderBy = "id desc";
+        }
+        SysUser sysUser = getSessionUser();
+        List<String> properties1 = new ArrayList(Arrays.asList(properties));
+        List<String> symbols1 = new ArrayList(Arrays.asList(symbols));
+        List<Object> values1 = new ArrayList(Arrays.asList(values));
+        if(1 != sysUser.getId()){
+            List<QrMatchDevice> qrMatchDeviceList = QrMatchDevice.dao.findByGid(sysUser.getId());
+            if(qrMatchDeviceList != null && qrMatchDeviceList.size() > 0){
+                StringBuffer sb = new StringBuffer();
+                qrMatchDeviceList.forEach(qrMatchDevice -> {
+                    sb.append(qrMatchDevice.getQrNum()).append(",");
+                });
+                properties1.add("qr_num");
+                symbols1.add(ZcurdConst.SEARCH_TYPE_OR2IN);
+                values1.add(sb.substring(0,sb.length()-1));
+                properties =  properties1.toArray(new String[properties1.size()]);
+                symbols =  symbols1.toArray(new String[symbols1.size()]);
+                values =  values1.toArray();
+            }
         }
 
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "charge_info_view", properties, symbols, values, orderBy, this.getPager());
@@ -98,13 +121,35 @@ public class ChargeBatteryInfoController extends BaseController {
             orderBy = "id desc";
         }
 
+        SysUser sysUser = getSessionUser();
+        List<String> properties1 = new ArrayList(Arrays.asList(properties));
+        List<String> symbols1 = new ArrayList(Arrays.asList(symbols));
+        List<Object> values1 = new ArrayList(Arrays.asList(values));
+        if(1 != sysUser.getId()){
+            List<QrMatchDevice> qrMatchDeviceList = QrMatchDevice.dao.findByGid(sysUser.getId());
+            if(qrMatchDeviceList != null && qrMatchDeviceList.size() > 0){
+                StringBuffer sb = new StringBuffer();
+                qrMatchDeviceList.forEach(qrMatchDevice -> {
+                    sb.append(qrMatchDevice.getQrNum()).append(",");
+                });
+                properties1.add("qr_num");
+                symbols1.add(ZcurdConst.SEARCH_TYPE_OR2IN);
+                values1.add(sb.substring(0,sb.length()-1));
+                properties =  properties1.toArray(new String[properties1.size()]);
+                symbols =  symbols1.toArray(new String[symbols1.size()]);
+                values =  values1.toArray();
+            }
+        }
+
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "charge_info_view", properties, symbols, values);
         List<String> headers = new ArrayList();
         List<String> clomuns = new ArrayList();
-        headers.add("用户编号");
-        clomuns.add("openId");
+        headers.add("用户昵称");
+        clomuns.add("nickName");
+        headers.add("设备名称");
+        clomuns.add("remark");
         headers.add("设备编号");
-        clomuns.add("deviceId");
+        clomuns.add("qr_num");
         headers.add("设备端口号");
         clomuns.add("devicePort");
         headers.add("操作开始时间");
@@ -115,10 +160,6 @@ public class ChargeBatteryInfoController extends BaseController {
         clomuns.add("endTime");
         headers.add("充电方式(手动:M,微信W)");
         clomuns.add("operType");
-        headers.add("服务器返回充电结果");
-        clomuns.add("serverResultCode");
-        headers.add(" 服务器充电结果描述");
-        clomuns.add("serverResultDesc");
         headers.add("终端充电状态");
         clomuns.add("status");
         headers.add("消费金额");

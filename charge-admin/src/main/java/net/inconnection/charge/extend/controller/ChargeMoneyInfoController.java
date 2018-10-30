@@ -6,6 +6,7 @@
 package net.inconnection.charge.extend.controller;
 
 import com.jfinal.plugin.activerecord.Record;
+import net.inconnection.charge.admin.account.model.SysUser;
 import net.inconnection.charge.admin.common.DBTool;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.csv.CsvRender;
@@ -14,6 +15,7 @@ import net.inconnection.charge.extend.model.ChargeMoneyInfo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ChargeMoneyInfoController extends BaseController {
@@ -37,7 +39,18 @@ public class ChargeMoneyInfoController extends BaseController {
         if (StringUtil.isEmpty(orderBy)) {
             orderBy = "id desc";
         }
-
+        SysUser sysUser = getSessionUser();
+        List<String> properties1 = new ArrayList(Arrays.asList(properties));
+        List<String> symbols1 = new ArrayList(Arrays.asList(symbols));
+        List<Object> values1 = new ArrayList(Arrays.asList(values));
+        if(1 != sysUser.getId()){
+            properties1.add("gid");
+            symbols1.add("=");
+            values1.add(sysUser.getId());
+            properties =  properties1.toArray(new String[properties1.size()]);
+            symbols =  symbols1.toArray(new String[symbols1.size()]);
+            values =  values1.toArray();
+        }
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "weixin_query_view", properties, symbols, values, orderBy, this.getPager());
         this.renderDatagrid(list, DBTool.countByMultPropertiesDbSource("zcurd_busi", "weixin_query_view", properties, symbols, values));
     }
@@ -117,6 +130,19 @@ public class ChargeMoneyInfoController extends BaseController {
         String orderBy = this.getOrderBy();
         if (StringUtil.isEmpty(orderBy)) {
             orderBy = "id desc";
+        }
+
+        SysUser sysUser = getSessionUser();
+        List<String> properties1 = new ArrayList(Arrays.asList(properties));
+        List<String> symbols1 = new ArrayList(Arrays.asList(symbols));
+        List<Object> values1 = new ArrayList(Arrays.asList(values));
+        if(1 != sysUser.getId()){
+            properties1.add("gid");
+            symbols1.add("=");
+            values1.add(sysUser.getId());
+            properties =  properties1.toArray(new String[properties1.size()]);
+            symbols =  symbols1.toArray(new String[symbols1.size()]);
+            values =  values1.toArray();
         }
 
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "weixin_query_view", properties, symbols, values);
