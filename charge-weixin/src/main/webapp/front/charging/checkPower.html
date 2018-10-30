@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../css/wechat.css">
 <link rel="stylesheet" href="../js/common/layer/mobile/need/layer.css">
 <script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../js/common/leadbase-encrypts.js"></script>
 <script src="../js/common/layer/mobile/layer.js"></script>
 <script type="text/javascript" src="../js/charging/checkPower.js"></script>
 </head>
@@ -277,7 +278,7 @@
                 temporaryRechargeMoney(money);
                 layer.close(index)
             }
-            ,no: function () {
+            ,no: function (index) {
                 layer.close(index)
                 userIsConfirmed = true;
                 // 跳转到充值页面
@@ -381,13 +382,13 @@
                 userIsConfirmed = true;
                 startCharge4WriteDate();
             }
-            ,no: function () {
+            ,no: function (index) {
                 layer.close(index)
                 userIsConfirmed = true;
                 location.href = "../recharge/rechargeNew?companyId=" + companyId;
             }
         })
-        
+
         // layer.confirm('余额不足，只能充电两小时。请确认' + devicePort + '插座充电' + time
         //     + '分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！', {
         //     closeBtn : 0,
