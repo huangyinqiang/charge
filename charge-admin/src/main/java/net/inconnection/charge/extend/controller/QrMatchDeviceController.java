@@ -17,6 +17,7 @@ import net.inconnection.charge.extend.model.QrMatchDevice;
 import net.inconnection.charge.extend.service.DeviceProjectService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +39,18 @@ public class QrMatchDeviceController extends BaseController {
         String orderBy = this.getOrderBy();
         if (StringUtil.isEmpty(orderBy)) {
             orderBy = "updateTime desc";
+        }
+        List<String> properties1 = new ArrayList(Arrays.asList(properties));
+        List<String> symbols1 = new ArrayList(Arrays.asList(symbols));
+        List<Object> values1 = new ArrayList(Arrays.asList(values));
+        SysUser sysUser = getSessionUser();
+        if(1 != sysUser.getId()){
+            properties1.add("gid");
+            symbols1.add("=");
+            values1.add(sysUser.getId());
+            properties =  properties1.toArray(new String[properties1.size()]);
+            symbols =  symbols1.toArray(new String[symbols1.size()]);
+            values =  values1.toArray();
         }
 
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "qr_match_device", properties, symbols, values, orderBy, this.getPager());

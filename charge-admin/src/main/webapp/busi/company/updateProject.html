@@ -244,7 +244,7 @@ $(function () {
 top.window.subPage.save = save;
 function save() {
 	if($("#zcurdHeadTable").form('validate')) {
-		$.post("updateProjectData", getParam(), function(data) {
+		$.post("updateProjectMicroPageData", getParam(), function(data) {
 			top.window.closeWindow();
 			top.window.subPage.loadCurrDatagrid();
 		});

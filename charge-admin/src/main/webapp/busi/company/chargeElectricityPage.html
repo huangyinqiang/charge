@@ -58,7 +58,7 @@ var dgOptions = {
     	fit:true,
     	border:false,
         rownumbers:true,
-    	url:'chargeElectricityHistoryData',
+    	url:'chargeElectricityHistoryListData',
     	method:'post',
     	toolbar:'#tb',
     	singleSelect: true,
@@ -277,18 +277,18 @@ $(function() {
     $("#gift_total").text("${gift_total ! }"+" 元");
 
     $.ajax({
-        url : "../company/listData",
+        url : "../company/getCompanyListByLoginUser",
         type : "POST",
         async : true,// 设置同步方式，false为同步
-        success : function(res) {
+        success : function(data) {
             $('#companyId').combobox({
-                data : res.rows,
+                data : data,
                 multiple:false, //支持多选
                 valueField : 'id',
                 textField : 'company_name'
             });
-            var id =  res.rows.id;
-            $('#companyId').combobox('setValue',id);
+            // var id =  data[0].id;
+            // $('#companyId').combobox('setValue',id);
         }
     })
 });
@@ -350,7 +350,13 @@ function updateActivity() {
     top.openWindow("活动-编辑", getCurrUrl("updateActivityPage") + "?id=" + id+"&company_name="+company_name, {size: '600x400'});
 }
 
-
+function exportCsv() {
+    var option = datagrid.datagrid("options");
+    var param = option.queryParams;
+    param.sortName = option.sortName;
+    param.sortOrder = option.sortOrder;
+    window.location.href = "chargeExportCsv?" + $.param(param);
+}
 
 
 

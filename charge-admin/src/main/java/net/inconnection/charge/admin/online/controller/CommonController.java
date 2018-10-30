@@ -1,11 +1,14 @@
 package net.inconnection.charge.admin.online.controller;
 
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.upload.UploadFile;
 import net.inconnection.charge.admin.account.common.annotation.ClearAuth;
 import net.inconnection.charge.admin.common.DBTool;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.util.StringUtil;
 import net.inconnection.charge.admin.online.model.CommonFile;
+
+import java.util.List;
 
 /**
  * 用来存放一些公共地址（无权限控制）的controller
@@ -24,8 +27,8 @@ public class CommonController extends BaseController {
 		if(StringUtil.isEmpty(orderBy)) {
 			orderBy = "id desc";
 		}
-		
-		renderJson(DBTool.findByMultProperties("sys_dict", properties, symbols, values));
+        List<Record> sys_dict = DBTool.findByMultProperties("sys_dict", properties, symbols, values);
+        renderJson(DBTool.findByMultProperties("sys_dict", properties, symbols, values));
 	}	
 	
 	//图标页面

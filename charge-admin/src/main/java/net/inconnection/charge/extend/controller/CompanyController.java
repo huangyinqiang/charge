@@ -3,10 +3,11 @@ package net.inconnection.charge.extend.controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Record;
-import net.inconnection.charge.admin.account.model.SysUser;
+import net.inconnection.charge.admin.account.common.annotation.ClearAuth;
 import net.inconnection.charge.admin.common.DBTool;
 import net.inconnection.charge.admin.common.ZcurdTool;
 import net.inconnection.charge.admin.common.base.BaseController;
+import net.inconnection.charge.admin.common.csv.CsvRender;
 import net.inconnection.charge.admin.common.util.Pager;
 import net.inconnection.charge.admin.common.util.StringUtil;
 import net.inconnection.charge.extend.model.ChargeBatteryInfo;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +47,19 @@ public class CompanyController extends BaseController{
         String orderBy = this.getOrderBy();
         if (StringUtil.isEmpty(orderBy)) {
             orderBy = "id desc";
+        }
+
+        List<String> properties1 = new ArrayList(Arrays.asList(properties));
+        List<String> symbols1 = new ArrayList(Arrays.asList(symbols));
+        List<Object> values1 = new ArrayList(Arrays.asList(values));
+        Company param = Company.dao.getCompanyByLoginUser();
+        if(1 != param.getId()){
+            properties1.add("id");
+            symbols1.add("=");
+            values1.add(param.getId());
+            properties =  properties1.toArray(new String[properties1.size()]);
+            symbols =  symbols1.toArray(new String[symbols1.size()]);
+            values =  values1.toArray();
         }
 
         List<Record> list = DBTool.findByMultPropertiesDbSource("zcurd_busi", "yc_company", properties, symbols, values, orderBy, this.getPager());
@@ -190,8 +205,8 @@ public class CompanyController extends BaseController{
     }
 
 
-    //修改活动
-    public void updateCouponPage() {
+
+    public void activityMicroPage() {
         Long company_id = getParaToLong("id");
         setAttr("company_id",company_id);
         setAttr("company_name",getPara("company_name"));
@@ -209,7 +224,7 @@ public class CompanyController extends BaseController{
     }
 
     //修改页面
-    public void updateActivityPage() {
+    public void updateActivityMicroPage() {
         //setAttr("dictDatastatus", Company.me.getDictDatastatus());
         Record compayActivity = Db.use(ZcurdTool.getDbSource("zcurd_busi")).findById("yc_company_activity", getParaToLong("id"));
         compayActivity.set("company_name",getPara("company_name"));
@@ -226,7 +241,7 @@ public class CompanyController extends BaseController{
     }
 
 
-    public void updateActivityData() {
+    public void updateActivityMicroPageData() {
         CompanyActivity model = CompanyActivity.dao.findById(this.getPara("id"));
         model.set("name",this.getPara("model.name"));
         model.set("status",this.getPara("model.status"));
@@ -251,7 +266,7 @@ public class CompanyController extends BaseController{
     }
 
 
-    public void CouponlistData() {
+    public void activityMicroPageListData() {
         Long company_id = getParaToLong("company_id");
         List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_company_activity where company_id="+company_id);
         for (Record record:list){
@@ -267,8 +282,16 @@ public class CompanyController extends BaseController{
         }
         this.renderDatagrid(list, list.size());
     }
+    //                projectMicroPage
+//                projectMicroPageListData
+//                addProjectMicroPage
+//                addProjectMicroPageData
 
-    public void editProject() {
+    //                updateProjectMicroPage
+//                updateProjectMicroPageData
+//                deleteProjectMicroPage
+//                deleteProjectMicroPageData
+    public void projectMicroPage() {
         Long company_id = getParaToLong("id");
         setAttr("company_id",company_id);
         setAttr("company_name",getPara("company_name"));
@@ -277,7 +300,7 @@ public class CompanyController extends BaseController{
         render("projectList.html");
     }
 
-    public void ProjectListData() {
+    public void projectMicroPageListData() {
         Long company_id = getParaToLong("company_id");
         List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_project where company_id="+company_id);
 
@@ -286,7 +309,7 @@ public class CompanyController extends BaseController{
 
 
     //修改页面
-    public void updateProjectPage() {
+    public void updateProjectMicroPage() {
         //setAttr("dictDatastatus", Company.me.getDictDatastatus());
         Record project = Db.use(ZcurdTool.getDbSource("zcurd_busi")).findById("yc_project", getParaToLong("id"));
         project.set("projectName",getPara("projectName"));
@@ -296,7 +319,7 @@ public class CompanyController extends BaseController{
     }
 
 
-    public void updateProjectData() {
+    public void updateProjectMicroPageData() {
         Project model = Project.dao.findById(this.getPara("id"));
         model.set("name",this.getPara("model.name"));
         model.set("introduce",this.getPara("model.introduce"));
@@ -324,7 +347,7 @@ public class CompanyController extends BaseController{
         this.renderSuccess();
     }
 
-    public void addProjectData() {
+    public void addProjectMicroPageData() {
         Project model = getModel(Project.class, "model");
         model.setCreatetime(new Date());
 
@@ -368,7 +391,7 @@ public class CompanyController extends BaseController{
     }
 
     //新增项目
-    public void addProjectPage() {
+    public void addProjectMicroPage() {
         setAttr("company_id",getPara("company_id"));
         render("addProject.html");
     }
@@ -377,15 +400,12 @@ public class CompanyController extends BaseController{
 
     //充值历史记录
     public void rechargeListPage() {
-        SysUser sysUser = (SysUser)getSessionAttr("sysUser");
-        Integer id = sysUser.getId();
-        List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi"))
-                                         .find("select * from sysuser_company where sysuser_id="+id);
-        Integer companyId = 1;
-        if(userCompanyList.size() > 0){
-            companyId = userCompanyList.get(0).get("company_id");
+        StringBuffer sql = new StringBuffer("select * from yc_recharge_history ");
+        Company company =  Company.dao.getCompanyByLoginUser();
+        if(1 != company.getId()){
+            sql.append(" where company_id in (").append(company.getId()).append(")");
         }
-        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from yc_recharge_history where company_id="+companyId);
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString());
         Integer money_total=0;
         Integer real_total = 0;
         Integer gift_total = 0;
@@ -409,8 +429,6 @@ public class CompanyController extends BaseController{
         setAttr("money_total",money_total/100.00);
         setAttr("real_total",real_total/100.00);
         setAttr("gift_total",gift_total/100.00);
-        setAttr("companyId",companyId);
-//        setAttr("company_name",getPara("company_name"));
         render("rechargeList.html");
     }
 
@@ -420,8 +438,8 @@ public class CompanyController extends BaseController{
         String[] properties = (String[])queryParams[0];
         String[] symbols = (String[])queryParams[1];
         Object[] values = (Object[])queryParams[2];
+        Company company = Company.dao.getCompanyByLoginUser();
 
-        Long companyId = getParaToLong("companyId");
         StringBuffer sql = new StringBuffer();
         sql.append("SELECT" +
                 "	yrh.*," +
@@ -433,8 +451,8 @@ public class CompanyController extends BaseController{
                 "	LEFT JOIN yc_company yc ON yrh.company_id = yc.id" +
                 "	LEFT JOIN tuser u ON yrh.openId = u.openId " +
                 "where 1=1 ");
-        if(companyId != 1L){
-            sql.append(" and company_id=").append(companyId);
+        if(1 != company.getId()){
+            sql.append(" and company_id in (").append(company.getId()).append(")");
         }
         List<Object> params = new ArrayList<>();
         for (int i = 0; i < properties.length; i++) {
@@ -467,25 +485,14 @@ public class CompanyController extends BaseController{
     }
 
     //充电记录页面
-    public void chargeElectricityHistoryPage() {
-        SysUser sysUser = (SysUser)getSessionAttr("sysUser");
-        Integer id = sysUser.getId();
-        List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from " +
-                "sysuser_company where sysuser_id="+id);
-//        Long company_id = getParaToLong("id");
-        Integer company_id = 1;
-        if(userCompanyList.size() > 0){
-            company_id = userCompanyList.get(0).get("company_id");
+    public void chargeElectricityHistoryListPage() {
+        StringBuffer sql = new StringBuffer("select * from yc_charge_history");
+        Company company =  Company.dao.getCompanyByLoginUser();
+        if(1 != company.getId()){
+            sql.append(" where company_id in (").append(company.getId()).append(")");
         }
 
-        StringBuffer sql = new StringBuffer("select * from yc_charge_history");
-        if(id == 1){
-            sql.append(" order by operStartTime desc ");
-        }else{
-            sql.append(" where company_id=");
-            sql.append(company_id);
-            sql.append(" order by operStartTime desc ");
-        }
+        sql.append(" order by operStartTime desc ");
         List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString());
         Integer money_total=0;//总金额和
         Integer gift_total=0;//总赠送金额和
@@ -502,8 +509,6 @@ public class CompanyController extends BaseController{
         }
             setAttr("money_total",money_total/100.00);
         setAttr("gift_total",gift_total/100.00);
-        setAttr("company_id",company_id);
-        setAttr("company_name",getPara("company_name"));
         render("chargeElectricityPage.html");
     }
 
@@ -511,22 +516,14 @@ public class CompanyController extends BaseController{
 
 
     //充电记录页面数据
-    public void chargeElectricityHistoryData() {
+    public void chargeElectricityHistoryListData() {
         Pager pager = this.getPager();
         Object[] queryParams = this.getQueryParams();
         String[] properties = (String[])queryParams[0];
         String[] symbols = (String[])queryParams[1];
         Object[] values = (Object[])queryParams[2];
-//        Long company_id = getParaToLong("company_id");
-        SysUser sysUser = (SysUser)getSessionAttr("sysUser");
-        Integer id = sysUser.getId();
-        List<Record> userCompanyList = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find("select * from " +
-                "sysuser_company where sysuser_id="+id);
-        String companyIdPara = getPara("company_id");
-        Integer companyId = 1;
-        if(userCompanyList.size() > 0){
-            companyId = userCompanyList.get(0).get("company_id");
-        }
+        Company company =  Company.dao.getCompanyByLoginUser();
+
         StringBuffer sql = new StringBuffer("SELECT" +
                 "	ych.*," +
                 "	ycp.NAME as `deviceName`," +
@@ -539,12 +536,10 @@ public class CompanyController extends BaseController{
                 "	LEFT JOIN tuser u ON ych.openId = u.openId "+
                 " where 1=1 ");
 
-//        if(companyId != 1 && companyIdPara != null){
-//            sql.append(" where ych.company_id=");
-//            sql.append(companyId);
-//        }else {
-//            sql.append(" where 1=1 ");
-//        }
+        if(1 != company.getId()){
+            sql.append(" and ych.company_id in (").append(company.getId()).append(")");
+        }
+
         List<Object> params = new ArrayList<>();
         for (int i = 0; i < properties.length; i++) {
                 sql.append(" and " + properties[i] + " " + symbols[i] + " ?");
@@ -681,5 +676,183 @@ public class CompanyController extends BaseController{
         }
 
     }
+
+    /**
+     * 充电记录导出
+     */
+    public void chargeExportCsv() {
+
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+        Company company =  Company.dao.getCompanyByLoginUser();
+
+        StringBuffer sql = new StringBuffer("SELECT" +
+                "	ych.*," +
+                "	ycp.NAME as `deviceName`," +
+                "	yc.company_name AS `companyName`," +
+                "	u.nickName " +
+                "FROM" +
+                "	yc_charge_history ych" +
+                "	LEFT JOIN yc_charge_pile ycp ON ych.deviceId = ycp.id" +
+                "	LEFT JOIN yc_company yc ON ych.company_id = yc.id" +
+                "	LEFT JOIN tuser u ON ych.openId = u.openId "+
+                " where 1=1 ");
+
+        if(1 != company.getId()){
+            sql.append(" and ych.company_id in (").append(company.getId()).append(")");
+        }
+
+        List<Object> params = new ArrayList<>();
+        for (int i = 0; i < properties.length; i++) {
+            sql.append(" and " + properties[i] + " " + symbols[i] + " ?");
+            params.add(values[i]);
+        }
+        sql.append(" order by ych.operStartTime desc ");
+
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString(),params.toArray());
+        for (Record record:list){
+            Integer chargeMoney=record.get("chargeMoney");
+            record.set("chargeMoney",chargeMoney/100.00);
+
+            Integer realMoney=record.get("realMoney");
+            record.set("realMoney",realMoney/100.00);
+
+            Integer giftMoney=record.get("giftMoney");
+            record.set("giftMoney",giftMoney/100.00);
+
+            Integer autoUnitPrice=record.get("autoUnitPrice");
+            record.set("autoUnitPrice",autoUnitPrice/100.00);
+
+        }
+
+
+        List<String> headers = new ArrayList();
+        List<String> clomuns = new ArrayList();
+
+        headers.add("公司名称");
+        clomuns.add("companyName");
+        headers.add("用户标识");
+        clomuns.add("openId");
+        headers.add("用户昵称");
+        clomuns.add("nickName");
+        headers.add("设备编号");
+        clomuns.add("deviceId");
+        headers.add("设备名称");
+        clomuns.add("deviceName");
+        headers.add("插座");
+        clomuns.add("socketSn");
+        headers.add("充电开始时间");
+        clomuns.add("startTime");
+        headers.add("充电结束时间");
+        clomuns.add("endTime");
+        headers.add("扣费状态");
+        clomuns.add("feeStatus");
+        headers.add("扣费方式");
+        clomuns.add("operType");
+        headers.add("充电方式");
+        clomuns.add("chargeType");
+        headers.add("充电状态");
+        clomuns.add("chargeStatus");
+        headers.add("充电总金额");
+        clomuns.add("chargeMoney");
+        headers.add("真实金额");
+        clomuns.add("realMoney");
+        headers.add("赠送金额");
+        clomuns.add("giftMoney");
+        headers.add("单价");
+        clomuns.add("autoUnitPrice");
+        headers.add("预设时长");
+        clomuns.add("chargeTime");
+        headers.add("充电时长");
+        clomuns.add("realChargeTime");
+        headers.add("记录时间");
+        clomuns.add("createDate");
+
+        CsvRender csvRender = new CsvRender(headers, list);
+        csvRender.clomuns(clomuns);
+        csvRender.fileName("消费明细");
+        this.addOpLog("[消费明细] 导出cvs");
+        this.render(csvRender);
+    }
+
+    /**
+     * 充值记录导出
+     */
+    public void rechargeExportCsv() {
+        Object[] queryParams = this.getQueryParams();
+        String[] properties = (String[])queryParams[0];
+        String[] symbols = (String[])queryParams[1];
+        Object[] values = (Object[])queryParams[2];
+        Company company = Company.dao.getCompanyByLoginUser();
+
+        StringBuffer sql = new StringBuffer();
+        sql.append("SELECT" +
+                "	yrh.*," +
+                "	yc.company_name AS `companyName`," +
+                "	u.nickName ," +
+                "   u.headimgurl "+
+                "FROM" +
+                "	yc_recharge_history yrh" +
+                "	LEFT JOIN yc_company yc ON yrh.company_id = yc.id" +
+                "	LEFT JOIN tuser u ON yrh.openId = u.openId " +
+                "where 1=1 ");
+        if(1 != company.getId()){
+            sql.append(" and company_id in (").append(company.getId()).append(")");
+        }
+        List<Object> params = new ArrayList<>();
+        for (int i = 0; i < properties.length; i++) {
+            sql.append(" and " + properties[i] + " " + symbols[i] + " ?");
+            params.add(values[i]);
+
+        }
+        sql.append(" order by recharge_time desc");
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString(),params.toArray());
+
+        for (Record record:list){
+
+            Integer money_sum=record.get("money_sum");
+            record.set("money_sum",money_sum/100.00);
+
+            Integer realMoney=record.get("real_money");
+            record.set("real_money",realMoney/100.00);
+
+            Integer coupon=record.get("coupon");
+            record.set("coupon",coupon/100.00);
+
+        }
+
+
+        List<String> headers = new ArrayList();
+        List<String> clomuns = new ArrayList();
+
+        headers.add("公司名称");
+        clomuns.add("companyName");
+        headers.add("用户标识");
+        clomuns.add("openId");
+        headers.add("用户昵称");
+        clomuns.add("nickName");
+        headers.add("真实金额");
+        clomuns.add("real_money");
+        headers.add("赠送金额");
+        clomuns.add("coupon");
+        headers.add("充值时间");
+        clomuns.add("recharge_time");
+
+        CsvRender csvRender = new CsvRender(headers, list);
+        csvRender.clomuns(clomuns);
+        csvRender.fileName("充值明细");
+        this.addOpLog("[充值明细] 导出cvs");
+        this.render(csvRender);
+    }
+
+    @ClearAuth
+    public void getCompanyListByLoginUser(){
+        List<Company> company = Company.dao.getCompanyListByLoginUser();
+        this.renderJson(company);
+    }
+
+
 
 }

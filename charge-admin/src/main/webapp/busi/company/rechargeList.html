@@ -15,6 +15,13 @@
 
     <div class="wrap_search">
             <span class="search_item">
+                    <span class="item_text">公司名称: </span>
+                    <span class="item_obj">
+                        <input id="companyId" name="yrh.company_id" data-options="panelHeight:'auto'"
+                               class="easyui-combobox">
+                    </span>
+            </span>
+            <span class="search_item">
                 <span class="item_text">用户昵称: </span>
                 <span class="item_obj">
                     <input class="easyui-textbox" type="text" name="nickName" id="nickName" value=""/>
@@ -45,7 +52,7 @@ var dgOptions = {
     	fit:true,
     	border:false,
         rownumbers:true,
-    	url:'rechargeListData?companyId=${companyId!}',
+    	url:'rechargeListData',
     	method:'post',
     	toolbar:'#tb',
     	singleSelect: true,
@@ -147,6 +154,22 @@ $(function() {
     $("#real_total").text("${real_total ! }"+" 元");
     $("#gift_total").text("${gift_total ! }"+" 元");
 
+    $.ajax({
+        url : "../company/getCompanyListByLoginUser",
+        type : "POST",
+        async : true,// 设置同步方式，false为同步
+        success : function(data) {
+            $('#companyId').combobox({
+                data : data,
+                multiple:false, //支持多选
+                valueField : 'id',
+                textField : 'company_name'
+            });
+            // var id =  data[0].id;
+            // $('#companyId').combobox('setValue',id);
+        }
+    })
+
 });
 
 function zcurdSearch() {
@@ -204,14 +227,13 @@ function updateActivity() {
     }
     top.openWindow("活动-编辑", getCurrUrl("updateActivityPage") + "?id=" + id+"&company_name="+company_name, {size: '600x400'});
 }
-
-
-
-
-
-
-
-
+function exportCsv() {
+    var option = datagrid.datagrid("options");
+    var param = option.queryParams;
+    param.sortName = option.sortName;
+    param.sortOrder = option.sortOrder;
+    window.location.href = "rechargeExportCsv?" + $.param(param);
+}
 //扩展js
 </script>
 
