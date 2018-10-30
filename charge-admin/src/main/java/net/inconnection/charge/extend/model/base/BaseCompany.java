@@ -27,6 +27,15 @@ public abstract class BaseCompany<M extends BaseCompany<M>> extends Model<M> imp
 		return getStr("company_name");
 	}
 
+	public M setPid(java.lang.Long pid) {
+		set("pid", pid);
+		return (M)this;
+	}
+	
+	public java.lang.Long getPid() {
+		return getLong("pid");
+	}
+
 	public M setTaxpayerId(java.lang.String taxpayerId) {
 		set("taxpayer_id", taxpayerId);
 		return (M)this;

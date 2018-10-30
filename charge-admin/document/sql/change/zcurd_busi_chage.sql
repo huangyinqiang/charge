@@ -232,4 +232,16 @@ create table yc_pay_agent_history
 
 
 
+-- auto-generated definition
+create table yc_charge_pile_hardware_version
+(
+  id              bigint       not null
+    primary key,
+  version            varchar(100) null,
+  updateTime        datetime     null,
+  comment            varchar(500)  null
+);
+
+
+
 

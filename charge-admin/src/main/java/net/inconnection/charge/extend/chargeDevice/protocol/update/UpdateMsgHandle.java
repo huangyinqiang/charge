@@ -7,9 +7,12 @@ import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.DeviceUpdateMsg;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.utils.RedisUtil;
+import net.inconnection.charge.extend.model.ChargePileHardwareVersion;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.util.Date;
+import java.util.List;
 
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.MQTT_TOPIC_CUR_VERSION;
 import static net.inconnection.charge.extend.chargeDevice.protocol.ProtocolConstant.MQTT_TOPIC_INDUSTRY_CHARGE;
@@ -127,6 +130,19 @@ public class UpdateMsgHandle {
                 break;
             case 10:
                 _log.info("升级成功,正在返回页面!");
+                //记录硬件设备版本
+                ChargePileHardwareVersion chargePileHardwareVersion = new ChargePileHardwareVersion();
+                chargePileHardwareVersion.setId(gwid.longValue());
+                chargePileHardwareVersion.setVersion(hardWareVersion);
+                chargePileHardwareVersion.setUpdateTime(new Date());
+                List<ChargePileHardwareVersion> chargePileHardwareVersionList = ChargePileHardwareVersion.dao.find("select * from yc_charge_pile_hardware_version where id=" + gwid);
+                if (chargePileHardwareVersionList == null || chargePileHardwareVersionList.isEmpty()){
+                    //不存在则创建
+                    chargePileHardwareVersion.save();
+                }else {
+                    //已存在则更新
+                    chargePileHardwareVersion.update();
+                }
                 response2Client(server,gwIdStr, status);
                 break;
             case 11:
