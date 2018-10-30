@@ -227,14 +227,13 @@ function updateActivity() {
     }
     top.openWindow("活动-编辑", getCurrUrl("updateActivityPage") + "?id=" + id+"&company_name="+company_name, {size: '600x400'});
 }
-
-
-
-
-
-
-
-
+function exportCsv() {
+    var option = datagrid.datagrid("options");
+    var param = option.queryParams;
+    param.sortName = option.sortName;
+    param.sortOrder = option.sortOrder;
+    window.location.href = "rechargeExportCsv?" + $.param(param);
+}
 //扩展js
 </script>
 

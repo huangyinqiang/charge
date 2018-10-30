@@ -239,7 +239,7 @@
 <script>
     top.window.subPage.save = save;
     function save(successFunc) {
-            $.post("addProjectData", getParam(), function(data) {
+            $.post("addProjectMicroPageData", getParam(), function(data) {
                 if(successFunc) {
                     successFunc();
                 }
