@@ -386,8 +386,21 @@ public class ChargePileDevice implements GateWay {
             case MSG_RESPONCE_CODE_SHUTDOWNSOCKET:
 
             case MSG_RESPONCE_CODE_TESTSOCKETPOWER:
+                ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
+
+                _log.info("callBackQueueName : " + callBackQueueName);
+                _log.info("message: " + messageJsonArr);
+                break;
 
             case MSG_RESPONCE_CODE_SOCKETSTARTCHARGE:
+
+                updateSocketStatus( responseObj);
+
+                ActiveMqSender.getInstance().pushToActiveMQ(messageJsonArr.toString(), callBackQueueName);
+
+                _log.info("callBackQueueName : " + callBackQueueName);
+                _log.info("message: " + messageJsonArr);
+                break;
 
             case MSG_RESPONCE_CODE_DELETEIMAGE:
 
@@ -415,6 +428,22 @@ public class ChargePileDevice implements GateWay {
 
         }
 
+
+    }
+
+    private void updateSocketStatus(JSONObject responseObj){
+        Long socketSn = Long.parseLong(responseObj.getString(MSG_DEVICESN));
+
+        if (!chargeSocketMap.containsKey(socketSn)) {
+            _log.error("invalid socket id :" + socketSn + "deviceId : " + chargePileId);
+            return;
+        }
+
+        if (responseObj.getString(MSG_RESPONCE_RESULT).equals("1")){
+            ChargeSocketComponent chargeSocket = chargeSocketMap.get(socketSn);
+            chargeSocket.setChargeState(ChargeSocketComponent.CHARGE_ING);
+            chargeSocket.setChargeState(ChargeSocketComponent.CHARGE_ING);
+        }
 
     }
 
@@ -752,7 +781,7 @@ public class ChargePileDevice implements GateWay {
     public static void main(String[] args){
 
 
-        ChargePileDevice chargePileDevice = new ChargePileDevice(201808000003L);
+        ChargePileDevice chargePileDevice = new ChargePileDevice(201809000013L);
 
         String testQueue = "testqueue";
 

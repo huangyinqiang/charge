@@ -34,9 +34,10 @@ public class ChargeSocketComponent implements Device {
     public static final String DEVICEUSED = "1";
 
     private static final Integer CHARGE_AUTO_DONE = 0;
-    private static final Integer CHARGE_ING = 1;
+    public static final Integer CHARGE_ING = 1;
     private static final Integer OVER_FLOW_PROTECT = 2;
     private static final Integer CHARGE_TIME_DONE = 3;
+    private static final Integer PLATFORM_SHUT_DOWN = 4;
 
     private static Logger log = LoggerFactory.getLogger(ChargeSocketComponent.class);
 
@@ -474,5 +475,13 @@ public class ChargeSocketComponent implements Device {
 
     public void setChargeVoltage(Long chargeVoltage) {
         this.chargeVoltage = chargeVoltage;
+    }
+
+    public void setChargeState(Integer chargeState) {
+        this.chargeState = chargeState;
+    }
+
+    public void setLastChargeState(Integer lastChargeState) {
+        this.lastChargeState = lastChargeState;
     }
 }
