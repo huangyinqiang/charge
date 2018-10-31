@@ -38,6 +38,7 @@ public class ChargeSocketComponent implements Device {
     private static final Integer OVER_FLOW_PROTECT = 2;
     private static final Integer CHARGE_TIME_DONE = 3;
     private static final Integer PLATFORM_SHUT_DOWN = 4;
+    public static final int FREE_CHARGE_TIME = 10 * 60;
 
     private static Logger log = LoggerFactory.getLogger(ChargeSocketComponent.class);
 
@@ -208,7 +209,7 @@ public class ChargeSocketComponent implements Device {
 
                 autoChargeUnitPrice = chargeHistory.getAutoUnitPrice();
 
-                if (chargeTime < 10*60){
+                if (chargeTime < FREE_CHARGE_TIME){
                     //10分钟内不收费
                     autoChargeMoney = 0;
                 }else {
@@ -232,25 +233,25 @@ public class ChargeSocketComponent implements Device {
                 if (tuser != null) {
 
                     int walletAccount = tuser.getWalletAccount() - autoChargeMoney;
-                    int walletRaelMoney;
-                    int walletGiftMony;
+                    int walletRealMoney;
+                    int walletGiftMoney;
                     if (tuser.get("wallet_real_money") != null) {
-                        walletRaelMoney = tuser.getWalletRealMoney() - realMoney;
+                        walletRealMoney = tuser.getWalletRealMoney() - realMoney;
                         if (tuser.get("wallet_gift_money") != null) {
-                            walletGiftMony = tuser.getWalletGiftMoney() - giftMoney;
+                            walletGiftMoney = tuser.getWalletGiftMoney() - giftMoney;
                         } else {
-                            walletGiftMony = 0;
+                            walletGiftMoney = 0;
                         }
                     } else {
-                        walletRaelMoney = tuser.getWalletAccount() - realMoney;
-                        walletGiftMony = 0;
+                        walletRealMoney = tuser.getWalletAccount() - realMoney;
+                        walletGiftMoney = 0;
                     }
 
-                    double raelGiftRate = walletRaelMoney / (double) walletAccount;
+                    double realGiftRate = walletRealMoney / (double) walletAccount;
                     tuser.setWalletAccount(walletAccount);
-                    tuser.setWalletRealMoney(walletRaelMoney);
-                    tuser.setWalletGiftMoney(walletGiftMony);
-                    tuser.setRealGitRate(raelGiftRate);
+                    tuser.setWalletRealMoney(walletRealMoney);
+                    tuser.setWalletGiftMoney(walletGiftMoney);
+                    tuser.setRealGitRate(realGiftRate);
 
                     tuser.update();
 
@@ -259,6 +260,32 @@ public class ChargeSocketComponent implements Device {
 
             }else {
                 chargerMoney = chargeHistory.getChargeMoney();
+                //10分钟内不收费,给用户退费
+                if (chargeTime < FREE_CHARGE_TIME){
+                    if (tuser != null){
+                        int walletRealMoney;
+                        int walletGiftMoney;
+                        walletRealMoney = tuser.getWalletRealMoney() + chargeHistory.getRealMoney();
+                        walletGiftMoney = tuser.getWalletGiftMoney() + chargeHistory.getGiftMoney();
+                        int walletAccount = walletRealMoney + walletGiftMoney;
+                        double realGiftRate = walletRealMoney / (double) walletAccount;
+
+                        tuser.setWalletAccount(walletAccount);
+                        tuser.setWalletRealMoney(walletRealMoney);
+                        tuser.setWalletGiftMoney(walletGiftMoney);
+                        tuser.setRealGitRate(realGiftRate);
+
+                        tuser.update();
+                    }
+                    chargerMoney = 0;
+
+                    //没有收费
+                    chargeHistory.setChargeMoney(0);
+                    chargeHistory.setRealMoney(0);
+                    chargeHistory.setGiftMoney(0);
+
+                }
+
                 if (tuser != null){
                     walletAccountForWeixinPush = tuser.getWalletAccount();
                 }
