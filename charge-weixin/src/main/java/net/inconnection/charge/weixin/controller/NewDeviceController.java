@@ -205,14 +205,8 @@ public class NewDeviceController extends Controller {
         Integer chargeTimeSenconds = chargeTime*60;
 
         JSONObject startChargeResltJson;
-        if(chargeTime == 800){
-            //充满自停
-            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, 0, TIMEOUT);
-        }else {
-            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, TIMEOUT);
-        }
 
-//        Integer startPower = 0;
+        startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, TIMEOUT);
 
         Integer startChargeStatus =9999;
         if (null != startChargeResltJson){
@@ -333,11 +327,9 @@ public class NewDeviceController extends Controller {
         log.info("开始充电 openId=" + openId + ",channelNum=" + devicePort + ",deviceId=" + deviceId );
 
         JSONObject startChargeResltJson;
-        if(chargeType.equals("auto")){
-            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, 0, TIMEOUT);
-        }else {
-            startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, TIMEOUT);
-        }
+
+        startChargeResltJson = deviceControlService.requestStartCharge(deviceSN, socketSN, chargeTimeSenconds, TIMEOUT);
+
 
         Integer startPower = 0;
         if (null != startChargeResltJson){
