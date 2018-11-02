@@ -74,9 +74,7 @@ public class AnalysisService {
                 "	LEFT JOIN qr_match_device qmd ON cbi.deviceId = qmd.match_num" +
                 "	LEFT JOIN yc_charge_pile ycp ON ycp.id = cbi.deviceId " +
                 "where  feeStatus='S' ");
-        if("M".equals(operType)){
-            sql.append(" and operType = 'M'");
-        }
+        sql.append(" and operType = '").append(operType).append("'");
 
         for (int i = 0; i < properties.length; i++) {
             sql.append(" and cbi.operStartTime " + symbols[i] + " ?");
