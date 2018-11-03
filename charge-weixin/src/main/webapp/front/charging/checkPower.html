@@ -223,13 +223,7 @@
 
             }
         })
-        // layer.confirm(msg, {
-        //     closeBtn : 0,
-        //     btn : [ '确定']
-        // }, function() {
-        //     userIsConfirmed = true;
-        //     startCharge4WriteDate();
-        // });
+
     }
 
     // 充值钱包
@@ -246,13 +240,6 @@
             }
         })
 
-        // layer.open('亲，余额不足不能使用此功能哦，点击"确定"去充值成为会员后使用此功能...', {
-        //     closeBtn : 0,
-        //     btn : [ '确认' ]
-        // }, function() {
-        //     // 跳转到充值页面
-        //     location.href = "../recharge/rechargeNew?companyId=" + companyId;
-        // });
     }
 
     // 充值钱包或者单次支付
@@ -286,27 +273,6 @@
             }
         })
 
-
-
-        // layer.confirm('请确认' + devicePort + '插座，充电' + time
-        //     + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！', {
-        //     btn : [ '临时支付', '充值' ]
-        // }, function() {
-        //     var pow = power.split("-")[1];
-        //     if(pow*1 > 500){
-        //         layer.msg("临时充电功率超限，请选择会员充电！", {
-        //             shift : 5
-        //         });
-        //         location.href = "../recharge/rechargeNew?companyId=" + companyId;
-        //         return;
-        //     }
-        //     // 单次支付
-        //     temporaryRechargeMoney(money);
-        // }, function() {
-        //     userIsConfirmed = true;
-        //     // 跳转到充值页面
-        //     location.href = "../recharge/rechargeNew?companyId=" + companyId;
-        // });
     }
 
 
@@ -389,21 +355,6 @@
             }
         })
 
-        // layer.confirm('余额不足，只能充电两小时。请确认' + devicePort + '插座充电' + time
-        //     + '分钟；点击"充值" 支付完成后享受会员价格，点击"充电" 充电两小时！', {
-        //     closeBtn : 0,
-        //     btn : [ '充电', '充值' ]
-        // }, function() {
-        //     chargeType = "charge";// 功率充电
-        //     operType = "W";// 会员扣费
-        //     money = parseInt(device.tow_hours_price);
-        //     time = 120;
-        //     userIsConfirmed = true;
-        //     startCharge4WriteDate();
-        // }, function() {
-        //     userIsConfirmed = true;
-        //     location.href = "../recharge/rechargeNew?companyId=" + companyId;
-        // });
     }
     //开始充电，写数据，发消息
     function startCharge4WriteDate() {
