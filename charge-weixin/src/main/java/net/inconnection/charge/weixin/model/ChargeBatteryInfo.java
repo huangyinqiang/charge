@@ -64,9 +64,9 @@ public class ChargeBatteryInfo extends Model<ChargeBatteryInfo> {
 //    }
 
     public List<ChargeBatteryInfo> queryPowerOff(String openId) {
-        log.info("查询14小时内可以远程断电的端口,openId:" + openId);
+//        log.info("查询14小时内可以远程断电的端口,openId:" + openId);
         List<ChargeBatteryInfo> resp = dao.find("select * from charge_battery_info where openId=? ", new Object[]{openId});
-        log.info("查询14小时内可以远程断电的端口结果" + resp);
+//        log.info("查询14小时内可以远程断电的端口结果" + resp);
         return resp;
     }
     public List<Record> queryPowerOffByOpenId(String openId) {
@@ -81,9 +81,9 @@ public class ChargeBatteryInfo extends Model<ChargeBatteryInfo> {
     }
 
     public ChargeBatteryInfo queryLastBatteryInfo(String openId, Date operStartTime, String deviceId, String devicePort) {
-        log.info("查询远程断电端口是否被别人占用，根据，openid= " + openId + ",operStartTime=" + operStartTime + ",deviceId=" + deviceId + ",devicePort=" + devicePort);
+//        log.info("查询远程断电端口是否被别人占用，根据，openid= " + openId + ",operStartTime=" + operStartTime + ",deviceId=" + deviceId + ",devicePort=" + devicePort);
         ChargeBatteryInfo chargeBatteryInfo = (ChargeBatteryInfo)this.findFirst("SELECT id from charge_battery_info where operStartTime > ? and openId <> ? and deviceId = ? and devicePort = ? ", new Object[]{operStartTime, openId, deviceId, devicePort});
-        log.info("查询远程断电端口是否被别人占用结果：" + chargeBatteryInfo);
+//        log.info("查询远程断电端口是否被别人占用结果：" + chargeBatteryInfo);
         return chargeBatteryInfo;
     }
 

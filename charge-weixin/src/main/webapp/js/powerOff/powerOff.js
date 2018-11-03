@@ -87,7 +87,7 @@ function getChargingInfo() {
                 // layer.msg("未查询到可远程断电的设备...", {
                 // 	shift : 15
                 // });
-                setTimeout(getChargingInfo(), 10000);
+                // setTimeout(getChargingInfo(), 10000);
             }
         }
     });
