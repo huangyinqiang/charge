@@ -65,7 +65,8 @@ public class busi_MappingKit {
         arp.addMapping("yc_recharge_history", "id", RechargeHistory.class);
 		arp.addMapping("yc_project_activity", "id", ProjectActivity.class);
 		arp.addMapping("yc_charge_pile_hardware_version", "id", ChargePileHardwareVersion.class);
-
+        arp.addMapping("yc_electricity_meter", "id", ElectricityMeter.class);
+        arp.addMapping("yc_electricity_meter_history", "id", ElectricityMeterHistory.class);
 
     }
 }

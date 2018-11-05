@@ -1,0 +1,229 @@
+
+<#include "/common/head.html"/>
+    
+    <table id="dg"></table>
+    <div id="tb" style="padding:2px 5px;">
+        <div class="wrap_search">
+		            	<span class="search_item">
+			            	<span class="item_text">公司: </span>
+			            	<span class="item_obj">
+			            		<input class="easyui-combobox" name="company_id" id="companyId" value="" style="width:100px" />
+			            	</span>    
+			            </span>
+		        		
+			            	<span class="search_item">
+				            	<span class="item_text">项目: </span>
+				            	<span class="item_obj">
+				            		<input class="easyui-textbox" type="text" name="project_id" id="projectId" value=""/>
+				            	</span>    
+				            </span>
+		        		
+			            	<span class="search_item">
+				            	<span class="item_text">电表名称: </span>
+				            	<span class="item_obj">
+				            		<input class="easyui-textbox" type="text" name="name" id="name" value=""/>
+				            	</span>    
+				            </span>
+        </div>
+        <div class="dg_btns_wrap">
+            <a href="javascript:void(0)" class="easyui-linkbutton addBtn" iconCls="glyphicon-plus" plain="true" onclick="add()">增加</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton updateBtn" iconCls="glyphicon-pencil" plain="true" onclick="update()">编辑</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton delBtn" iconCls="glyphicon-remove" plain="true" onclick="del()">删除</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton exportBtn" iconCls="glyphicon-export" plain="true" onclick="exportCsv()">导出</a>
+            <div id="searchBtnWrap" style="float:right; padding-right:40px;">
+                <a href="javascript:void(0)" class="easyui-linkbutton color1" iconCls="glyphicon-search" onclick="zcurdSearch(this)">搜索</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton color2" iconCls="glyphicon-repeat" onclick="flushPage()">重置</a>
+            </div>
+        </div>
+    </div>
+    
+
+<script type="text/javascript">
+var datagrid = $("#dg");
+
+var dgOptions = {
+        rownumbers:true,
+    	fit:true,
+    	border:false,
+        rownumbers:true,
+    	url:'listData',
+    	method:'post',
+    	toolbar:'#tb',
+    	pageSize: 20,
+    	pagination:true,
+    	multiSort:true,
+        sortName: getInitParam().sort,
+        sortOrder: getInitParam().order,
+        queryParams: getInitParam(),
+        
+        columns: [[
+		         {field:'id', checkbox:true}
+	           	 ,{field:'company_id', title: '公司', width:120, sortable: true }
+                 ,{field:'companyName', title: '公司名称', width:120, sortable: true }
+	           	 ,{field:'project_id', title: '项目', width:120, sortable: true }
+                 ,{field:'projectName', title: '公司名称', width:120, sortable: true }
+                 ,{field:'name', title: '电表名称', width:120, sortable: true }
+	           	 ,{field:'type', title: '类型', width:120, sortable: true }
+	           	 ,{field:'price', title: '单价(分)', width:120, sortable: true }
+	           	 ,{field:'create_time', title: '创建时间', width:120, sortable: true }
+	           ]],
+	           loadFilter: function(data) {
+	        	   if(data.result && data.result == 'fail') {	//失败时，错误消息提示
+	        		   showWarnMsg(data.msg);
+	        		   return {};
+	        	   }else {
+	        		   return data;
+	        	   }
+	           }           
+	};
+$(function() {
+	handleAuthDataRule();
+	datagrid.datagrid(dgOptions);
+    $.ajax({
+        url : "../company/getCompanyListByLoginUser",
+        type : "POST",
+        async : true,// 设置同步方式，false为同步
+        success : function(data) {
+            $('#companyId').combobox({
+                data : data,
+                multiple:false, //支持多选
+                valueField : 'id',
+                textField : 'company_name'
+            });
+            // var id = data[0].id;
+            // $('#companyId').combobox('setValue',id);
+            // getProjectByCompanyId(id)
+        }
+    })
+});
+
+
+$('#companyId').combobox({
+    onChange: function (n,o) {
+        var companyId = $('#companyId').combobox('getValue');
+        getProjectByCompanyId(companyId)
+
+    }
+});
+
+function getProjectByCompanyId(val) {
+    $.ajax({
+        url : "../company/projectMicroPageListData",
+        type : "POST",
+        data:{company_id:val},
+        async : true,// 设置同步方式，false为同步
+        success : function(res) {
+            $('#projectId').combobox({
+                data : res.rows,
+                multiple:false, //支持多选
+                valueField : 'id',
+                textField : 'name'
+            });
+
+        }
+    })
+}
+
+function zcurdSearch() {
+	var param = zcurdGetParam();
+	datagrid.datagrid("load", {
+		queryParams: param
+	})
+}
+
+function zcurdGetParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param[$(item).attr("name")] = $(item).val();	
+		}
+	});
+	return param;
+}
+
+function getInitParam() {
+	var param = {};
+	$("#tb :input[name]").each(function(i, item) {
+		if($(item).val()) {
+			param["queryParams[" + $(item).attr("name") + "]"] = $(item).val();	
+		}
+	});
+	if("") {
+		param.sort = "";
+		param.order = "asc";
+	}
+	return param;
+}
+
+var initPara = zcurdGetParam();
+function add() {
+	top.window.subPage.loadCurrDatagrid = function() {
+		showMsg("增加成功！");
+		datagrid.datagrid("load");
+	}
+	top.openWindow("电表-增加", getCurrUrl("addPage") + "?" + $.param(initPara), {size: '600x400'});
+}
+
+function update() {
+	var rowsSel = datagrid.datagrid("getSelections");
+	if(rowsSel.length != 1) {
+		showWarnMsg("请选择需要编辑的一条数据！");
+		return;
+	}
+	var id = rowsSel[0].id;
+	top.window.subPage.loadCurrDatagrid = function() {
+		showMsg("更新成功！");
+		datagrid.datagrid("reload");
+	}
+	top.openWindow("电表-编辑", getCurrUrl("updatePage") + "?id=" + id, {size: '600x400'});
+}
+
+function del() {
+	var ids = [];
+	$.each(datagrid.datagrid("getSelections"), function(i, item) {
+		ids.push(item.id);
+	});
+	if(ids.length < 1) {
+		showWarnMsg("请选择需要删除的数据！");
+		return;
+	}
+	confirmMsg("确认删除？", function() {
+		$.post("delete", {id: ids}, function(data) {
+			showMsg("删除成功！");
+			datagrid.datagrid("reload");
+		});
+	});
+}
+
+
+function exportCsv() {
+	var option = datagrid.datagrid("options");
+	var param = option.queryParams;
+	param.sortName = option.sortName;
+	param.sortOrder = option.sortOrder;
+	window.location.href = "exportCsv?" + $.param(param);
+}
+
+//按钮事件
+
+/**
+ * 打开子页
+ */
+var _openSubPageFlag = false;
+function _openSubPage(pageUrl) {
+	if(!_openSubPageFlag) {
+		$("#subLayout").layout("expand", "east");
+		setTimeout(function() {
+			$("#subIframe").attr("src", pageUrl);
+		}, 600);
+		_openSubPageFlag = true;
+	}else {
+		$("#subIframe").attr("src", pageUrl);
+	}
+}
+
+//扩展js
+</script>
+
+<#include "/common/dialogWindow.html"/>
+<#include "/common/foot.html"/>
