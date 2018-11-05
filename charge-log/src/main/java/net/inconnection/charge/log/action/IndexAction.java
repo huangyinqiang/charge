@@ -9,7 +9,7 @@ import net.inconnection.charge.log.plugin.JmsReceiver;
 import javax.jms.JMSException;
 
 public class IndexAction extends Controller {
-    private static String flag = "no";
+    private static String flag = "yes";
 
     public IndexAction() {
     }
