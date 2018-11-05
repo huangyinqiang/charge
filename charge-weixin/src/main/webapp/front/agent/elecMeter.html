@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>电表信息</title>
+	<!--<link rel="stylesheet" href="../../css/personal.css" />-->
+    <link href="../css/agent/agentData.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../css/wechat.css">
+	<link href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css" rel="stylesheet">
+	<!--<script type="text/javascript" src="../js/common/jquery-2.1.1.min.js"></script>-->
+	<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../js/common/layer/mobile/need/layer.css">
+    <script src="../js/common/layer/mobile/layer.js"></script>
+    <script type="text/javascript" src="../js/agent/date.js" ></script>
+    <script type="text/javascript" src="../js/agent/iscroll.js" ></script>
+
+
+
+</head>
+<style type="text/css">
+    *{
+        margin:0;
+        padding: 0;
+    }
+    ul,li,ol{
+        margin:0;
+        padding: 0;
+        list-style: none;
+    }
+     .meterBox{
+        width: 96%;
+        height: auto;
+        background: #03a9f417;
+        margin: 15px auto;
+        padding: 10px 0;
+     }
+      .meterBox ul h3{
+        font-size: 18px;
+        width: 100%;
+        height: auto;
+        text-align: center;
+    }
+     .meterBox ul{
+        width: 100%;
+        height: auto;
+    }
+    .meterBox ul li{
+        width: 100%;
+        height: 30px;
+        font-size: 14px;
+        line-height: 30px;
+        text-indent: 10px;
+        position: relative;
+        margin-top: 10px;
+        box-sizing:border-box;
+    }
+     .meterBox ul li span{
+        position: absolute;
+        left: 0;
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        text-align: right;
+     }
+     .meterBox ul li .meterConter{
+        position: absolute;
+        left: 82px;top: 0;
+        width:calc(100% - 100px);
+        height: 30px;
+        border: 1px solid #bdbdbd;
+        box-sizing:border-box;
+     }
+
+
+
+    .check_meter{
+        width: 60px;
+        height: 30px;
+        border: none;
+        font-size: 14px;
+        background: #03A9F4;
+        text-align: center;
+        margin: 0 auto;
+        margin-top: 20px;
+        border-radius: 5px;
+        color: white;
+        line-height: 30px;
+        cursor:pointer;
+    }
+    .meter_pw{
+        float: left;
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        text-align: right;
+        font-size: 14px;
+        line-height: 30px;
+        text-indent: 10px;
+        cursor: pointer;
+    }
+    .meter_img{
+        float: right;
+        width:calc(100% - 83px); 
+        min-height:200px;
+        height:auto !important;
+        height:200px;
+         border: 1px solid #bdbdbd;
+        box-sizing:border-box;
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+    }
+
+    /*时间控件*/
+    .demo{width:100%;text-indent: 10px;margin:20px auto 0 auto;  position: relative;font-size: 14px;}
+    .demo .lie{margin:0 0 20px 0;}
+
+</style>
+   
+
+
+<body>
+   <div class="meterBox">
+        <ul>
+            <h3>电表抄表</h3>
+            <li>
+                <span>公司：</span>
+                <select class="meterConter" id="company" placeholder="请选择运营商" onchange="getProjectInfo()">
+                </select>
+            </li>
+            <li>
+                <span>项目：</span>
+                <select class="meterConter"  id="project"  onchange="getMeter()">
+                </select>
+            </li>
+            <li>
+                <span>电表：</span>
+                <select class="meterConter" id="elecMeter" onchange="queryMeterHistory()">
+                </select>
+            </li>
+            <li>
+                <span>上次度数：</span>
+                <div class="meterConter" type="number" id="lastNum">
+                </div>
+            </li>
+            <li>
+                <span>本次度数：</span>
+                <input class="meterConter" type="number" id="currNum"/>
+            </li>
+            <!--<li>-->
+                <!--&lt;!&ndash;<span>抄表时间：</span>&ndash;&gt;-->
+                <!--<div class="lie">开始日期:<input  id="beginTime" class="kbtn" /></div>-->
+                <!--<div id="datePlugin"></div>-->
+                <!--&lt;!&ndash;<input class="meterConter" type="number" id="currNum"/>&ndash;&gt;-->
+            <!--</li>-->
+
+            <div class="demo">
+                <div class="lie">抄表日期:<input id="currDate" class="meterConter" style="
+    position: absolute;
+    left: 82px;
+    top: 0;
+    width: calc(100% - 100px);
+    height: 30px;
+    border: 1px solid #bdbdbd;
+    box-sizing: border-box;"></div>
+            </div>
+            <div id="datePlugin"></div>
+
+            <!-- 拍照 -->
+            <!--<li style="height: auto; min-height:200px;height:auto !important;height:200px;">-->
+                <!--<div class="meter_pw">拍照：</div>-->
+                <!--<input  accept="image/*" type="file" onfocus="this.blur()" id="file"/>-->
+
+                    <!--<div class="meter_img"></div>-->
+            <!--</li>-->
+        </ul>
+    
+         <div class="check_meter" id="save">确定</div>
+    </div>
+</body>
+<script>
+    $(function () {
+
+        var dd = new Date();
+        var y = dd.getFullYear();
+        var m = dd.getMonth()+1;//获取当前月份的日期
+        var d = dd.getDate();
+        $('#currDate').date();
+        $('#currDate').val(y+"-"+m+"-"+d)
+        $.ajax({
+            type : "POST",
+            url : "../combobox/queryCompany",
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : false,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(data) {
+                if (data != null) {
+                    for(var i=0; i < data.length; i++){
+                        var company = data[i];
+                        var string="<option  value='" + company.id + "'>" + company.company_name + "</option>" ;//+
+                        $("#company").append(string);
+                    }
+
+                }
+            }
+        });
+
+        getProjectInfo();
+        getMeter()
+        queryMeterHistory()
+    })
+
+    function getProjectInfo(){
+            $("#project").empty();
+            var companyId= $("#company").val();
+            $.ajax({
+                url:"../combobox/queryProject",
+                dataType: "JSON",
+                data: {companyId: companyId},
+                type: "POST",
+                async : false,
+                success:function (data) {
+                    console.log(data)
+                    if (data != null) {
+                        for(var i=0; i < data.length; i++){
+                            var project = data[i];
+                            var string="<option  value='" + project.id + "'>" + project.name + "</option>" ;//+
+                            $("#project").append(string);
+                        }
+
+                    }
+                },
+                error:function(e) {
+                    layer.open({
+                        content: "系统异常，请稍候重试！"
+                        ,skin: 'msg'
+                        ,time: 3 //3秒后自动关闭
+                    });
+
+                }
+            });
+
+    }
+
+
+   function getMeter(){
+           $("#elecMeter").empty();
+           var projectId= $("#project").val();
+           $.ajax({
+               url:"../combobox/queryMeter",
+               dataType: "JSON",
+               data: {projectId: projectId},
+               type: "POST",
+               async : false,
+               success:function (data) {
+                   if (data != null) {
+                       for(var i=0; i < data.length; i++){
+                           var meter = data[i];
+                           var string="<option  value='" + meter.id + "'>" + meter.name + "</option>" ;//+
+                           $("#elecMeter").append(string);
+                       }
+
+                   }
+               },
+               error:function(e) {
+                   layer.open({
+                       content: "系统异常，请稍候重试！"
+                       ,skin: 'msg'
+                       ,time: 3 //3秒后自动关闭
+                   });
+               }
+           });
+    }
+
+    function queryMeterHistory(){
+        var meterId= $("#elecMeter").val();
+        $.ajax({
+            url:"../meter/queryMeterHistory",
+            dataType: "JSON",
+            data: {meterId: meterId},
+            type: "POST",
+            success:function (res) {
+                if (res.respCode == "000000" && res.respObj != null) {
+                    $("#lastNum").text(res.respObj.curr_num)
+                }else{
+                    $("#lastNum").text("0")
+                }
+            },
+            error:function(e) {
+                layer.open({
+                    content: "系统异常，请稍候重试！"
+                    ,skin: 'msg'
+                    ,time: 3 //3秒后自动关闭
+                });
+            }
+        });
+    }
+
+
+    var fileData;
+
+    $("#save").click(function () {
+        var materId = $("#elecMeter").val();
+        var lastNum = $("#lastNum").text();
+        var currNum = $("#currNum").val();
+        var currDate = $("#currDate").val();
+        if(lastNum == null || lastNum == ""){
+            layer.open({
+                content: "上次度数不应该为空"
+                ,skin: 'msg'
+                ,time: 3 //3秒后自动关闭
+            });
+            return;
+        }
+        if(currNum == null || currNum == ""){
+            layer.open({
+                content: "本次度数不应该为空"
+                ,skin: 'msg'
+                ,time: 3 //3秒后自动关闭
+            });
+            return;
+        }
+        if(currNum <= lastNum){
+            layer.open({
+                content: "本次度数不应该小于上次度数"
+                ,skin: 'msg'
+                ,time: 3 //3秒后自动关闭
+            });
+            return;
+        }
+
+        // var file = document.getElementById("file").files[0];
+        // var  size = file.size/(1024*1024);
+        // if(size > 10){
+        //     layer.open({
+        //         content: "文件太大"
+        //         ,skin: 'msg'
+        //         ,time: 3 //3秒后自动关闭
+        //     });
+        //     return;
+        // }
+        var reader = new FileReader();
+
+        // reader.readAsDataURL(file);
+        // reader.onload = function(e){
+        //     fileData = this.result;
+        //     var date = {
+        //         openId : localStorage.getItem("openId"),
+        //         materId : materId,
+        //         lastNum : lastNum,
+        //         currNum : currNum,
+        //         file : fileData
+        //     };
+        //
+        //     $.ajax({
+        //         url:"../meter/addMeterHistory",
+        //         dataType: "JSON",
+        //         data: date,
+        //         type: "POST",
+        //         success:function (res) {
+        //             if(res.respCode == "000000"){
+        //                 layer.open({
+        //                     content: "抄表成功"
+        //                     ,skin: 'msg'
+        //                     ,time: 3 //3秒后自动关闭
+        //                 });
+        //             }
+        //         },
+        //         error:function(e) {
+        //             layer.open({
+        //                 content: "系统异常，请稍候重试！"
+        //                 ,skin: 'msg'
+        //                 ,time: 3 //3秒后自动关闭
+        //             });
+        //         }
+        //     });
+        // }
+
+
+        var date = {
+            openId : localStorage.getItem("openId"),
+            materId : materId,
+            lastNum : lastNum,
+            currNum : currNum,
+            currDate:currDate
+        };
+
+        $.ajax({
+            url:"../meter/addMeterHistory",
+            dataType: "JSON",
+            data: date,
+            type: "POST",
+            success:function (res) {
+                if(res.respCode == "000000"){
+                    layer.open({
+                        content: "抄表成功"
+                        ,skin: 'msg'
+                        ,time: 3 //3秒后自动关闭
+                    });
+                }
+            },
+            error:function(e) {
+                layer.open({
+                    content: "系统异常，请稍候重试！"
+                    ,skin: 'msg'
+                    ,time: 3 //3秒后自动关闭
+                });
+            }
+        });
+
+
+
+
+
+    })
+
+</script>
+</html>

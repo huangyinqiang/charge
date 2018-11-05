@@ -412,3 +412,26 @@ body{
     top: -0.25rem;
     color:#4caf50;
 }
+
+
+@font-face {
+    font-family: 'iconfont';  /* project id 903754 */
+    src: url('//at.alicdn.com/t/font_903754_21j5mpgo2bk.eot');
+    src: url('//at.alicdn.com/t/font_903754_21j5mpgo2bk.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_903754_21j5mpgo2bk.woff') format('woff'),
+    url('//at.alicdn.com/t/font_903754_21j5mpgo2bk.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_903754_21j5mpgo2bk.svg#iconfont') format('svg');
+}
+
+.icon-dianbiao:before { content: "\e612"; }
+
+.icon-dianbiao{
+    position: absolute;
+    font-size: 0.8rem;
+    text-align: center;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: -0.25rem;
+    color:#4caf50;
+}

@@ -90,6 +90,8 @@
                         if (data.respObj.role != 1){
                             //安装人员
                             $('#newDeviceInstall').hide();
+                            $('#meterHis').hide();
+
                         }
 
 
@@ -155,6 +157,12 @@
             location.href = "./agent/showAgentData"
         }
 
+        function elecMeter() {
+            location.href = "./meter/showElecMeter"
+        }
+
+
+
 
 	</script>
 </head>
@@ -217,6 +225,10 @@
 				<i class="iconfont icon-editor2b"></i>
 				<p>设备安装</p>
 			</li>
+            <li id="meterHis" onclick="elecMeter()">
+                <i class="iconfont icon-dianbiao"></i>
+                <p>抄表</p>
+            </li>
 			<li onclick="aboutUs();">
 				<i class="iconfont icon-moban"></i>
 				<p>关于我们</p>
@@ -249,7 +261,7 @@
                 <i class="iconfont icon-c-kongzhuangtai"></i>
                 <p>经营数据</p>
             </li>
-            <!--<li onclick="">-->
+            <!--<li onclick="elecMeter()">-->
                 <!--<i class="iconfont icon-navicon-srtj"></i>-->
                 <!--<p>收入提取</p>-->
             <!--</li>-->
