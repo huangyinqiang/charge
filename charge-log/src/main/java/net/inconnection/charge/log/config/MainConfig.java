@@ -1,6 +1,11 @@
 package net.inconnection.charge.log.config;
 
-import com.jfinal.config.*;
+import com.jfinal.config.Constants;
+import com.jfinal.config.Handlers;
+import com.jfinal.config.Interceptors;
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.config.Plugins;
+import com.jfinal.config.Routes;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
@@ -12,11 +17,19 @@ import net.inconnection.charge.log.bean.CardLog;
 import net.inconnection.charge.log.bean.Customer;
 import net.inconnection.charge.log.bean.DeviceLog;
 import net.inconnection.charge.log.bean.QrDevice;
+import net.inconnection.charge.log.plugin.ActiveMQ;
 import net.inconnection.charge.log.plugin.ActiveMQPlugin;
+import net.inconnection.charge.log.plugin.Destination;
+import net.inconnection.charge.log.plugin.JmsReceiver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.jms.JMSException;
 import java.io.File;
 
 public class MainConfig extends JFinalConfig {
+    private static final Logger logger = LoggerFactory.getLogger(MainConfig.class);
+
     public MainConfig() {
     }
 
@@ -53,6 +66,19 @@ public class MainConfig extends JFinalConfig {
 
     public void configHandler(Handlers me) {
     }
+
+    @Override
+    public void afterJFinalStart() {
+        logger.info("charge-log 开始启动");
+        try {
+            ActiveMQ.addReceiver(new JmsReceiver("testReceiver1", ActiveMQ.getConnection(), Destination.Queue, PropKit.get("mqsubject")));
+        } catch (JMSException e) {
+            e.printStackTrace();
+        }
+        logger.info("charge-log 启动完成");
+
+    }
+
 
     public static void main(String[] args) {
         C3p0Plugin c3p0Plugin = new C3p0Plugin("jdbc:mysql://gjd.henankejue.com:3306/zcurd_busi?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull", "root", "x5");

@@ -82,6 +82,8 @@ public class ZcurdConfig extends JFinalConfig {
         me.add("/order", OrdersController.class, "/busi/order");
         me.add("/activity", ActivityController.class, "/busi/activity");
         me.add("/control", DeviceControlController.class, "/busi/control");
+        me.add("/meter", ElectricityMeterController.class, "/busi/meter");
+        me.add("/meterHis", ElectricityMeterHistoryController.class, "/busi/meter");
 
 
     }

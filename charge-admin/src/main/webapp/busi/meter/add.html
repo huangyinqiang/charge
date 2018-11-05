@@ -1,0 +1,126 @@
+
+<#include "/common/head.html"/>
+
+
+ <div class="easyui-panel addPage" data-options="fit:true,border:false,novalidate:true">
+    <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
+        <table class="table1">
+            <tr>
+           		<th><span id="company_id_label">公司：</span></th>
+               	<td>
+	            	<div class="wrap_input">
+                        <input class="easyui-combobox" id="companyId" name="company_id" value=""
+                               style="width: 50%" editable = "false" required>
+                    </div>
+           		</td>
+            <tr>
+           		<th><span id="project_id_label">项目：</span></th>
+               	<td>
+	            	<div class="wrap_input">
+                        <input class="easyui-combobox" id="projectId" name="project_id" value=""
+                               style="width: 50%" editable = "false" required />
+                    </div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span id="name_label">电表名称：</span></th>
+               	<td>
+               		<div class="wrap_input">
+                        <input class="easyui-textbox" type="text" name="name" id="name"
+                               value="" style="width: 50%" required>
+                    </div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span id="type_label">类型</span></th>
+               	<td>
+	            	<div class="wrap_input">
+                        <select class="easyui-combobox" id="type" name="type" value="" style="width: 50%"  data-options="panelHeight:'auto'">
+                            <option value="1">预付</option>
+                            <option value="2">后付</option>
+                        </select>
+
+                    </div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span id="price_label">单价(分)：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="price" id="price" value="" style="width: 50%" required /></div>
+           		</td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+
+top.window.subPage.save = save;
+$(function () {
+    $.ajax({
+        url : "../company/getCompanyListByLoginUser",
+        type : "POST",
+        async : true,// 设置同步方式，false为同步
+        success : function(data) {
+            $('#companyId').combobox({
+                data : data,
+                multiple:false, //支持多选
+                valueField : 'id',
+                textField : 'company_name'
+            });
+        }
+    })
+})
+$('#companyId').combobox({
+    onChange: function (n,o) {
+        var companyId = $('#companyId').combobox('getValue');
+        getProjectByCompanyId(companyId)
+
+    }
+});
+
+function getProjectByCompanyId(val) {
+    $.ajax({
+        url : "../company/projectMicroPageListData",
+        type : "POST",
+        data:{company_id:val},
+        async : true,// 设置同步方式，false为同步
+        success : function(res) {
+            $('#projectId').combobox({
+                data : res.rows,
+                multiple:false, //支持多选
+                valueField : 'id',
+                textField : 'name'
+            });
+
+        }
+    })
+}
+function save() {
+	if($("#ff").form('enableValidation').form('validate')) {
+		$.post("add", getParam(), function(data) {
+			if(data.result == "success") {
+				top.window.closeWindow();
+				top.window.subPage.loadCurrDatagrid();
+			}
+		});
+	}
+}
+function getParam() {
+	var param = {
+       		"model.company_id": getInputValue("company_id"), 
+       		"model.project_id": getInputValue("project_id"), 
+       		"model.name": getInputValue("name"), 
+       		"model.type": getInputValue("type"), 
+       		"model.price": getInputValue("price")
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

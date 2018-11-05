@@ -80,6 +80,8 @@ public class APPConfig extends JFinalConfig {
         me.add("/install", NewDeviceInstallController.class, "/front");
 
         me.add("/agent", AgentController.class, "/front");
+        me.add("/combobox", ComboboxController.class, "/front");
+        me.add("/meter", MeterController.class, "/front");
     }
 
     public void configPlugin(Plugins me) {
@@ -106,6 +108,8 @@ public class APPConfig extends JFinalConfig {
         arp.addMapping("yc_project", NewDeviceProject.class);
         arp.addMapping("yc_device_project", DeviceProject.class);
         arp.addMapping("yc_project_activity", ProjectActivity.class);
+        arp.addMapping("yc_electricity_meter", ElectricityMeter.class);
+        arp.addMapping("yc_electricity_meter_history", ElectricityMeterHistory.class);
 
         arp.setShowSql(true);
         me.add(arp);

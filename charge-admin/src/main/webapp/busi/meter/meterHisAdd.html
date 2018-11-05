@@ -1,0 +1,93 @@
+
+<#include "/common/head.html"/>
+
+
+ <div class="easyui-panel addPage" data-options="fit:true,border:false,novalidate:true">
+    <form class="easyui-form" id="ff" method="post" data-options="novalidate:true">
+        <table class="table1">
+            <tr>
+           		<th><span id="meter_id_label">电表ID：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="meter_id" id="meter_id" value="" data-options="fit: true"></input></div>
+           		</td>
+            <tr>
+           		<th><span id="last_num_label">上次电表度数：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="last_num" id="last_num" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span id="curr_num_label">本次电表度数：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="curr_num" id="curr_num" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span id="openId_label">抄表人：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="openId" id="openId" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span id="count_label">使用度数：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="count" id="count" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span id="total_label">金额：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="total" id="total" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span id="create_date_label">创建时间：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-datebox" type="text" name="create_date" id="create_date" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+            <tr>
+           		<th><span id="curr_date_label">抄表时间：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-datebox" type="text" name="curr_date" id="curr_date" value="" data-options="fit: true"></input></div>
+           		</td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+
+top.window.subPage.save = save;
+function save() {
+	if($("#ff").form('enableValidation').form('validate')) {
+		$.post("add", getParam(), function(data) {
+			if(data.result == "success") {
+				top.window.closeWindow();
+				top.window.subPage.loadCurrDatagrid();
+			}
+		});
+	}
+}
+function getParam() {
+	var param = {
+	     
+       		"model.meter_id": getInputValue("meter_id"), 
+       		"model.last_num": getInputValue("last_num"), 
+       		"model.curr_num": getInputValue("curr_num"), 
+       		"model.openId": getInputValue("openId"), 
+       		"model.count": getInputValue("count"), 
+       		"model.total": getInputValue("total"), 
+       		"model.create_date": getInputValue("create_date"), 
+       		"model.curr_date": getInputValue("curr_date"), 
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>
