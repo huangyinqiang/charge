@@ -23,6 +23,7 @@ import net.inconnection.charge.extend.chargeDevice.jms.*;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgReceiver;
 import net.inconnection.charge.extend.controller.*;
 import net.inconnection.charge.extend.model.busi_MappingKit;
+import net.inconnection.charge.extend.task.SchedulerPlugin;
 import net.inconnection.charge.service.DeviceControlService;
 import net.inconnection.charge.service.dubboPlugin.DubboServerPlugin;
 
@@ -140,6 +141,10 @@ public class ZcurdConfig extends JFinalConfig {
 		DubboServerPlugin dubbo = new DubboServerPlugin("charge-admin-service",  20882);
 		dubbo.addService(DeviceControlService.class,new DeviceControlServiceImpl());
 		me.add(dubbo);
+
+
+		SchedulerPlugin sp = new SchedulerPlugin("job.properties");
+		me.add(sp);
 
 	}
 	
