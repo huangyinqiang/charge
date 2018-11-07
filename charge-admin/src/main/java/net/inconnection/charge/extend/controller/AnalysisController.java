@@ -286,6 +286,8 @@ public class AnalysisController extends BaseController{
         clomuns.add("chargeTime");
         headers.add("充电时长(分)");
         clomuns.add("realChargeTime");
+        headers.add("开始时间");
+        clomuns.add("operStartTime");
 
 
         CsvRender csvRender = new CsvRender(headers, result);
@@ -369,6 +371,8 @@ public class AnalysisController extends BaseController{
         clomuns.add("chargeTime");
         headers.add("充电时长(分)");
         clomuns.add("realChargeTime");
+        headers.add("开始时间(分)");
+        clomuns.add("operStartTime");
 
 
         CsvRender csvRender = new CsvRender(headers, result);
@@ -407,6 +411,7 @@ public class AnalysisController extends BaseController{
             r.set("amount", a[3]);
             r.set("chargeTime", a[4]);
             r.set("realChargeTime", a[5]);
+            r.set("operStartTime", a[6]);
             result.add(r);
         }
         return  result;

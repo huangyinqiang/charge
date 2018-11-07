@@ -174,15 +174,14 @@ public class AnalysisService {
                 "	ifnull( qmd.remark, ycp.NAME ) AS `deviceName`," +
                 "	cbi.charge  / 100 AS `amount`, " +
                 "   cbi.chargeTime ,"+
-                "   cbi.realChargeTime "+
+                "   cbi.realChargeTime ,"+
+                "   cbi.operStartTime "+
                 "FROM" +
                 "	charge_battery_info cbi" +
                 "	LEFT JOIN qr_match_device qmd ON cbi.deviceId = qmd.match_num" +
                 "	LEFT JOIN yc_charge_pile ycp ON ycp.id = cbi.deviceId " +
                 "where  feeStatus='S' ");
-        if("M".equals(operType)){
-            sql.append(" and operType = 'M'");
-        }
+        sql.append(" and operType = '").append(operType).append("'");
         if(deviceId != null && StringUtil.isNotEmpty(deviceId)){
             sql.append(" and cbi.deviceId =").append(deviceId);
         }
