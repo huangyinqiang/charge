@@ -16,6 +16,7 @@ import net.inconnection.charge.weixin.plugin.JmsSender;
 import net.inconnection.charge.weixin.service.ChargeInfoBatteryService;
 import net.inconnection.charge.weixin.service.NewDeviceChargePriceService;
 import net.inconnection.charge.weixin.service.NewDeviceService;
+import net.inconnection.charge.weixin.service.PileCardService;
 import org.apache.commons.lang.StringUtils;
 
 import javax.jms.JMSException;
@@ -33,6 +34,7 @@ public class NewDeviceController extends Controller {
     private static final NewDeviceChargePriceService newDeviceChargePriceService = new NewDeviceChargePriceService();
 
     private static ChargeInfoBatteryService chargeBatteryService = new ChargeInfoBatteryService();
+    private static final PileCardService pileCardService = new PileCardService();
 
     private static final Log log = Log.getLog(NewDeviceController.class);
 
@@ -491,15 +493,16 @@ public class NewDeviceController extends Controller {
         String companyId = this.getPara("companyId");
         String projectIdStr = this.getPara("projectId");
         String installed = this.getPara("installed");
+        String iccid = this.getPara("iccid");
 
 
-        Long chargePileId = Long.parseLong(deviceId);
-        Double latitudeDouble = Double.parseDouble(latitude);
-        Double longitudeDouble = Double.parseDouble(longitude);
-        Long powerMaxLong = Long.parseLong(powerMax);
-        Integer socketSumInt = Integer.parseInt(socketSum);
-        Long companyIdLong = Long.parseLong(companyId);
-        Long projectId = Long.parseLong(projectIdStr);
+         Long chargePileId = Long.parseLong(deviceId);
+         Double latitudeDouble = Double.parseDouble(latitude);
+         Double longitudeDouble = Double.parseDouble(longitude);
+         Long powerMaxLong = Long.parseLong(powerMax);
+         Integer socketSumInt = Integer.parseInt(socketSum);
+         Long companyIdLong = Long.parseLong(companyId);
+         Long projectId = Long.parseLong(projectIdStr);
 
         log.info("开始入网 deviceId=" + deviceId );
 
@@ -516,10 +519,12 @@ public class NewDeviceController extends Controller {
         if (permissionOnlineSuccess != null && permissionOnlineSuccess){
             log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功");
 
-            Boolean updateResult = newDeviceService.updateInstallInfo(chargePileId, chargePileName, province, city, location, latitudeDouble,
-                    longitudeDouble, powerMaxLong, socketSumInt , companyIdLong, projectId);
+            boolean flag = saveDeviceAndCard(chargePileId, chargePileName, province, city, location,
+                    latitudeDouble, longitudeDouble, powerMaxLong, socketSumInt, companyIdLong,
+                    projectId, iccid);
 
-            if (updateResult != null && updateResult.equals(true)) {
+
+            if (flag) {
 
                 log.info("新设备入网结果 deviceId=" + deviceId + ", 入网成功，信息更新成功");
 
@@ -535,6 +540,21 @@ public class NewDeviceController extends Controller {
             HnKejueResponse json = new HnKejueResponse(RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
             this.renderJson(json);
         }
+
+    }
+
+    private boolean saveDeviceAndCard(Long deviceId, String chargePileName, String province, String city, String location,
+                                   Double latitude, Double longitude, Long powerMax, Integer socketSum , Long companyId,
+                                   Long projectId,String iccid) {
+        Boolean update = newDeviceService.updateInstallInfo(deviceId, chargePileName, province,
+                city, location, latitude,
+                longitude, powerMax, socketSum, companyId, projectId);
+        //保存物联卡信息
+        Boolean save = pileCardService.save(iccid, String.valueOf(deviceId));
+        if(update && save){
+            return true;
+        }
+        return false;
 
     }
 

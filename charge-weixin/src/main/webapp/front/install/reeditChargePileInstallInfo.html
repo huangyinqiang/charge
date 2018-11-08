@@ -154,6 +154,7 @@
         var socketSum = $('#socketSum').val();
         var companyId = $('#company').val();
         var projectId = $('#project').val();
+        var iccid = $('#iccid').val();
 
 
         if (chargePileName == "" || chargePileName == null) {
@@ -211,6 +212,12 @@
             });
             return;
         }
+        if (iccid == "" || iccid == null) {
+            layer.msg("请输入物联卡号", {
+                shift : 5
+            });
+            return;
+        }
 
 
 		$.ajax({
@@ -228,7 +235,8 @@
                 powerMax : powerMax,
                 socketSum : socketSum,
                 companyId : companyId,
-                projectId : projectId
+                projectId : projectId,
+                iccid : iccid
     		},
 			cache : false,
 			async : false,//
@@ -331,6 +339,10 @@
 						</select>
 					</td>
 				</tr>
+                <tr>
+                    <td style="width: 120px;">ICCID</td>
+                    <td><input align="right" type="text" placeholder="物联卡背后20位" id="iccid" /></td>
+                </tr>
 
 			</table>
 			<a id="submit" href="#" onclick="submit()" class="recharge">提交</a>

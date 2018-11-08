@@ -1,0 +1,77 @@
+
+<#include "/common/head.html"/>
+ <div class="addBatchPage" data-options="fit:true,border:false,novalidate:true"
+ style="margin: 0 auto;
+    width: 500px;
+    margin-top: 20px;">
+     <fieldset>
+         <legend>文件导入</legend>
+         <input type="file" name="file" id="avatar" accept="application/octet-stream"/>
+         <button id="submit">上传</button>
+         <div style="padding: 0px 10px 5px 10px;margin-top: 10px;border: 1px solid #bebebe;">
+             <p style="color: red;font-weight: 600;font-size: 16px;" >模板：
+             <a style="color: black;font-size: 12px;font-weight: 100;" href='exportTemplate'>查看模板</a>
+             </p>
+             <p>iccid deviceId  total</p>
+         </div>
+     </fieldset>
+
+</div>
+<script type="text/javascript" src="${basePath}/res/layer/layer.js"></script>
+<script>
+    top.window.subPage.save = save;
+    function save(successFunc) {
+        top.window.closeWindow();
+        top.window.subPage.loadCurrDatagrid();
+    }
+    $("#submit").click(function(){
+        var fileVal = $("#avatar").val();
+        if(fileVal === "" | fileVal === null){
+            alert("请选择升级文件!");
+            return;
+        }
+        var formData = new FormData();               //新建FormData对象
+        var fileList = $("#avatar").prop("files");   //取file控件中的文件,files属性取到的是一个fileList
+        formData.append('file', fileList[0]);        //将fileList中的文件逐个放入formData中，注意，直接放入fileList后台是取不到的
+        var fileName=$("#avatar").val();
+
+        $.ajax({
+            url: "addBatch?fileName="+fileName,    //C# Razor写法,也可写成/home/receive,但是安全性欠佳
+            data: formData,
+            type: 'POST',
+            contentType: false,                      //这里着重强调contentType和processData都要设置为false,否则文件发送不过去
+            processData: false,                      //这样做是为了防止浏览器自动转换发送出的数据格式为字符串或其他
+            beforeSend: function(){
+                // 禁用按钮防止重复提交
+                $("#submit").attr({ disabled: "disabled" });
+                layer.msg('上传中', {
+                    icon: 16
+                    ,shade: 0.01,
+                    time:0
+                });
+            },
+            success: function (data) {
+                if (data.result === "success") {
+                    layer.closeAll();
+                    layer.msg('成功：',{
+                            icon: 1,
+                            time:3000
+                        });
+                }else {
+                    layer.msg('失败：'+data.msg ,{
+                        icon: 2,
+                        time:3000
+                    });
+
+                }
+            },
+            complete: function () {
+                $("#submit").removeAttr("disabled");
+            },
+            error:function(){
+                layer.msg('失败', {icon: 2});
+            }
+        })
+    });
+</script>
+<#include "/common/foot.html"/>

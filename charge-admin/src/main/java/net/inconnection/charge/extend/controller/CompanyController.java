@@ -369,7 +369,7 @@ public class CompanyController extends BaseController{
                             .save();
                     new ProjectActivity().setProjectId(id).setName(name+"活动").setType("CH").setMoney(5000)
                             .setChargeNum(2000).setRemark("无赠费").setStatus("Y").setStartTime(new Date())
-                            .setExpiryTime(new Date()).setActNum(2005).setCoupon(0)
+                            .setExpiryTime(new Date()).setActNum(2003).setCoupon(0)
                             .save();
                     new ProjectActivity().setProjectId(id).setName(name+"活动").setType("CH").setMoney(10000)
                             .setChargeNum(2000).setRemark("无赠费").setStatus("Y").setStartTime(new Date())

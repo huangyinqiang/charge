@@ -265,4 +265,15 @@ CREATE TABLE yc_electricity_meter_history  (
   PRIMARY KEY (id) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
-
+CREATE TABLE `zcurd_busi`.`Untitled`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `deviceId` bigint(20) COMMENT '设备Id',
+  `msisdn` bigint(13) COMMENT '物联卡号',
+  `iccid` varchar(20),
+  `state` varchar(255) COMMENT '状态 1正常 0 停机 ',
+  `user` double(11, 2) COMMENT '已使用流量',
+  `total` double(11, 2) COMMENT '总流量',
+  `create_date` timestamp(0),
+  `update_date` timestamp(0),
+  PRIMARY KEY (`id`)
+);

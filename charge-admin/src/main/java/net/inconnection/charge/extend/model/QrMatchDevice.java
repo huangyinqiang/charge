@@ -26,4 +26,8 @@ public class QrMatchDevice extends BaseQrMatchDevice<QrMatchDevice> {
 	public List<QrMatchDevice> findInGid(String gid) {
 		return this.find("select * from qr_match_device where gid in (" + gid + ") order by createtime asc");
 	}
+
+    public QrMatchDevice findByQrNum(Long qrNum) {
+        return this.findFirst("select * from qr_match_device where qr_num = ? " ,qrNum);
+    }
 }

@@ -67,6 +67,8 @@ public class NewDeviceService {
         try {
             Boolean updateResult = NewDevice.dao.updateInstallInfo(deviceId, chargePileName, province, city, location, latitude,
                     longitude, powerMax, socketSum , companyId, projectId);
+
+
             return updateResult;
         } catch (Exception var3) {
             return null;

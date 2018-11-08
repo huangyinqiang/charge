@@ -110,6 +110,7 @@ public class APPConfig extends JFinalConfig {
         arp.addMapping("yc_project_activity", ProjectActivity.class);
         arp.addMapping("yc_electricity_meter", ElectricityMeter.class);
         arp.addMapping("yc_electricity_meter_history", ElectricityMeterHistory.class);
+        arp.addMapping("yc_pile_card", PileCard.class);
 
         arp.setShowSql(true);
         me.add(arp);
