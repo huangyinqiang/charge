@@ -81,6 +81,15 @@ function getChargingInfo() {
 
                 remainingTime(timeAddMin(data.respObj[0].operStartTime,chargeTime));
                 userTime(data.respObj[0].operStartTime)
+                var  flag = GetQueryString("flag");
+                if(flag == "1"){
+                    var btns = $('.btnFlag');
+                    btns.each(function() {
+                        $(this).hide();
+
+                    });
+
+                }
 
 
             } else {
@@ -237,4 +246,13 @@ function checkTime(i) { //将0-9的数字前面加上0，例1变为01
     }
 
     return i;
+}
+
+// 获取URL中的参数值
+function GetQueryString(url) {
+    var reg = new RegExp("(^|&)" + url + "=([^&]*)(&|$)");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null)
+        return unescape(r[2]);
+    return null;
 }
