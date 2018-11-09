@@ -16,4 +16,8 @@ public class ChargeHistory extends BaseChargeHistory<ChargeHistory> {
         return this.find("select * from yc_charge_history where company_id = ? " +
                 "and createDate > ? and createDate < ?",companyId,startDate,endDate);
     }
+    public List<ChargeHistory> queryChargeHistory(int chargeStatus,Date startDate, Date endDate) {
+        return this.find("select * from yc_charge_history where chargeStatus = ? " +
+                "and createDate > ? and createDate < ?",chargeStatus,startDate,endDate);
+    }
 }

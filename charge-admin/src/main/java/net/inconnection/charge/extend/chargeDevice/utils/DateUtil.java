@@ -172,6 +172,12 @@ public class DateUtil {
 
 		List list = getDatesBetweenTwoDate(startDate,endDate);
 		System.out.println("得到的时间:"+list);
+//        int hour = (int)Math.ceil(700 / 60);
+        System.out.println((int)Math.ceil(700 / 60.0));
+        System.out.println(new Double(800 / 60.0 * 40).intValue());
+//        int totalMoney = new Double(Double.parseDouble("800") / 60.0 * price).intValue();
+
+        System.out.println(new Double(2.6).intValue());
 
 	}
 
@@ -683,5 +689,54 @@ public class DateUtil {
 		return firstDayTime;
 	}
 
+
+    /**
+     * 返回当前时间之前hour小时的时间
+     * @param hour
+     * @return
+     */
+    public static String getBeforeByHourTime(int hour){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) - hour);
+        SimpleDateFormat df = new SimpleDateFormat(PATTERN_STANDARD19H);
+        return df.format(calendar.getTime());
+    }
+
+    /**
+     * 返回指定格式的时间
+     * @param str 时间字符串
+     * @param pattern 返回的时间格式，默认 yyyy-MM-dd HH:mm:ss
+     * @return 返回的时间
+     */
+    public static Date dateStringToDate(String str,String pattern) {
+        SimpleDateFormat format = null;
+        Date date = new Date();
+        try {
+            if(pattern != null){
+                format = new SimpleDateFormat(pattern);
+            }else{
+                format = new SimpleDateFormat(PATTERN_STANDARD19H);
+            }
+            date = format.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+
+    /**
+     *  返回minute分钟后的时间
+     * @param date 时间
+     * @param minute 分钟
+     * @return
+     */
+    public static Date getAfterDateByMinute(Date date,int minute) {
+        Calendar calendar=Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.MINUTE, minute);
+        SimpleDateFormat df = new SimpleDateFormat(PATTERN_STANDARD19H);
+        return dateStringToDate(df.format(calendar.getTime()), null);
+    }
 
 }

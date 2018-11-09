@@ -121,6 +121,10 @@ public class ChargePileDevice implements GateWay {
         this.chargeSocketMap = chargeSocketMap;
     }
 
+    public Map<Long, ChargeSocketComponent> getChargeSocketMap() {
+        return chargeSocketMap;
+    }
+
     @Override
     public void setID(Long id) {
         chargePileId = id;
