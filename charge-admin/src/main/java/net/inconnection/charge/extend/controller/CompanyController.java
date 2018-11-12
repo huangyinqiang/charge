@@ -28,7 +28,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CompanyController extends BaseController{
     private static Logger log = LoggerFactory.getLogger(CompanyController.class);
@@ -484,6 +486,36 @@ public class CompanyController extends BaseController{
         this.renderDatagrid(list, size);
     }
 
+    public void rechargeSum() {
+        ;
+        StringBuffer sql = new StringBuffer("select * from yc_recharge_history ");
+        sql.append(" where company_id =").append(this.getPara("companyId"));
+
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString());
+        Integer money_total=0;
+        Integer real_total = 0;
+        Integer gift_total = 0;
+        for (Record record:list){
+            Integer money_sum = record.get("money_sum");
+            if (money_sum!=null){
+                money_total+=money_sum;
+            }
+            Integer real_money = record.get("real_money");
+            if (real_money != null){
+                real_total += real_money;
+            }
+            Integer coupon = record.get("coupon");
+            if (coupon != null){
+                gift_total += coupon;
+            }
+        }
+        Map map =new HashMap<String,Double>();
+        map.put("moneyTotal", money_total/100.00);
+        map.put("realTotal", real_total/100.00);
+        map.put("giftTotal", gift_total/100.00);
+        renderJson(map);
+    }
+
     //充电记录页面
     public void chargeElectricityHistoryListPage() {
         StringBuffer sql = new StringBuffer("select * from yc_charge_history");
@@ -568,6 +600,29 @@ public class CompanyController extends BaseController{
         }
         this.renderDatagrid(list, size);
     }
+    public void chargeSum() {
+        StringBuffer sql = new StringBuffer("select * from yc_charge_history");
+        sql.append(" where company_id =").append(this.getPara("companyId"));
+        List<Record> list = Db.use(ZcurdTool.getDbSource("zcurd_busi")).find(sql.toString());
+        Integer money_total=0;//总金额和
+        Integer gift_total=0;//总赠送金额和
+        for (Record record:list){
+            Integer money_sum = record.get("chargeMoney");
+            Integer gift_sum = record.get("giftMoney");
+            if (money_sum!=null){
+                money_total+=money_sum;
+            }
+            if (gift_sum!=null){
+                gift_total+=gift_sum;
+            }
+        }
+
+        Map map =new HashMap<String,Double>();
+        map.put("moneyTotal", money_total/100.00);
+        map.put("giftTotal", gift_total/100.00);
+        renderJson(map);
+    }
+
 
     public void costListPage() {
         this.render("cost.html");

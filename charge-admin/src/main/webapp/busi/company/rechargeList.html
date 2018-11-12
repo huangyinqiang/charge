@@ -27,6 +27,12 @@
                     <input class="easyui-textbox" type="text" name="nickName" id="nickName" value=""/>
                 </span>
             </span>
+            <span class="search_item search_between">
+                <span class="item_text">充值时间: </span>
+                <span class="item_obj">
+                    <input class="easyui-datetimebox" style="width:150px;" name="_start_recharge_time" id="_start_recharge_time" value=""/> ：<input class="easyui-datetimebox" style="width:150px;" name="_end_recharge_time" id="_end_recharge_time" value=""/>
+                </span>
+            </span>
         <!--<span class="search_item">-->
                 <!--<span class="item_text">充电站编码: </span>-->
                 <!--<span class="item_obj">-->
@@ -170,6 +176,24 @@ $(function() {
         }
     })
 
+});
+
+$('#companyId').combobox({
+    onChange: function (n,o) {
+        var companyId = $('#companyId').combobox('getValue');
+        console.log(companyId)
+        $.ajax({
+            url : "../company/rechargeSum",
+            type : "POST",
+            data:{companyId:companyId},
+            async : true,// 设置同步方式，false为同步
+            success : function(data) {
+                $("#money_total").text(data.moneyTotal+" 元");
+                $("#real_total").text(data.realTotal+" 元");
+                $("#gift_total").text(data.giftTotal+" 元");
+            }
+        })
+    }
 });
 
 function zcurdSearch() {
