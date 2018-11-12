@@ -51,7 +51,7 @@ public class ChargeOrderTask implements Runnable {
             Double realRate = chargeHistory.getRealRate();
             int min = DateUtil.diffSecondDate(new Date(),operStartTime)/60;
             Date endDate = DateUtil.getAfterDateByMinute(operStartTime, min);
-            log.info("充电时间与当前时间比较："+min);
+            log.info("充电时间与当前时间比较："+(min-chargeTime));
             String message = "充电完成";
 
             if("temp".equals(chargeType) || "charge".equals(chargeType)){
@@ -92,6 +92,7 @@ public class ChargeOrderTask implements Runnable {
                         chargeHistory.setChargeMoney(totalMoney);
                         chargeHistory.setRealMoney(realMoney);
                         chargeHistory.setGiftMoney(giftMoney);
+                        chargeHistory.setFeeStatus("S");
                         log.info("更新后充电记录："+chargeHistory);
                         chargeHistory.update();
                         message = "监测电池充满断电";
@@ -111,6 +112,7 @@ public class ChargeOrderTask implements Runnable {
                             chargeHistory.setChargeMoney(totalMoney);
                             chargeHistory.setRealMoney(realMoney);
                             chargeHistory.setGiftMoney(giftMoney);
+                            chargeHistory.setFeeStatus("S");
                             log.info("更新后充电记录："+chargeHistory);
                             chargeHistory.update();
                             message = "预设时间充电完成";
