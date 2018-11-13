@@ -243,29 +243,44 @@
     }
 
     // 充值钱包或者单次支付
+    // function chargeOrPay() {
+    //
+    //     layer.open({
+    //         content: '请确认' + devicePort + '插座，充电' + time
+    //         + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！'
+    //         ,btn: [ '临时支付', '充值' ] //[yes no]
+    //         ,yes: function (index) {
+    //             var pow = power.split("-")[1];
+    //             if(pow*1 > 500){
+    //                 layer.open({
+    //                     content: "临时充电功率超限，请选择会员充电！"
+    //                     ,skin: 'msg'
+    //                     ,time: 3 //3秒后自动关闭
+    //                 });
+    //
+    //                 location.href = "../recharge/rechargeNew?companyId=" + companyId;
+    //                 return;
+    //             }
+    //             // 单次支付
+    //             temporaryRechargeMoney(money);
+    //             layer.close(index)
+    //         }
+    //         ,no: function (index) {
+    //             layer.close(index)
+    //             userIsConfirmed = true;
+    //             // 跳转到充值页面
+    //             location.href = "../recharge/rechargeNew?companyId=" + companyId;
+    //         }
+    //     })
+    //
+    // }
+
     function chargeOrPay() {
 
         layer.open({
-            content: '请确认' + devicePort + '插座，充电' + time
-            + '分钟；充电费用' + money/100 + '元；点击"临时支付" 支付完成后开始充电，点击"充值" 支付完成后享受会员价格！'
-            ,btn: [ '临时支付', '充值' ] //[yes no]
+            content: '余额不足，请确点击"充值" 支付完成后享受会员价格充电！'
+            ,btn: [ '充值' ] //[yes no]
             ,yes: function (index) {
-                var pow = power.split("-")[1];
-                if(pow*1 > 500){
-                    layer.open({
-                        content: "临时充电功率超限，请选择会员充电！"
-                        ,skin: 'msg'
-                        ,time: 3 //3秒后自动关闭
-                    });
-
-                    location.href = "../recharge/rechargeNew?companyId=" + companyId;
-                    return;
-                }
-                // 单次支付
-                temporaryRechargeMoney(money);
-                layer.close(index)
-            }
-            ,no: function (index) {
                 layer.close(index)
                 userIsConfirmed = true;
                 // 跳转到充值页面
@@ -319,10 +334,14 @@
                 userIsConfirmed = true;
                 startCharge4WriteDate();
             } else {
-                layer.open({
-                    content: "支付失败"
-                    ,skin: 'msg'
-                    ,time: 3 //3秒后自动关闭
+                // layer.open({
+                //     content: "支付失败"
+                //     ,skin: 'msg'
+                //     ,time: 3 //3秒后自动关闭
+                // });
+
+                layer.msg("支付失败，请联系客服...", {
+                    shift: 5
                 });
                 userIsConfirmed = true;
                 window.location="../charging";
