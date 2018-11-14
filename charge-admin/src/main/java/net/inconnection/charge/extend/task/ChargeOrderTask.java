@@ -97,7 +97,7 @@ public class ChargeOrderTask implements Runnable {
                         chargeHistory.update();
                         message = "监测电池充满断电";
 
-                        updateTuserAndPush(true,chargeHistory,chargeHistory.getOpenId(),totalMoney,realMoney,giftMoney, message,min);
+                        updateTuserAndPush(true,chargeHistory,chargeHistory.getOpenId(),totalMoney,realMoney,giftMoney, message,chargeHistory.getRealChargeTime());
                     }
                 }else{
                     //插座未关闭，判断是否错超过预设时间半小时
