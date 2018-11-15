@@ -178,7 +178,7 @@ public class PileCardController extends BaseController {
 
         List<String> headers = new ArrayList<String>();
         headers.add("iccid");
-        headers.add("device");
+        headers.add("deviceId");
         headers.add("total");
 
         CsvRender csvRender = new CsvRender(headers, null);
@@ -209,7 +209,7 @@ public class PileCardController extends BaseController {
 		clomuns.add("msisdn");
 		headers.add("iccid");
 		clomuns.add("iccid");
-		headers.add("状态 1正常 0 停机 ");
+		headers.add("状态");
 		clomuns.add("state");
 		headers.add("已使用流量");
 		clomuns.add("user");
