@@ -33,13 +33,6 @@ $(function() {
 		window.history.pushState(state, "title", "#");
 	}
 
-    window.addEventListener("visibilitychange",function(){
-        if (socketIsOpen && !userIsConfirmed && document.hidden) {
-            window.location.href="../charging"
-            socketIsOpen = false;
-        }
-
-    })
 });
 // 获取URL中的参数值
 function GetQueryString(url) {
