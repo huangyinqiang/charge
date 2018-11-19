@@ -1,11 +1,17 @@
 package net.inconnection.charge.admin.common;
 
 import com.jfinal.aop.Duang;
-import com.jfinal.config.*;
+import com.jfinal.config.Constants;
+import com.jfinal.config.Handlers;
+import com.jfinal.config.Interceptors;
+import com.jfinal.config.JFinalConfig;
+import com.jfinal.config.Plugins;
+import com.jfinal.config.Routes;
 import com.jfinal.core.JFinal;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.jfinal.plugin.redis.RedisPlugin;
 import com.jfinal.render.FreeMarkerRender;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
@@ -15,12 +21,31 @@ import net.inconnection.charge.admin.account.model.SysLoginLog;
 import net.inconnection.charge.admin.account.model._MappingKit;
 import net.inconnection.charge.admin.common.handler.ZcurdHandler;
 import net.inconnection.charge.admin.common.interceptor.ErrorInterceptor;
-import net.inconnection.charge.admin.online.controller.*;
-import net.inconnection.charge.admin.online.model.*;
+import net.inconnection.charge.admin.online.controller.CommonController;
+import net.inconnection.charge.admin.online.controller.SysOplogController;
+import net.inconnection.charge.admin.online.controller.TaskBaseController;
+import net.inconnection.charge.admin.online.controller.ZcurdController;
+import net.inconnection.charge.admin.online.controller.ZcurdHeadController;
+import net.inconnection.charge.admin.online.model.CommonFile;
+import net.inconnection.charge.admin.online.model.SysMenuBtn;
+import net.inconnection.charge.admin.online.model.SysOplog;
+import net.inconnection.charge.admin.online.model.TaskBase;
+import net.inconnection.charge.admin.online.model.TaskLog;
+import net.inconnection.charge.admin.online.model.ZcurdField;
+import net.inconnection.charge.admin.online.model.ZcurdHead;
+import net.inconnection.charge.admin.online.model.ZcurdHeadBtn;
+import net.inconnection.charge.admin.online.model.ZcurdHeadJs;
 import net.inconnection.charge.admin.online.service.TaskService;
 import net.inconnection.charge.extend.chargeDevice.DeviceControlServiceImpl;
-import net.inconnection.charge.extend.chargeDevice.jms.*;
+import net.inconnection.charge.extend.chargeDevice.jms.ActiveMQ;
+import net.inconnection.charge.extend.chargeDevice.jms.ActiveMQPlugin;
+import net.inconnection.charge.extend.chargeDevice.jms.DestinationType;
+import net.inconnection.charge.extend.chargeDevice.jms.DeviceUpdateMQServer;
+import net.inconnection.charge.extend.chargeDevice.jms.ImageTransMQServer;
+import net.inconnection.charge.extend.chargeDevice.jms.JmsSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgReceiver;
+import net.inconnection.charge.extend.chargeDevice.utils.AESUtil;
+import net.inconnection.charge.extend.chargeDevice.utils.PropertiesFileUtil;
 import net.inconnection.charge.extend.controller.*;
 import net.inconnection.charge.extend.model.busi_MappingKit;
 import net.inconnection.charge.extend.task.SchedulerPlugin;
@@ -146,6 +171,16 @@ public class ZcurdConfig extends JFinalConfig {
 
 		SchedulerPlugin sp = new SchedulerPlugin("job.properties");
 		me.add(sp);
+
+        PropertiesFileUtil propertiesFileUtil = PropertiesFileUtil.getInstance("redis");
+        RedisPlugin redisPlugin = new RedisPlugin("redis",
+                propertiesFileUtil.get("master.redis.ip"),
+                propertiesFileUtil.getInt("master.redis.port"),
+                propertiesFileUtil.getInt("master.redis.timeout"),
+                AESUtil.AESDecode(propertiesFileUtil.getInstance("redis").get("master.redis.password"))
+
+        );
+        me.add(redisPlugin);
 
 	}
 	

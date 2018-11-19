@@ -2,6 +2,8 @@ package net.inconnection.charge.extend.chargeDevice.deviceManage.device;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.plugin.redis.Cache;
+import com.jfinal.plugin.redis.Redis;
 import net.inconnection.charge.extend.chargeDevice.deviceInterface.Device;
 import net.inconnection.charge.extend.chargeDevice.deviceInterface.GateWay;
 import net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.Alarm;
@@ -10,11 +12,16 @@ import net.inconnection.charge.extend.chargeDevice.jms.ImageTransMQServer;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.MsgConvertUtil;
 import net.inconnection.charge.extend.chargeDevice.protocol.image.ImageMsgHandle;
-import net.inconnection.charge.extend.chargeDevice.protocol.message.*;
+import net.inconnection.charge.extend.chargeDevice.protocol.message.RequestMsg;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.facet.*;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.protocol.update.UpdateMsgHandle;
-import net.inconnection.charge.extend.chargeDevice.utils.*;
+import net.inconnection.charge.extend.chargeDevice.utils.ActiveMqSender;
+import net.inconnection.charge.extend.chargeDevice.utils.AlarmConfigManager;
+import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfo;
+import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfoConfig;
+import net.inconnection.charge.extend.chargeDevice.utils.DateUtil;
+import net.inconnection.charge.extend.chargeDevice.utils.SEQGeneration;
 import net.inconnection.charge.extend.model.ChargePile;
 import net.inconnection.charge.extend.model.ChargePileHistory;
 import net.inconnection.charge.extend.model.ChargeSocket;
@@ -22,7 +29,13 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.AlarmStatus.CONTINUE;
@@ -77,8 +90,9 @@ public class ChargePileDevice implements GateWay {
 
         ChargePileHistory chargePileHistory = new ChargePileHistory();
         chargePileHistory.setPileId(chargePileId).setTotalVoltage(voltage).setTotalIntensity(intensity).
-                setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime).save();
-
+                setBatVol(batVol).setControllerVol(controllerVol).setPowerTotal(power).setUpdateTime(lastUpdataTime);
+        Cache cache = Redis.use();
+        cache.lpush("pileHis",chargePileHistory);
     }
 
     void updateStatusToDb(Integer status){

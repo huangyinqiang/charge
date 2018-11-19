@@ -3,27 +3,40 @@ package net.inconnection.charge.extend.chargeDevice.deviceManage.device;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jfinal.plugin.redis.Cache;
+import com.jfinal.plugin.redis.Redis;
 import net.inconnection.charge.extend.chargeDevice.deviceInterface.Device;
 import net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.Alarm;
 import net.inconnection.charge.extend.chargeDevice.jms.ActiveMQ;
 import net.inconnection.charge.extend.chargeDevice.jms.JmsSender;
 import net.inconnection.charge.extend.chargeDevice.protocol.MqttMsgSender;
-import net.inconnection.charge.extend.chargeDevice.protocol.message.facet.GatewayFacet;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.RequestMsg;
+import net.inconnection.charge.extend.chargeDevice.protocol.message.facet.GatewayFacet;
 import net.inconnection.charge.extend.chargeDevice.protocol.message.facet.RequestSocketFacet;
 import net.inconnection.charge.extend.chargeDevice.protocol.topic.GeneralTopic;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmConfigManager;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfo;
 import net.inconnection.charge.extend.chargeDevice.utils.AlarmInfoConfig;
 import net.inconnection.charge.extend.chargeDevice.utils.SEQGeneration;
-import net.inconnection.charge.extend.model.*;
+import net.inconnection.charge.extend.model.ChargeBatteryInfo;
+import net.inconnection.charge.extend.model.ChargeHistory;
+import net.inconnection.charge.extend.model.ChargePile;
+import net.inconnection.charge.extend.model.ChargeSocket;
+import net.inconnection.charge.extend.model.ChargeSocketHistory;
+import net.inconnection.charge.extend.model.Tuser;
+import net.inconnection.charge.extend.model.WeiXin;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.AlarmStatus.CONTINUE;
 import static net.inconnection.charge.extend.chargeDevice.deviceManage.alarm.AlarmStatus.END;
@@ -72,7 +85,10 @@ public class ChargeSocketComponent implements Device {
 
         ChargeSocketHistory chargeSocketHistory = new ChargeSocketHistory();
         chargeSocketHistory.setChargeSocketId(socketKey).setChargePileId(chargePileId).setStartPower(startPower).setChargePower(chargePower)
-                .setChargeIntensity(chargeIntensity).setChargeState(chargeState).setUpdateTime(lastUpdateTime).save();
+                .setChargeIntensity(chargeIntensity).setChargeState(chargeState).setUpdateTime(lastUpdateTime);
+
+        Cache cache = Redis.use();
+        cache.lpush("socketHis",chargeSocketHistory);
     }
 
 
