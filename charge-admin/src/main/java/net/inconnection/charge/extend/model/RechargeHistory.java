@@ -18,4 +18,11 @@ public class RechargeHistory extends BaseRechargeHistory<RechargeHistory> {
         return rechargeHistories;
 
     }
+
+    public List<RechargeHistory> queryRechargeHistoryByOpenId(String openId) {
+        List<RechargeHistory> rechargeHistories = this.find("select * from yc_recharge_history " +
+                "where openId = ? order by recharge_time desc limit 0,10", openId);
+        return rechargeHistories;
+
+    }
 }

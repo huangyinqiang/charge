@@ -20,4 +20,7 @@ public class ChargeHistory extends BaseChargeHistory<ChargeHistory> {
         return this.find("select * from yc_charge_history where chargeStatus = ? " +
                 "and createDate > ? and createDate < ?",chargeStatus,startDate,endDate);
     }
+    public List<ChargeHistory> queryChargeHistoryByOpenId(String openId) {
+        return this.find("select * from yc_charge_history where openId = ? order by operStartTime limit 0,10",openId);
+    }
 }

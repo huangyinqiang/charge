@@ -1,5 +1,8 @@
 
 <#include "/common/head.html"/>
+
+<div id="subLayout" class="easyui-layout" data-options="fit:true, border:false">
+<div data-options="region:'center', border:false">
     <table id="dg"></table>
     <div id="tb" style="padding:2px 5px;">
         <div class="wrap_search">
@@ -23,7 +26,11 @@
             </div>
         </div>
     </div>
-    
+</div>
+    <div data-options="region:'east',split:true, border:false, collapsed:true, width:window.subPageWidth||'40%', title:window.subPageTitle||'子页', onCollapse: function(){_openSubPageFlag=false;}">
+        <iframe id="subIframe" class="easyui-panel" data-options="fit:true,border:false"></iframe>
+    </div>
+</div>
 
 <script type="text/javascript">
 var datagrid = $("#dg");
@@ -41,7 +48,7 @@ var dgOptions = {
     	multiSort:true,
         queryParams: getInitParam(),
         columns: [[
-		         {field:'id', checkbox:true}
+		         {field:'id', checkbox:true,}
 	           	 ,{field:'nickName', title: '用户昵称', width:160, sortable: true}
 	           	,{field:'headimgurl', title: '用户头像', width:70,height:20, sortable: false,formatter:function(value,row,index){
 	           		return "<img style='width:60px;height:40px;' src="+value+"></img>";
@@ -98,7 +105,12 @@ var dgOptions = {
                             return "普通用户";
                         }
                 }}
-	           ]]
+	           ]],
+        onClickRow: function(index, data) {
+            if(_openSubPageFlag){
+                update();
+            }
+        }
 	};
 $(function() {
 	handleAuthDataRule();
@@ -149,7 +161,10 @@ function update() {
 		showMsg("充值成功");
 		datagrid.datagrid("reload");
 	}
-	top.openWindow("在线充值", getCurrUrl("updatePage") + "?id=" + id, {size: '600x400'});
+    var url = getCurrUrl("updatePage") + "?id=" + id
+    _openSubPage(url);
+
+	// top.openWindow("在线充值", getCurrUrl("updatePage") + "?id=" + id, {size: '600x400'});
 }
 function editRole() {
     var rowsSel = datagrid.datagrid("getSelections");
@@ -216,7 +231,10 @@ function _openSubPage(pageUrl) {
 		$("#subIframe").attr("src", pageUrl);
 	}
 }
-
+//扩展js
+var subPageWidth = "45%";
+var subPageTitle = "充值";
+dgOptions.singleSelect=true;
 //扩展js
 </script>
 

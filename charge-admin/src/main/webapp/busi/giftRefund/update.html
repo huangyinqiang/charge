@@ -1,0 +1,118 @@
+
+<#include "/common/head.html"/>
+
+
+ <div class="easyui-panel updatePage" data-options="fit:true,border:false">
+    <form id="ff" class="easyui-form" method="post">
+        <table class="table1">
+            <tr>
+           		<th><span id="openId_label">用户：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="openId" id="openId" value="${model.openId!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            <tr>
+           		<th><span id="device_Id_label">设备ID：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="device_Id" id="device_Id" value="${model.device_Id!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="company_Id_label">公司ID：</span></th>
+               	<td>
+               		<div class="wrap_input"><input id="company_Id" name="company_Id" id="company_Id" class="easyui-combobox" value="${model.company_Id!''}" data-options="
+               				
+               				valueField: 'id',
+        					textField: 'text',
+        					fit: true,
+        					data:[
+        						{id:'', text:''}<#list dictDatacompany_Id.keySet() as key>,{id:'${key}', text:'${dictDatacompany_Id.get(key)}'}</#list>
+	               			]
+               		"/></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="type_label">类型 1:充值赠费 2:消费退费 3:充值退费：</span></th>
+               	<td>
+               		<div class="wrap_input"><input id="type" name="type" id="type" class="easyui-combobox" value="${model.type!''}" data-options="
+               				
+               				valueField: 'id',
+        					textField: 'text',
+        					fit: true,
+        					data:[
+        						{id:'', text:''}<#list dictDatatype.keySet() as key>,{id:'${key}', text:'${dictDatatype.get(key)}'}</#list>
+	               			]
+               		"/></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="charge_Id_label">消费ID：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="charge_Id" id="charge_Id" value="${model.charge_Id!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="recharge_Id_label">充值ID：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-textbox" type="text" name="recharge_Id" id="recharge_Id" value="${model.recharge_Id!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="money_label">金额 单位:分：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-numberspinner" type="text" name="money" id="money" value="${model.money!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+            <tr>
+           		<th><span id="create_date_label">创建时间：</span></th>
+               	<td>
+               		<div class="wrap_input"><input class="easyui-datetimebox" type="text" name="create_date" id="create_date" value="${model.create_date!''}" data-options="fit: true"></input></div>
+           		</td>
+           		
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+
+top.window.subPage.save = save;
+function save() {
+	if($("#zcurdHeadTable").form('validate')) {
+		$.post("update", getParam(), function(data) {
+			if(data.result == "success") {
+				top.window.closeWindow();
+				top.window.subPage.loadCurrDatagrid();
+			}
+		});
+	}
+}
+function getParam() {
+	var param = {
+	     
+	    "id": ${model.id}, 
+       	    "model.openId": getInputValue("openId"), 
+       	    "model.device_Id": getInputValue("device_Id"), 
+       	    "model.company_Id": getInputValue("company_Id"), 
+       	    "model.type": getInputValue("type"), 
+       	    "model.charge_Id": getInputValue("charge_Id"), 
+       	    "model.recharge_Id": getInputValue("recharge_Id"), 
+       	    "model.money": getInputValue("money"), 
+       	    "model.create_date": getInputValue("create_date"), 
+	}
+	for(key in param) {
+		if(!param[key]) {
+			delete param[key];
+		}
+	}
+	return param;
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

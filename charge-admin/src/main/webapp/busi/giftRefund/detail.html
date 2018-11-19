@@ -1,0 +1,51 @@
+
+<#include "/common/head.html"/>
+
+
+ <div class="easyui-panel detailPage" data-options="fit:true,border:false">
+    <form id="ff" class="easyui-form" method="post">
+        <table class="table1">
+            <tr>
+           		<th><span id="openId_label">用户：</span></th>
+	               	<td><span class="valueSpan"><pre>${model.openId!''}</pre></span></td>
+            <tr>
+           		<th><span id="device_Id_label">设备ID：</span></th>
+	               	<td><span class="valueSpan"><pre>${model.device_Id!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span id="company_Id_label">公司ID：</span></th>
+	               	<td><span class="valueSpan"><pre>${model.company_Id!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span id="type_label">类型 1:充值赠费 2:消费退费 3:充值退费：</span></th>
+	               	<td><span class="valueSpan"><pre>${model.type!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span id="charge_Id_label">消费ID：</span></th>
+	               	<td><span class="valueSpan"><pre>${model.charge_Id!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span id="recharge_Id_label">充值ID：</span></th>
+	               	<td><span class="valueSpan"><pre>${model.recharge_Id!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span id="money_label">金额 单位:分：</span></th>
+	               	<td><span class="valueSpan"><pre>${model.money!''}</pre></span></td>
+            </tr>
+            <tr>
+           		<th><span id="create_date_label">创建时间：</span></th>
+	               	<td><span class="valueSpan"><pre>${model.create_date!''}</pre></span></td>
+            </tr>
+           	
+        </table>
+    </form>
+</div>
+<script>
+top.window.subPage.save = save;
+function save() {
+	top.window.closeWindow();
+}
+
+//扩展js
+</script>
+<#include "/common/foot.html"/>

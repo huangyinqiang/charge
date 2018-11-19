@@ -265,7 +265,7 @@ CREATE TABLE yc_electricity_meter_history  (
   PRIMARY KEY (id) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
-CREATE TABLE `zcurd_busi`.`Untitled`  (
+CREATE TABLE `zcurd_busi`.`yc_pile_card`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `deviceId` bigint(20) COMMENT '设备Id',
   `msisdn` bigint(13) COMMENT '物联卡号',
@@ -275,5 +275,20 @@ CREATE TABLE `zcurd_busi`.`Untitled`  (
   `total` double(11, 2) COMMENT '总流量',
   `create_date` timestamp(0),
   `update_date` timestamp(0),
+  PRIMARY KEY (`id`)
+);
+
+
+
+CREATE TABLE `zcurd_busi`.`yc_gift_refund`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `openId` varchar(50) COMMENT '用户',
+  `device_Id` bigint(15) COMMENT '设备ID',
+  `company_Id` int(0) COMMENT '公司ID',
+  `type` int(1) COMMENT '类型 1:充值赠费 2:消费退费 3:充值退费',
+  `charge_Id` bigint(20) COMMENT '消费ID',
+  `recharge_Id` bigint(20) COMMENT '充值ID',
+  `money` bigint(20) COMMENT '金额 单位:分',
+  `create_date` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 );

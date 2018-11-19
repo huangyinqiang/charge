@@ -1,59 +1,231 @@
  <#include "/common/head.html"/>
+ <div class="updatePage" data-options="fit:true,border:false">
+     <div class="easyui-panel" title="用户信息" data-options="fit:true,border:false,tools:'#tt'">
+         <form id="ff" class="easyui-form" method="post" data-options="tools:'#tt'">
+             <table class="table1">
+                 <tr>
+                     <th><span>昵称：</span></th>
+                     <td>
+                         <div class="wrap_input">
+                             <input class="easyui-textbox" type="text" name="nickName"
+                                    id="nickName" value="${model.nickName!''}" editable="false"
+                                    data-options="fit: true,required:true"></input>
+                         </div>
+                     </td>
+
+                 </tr>
+                 <!--<tr>-->
+                     <!--<th><span>openId：</span></th>-->
+                     <!--<td>-->
+                         <!--<div class="wrap_input">-->
+                             <!--<input class="easyui-textbox" type="text" name="openId"-->
+                                    <!--id="openId" value="${model.openId!''}"-->
+                                    <!--data-options="fit: true,required:true"></input>-->
+                         <!--</div>-->
+                     <!--</td>-->
+
+                 <!--</tr>-->
+                 <tr>
+                     <th><span>钱包：</span></th>
+                     <td>
+                         <div class="wrap_input">
+                             <input class="easyui-textbox" type="text" editable="false"
+                                    name="walletAccount" id="walletAccount"
+                                    value="${model.walletAccount/100!''}" data-options="fit: true"></input>
+                         </div>
+                     </td>
+                 </tr>
+                 <tr>
+                     <th><span>金额(单位:分)</span></th>
+                     <td>
+                         <div class="wrap_input">
+                             <input class="easyui-textbox" type="text"
+                                    name="money" id="money"
+                                    prompt="消费金额或充值金额" data-options="fit: true"></input>
+                         </div>
+                     </td>
+                 </tr>
+                 <tr>
+                     <th><span>类型</span></th>
+                     <td>
+                         <div class="wrap_input">
+                             <select  class="easyui-combbox" id="type" name="type">
+                                 <option  value='1'> 充值赠费</option>
+                                 <option  value='2'> 消费退费</option>
+                                 <option  value='3'> 充值退费</option>
+                                 <option  value='4'> 送费</option>
+                             </select>
+                         </div>
+                     </td>
+                 </tr>
+                 <tr>
+                     <th><span>公司</span></th>
+                     <td>
+                         <div class="wrap_input">
+                             <input class="easyui-combobox" name="companyId" id="companyId" value="" style="width:100px" />
+                         </div>
+                     </td>
+                 </tr>
+             </table>
+         </form>
+     </div>
+     <div id="tt">
+         <a href="javascript:void(0)" title="保存" class="icon-save" onclick="javascript:save()"></a>
+     </div>
+ </div>
+ <table id="dg"></table>
 
 
-<div class="easyui-panel updatePage"
-	data-options="fit:true,border:false">
-	<form id="ff" class="easyui-form" method="post">
-		<table class="table1">
-			<tr>
-				<th><span>昵称：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text" name="nickName"
-							id="nickName" value="${model.nickName!''}"
-							data-options="fit: true,required:true"></input>
-					</div>
-				</td>
 
-			</tr>
-			<tr>
-				<th><span>钱包：</span></th>
-				<td>
-					<div class="wrap_input">
-						<input class="easyui-textbox" type="text"
-							name="walletAccount" id="walletAccount"
-							value="${model.walletAccount/100!''}" data-options="fit: true"></input>
-					</div>
-				</td>
-
-			</tr>
-		</table>
-	</form>
-</div>
 <script>
-top.window.subPage.save = save;
+
+var openId = '${model.openId}';
+var datagrid = $("#dg");
+var rechargeOptions = {
+    // rownumbers:true,
+    fit:true,
+    border:false,
+    url:'queryRechargeByOpenId',
+    method:'post',
+    singleSelect: true,
+    // toolbar:'#tb',
+    pageSize: 50,
+    pagination:false,
+    multiSort:true,
+    queryParams: {openId:openId},
+    columns: [[
+        {field:'id', checkbox:true}
+        ,{field:'openId', title: 'openId', width:160, sortable: false}
+        ,{field:'company_id', title: '公司', width:80, sortable: false}
+        ,{field:'real_money', title: '充值金额(元)', width:80, sortable: false,
+            formatter: function (value, row, index) {
+                return value/100;
+            }
+        }
+        ,{field:'coupon', title: '赠送金额(元)', width:80, sortable: false,
+            formatter: function (value, row, index) {
+                return value/100;
+            }
+        }
+
+        ,{field:'recharge_time', title: '充值时间', width:120, sortable: false}
+
+    ]]
+};
+var chargeOptions = {
+    fit:true,
+    border:false,
+    url:'queryChargeByOpenId',
+    method:'post',
+    singleSelect: true,
+    pageSize: 50,
+    pagination:false,
+    multiSort:true,
+    queryParams: {openId:openId},
+    columns: [[
+        {field:'id', checkbox:true}
+        ,{field:'openId', title: 'openId', width:160, sortable: false}
+        ,{field:'deviceId', title: '设备', width:80, sortable: false}
+        ,{field:'chargeType', title: '类型', width:120, sortable: false,
+            formatter: function (value, row, index) {
+                if (value == 'auto') {
+                    return "<span style='color:green;font-size:14px;'>智能</span>";
+                } else  if (value == 'charge') {
+                    return "<span style='color:green;font-size:14px;'>会员</span>";
+                } else  if (value == 'temp') {
+                    return "<span style='color:green;font-size:14px;'>临时</span>";
+                } else  {
+                    return "<span style='color:red;font-size:14px;'>其他</span>";
+                }
+            }}
+        , {
+            field: 'chargeMoney', title: '消费金额(元)', width: 80, sortable: false,
+            formatter: function (value, row, index) {
+                return value/100;
+            }
+        }
+        ,{
+            field : 'feeStatus',
+            title : '扣费状态',
+            width : 60,
+            formatter : function(value, row, index) {
+                if (value == 'S') {
+                    return "<span style='color:green;font-size:14px;'>已扣费</span>";
+                } else  if (value == 'U') {
+                    return "<span style='color:red;font-size:14px;'>未扣费</span>";
+                } else  {
+                    return "<span style='color:red;font-size:14px;'>其他</span>";
+                }
+            }
+        }
+        ,{field:'operStartTime', title: '充电时间', width:120, sortable: false}
+
+    ]]
+};
+$(function() {
+    handleAuthDataRule();
+    datagrid.datagrid(rechargeOptions);
+    $.ajax({
+        url : "../company/getCompanyListByLoginUser",
+        type : "POST",
+        async : true,// 设置同步方式，false为同步
+        success : function(data) {
+            $('#companyId').combobox({
+                data : data,
+                multiple:false, //支持多选
+                valueField : 'id',
+                textField : 'company_name'
+            });
+        }
+    })
+});
+
+
+$("#type").combobox({
+    onChange: function (n,o) {
+        var type = $("#type").combobox("getValue");
+        if(type == 1 || type == 3){
+            //充值
+            datagrid.datagrid(rechargeOptions);
+        }else if(type == 2){
+            //消费
+            datagrid.datagrid(chargeOptions);
+        }
+    }
+});
 function save() {
+    var data = getParam();
+    if(data.type == 4){
+        if (data.companyId == null || data.companyId == ""){
+            showWarnMsg("请选择公司！");
+            return;
+        }
+    }else{
+        if (data.dataId == null || data.dataId == ""){
+            showWarnMsg("请选择要编辑的数据！");
+            return;
+        }
+    }
+
 	if($("#zcurdHeadTable").form('validate')) {
-		$.post("update", getParam(), function(data) {
+		$.post("update", data, function(data) {
 			top.window.closeWindow();
 			top.window.subPage.loadCurrDatagrid();
 		});
 	}
 }
 function getParam() {
+    var rowsSel = datagrid.datagrid("getSelections");
+    var type = $("#type").combobox("getValue");
+    var companyId = $("#companyId").combobox("getValue");
+    var id = rowsSel.length == 0 ? 0 :rowsSel[0].id;
+
 	var param = {
-	    "id": ${model.id}, 
-       	    "model.openId": getInputValue("openId"), 
-       	    "model.nickName": getInputValue("nickName"), 
-       	    "model.headimgurl": getInputValue("headimgurl"), 
-       	    "model.city": getInputValue("city"), 
-       	    "model.province": getInputValue("province"), 
-       	    "model.tel": getInputValue("tel"), 
-       	    "model.registerDate": getInputValue("registerDate"), 
-       	    "model.lastLoginDate": getInputValue("lastLoginDate"), 
-       	    "model.cardNumber": getInputValue("cardNumber"), 
-       	    "model.band": getInputValue("band"), 
-       	    "model.walletAccount": getInputValue("walletAccount")
+	    "id": ${model.id},
+        "type":getInputValue("type"),
+        "dataId":id,
+        "money":getInputValue("money"),
+        "companyId":companyId
 	}
 	for(key in param) {
 		if(!param[key]) {

@@ -10,6 +10,9 @@ import net.inconnection.charge.admin.common.DBTool;
 import net.inconnection.charge.admin.common.base.BaseController;
 import net.inconnection.charge.admin.common.csv.CsvRender;
 import net.inconnection.charge.admin.common.util.StringUtil;
+import net.inconnection.charge.extend.model.ChargeHistory;
+import net.inconnection.charge.extend.model.GiftRefund;
+import net.inconnection.charge.extend.model.RechargeHistory;
 import net.inconnection.charge.extend.model.Tuser;
 import net.inconnection.charge.extend.model.TuserCharge;
 
@@ -59,21 +62,97 @@ public class TuserController extends BaseController {
     }
 
     public void update() {
+        String companyId = this.getPara("companyId");
         Tuser model = (Tuser)Tuser.me.findById(this.getPara("id"));
+        Integer walletAccount = model.getWalletAccount();
+        Integer walletRealMoney = model.getWalletRealMoney() == null ? 0 :model.getWalletRealMoney();
+        int walletGiftMoney = model.getWalletGiftMoney() == null ? 0 : model.getWalletGiftMoney();
+
         int id = (Integer)model.get("id");
-        int last = model.getInt("walletAccount");
-        String name = (String)model.get("nickName");
-        model.set("nickName", this.getPara("model.nickName"));
-        String chargeWall = this.getPara("model.walletAccount");
-        float chargeTmp = Float.parseFloat(chargeWall);
-        model.set("walletAccount", chargeTmp * 100.0F);
-        TuserCharge tCharge = new TuserCharge();
-        tCharge.set("tuserid", id);
-        tCharge.set("name", name);
-        tCharge.set("charge", chargeTmp);
-        tCharge.set("last", last);
-        tCharge.set("jointime", new Date());
-        tCharge.save();
+        int type = this.getParaToInt("type");
+        String dataId = this.getPara("dataId");
+        int money = this.getParaToInt("money");
+//        String name = (String)model.get("nickName");
+//        model.set("nickName", this.getPara("model.nickName"));
+//        String chargeWall = this.getPara("model.walletAccount");
+//        float chargeTmp = Float.parseFloat(chargeWall);
+//        model.set("walletAccount", chargeTmp * 100.0F);
+        GiftRefund giftRefund = new GiftRefund();
+        giftRefund.setLast(Long.valueOf(walletAccount));
+        if(type == 1){  //充值
+
+            //修充值记录
+            RechargeHistory rechargeHistory = RechargeHistory.dao.findById(dataId);
+            Integer realMoney = rechargeHistory.getRealMoney();
+            rechargeHistory.setCoupon(money);
+            rechargeHistory.setMoneySum(money+realMoney);
+            rechargeHistory.update();
+
+            //修改赠费比
+
+            double realGiftRate = walletRealMoney/(double)(walletAccount + money );
+            model.setWalletAccount(walletAccount+money);
+            model.setWalletGiftMoney(model.getWalletAccount()-walletRealMoney);
+            model.setRealGitRate(realGiftRate);
+
+            giftRefund.setRechargeId(Long.valueOf(dataId));
+            giftRefund.setCompanyId(Integer.parseInt(rechargeHistory.getCompanyId().toString()));
+
+
+        }else if(type == 2){//消费
+
+            //修改消费记录
+            ChargeHistory chargeHistory = ChargeHistory.dao.findById(dataId);
+            chargeHistory.setChargeMoney(money);
+            Double realRate = chargeHistory.getRealRate();
+            int realMoney = new Double((double)money * realRate).intValue();
+            chargeHistory.setRealMoney(realMoney);
+            chargeHistory.update();
+
+            //修改赠费比
+            model.setWalletAccount(walletAccount+money);
+            model.setWalletRealMoney(walletRealMoney-realMoney);
+            model.setWalletGiftMoney(walletGiftMoney-(money-realMoney));
+
+            giftRefund.setChargeId(Long.valueOf(dataId));
+            giftRefund.setDeviceId(Long.valueOf(chargeHistory.getDeviceId()));
+            giftRefund.setCompanyId(Integer.parseInt(chargeHistory.getCompanyId().toString()));
+
+        }else if(type == 3){
+            model.setWalletAccount(money);
+            model.setWalletGiftMoney(0);
+            model.setWalletRealMoney(0);
+            model.setRealGitRate(0.0);
+            //修充值记录
+            RechargeHistory rechargeHistory = RechargeHistory.dao.findById(dataId);
+            giftRefund.setRechargeId(Long.valueOf(dataId));
+            giftRefund.setCompanyId(Integer.parseInt(rechargeHistory.getCompanyId().toString()));
+
+        }else if(type == 4){
+            model.setWalletAccount(money);
+            model.setWalletGiftMoney(0);
+            model.setWalletRealMoney(0);
+            model.setRealGitRate(0.0);
+
+            giftRefund.setCompanyId(Integer.parseInt(companyId));
+        }
+
+
+        //退费赠费记录
+        giftRefund.setOpenId(model.getOpenId());
+        giftRefund.setType(type);
+        giftRefund.setMoney(Long.valueOf(money));
+        giftRefund.save();
+
+
+
+//        TuserCharge tCharge = new TuserCharge();
+//        tCharge.set("tuserid", id);
+//        tCharge.set("name", name);
+//        tCharge.set("charge", chargeTmp);
+//        tCharge.set("last", last);
+//        tCharge.set("jointime", new Date());
+//        tCharge.save();
         model.update();
         this.addOpLog("[在线用户] 修改");
         this.renderSuccess();
@@ -142,5 +221,18 @@ public class TuserController extends BaseController {
         csvRender.fileName("在线用户");
         this.addOpLog("[在线用户] 导出cvs");
         this.render(csvRender);
+    }
+
+    public void queryRechargeByOpenId() {
+        List<RechargeHistory> historyList = RechargeHistory.dao.queryRechargeHistoryByOpenId(this.getPara
+                ("openId"));
+        renderDatagrid(historyList,historyList.size());
+
+    }
+    public void queryChargeByOpenId() {
+        List<ChargeHistory> chargeHistoryList = ChargeHistory.dao.queryChargeHistoryByOpenId(this.getPara
+                ("openId"));
+        renderDatagrid(chargeHistoryList,chargeHistoryList.size());
+
     }
 }
