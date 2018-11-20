@@ -104,9 +104,10 @@
         var localUrl = window.location.href;
         companyId = GetQueryString('companyId');
         projectId = GetQueryString('projectId');
+        deviceId = GetQueryString('deviceId');
         type = 'WA';//充值类型
 
-        deviceId=10100000001;
+        // deviceId=10100000001;
 
         getUserInfo();
         // 设置钱包余额
@@ -296,7 +297,8 @@
                     coupon: coupon,
                     wallet_real_money:userInfo.wallet_real_money,
                     wallet_gift_money:userInfo.wallet_gift_money,
-					companyId:companyId
+					companyId:companyId,
+                    projectId:projectId
                 },
                 cache: false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取
                 async: false,// 设置同步方式，false为同步

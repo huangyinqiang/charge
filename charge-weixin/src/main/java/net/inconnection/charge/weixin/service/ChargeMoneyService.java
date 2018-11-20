@@ -28,7 +28,7 @@ public class ChargeMoneyService {
     public ChargeMoneyService() {
     }
 
-    public HnKejueResponse addRechargInfo(String openId, String deviceId, String chargeType, String walletAccount, String money, String chargeNum, String coupon, String cardNumber, String walletRealMoney, String walletGiftMoney, String companyId) {
+    public HnKejueResponse addRechargInfo(String openId, String deviceId, String chargeType, String walletAccount, String money, String chargeNum, String coupon, String cardNumber, String walletRealMoney, String walletGiftMoney, String companyId,String projectId) {
         try {
             if (StringUtils.isBlank(openId)) {
                 log.error("openId不能为空");
@@ -83,7 +83,7 @@ public class ChargeMoneyService {
             chargeMoneyInfoBean.setMoney(Integer.parseInt(money));
             chargeMoneyInfoBean.setChargetype(chargeType);
             chargeMoneyInfoBean.setCreatetime(new Date());
-            this.addAndUpdate(openId, deviceId, chargeType, walletAccount, money, coupon, chargeMoneyInfoBean, cardNumber, walletRealMoney, walletGiftMoney, companyId);
+            this.addAndUpdate(openId, deviceId, chargeType, walletAccount, money, coupon, chargeMoneyInfoBean, cardNumber, walletRealMoney, walletGiftMoney, companyId,projectId);
         } catch (Exception var10) {
             log.error("新增充值记录失败" + var10);
             return new HnKejueResponse(false, RespCode.FAILD.getKey(), RespCode.FAILD.getValue());
@@ -92,7 +92,7 @@ public class ChargeMoneyService {
         return new HnKejueResponse(true, RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue());
     }
 
-    private void addAndUpdate(final String openId, final String deviceId, final String chargeType, final String walletAccount, final String money, final String coupon, final ChargeMoneyInfoBean chargeMoneyInfoBean, final String cardNumber, final String walletRealMoney, final String walletGiftMoney, final String companyId) {
+    private void addAndUpdate(final String openId, final String deviceId, final String chargeType, final String walletAccount, final String money, final String coupon, final ChargeMoneyInfoBean chargeMoneyInfoBean, final String cardNumber, final String walletRealMoney, final String walletGiftMoney, final String companyId,final String projectId) {
         Db.tx(new IAtom() {
             public boolean run() throws SQLException {
                 String format = (new SimpleDateFormat("yy/MM/dd HH:mm:ss")).format(new Date());
@@ -125,7 +125,7 @@ public class ChargeMoneyService {
 
                 ChargeMoneyInfo.dao.addChargeMoneyLog(chargeMoneyInfoBean);
 
-                RechargeHistory.dao.addRechargeHistoryLog(openId, companyId, totalMoney , chargeMoney, couponMoney);
+                RechargeHistory.dao.addRechargeHistoryLog(openId, companyId, totalMoney , chargeMoney, couponMoney,deviceId,projectId);
 
                 return true;
             }

@@ -292,3 +292,8 @@ CREATE TABLE `zcurd_busi`.`yc_gift_refund`  (
   `create_date` timestamp(0) DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`)
 );
+
+
+ALTER TABLE `zcurd_busi`.`yc_recharge_history`
+ADD COLUMN `project_id` bigint(20) AFTER `company_id`,
+ADD COLUMN `device_id` bigint(20) AFTER `project_id`;

@@ -13,11 +13,13 @@ public class RechargeHistory extends Model<RechargeHistory> {
     }
 
 
-    public boolean addRechargeHistoryLog(final String openId, final String companyId, int totalMoney, int chargeMoney, int couponMoney) {
+    public boolean addRechargeHistoryLog(final String openId, final String companyId, int totalMoney, int chargeMoney, int couponMoney,String deviceId,String projectId) {
         log.info("增加充值历史记录：" );
         RechargeHistory rechargeHistory = new RechargeHistory();
         rechargeHistory.set("openId", openId);
         rechargeHistory.set("company_id", Long.parseLong(companyId));
+        rechargeHistory.set("project_id", projectId);
+        rechargeHistory.set("device_id", deviceId);
         rechargeHistory.set("money_sum", totalMoney);
         rechargeHistory.set("real_money", chargeMoney);
         rechargeHistory.set("coupon", couponMoney);

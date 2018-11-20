@@ -4,12 +4,15 @@ import com.jfinal.core.Controller;
 import com.jfinal.log.Log;
 import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.code.RespCode;
+import net.inconnection.charge.weixin.model.Device;
 import net.inconnection.charge.weixin.model.DeviceProject;
+import net.inconnection.charge.weixin.model.NewDeviceProject;
 import net.inconnection.charge.weixin.model.ProjectActivity;
 import net.inconnection.charge.weixin.service.ChargeMoneyService;
 import net.inconnection.charge.weixin.service.CompanyActivityService;
 import net.inconnection.charge.weixin.service.MoneyMatchActivityService;
 import net.inconnection.charge.weixin.service.ProjectActivityService;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -88,16 +91,32 @@ public class RechargeController extends Controller {
         String chargeNum = this.getPara("chargeNum");
         String coupon = this.getPara("coupon");
         String deviceId = this.getPara("deviceId");
+        if(StringUtils.isBlank(deviceId)){
+            deviceId = "10100000001";
+        }
         String walletAccount = this.getPara("walletAccount");
         String cardNumber = this.getPara("cardNumber");
 
         String walletRealMoney = this.getPara("wallet_real_money");
         String walletGiftMoney = this.getPara("wallet_gift_money");
         String companyId = this.getPara("companyId");
+        String projectId = this.getPara("projectId");
+        if(StringUtils.isBlank(projectId)){
+            projectId = "1";
+        }
 
-        log.info("新增充值信息结束开始 openId=" + openId + ",deviceId=" + deviceId + ",type=" + chargeType + ",money=" + money
+        if(deviceId.length() == 15){
+            Device device = Device.dao.queryDeviceByDeviceId(deviceId);
+            DeviceProject deviceProject = DeviceProject.me.queryProjectIdByDeviceId(device.get("id").toString());
+            String id = deviceProject.get("project_id").toString();
+            NewDeviceProject project = NewDeviceProject.dao.queryDeviceChargePriceByProjectID(Long.valueOf(id));
+            projectId = id;
+            companyId = project.get("company_id").toString();
+        }
+
+        log.info("新增充值信息结束开始 openId=" + openId + ",deviceId=" + deviceId + ",type=" + chargeType + ",money=" + money+",projectId="+projectId
                     + ",入帐金额=" + chargeNum + ",入帐赠送金额=" + coupon + ",电卡卡号=" + cardNumber + ",钱包实际充值余额=" + walletRealMoney + ",钱包赠费余额" + walletGiftMoney + ",公司ID" + companyId);
-        HnKejueResponse response = chargeMoneyService.addRechargInfo(openId, deviceId, chargeType, walletAccount, money, chargeNum, coupon, cardNumber, walletRealMoney, walletGiftMoney, companyId);
+        HnKejueResponse response = chargeMoneyService.addRechargInfo(openId, deviceId, chargeType, walletAccount, money, chargeNum, coupon, cardNumber, walletRealMoney, walletGiftMoney, companyId,projectId);
         log.info("新增充值信息结束：" + response);
         this.renderJson(response);
     }
