@@ -226,32 +226,36 @@ public class ChargePileDevice implements GateWay {
 
 
         intensity = 0L;
-        if (msgJArray.size() > 1) {
-            status = STATUS_OK;
-            for (int i = 1; i < msgJArray.size(); i++) {
-                JSONObject chargeSocketObj = msgJArray.getJSONObject(i);
 
-                Long socketSn = Long.parseLong(chargeSocketObj.getString(MSG_DEVICESN));
 
-                if (!chargeSocketMap.containsKey(socketSn)) {
-                    ChargeSocketComponent chargeSocketComponent = new ChargeSocketComponent(chargePileId, socketSn);
-                    chargeSocketMap.put(socketSn, chargeSocketComponent);
-                    addNewDeviceToDb(chargePileId, socketSn);
-                }
+        for (int i = 1; i < msgJArray.size(); i++) {
+            JSONObject chargeSocketObj = msgJArray.getJSONObject(i);
 
-                ChargeSocketComponent chargeSocket = chargeSocketMap.get(socketSn);
+            Long socketSn = Long.parseLong(chargeSocketObj.getString(MSG_DEVICESN));
 
-                chargeSocket.setChargeVoltage(voltage);
-
-                chargeSocket.updateData(dataTime, chargeSocketObj);
-
-                chargeSocket.updateStatus(dataTime, chargeSocketObj);
-
-                intensity += chargeSocket.getChargeIntensity();
+            if (!chargeSocketMap.containsKey(socketSn)) {
+                ChargeSocketComponent chargeSocketComponent = new ChargeSocketComponent(chargePileId, socketSn);
+                chargeSocketMap.put(socketSn, chargeSocketComponent);
+                addNewDeviceToDb(chargePileId, socketSn);
             }
+
+            ChargeSocketComponent chargeSocket = chargeSocketMap.get(socketSn);
+
+            chargeSocket.setChargeVoltage(voltage);
+
+            chargeSocket.updateData(dataTime, chargeSocketObj);
+
+            chargeSocket.updateStatus(dataTime, chargeSocketObj);
+
+            intensity += chargeSocket.getChargeIntensity();
+        }
+
+        if (msgJArray.size() > 1 && msgJArray.size() == 1+chargeSocketMap.size()) {
+            status = STATUS_OK;
         }else {
             //只有gateway，没有强电板数据
-            _log.error("充电桩没有携带强电板数据，请检查，充电设备id为： " + chargePileId);
+            _log.error("充电桩没有携带完整的强电板数据，请检查，充电设备id为： " + chargePileId +
+                    ", 上传充电插座个数为" + (msgJArray.size()-1) + ",真实充电插座个数为" + chargeSocketMap.size());
             status = STATUS_ALARM;
         }
 
