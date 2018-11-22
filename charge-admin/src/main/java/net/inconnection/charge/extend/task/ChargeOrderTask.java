@@ -87,8 +87,14 @@ public class ChargeOrderTask implements Runnable {
                         //向上取整
                         int hour = (int)Math.ceil(min / 60.0);
                         int totalMoney = hour * price;
-                        int realMoney = new Double((double)totalMoney * realRate).intValue();
-                        int giftMoney = totalMoney - realMoney;
+                        int realMoney = 0;
+                        int giftMoney = 0;
+                        if(realRate > 0){
+                            realMoney = new Double((double)totalMoney * realRate).intValue();
+                        }
+                        if(realMoney > 0){
+                            giftMoney = totalMoney - realMoney;
+                        }
                         chargeHistory.setChargeMoney(totalMoney);
                         chargeHistory.setRealMoney(realMoney);
                         chargeHistory.setGiftMoney(giftMoney);
@@ -161,15 +167,15 @@ public class ChargeOrderTask implements Runnable {
 
             if (chargeHistory.getOperType().equals("M")){
                 //临时充电
-                title = "您选择临时充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeTime/60 + "分钟";
+                title = "您选择临时充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeHistory.getChargeTime()/60 + "分钟";
             }else {
                 if (chargeHistory.getChargeType().equals("auto")){
                     //智能充电
-                    title = "您选择会员充满自停，实际充电时间" + chargeTime/60 + "分钟";
+                    title = "您选择会员充满自停，实际充电时间" + chargeHistory.getChargeTime()/60 + "分钟";
 
                 }else {
                     //会员定时充电
-                    title = "您选择会员充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeTime/60 + "分钟";
+                    title = "您选择会员充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeHistory.getChargeTime()/60 + "分钟";
                 }
             }
 
