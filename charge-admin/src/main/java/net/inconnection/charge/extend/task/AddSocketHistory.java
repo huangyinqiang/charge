@@ -24,10 +24,10 @@ public class AddSocketHistory implements Runnable {
         Cache cache = Redis.use();
         List<ChargeSocketHistory> socketHis = cache.lrange(SOCKET_KEY, 0, -1);
         DBTool.use(ZcurdTool.getDbSource("zcurd_busi")).batchSave(socketHis, 1000);
-        cache.ltrim(SOCKET_KEY, 1, -1);
+        cache.del(SOCKET_KEY);
         List<ChargePileHistory> pileHis = cache.lrange(PILE_KEY, 0, -1);
         DBTool.use(ZcurdTool.getDbSource("zcurd_busi")).batchSave(pileHis, 1000);
-        cache.ltrim(PILE_KEY, 1, -1);
+        cache.del(PILE_KEY);
 
         log.info("定时任务结束：定时保存ChargeSocketHistory记录数"+socketHis.size());
     }
