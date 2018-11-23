@@ -167,15 +167,15 @@ public class ChargeOrderTask implements Runnable {
 
             if (chargeHistory.getOperType().equals("M")){
                 //临时充电
-                title = "您选择临时充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeHistory.getChargeTime()/60 + "分钟";
+                title = "您选择临时充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeHistory.getChargeTime() + "分钟";
             }else {
                 if (chargeHistory.getChargeType().equals("auto")){
                     //智能充电
-                    title = "您选择会员充满自停，实际充电时间" + chargeHistory.getChargeTime()/60 + "分钟";
+                    title = "您选择会员充满自停，实际充电时间" + chargeHistory.getChargeTime() + "分钟";
 
                 }else {
                     //会员定时充电
-                    title = "您选择会员充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeHistory.getChargeTime()/60 + "分钟";
+                    title = "您选择会员充电，充电时间" + chargeHistory.getChargeTime() + "分钟，实际充电时间" + chargeHistory.getChargeTime() + "分钟";
                 }
             }
 
