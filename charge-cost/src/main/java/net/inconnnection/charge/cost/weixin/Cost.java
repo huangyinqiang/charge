@@ -5,6 +5,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import net.inconnnection.charge.cost.bean.ChargeBatteryInfoBean;
 import net.inconnnection.charge.cost.model.ChargeBatteryInfo;
+import net.inconnnection.charge.cost.model.ChargeHistory;
 import net.inconnnection.charge.cost.model.Result;
 import net.inconnnection.charge.cost.model.TUser;
 
@@ -63,6 +64,7 @@ public class Cost {
         cb.setDeviceId(req.getDeviceId());
         cb.setDevicePort(req.getDevicePort());
         ChargeBatteryInfo findFirst = ChargeBatteryInfo.dao.findFirst(cb);
+        ChargeHistory chargeHistory = ChargeHistory.dao.findFirst(req.getDeviceId(), req.getDevicePort(), openId);
         if (findFirst == null) {
             log.info("查询更新根据功率充电的信息为空！");
             result.setStatus(0);
@@ -76,9 +78,17 @@ public class Cost {
             final String realChargeTime = req.getRealChargeTime();
             final int batteryId = (Integer)findFirst.get("id");
             String add_money = "Y";
+
+            final int chargeId = Integer.valueOf(chargeHistory.get("id").toString());
+            final int realRate = Integer.valueOf(chargeHistory.get("realRate").toString());
+            final int realMoney = new Double((double) costMoney*realRate).intValue();
+            final int giftMoney = costMoney - realMoney;
             boolean flag = Db.tx(new IAtom() {
                 public boolean run() throws SQLException {
                     int update = Db.update("update charge_battery_info set charge=?,walletAccount=?,status=?,endTime=?,realChargeTime=?,add_money=? where id=?", new Object[]{costMoney, account, status, new Date(), realChargeTime, "Y", batteryId});
+
+                    int update1 = Db.update("update yc_charge_history set chargeMoney=?,realMoney=?,giftMoney=?,chargeStatus=?,endTime=?," +
+                            "realChargeTime=? ,add_money=?  where id=?", new Object[]{costMoney,realMoney,giftMoney, status, new Date(), realChargeTime,"Y", chargeId});
                     if (update != 1) {
                         Cost.log.error("充满自动停止 更新订单失败");
                         return false;
@@ -108,6 +118,7 @@ public class Cost {
         cb.setDeviceId(req.getDeviceId());
         cb.setDevicePort(req.getDevicePort());
         ChargeBatteryInfo findFirst = ChargeBatteryInfo.dao.findFirst(cb);
+        ChargeHistory chargeHistory = ChargeHistory.dao.findFirst(req.getDeviceId(), req.getDevicePort(), openId);
         if (findFirst == null) {
             log.info("查询更新根据功率充电的信息为空！");
             result.setStatus(0);
@@ -118,9 +129,12 @@ public class Cost {
             final String realChargeTime = req.getRealChargeTime();
             final int batteryId = (Integer)findFirst.get("id");
             String add_money = "A";
+
+            final String chargeId = chargeHistory.get("id").toString();
             boolean flag = Db.tx(new IAtom() {
                 public boolean run() throws SQLException {
                     int update = Db.update("update charge_battery_info set status=?,endTime=?,realchargeTime=?,add_money=? where id=?", new Object[]{status, new Date(), realChargeTime, "A", batteryId});
+                    int update1 = Db.update("update yc_charge_history set chargeStatus=?,endTime=?,realChargeTime=? ,add_money=? where id=?", new Object[]{ status, new Date(), realChargeTime, "A",chargeId});
                     if (update != 1) {
                         Cost.log.error("充满自动停止 更新订单失败");
                         return false;

@@ -15,6 +15,7 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
 import net.inconnnection.charge.cost.action.IndexAction;
 import net.inconnnection.charge.cost.model.ChargeBatteryInfo;
+import net.inconnnection.charge.cost.model.ChargeHistory;
 import net.inconnnection.charge.cost.model.TUser;
 import net.inconnnection.charge.cost.plugin.ActiveMQ;
 import net.inconnnection.charge.cost.plugin.ActiveMQPlugin;
@@ -50,6 +51,7 @@ public class MainConfig extends JFinalConfig {
         arp.setDialect(new MysqlDialect());
         arp.addMapping("charge_battery_info", ChargeBatteryInfo.class);
         arp.addMapping("tuser", TUser.class);
+        arp.addMapping("yc_charge_history", ChargeHistory.class);
         me.add(c3p0Plugin);
         me.add(arp);
         ActiveMQPlugin p = new ActiveMQPlugin(PropKit.get("mqaddress"));
@@ -69,6 +71,9 @@ public class MainConfig extends JFinalConfig {
 
     @Override
     public void  afterJFinalStart(){
+        ChargeHistory odSZL1TUi4xri0UYvd20HhAbqKfE = ChargeHistory.dao.findFirst("356566077059970", "1",
+                "odSZL1TUi4xri0UYvd20HhAbqKfE");
+
         logger.info("charge-cost 开始启动");
         try {
             ActiveMQ.addReceiver(new JmsReceiver("testReceiver1", ActiveMQ.getConnection(), Destination.Queue, PropKit.get("mqsubject")));

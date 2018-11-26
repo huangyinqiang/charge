@@ -13,6 +13,7 @@ import net.inconnection.charge.weixin.bean.resp.HnKejueResponse;
 import net.inconnection.charge.weixin.bean.resp.PageResponse;
 import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.ChargeBatteryInfo;
+import net.inconnection.charge.weixin.model.Device;
 import net.inconnection.charge.weixin.model.NewDeviceChargeHistory;
 import net.inconnection.charge.weixin.model.TUser;
 import net.inconnection.charge.weixin.utils.EncDecUtils;
@@ -105,7 +106,20 @@ public class ChargeInfoBatteryService {
 
             String format = (new SimpleDateFormat("yy/MM/dd HH:mm:ss")).format(new Date());
             String MD5 = EncDecUtils.getMD5(openId + deviceId + format);
-            this.addAndUpdate(openId, MD5, operType, chargeBatteryInfoBean, walletAccountInt);
+
+            Record record = Db.findFirst("SELECT yp.company_id FROM yc_project yp WHERE yp.id = (SELECT ycp.project_id" +
+                    " FROM yc_device_project ycp WHERE ycp.device_id = ( SELECT qmd.id FROM qr_match_device qmd WHERE" +
+                    " qmd.match_num = " + chargeBatteryInfoBean.getDeviceid() + " ) )");
+            Long companyId = Long.valueOf(record.get("company_id").toString());
+            TUser user = TUser.dao.queryUserByOpenId(openId);
+            Double realRate = user.getDouble("real_git_rate");
+            int realMoney = new Double((double) moneyInt*realRate).intValue();
+            int giftMoney = moneyInt - realMoney;
+            Device device = Device.dao.queryDeviceByDeviceId(deviceId);
+            Integer autoUnitPriceInt = Integer.valueOf(device.get("power_a1").toString());
+
+            this.addAndUpdate(openId, MD5, operType, chargeBatteryInfoBean, walletAccountInt,
+                    companyId,type,realMoney,giftMoney,realRate,autoUnitPriceInt);
             boolean invokeServer = this.invokeServer(openId, deviceId, devicePort, time, type, money);
             if (invokeServer) {
                 log.info("调用服务器充电成功");
@@ -267,11 +281,13 @@ public class ChargeInfoBatteryService {
         });
     }
 
-    private void addAndUpdate(final String openId, final String MD5, final String operType, final ChargeBatteryInfoBean chargeBatteryInfoBean, final int walletAccountInt) {
+    private void addAndUpdate(final String openId, final String MD5, final String operType, final ChargeBatteryInfoBean chargeBatteryInfoBean, final int walletAccountInt,
+                              final  Long companyId,final String type,final int realMoney,final int giftMoney,final double realRate,final int autoUnitPriceInt) {
         Db.tx(new IAtom() {
             public boolean run() throws SQLException {
                 chargeBatteryInfoBean.setMd5(MD5);
                 ChargeBatteryInfo.dao.addChargeLog(chargeBatteryInfoBean);
+                NewDeviceChargeHistory.dao.addChargeHistory(chargeBatteryInfoBean, companyId, type, realMoney, giftMoney, realRate, autoUnitPriceInt);
                 if (operType.equals("M")) {
                     TUser.dao.updateWalletAccount(walletAccountInt, openId);
                 }
