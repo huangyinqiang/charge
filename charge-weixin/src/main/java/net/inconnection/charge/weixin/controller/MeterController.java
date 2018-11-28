@@ -7,6 +7,8 @@ import net.inconnection.charge.weixin.code.RespCode;
 import net.inconnection.charge.weixin.model.ElectricityMeter;
 import net.inconnection.charge.weixin.model.ElectricityMeterHistory;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Date;
 
 public class MeterController extends Controller {
@@ -36,14 +38,16 @@ public class MeterController extends Controller {
 
     public void addMeterHistory(){
         try {
+            File file = getFiles().get(0).getFile();
+
             String materId = this.getPara("materId");
             String lastNumStr = this.getPara("lastNum");
             String currNumStr = this.getPara("currNum");
             String openId = this.getPara("openId");
             String currDate = this.getPara("currDate");
+            FileInputStream fis = new FileInputStream(file);
 
-
-            log.info("添加抄表记录：materId="+materId+" lastNum="+lastNumStr+" currNum="+currNumStr+" openId="+openId);
+            log.info("添加抄表记录：materId="+materId+" lastNum="+lastNumStr+" currNum="+currNumStr+" openId="+openId+" file="+file);
             double lastNum = Double.parseDouble(lastNumStr);
             double currNum = Double.parseDouble(currNumStr);
             double count = currNum - lastNum;
@@ -58,6 +62,7 @@ public class MeterController extends Controller {
             model.set("total", total);
             model.set("curr_date", currDate);
             model.set("create_date", new Date());
+            model.set("img",fis );
             model.save();
 
             this.renderJson(new HnKejueResponse(RespCode.SUCCESS.getKey(), RespCode.SUCCESS.getValue()));

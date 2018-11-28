@@ -41,8 +41,14 @@ public class ElectricityMeterController extends BaseController {
             Long projectId = record.getLong("project_id");
             Company company = Company.me.findById(companyId);
             Project project = Project.me.findById(projectId);
-            record.set("companyName", company.getCompanyName());
-            record.set("projectName", project.getName());
+            if(company != null){
+                record.set("companyName", company.getCompanyName());
+            }
+            if(project != null){
+                record.set("projectName", project.getName());
+            }
+
+
         }
 		renderDatagrid(
 			list, 

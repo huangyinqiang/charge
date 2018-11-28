@@ -9,6 +9,9 @@ import net.inconnection.charge.extend.model.ElectricityMeter;
 import net.inconnection.charge.extend.model.ElectricityMeterHistory;
 import net.inconnection.charge.extend.model.Tuser;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +43,10 @@ public class ElectricityMeterHistoryController extends BaseController {
             record.set("meterName", model.getName());
             Object openId = record.get("openId");
             Tuser tuser = Tuser.me.queryTuserByOpenId(openId.toString());
-            record.set("nickName", tuser.getNickName());
+            if(tuser != null){
+                record.set("nickName", tuser.getNickName());
+            }
+
         }
 		renderDatagrid(
 			list, 
@@ -136,4 +142,28 @@ public class ElectricityMeterHistoryController extends BaseController {
 		addOpLog("[电表记录] 导出cvs");
 		render(csvRender);
 	}
+
+    public void img() {
+        String id = this.getPara("id");
+        ElectricityMeterHistory meterHistory = ElectricityMeterHistory.me.findById(id);
+        HttpServletResponse response = this.getResponse();
+//        response.setContentType("image/*");
+
+            try {
+                byte[] bytes = meterHistory.getImg();
+                for (int i = 0; i < bytes.length; ++i) {
+                    if (bytes[i] < 0) {// 调整异常数据
+                        bytes[i] += 256;
+                    }
+                }
+
+                ServletOutputStream out = response.getOutputStream();
+                out.write(bytes);
+                out.flush();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
 }

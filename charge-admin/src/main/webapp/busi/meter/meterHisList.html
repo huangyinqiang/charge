@@ -72,6 +72,12 @@ var dgOptions = {
                  }
 	           	 ,{field:'create_date', title: '创建时间', width:120, sortable: true }
 	           	 ,{field:'curr_date', title: '抄表时间', width:120, sortable: true }
+                 ,{field:'img', title: '照片', width:120, sortable: true
+                    ,formatter:function(value,row,index){
+                     console.log(row.id)
+                        return "<a href='#' onclick='showImg("+row.id+")'>查看</a>";
+                    }
+                 }
 	           ]],
 	           loadFilter: function(data) {
 	        	   if(data.result && data.result == 'fail') {	//失败时，错误消息提示
@@ -111,7 +117,9 @@ $('#companyId').combobox({
 
     }
 });
-
+function showImg(value) {
+    window.open('img?id='+value, "查看", "_blank")
+}
 function getProjectByCompanyId(val) {
     $.ajax({
         url : "../company/projectMicroPageListData",

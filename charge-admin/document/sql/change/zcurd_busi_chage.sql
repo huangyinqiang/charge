@@ -297,3 +297,7 @@ CREATE TABLE `zcurd_busi`.`yc_gift_refund`  (
 ALTER TABLE `zcurd_busi`.`yc_recharge_history`
 ADD COLUMN `project_id` bigint(20) AFTER `company_id`,
 ADD COLUMN `device_id` bigint(20) AFTER `project_id`;
+
+
+ALTER TABLE `zcurd_busi`.`yc_electricity_meter_history`
+ADD COLUMN `img` longblob COMMENT '照片' AFTER `curr_date`;

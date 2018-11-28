@@ -169,13 +169,17 @@
             </div>
             <div id="datePlugin"></div>
 
-            <!-- 拍照 -->
-            <!--<li style="height: auto; min-height:200px;height:auto !important;height:200px;">-->
-                <!--<div class="meter_pw">拍照：</div>-->
-                <!--<input  accept="image/*" type="file" onfocus="this.blur()" id="file"/>-->
-
-                    <!--<div class="meter_img"></div>-->
+            <!--<li>-->
+                <!--<span>上传记录：</span>-->
+                <!--<input  class="meterConter" type="file" name="file" id="avatar" accept="image/*"/>-->
             <!--</li>-->
+
+             <!--拍照 -->
+            <li style="height: auto; min-height:100px;height:auto !important;height:200px;">
+                <div class="meter_pw">上传记录：</div>
+                <input  accept="image/*" type="file" onfocus="this.blur()" id="file"/>
+                <!--<div class="meter_img"></div>-->
+            </li>
         </ul>
     
          <div class="check_meter" id="save">确定</div>
@@ -300,7 +304,7 @@
     }
 
 
-    var fileData;
+
 
     $("#save").click(function () {
         var materId = $("#elecMeter").val();
@@ -323,7 +327,7 @@
             });
             return;
         }
-        if(currNum <= lastNum){
+        if(currNum*1 <= lastNum*1){
             layer.open({
                 content: "本次度数不应该小于上次度数"
                 ,skin: 'msg'
@@ -378,21 +382,27 @@
         //         }
         //     });
         // }
-
-
-        var date = {
-            openId : localStorage.getItem("openId"),
-            materId : materId,
-            lastNum : lastNum,
-            currNum : currNum,
-            currDate:currDate
-        };
+        var fileVal = $("#file").val();
+        if(fileVal === "" | fileVal === null){
+            alert("请选择照片!");
+            return;
+        }
+        var formData = new FormData();               //新建FormData对象
+        var fileList = $("#file").prop("files");   //取file控件中的文件,files属性取到的是一个fileList
+        formData.append('file', fileList[0]);        //将fileList中的文件逐个放入formData中，注意，直接放入fileList后台是取不到的
+        formData.append('openId',localStorage.getItem("openId"));
+        formData.append('materId', materId);
+        formData.append('lastNum', lastNum);
+        formData.append('currNum', currNum);
+        formData.append('currDate', currDate);
 
         $.ajax({
             url:"../meter/addMeterHistory",
             dataType: "JSON",
-            data: date,
+            data: formData,
             type: "POST",
+            contentType: false,
+            processData: false,
             success:function (res) {
                 if(res.respCode == "000000"){
                     layer.open({
