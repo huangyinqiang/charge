@@ -90,4 +90,13 @@ public abstract class BaseElectricityMeterHistory<M extends BaseElectricityMeter
 		return get("curr_date");
 	}
 
+    public M setImg(byte[] img) {
+        set("img", img);
+        return (M)this;
+    }
+
+    public byte[] getImg() {
+        return get("img");
+    }
+
 }

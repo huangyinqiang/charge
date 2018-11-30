@@ -1,0 +1,418 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>充电地图</title>
+    <script type="text/javascript" src="${basePath}/res/js/jquery-easyui/jquery.min.js"></script>
+    <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+    <!--<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key="></script>-->
+    <link rel="icon" type="image/x-icon" href="${basePath}/res/images/zcurd/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="${basePath}/res/js/jquery-easyui/themes/gray/easyui.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/res/js/jquery-easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/res/js/jquery-easyui/themes/color.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/res/css/common.css">
+    <link rel="stylesheet" type="text/css" href="${basePath}/res/css/icon.css">
+
+    <script type="text/javascript" src="${basePath}/res/js/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="${basePath}/res/js/jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="${basePath}/res/js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <!--<script type="text/javascript" src="${basePath}/res/js/common.js"></script>-->
+
+    <style>
+        #container{
+            min-width:600px;
+            min-height:650px;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript">
+    var localUrl = window.location.href;
+    var deviceData;
+    var map;
+
+    //百度地图API功能
+    function loadJScript() {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://api.map.baidu.com/api?v=2.0&ak=6zs5qgqRymPOX6LPqlWfrHjfbTWLEENM&callback=init";
+        document.body.appendChild(script);
+    }
+    function init() {
+        var MapOptions ={
+            enableAutoResize:true,
+            enableMapClick: false,
+            enableScrollWheelZoom:true
+        }
+        map = new BMap.Map("container",MapOptions);            // 创建Map实例
+        var point = new BMap.Point(108.9023, 34.2405); // 创建点坐标
+        map.centerAndZoom(point,15);
+        map.enableScrollWheelZoom();
+        getData()
+
+    }
+    window.onload = loadJScript;  //异步加载地图
+
+
+    //查询地图信息
+    function getData() {
+        $.ajax({
+            type : "POST",
+            url : "../newDevice/queryMap",
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : false,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(data) {
+                deviceData = data;
+                var j = 0;
+                for (var i = 0; i < data.length; i++) {
+                    var points =[];
+                    points.push(new BMap.Point(data[i].chargePile.lng,data[i].chargePile.lat));
+                    new BMap.Convertor().translate(points, 1, 5,  function (d) {
+                        if(d.status === 0) {
+                            var myIcon
+                            var deviceStatus = deviceData[j].chargePile.status;
+                            if(deviceStatus == 1){//正常
+                                myIcon = new BMap.Icon("/res/images/zcurd/marker-green.png", new BMap.Size(50,50));
+                            }else if (deviceStatus == 2){//离线
+                                myIcon = new BMap.Icon("/res/images/zcurd/marker-gray.png", new BMap.Size(50,50));
+                            }else if(deviceStatus == 3){//故障
+                                myIcon = new BMap.Icon("/res/images/zcurd/marker-red.png", new BMap.Size(50,50));
+                            }
+
+
+                            var marker = new BMap.Marker(d.points[0],{icon:myIcon});
+                            map.addOverlay(marker);
+
+                            var content =
+                                "<h4 style='margin:0 0 5px 0;padding:0.2px 0'>"+deviceData[j].companyName+"</h4>" +
+                                "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2px'>设备名称："+deviceData[j].chargePile.name+"</p>"+
+                                "<p style='margin:0;line-height:1.5;font-size:13px;text-indent:2px'>使用中："+deviceData[j].chargeSockets+"</p>";
+                            marker.addEventListener("click", function(){
+                                showInfo(marker,content,points[0]);
+                            });
+                            j++;
+                        }
+                    });
+                }
+
+            }
+        });
+    }
+
+    //显示信息窗口，显示标注点的信息。
+    function showInfo(thisMarker,content,point){
+        var opts = {
+            width : 50,     // 信息窗口宽度
+            height: 00,     // 信息窗口高度
+            // title : "车辆信息"  // 信息窗口标题
+        }
+        var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+        thisMarker.openInfoWindow(infoWindow,point);   //图片加载完毕重绘infowindow
+    }
+
+
+</script>
+<div id="container"></div>
+<div style="
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 250px;
+    height: 200px;
+    background-color: white;
+" id="online"></div>
+<div style="
+    position: absolute;
+    top: 250px;
+    left: 20px;
+    width: 300px;
+    height: 200px;
+    background-color: white;
+" id="recharge"></div>
+<div style="
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 250px;
+    height: 200px;
+    background-color: white;
+" id="charge"></div>
+<div style="
+    position: absolute;
+    top: 250px;
+    right: 20px;
+    width: 250px;
+    height: 350px;
+    background-color: white;
+" id="used"></div>
+</body>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+<script>
+    var dom = document.getElementById("online");
+    var myChart = echarts.init(dom);
+    option = {
+        title : {
+            text: '入网设备',
+            x:'center',
+            textStyle: {
+                fontSize: '14',
+            }
+
+        },
+        // tooltip: {
+        //     trigger: 'item',
+        //     formatter: "{a} <br/>{b}: {c} ({d}%)",
+        //     textStyle: {
+        //         fontSize: '14',
+        //     }
+        // },
+        // legend: {
+        //     orient: 'vertical',
+        //     x: 'left',
+        //     data:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+        // },
+        series: [
+            {
+                name:'设备',
+                type:'pie',
+                radius: ['40%', '55%'],
+                label: {
+                    normal: {
+                        formatter: '{b|{b}：}{c} ',
+                        backgroundColor: '#eee',
+                        borderColor: '#aaa',
+                        borderWidth: 1,
+                        rich: {
+
+                            b: {
+                                fontSize: 12,
+                                lineHeight: 14
+                            }
+
+                        }
+                    },
+                    // emphasis: {
+                    //     show: true,
+                    //     textStyle: {
+                    //         fontSize: '14',
+                    //     }
+                    // }
+                },
+                data:[
+                    // {value:348, name:'上线'},
+                    // {value:251, name:'离线'},
+                    // {value:147, name:'故障'},
+                ]
+            }
+        ]
+    };
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+
+
+    var rechargeChart = echarts.init(document.getElementById("recharge"));
+    rechargeOption = {
+         title : {
+             text: '充值收入',
+             x:'center',
+             textStyle: {
+                 fontSize: '12',
+             }
+
+         },
+        xAxis: {
+            type: 'category',
+            data:[]
+            // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            // data: [120, 200, 150, 80, 70, 110, 130],
+            data:[],
+            type: 'bar'
+        }]
+    };
+    if (rechargeOption && typeof rechargeOption === "object") {
+        rechargeChart.setOption(rechargeOption, true);
+    }
+
+    var chargeChart = echarts.init(document.getElementById("charge"));
+    chargeOption = {
+        title : {
+            text: '消费',
+            x:'center',
+            textStyle: {
+                fontSize: '12',
+            }
+
+        },
+        xAxis: {
+            type: 'category',
+            data:[]
+            // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [{
+            // data: [120, 200, 150, 80, 70, 110, 130],
+            data:[],
+            type: 'bar'
+        }]
+    };
+    if (chargeOption && typeof chargeOption === "object") {
+        chargeChart.setOption(chargeOption, true);
+    }
+
+    var usedChart = echarts.init(document.getElementById("used"));
+    usedOption = {
+        title: {
+            text: '使用排名',
+            textStyle: {
+                fontSize: '14',
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
+        },
+        // legend: {
+        //     data: ['2011年', '2012年']
+        // },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            boundaryGap: [0, 20]
+        },
+        yAxis: {
+            type: 'category',
+            data: []
+            // data: ['巴西','印尼','美国','印度','中国']
+        },
+        series: [
+            {
+                name: '使用排名',
+                type: 'bar',
+                // data: [18203, 23489, 29034, 104970, 131744]
+                data: []
+            },
+            // {
+            //     name: '2012年',
+            //     type: 'bar',
+            //     data: [19325, 23438, 31000, 121594, 134141, 681807]
+            // }
+        ]
+    };
+    if (usedOption && typeof usedOption === "object") {
+        usedChart.setOption(usedOption, true);
+    }
+
+</script>
+<script>
+$(function () {
+    initDeviceStatus()
+    queryRecharge()
+    queryCharge()
+    querySocket()
+})
+    function initDeviceStatus() {
+        $.ajax({
+            type : "POST",
+            url : "../newDevice/queryDeviceStatus",
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : true,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(data) {
+                myChart.setOption({
+                    series:{
+                        data:data
+                    }
+                })
+
+            }
+        });
+    }
+    function queryRecharge() {
+        $.ajax({
+            type : "POST",
+            url : "../newDevice/queryRecharge",
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : true,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(data) {
+                rechargeChart.setOption({
+                    xAxis:{
+                        data:data.xAxis
+                    },
+                    series:{
+                        data:data.series
+                    }
+                })
+
+            }
+        });
+    }
+    function queryCharge() {
+        $.ajax({
+            type : "POST",
+            url : "../newDevice/queryCharge",
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : true,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(data) {
+                chargeChart.setOption({
+                    xAxis:{
+                        data:data.xAxis
+                    },
+                    series:{
+                        data:data.series
+                    }
+                })
+
+            }
+        });
+    }
+    function querySocket() {
+        $.ajax({
+            type : "POST",
+            url : "../newDevice/querySocket",
+            cache : false,// *ie下面只会建立一次 ajax 请求，将响应结果放在浏览器缓存里 下次调用该ajax请求时 从缓存里读取,为false只有ＧＥＴ请求生效
+            async : true,// 设置同步方式，false为同步
+            dataType : "json",
+            success : function(data) {
+                usedChart.setOption({
+                    yAxis:{
+                        data:data.yAxis
+                    },
+                    series:{
+                        data:data.series
+                    }
+                })
+
+            }
+        });
+    }
+
+</script>
+</html>
+
